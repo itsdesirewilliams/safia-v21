@@ -2,6 +2,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   ConfigError,
+  getOptionalInstagramAccessToken,
+  getOptionalYoutubeVideoId,
   getPublicConfig,
   getSupabaseAdminEnv,
   getSupabaseEnv,
@@ -51,6 +53,24 @@ describe("required configuration", () => {
       url: "https://example.supabase.co",
       anonKey: "anon-key",
     });
+  });
+});
+
+describe("optional homepage configuration", () => {
+  it("returns null rather than throwing when inputs are absent", () => {
+    vi.stubEnv("INSTAGRAM_ACCESS_TOKEN", "");
+    vi.stubEnv("YOUTUBE_VIDEO_ID", "");
+
+    expect(getOptionalInstagramAccessToken()).toBeNull();
+    expect(getOptionalYoutubeVideoId()).toBeNull();
+  });
+
+  it("returns the configured values when present", () => {
+    vi.stubEnv("INSTAGRAM_ACCESS_TOKEN", "ig-token");
+    vi.stubEnv("YOUTUBE_VIDEO_ID", "dQw4w9WgXcQ");
+
+    expect(getOptionalInstagramAccessToken()).toBe("ig-token");
+    expect(getOptionalYoutubeVideoId()).toBe("dQw4w9WgXcQ");
   });
 });
 

@@ -93,21 +93,23 @@ export function SiteHeader() {
                     {item.label}
                     <Chevron open={productsOpen} />
                   </button>
-                  {productsOpen && (
-                    <ul className="absolute right-0 top-full z-50 mt-1 w-64 rounded-lg border border-ink-100 bg-white p-2 shadow-lg">
-                      {item.children.map((child) => (
-                        <li key={child.href}>
-                          <Link
-                            href={child.href}
-                            onClick={closeMenus}
-                            className="block rounded-md px-3 py-2 text-sm text-ink-800 transition-colors hover:bg-ink-100 hover:text-brand-600"
-                          >
-                            {child.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  <ul
+                    className={`absolute right-0 top-full z-50 mt-1 w-64 rounded-lg border border-ink-100 bg-white p-2 shadow-lg ${
+                      productsOpen ? "" : "hidden"
+                    }`}
+                  >
+                    {item.children.map((child) => (
+                      <li key={child.href}>
+                        <Link
+                          href={child.href}
+                          onClick={closeMenus}
+                          className="block rounded-md px-3 py-2 text-sm text-ink-800 transition-colors hover:bg-ink-100 hover:text-brand-600"
+                        >
+                          {child.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
                 </li>
               );
             })}

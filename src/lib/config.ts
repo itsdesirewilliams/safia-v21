@@ -109,9 +109,26 @@ export function getInstagramAccessToken(): string {
   return readRequired(["INSTAGRAM_ACCESS_TOKEN"]).INSTAGRAM_ACCESS_TOKEN;
 }
 
+/**
+ * Optional long-lived Instagram Graph API access token. The homepage feed
+ * hides gracefully when this is absent (ADR-0008), so this getter returns
+ * `null` instead of throwing.
+ */
+export function getOptionalInstagramAccessToken(): string | null {
+  return optional("INSTAGRAM_ACCESS_TOKEN");
+}
+
 /** YouTube video ID for the homepage embed. */
 export function getYoutubeVideoId(): string {
   return readRequired(["YOUTUBE_VIDEO_ID"]).YOUTUBE_VIDEO_ID;
+}
+
+/**
+ * Optional YouTube video ID. The homepage tour renders a labelled placeholder
+ * when this is absent, so this getter returns `null` instead of throwing.
+ */
+export function getOptionalYoutubeVideoId(): string | null {
+  return optional("YOUTUBE_VIDEO_ID");
 }
 
 export type SocialLink = {
