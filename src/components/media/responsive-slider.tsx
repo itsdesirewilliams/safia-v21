@@ -8,6 +8,12 @@ export type ResponsiveSliderProps = {
   /** Which developer-provided asset folder this slider serves. */
   collection: SliderCollection;
   className?: string;
+  /**
+   * When false, the slider's built-in download action is suppressed so the
+   * owning page can render its own (used by Catalogue to gate the action on a
+   * configured URL). Defaults to true.
+   */
+  showDownload?: boolean;
 };
 
 /**
@@ -20,6 +26,7 @@ export type ResponsiveSliderProps = {
 export function ResponsiveSlider({
   collection,
   className,
+  showDownload = true,
 }: ResponsiveSliderProps) {
   const config = resolveSliderConfig(collection);
   const slides = readSliderSlides(collection);
@@ -42,7 +49,7 @@ export function ResponsiveSlider({
 
   return (
     <ResponsiveSliderView
-      config={config}
+      config={showDownload ? config : { ...config, downloadUrl: null }}
       slides={slides}
       className={className}
     />

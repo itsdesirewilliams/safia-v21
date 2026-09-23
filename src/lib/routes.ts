@@ -79,8 +79,9 @@ export const FOOTER_NAV: readonly NavLink[] = [
 
 /**
  * Concrete paths exercised by the route-resolution test. Dynamic routes use
- * representative slugs; placeholders render for any slug until their owning
- * ticket lands.
+ * representative slugs; the Pattern slug is a real catalogue pattern (the
+ * Pattern detail route now 404s unknown slugs), while the Post slug remains a
+ * placeholder until its owning ticket lands.
  */
 export const SMOKE_ROUTES: readonly string[] = [
   ROUTES.home,
@@ -91,7 +92,7 @@ export const SMOKE_ROUTES: readonly string[] = [
   ROUTES.qualityFirst,
   ROUTES.catalogue,
   ...CATEGORIES.map((category) => ROUTES.category(category.slug)),
-  ROUTES.pattern("motorcycle", "example-pattern"),
+  ROUTES.pattern("motorcycle", "motorcycle-tyres-sfm-101"),
   ROUTES.blogs,
   ROUTES.post("example-post"),
 ];

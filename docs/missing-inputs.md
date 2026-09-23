@@ -37,7 +37,7 @@ shell builds and runs without them; features that need them fail loudly with a
 | Testimonial content | — (content) | Homepage | Not supplied; the homepage renders a labelled placeholder rather than inventing quotes |
 | Product / category imagery | — (asset) | Homepage product ranges, Pattern pages | Not supplied; the homepage uses branded abstract tiles as clearly-temporary placeholders rather than stock or old-site imagery |
 | Slider artwork | — (asset) | Catalogue & Business Profile sliders | Not supplied; labelled placeholder SVGs ship in `public/assets/{landscape,portrait}/{catalogue,business-profile}` and are replaced by dropping matching filenames into both ratio folders |
-| Catalogue download URL | `NEXT_PUBLIC_CATALOGUE_DOWNLOAD_URL` | Catalogue slider download action | No PDF link supplied; the slider omits the download action until one is set |
+| Catalogue download URL | `NEXT_PUBLIC_CATALOGUE_DOWNLOAD_URL` | Catalogue download action | No PDF link supplied; `/catalogue` shows a labelled placeholder for the download action until one is set |
 | Email transport credentials | `EMAIL_TRANSPORT_*` | Contact Us forms (ADR-0007) | Transport provider itself is a deferred implementation detail |
 | First admin account | — (credential) | `/admin/media` access | No admin/editor user exists yet. Bootstrap with `ADMIN_EMAIL=... ADMIN_PASSWORD=... node scripts/create-admin.mjs` (see `docs/admin-media.md`). Roles are never self-assigned |
 | Quality First testing videos | — (asset) | `/quality-first` story rail | Not supplied; the rail renders a labelled empty state until `.mp4`/`.webm` files are added to `testing-videos/stories/` (Admin-only) |
