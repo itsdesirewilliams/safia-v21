@@ -20,7 +20,8 @@ shell builds and runs without them; features that need them fail loudly with a
 | Facebook URL | `NEXT_PUBLIC_SOCIAL_FACEBOOK` | Supplied |
 | LinkedIn URL | `NEXT_PUBLIC_SOCIAL_LINKEDIN` | Supplied |
 | Catalogue schema | `supabase/migrations/20260923010000_catalogue_minimal.sql` | Applied to `safeway-tyre` (homepage search) |
-| Catalogue seed | `supabase/seed.sql` | Applied — **provisional**; Ticket 8 replaces it with the normalized dataset |
+| Master product data | `supabase/master-product-data.json` | Supplied — the authoritative Category → Pattern → Variant dataset (schemaVersion 1.0) |
+| Catalogue seed | `supabase/seed.sql` | Applied — generated from the master product data; Ticket 8 adds the full normalization seam |
 
 ## Awaiting input (flagged, not invented)
 
@@ -35,7 +36,7 @@ shell builds and runs without them; features that need them fail loudly with a
 | Slider artwork | — (asset) | Catalogue & Business Profile sliders | Not supplied; labelled placeholder SVGs ship in `public/assets/{landscape,portrait}/{catalogue,business-profile}` and are replaced by dropping matching filenames into both ratio folders |
 | Catalogue download URL | `NEXT_PUBLIC_CATALOGUE_DOWNLOAD_URL` | Catalogue slider download action | No PDF link supplied; the slider omits the download action until one is set |
 | Email transport credentials | `EMAIL_TRANSPORT_*` | Contact Us forms (ADR-0007) | Transport provider itself is a deferred implementation detail |
-| Alfabet font licence | — (asset) | Production typography | `src/app/fonts` currently uses the Fontspring **demo** cuts supplied in `assets/fonts`; licence must be verified before production |
+| Final display font | — (design decision) | Production typography | Alfabet is removed from the active site typography; Archivo is the only active font. The final display font is a separate future design decision; the supplied Fontspring demo cuts in `assets/fonts` must not be used in production regardless |
 
 ## How missing values behave
 

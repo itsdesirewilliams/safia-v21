@@ -19,26 +19,29 @@ export function PagePlaceholder({
   links,
 }: PagePlaceholderProps) {
   return (
-    <section className="mx-auto max-w-5xl px-4 py-20 sm:px-6 lg:px-8">
-      <p className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-brand-600">
+    <section className="mx-auto max-w-5xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+      <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-brand-600">
+        <span aria-hidden="true" className="h-px w-8 bg-brand-600" />
         {eyebrow}
       </p>
-      <h1 className="mt-3 font-display text-4xl font-bold tracking-tight text-ink-950 sm:text-5xl">
+      <h1 className="mt-4 text-4xl font-bold tracking-tight text-ink-950 sm:text-5xl">
         {title}
       </h1>
-      <p className="mt-4 max-w-2xl text-base text-ink-800/80">{description}</p>
+      <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-700">
+        {description}
+      </p>
       {ticket && (
-        <p className="mt-6 inline-flex rounded-full bg-ink-100 px-3 py-1 text-xs font-medium text-ink-800">
+        <p className="mt-8 inline-flex rounded-full border border-ink-200 bg-ink-50 px-3.5 py-1.5 text-xs font-medium text-ink-700">
           Placeholder — implemented by {ticket}
         </p>
       )}
       {links && links.length > 0 && (
-        <ul className="mt-8 flex flex-wrap gap-3">
+        <ul className="mt-10 flex flex-wrap gap-3">
           {links.map((link) => (
             <li key={link.href}>
               <Link
                 href={link.href}
-                className="inline-flex rounded-md border border-ink-100 px-4 py-2 text-sm font-medium text-ink-800 transition-colors hover:border-brand-500 hover:text-brand-600"
+                className="inline-flex rounded-lg border border-ink-200 bg-white px-4 py-2 text-sm font-medium text-ink-800 transition-colors hover:border-brand-600/50 hover:text-brand-600"
               >
                 {link.label}
               </Link>
@@ -46,7 +49,7 @@ export function PagePlaceholder({
           ))}
         </ul>
       )}
-      <div className="mt-10">
+      <div className="mt-12">
         <Link
           href={ROUTES.home}
           className="text-sm font-medium text-brand-600 hover:underline"

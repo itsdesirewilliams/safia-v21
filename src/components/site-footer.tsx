@@ -10,7 +10,7 @@ function SocialIcon({ name }: { name: string }) {
     "aria-hidden": true,
     viewBox: "0 0 24 24",
     fill: "currentColor",
-    className: "h-5 w-5",
+    className: "h-4 w-4",
   } as const;
 
   switch (name) {
@@ -62,7 +62,7 @@ function SocialLinks({ links }: { links: readonly SocialLink[] }) {
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-brand-500"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-ink-100/70 transition-colors hover:border-brand-600 hover:bg-brand-600 hover:text-white"
           >
             <SocialIcon name={link.name} />
             <span className="sr-only">{`${SITE.name} on ${link.name}`}</span>
@@ -73,14 +73,22 @@ function SocialLinks({ links }: { links: readonly SocialLink[] }) {
   );
 }
 
+function FooterHeading({ children }: { children: string }) {
+  return (
+    <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-white/45">
+      {children}
+    </h2>
+  );
+}
+
 export function SiteFooter() {
   const { companyAddress, socialLinks } = getPublicConfig();
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-ink-950 text-ink-100">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-2 lg:grid-cols-4 lg:px-8">
-        <div className="space-y-4">
+    <footer className="border-t-2 border-brand-600 bg-ink-950 text-ink-100">
+      <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr] lg:gap-8 lg:px-8">
+        <div className="space-y-5">
           <Image
             src="/brand/safeway-logo-white.png"
             alt={SITE.name}
@@ -88,21 +96,19 @@ export function SiteFooter() {
             height={42}
             className="h-9 w-auto"
           />
-          <p className="max-w-xs text-sm text-ink-100/70">
+          <p className="max-w-xs text-sm leading-relaxed text-ink-100/60">
             {SITE.legalName}. {SITE.tagline}.
           </p>
           {companyAddress && (
-            <p className="max-w-xs text-sm text-ink-100/70">
+            <p className="max-w-xs text-sm leading-relaxed text-ink-100/60">
               {companyAddress}
             </p>
           )}
         </div>
 
         <nav aria-label="Footer">
-          <h2 className="font-display text-sm font-semibold uppercase tracking-wider text-white">
-            Explore
-          </h2>
-          <ul className="mt-4 space-y-2">
+          <FooterHeading>Explore</FooterHeading>
+          <ul className="mt-5 space-y-2.5">
             {FOOTER_NAV.map((item) => (
               <li key={item.href}>
                 <Link
@@ -117,10 +123,8 @@ export function SiteFooter() {
         </nav>
 
         <div>
-          <h2 className="font-display text-sm font-semibold uppercase tracking-wider text-white">
-            Contact
-          </h2>
-          <ul className="mt-4 space-y-2 text-sm text-ink-100/70">
+          <FooterHeading>Contact</FooterHeading>
+          <ul className="mt-5 space-y-2.5 text-sm text-ink-100/70">
             <li>
               <a
                 href={`mailto:${SITE.emails.director}`}
@@ -148,33 +152,31 @@ export function SiteFooter() {
           </ul>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-8">
           <div>
-            <h2 className="font-display text-sm font-semibold uppercase tracking-wider text-white">
-              Opening Hours
-            </h2>
-            <p className="mt-4 text-sm text-ink-100/70">
+            <FooterHeading>Opening Hours</FooterHeading>
+            <p className="mt-5 text-sm text-ink-100/70">
               {SITE.openingHours.days}
               <br />
               {SITE.openingHours.hours}
             </p>
-            <p className="text-sm text-ink-100/50">
-              {SITE.openingHours.closed}
+            <p className="mt-1 text-sm text-ink-100/40">
+              {SITE.openingHours.closed} closed
             </p>
           </div>
-          <div>
-            <h2 className="font-display text-sm font-semibold uppercase tracking-wider text-white">
-              Follow
-            </h2>
-            <div className="mt-4">
-              <SocialLinks links={socialLinks} />
+          {socialLinks.length > 0 && (
+            <div>
+              <FooterHeading>Follow</FooterHeading>
+              <div className="mt-5">
+                <SocialLinks links={socialLinks} />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
       <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-6 text-xs text-ink-100/50 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-6 text-xs text-ink-100/45 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <p>
             © {year} {SITE.legalName}. All rights reserved.
           </p>

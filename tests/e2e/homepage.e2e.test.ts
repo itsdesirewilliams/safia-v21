@@ -115,7 +115,7 @@ describe("homepage vertical slice", () => {
 
 describe("server-side product search", () => {
   it("resolves a size query to a Pattern", async () => {
-    const response = await fetch(`${BASE_URL}/api/search?q=12.4-28`);
+    const response = await fetch(`${BASE_URL}/api/search?q=6.00-16`);
     expect(response.status).toBe(200);
 
     const body = (await response.json()) as {
@@ -124,7 +124,7 @@ describe("server-side product search", () => {
 
     expect(body.results.length).toBeGreaterThan(0);
     const match = body.results.find(
-      (result) => result.patternSlug === "tractor-rear-tyres-r-1-tr-1042",
+      (result) => result.patternSlug === "bias-tractor-tyres-tr-1042",
     );
     expect(match).toBeDefined();
     expect(match?.categorySlug).toBe("agriculture");
@@ -136,9 +136,7 @@ describe("server-side product search", () => {
       results: { patternSlug: string; patternCode: string }[];
     };
 
-    expect(body.results[0]?.patternSlug).toBe(
-      "tractor-rear-tyres-r-1-tr-1042",
-    );
+    expect(body.results[0]?.patternSlug).toBe("bias-tractor-tyres-tr-1042");
     expect(body.results[0]?.patternCode).toBe("TR-1042");
   });
 

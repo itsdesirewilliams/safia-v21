@@ -1,6 +1,12 @@
 # Safeway Tyre Website
 
-The public website and product catalogue for Safeway Tyre (a brand of DEE RON Automotives LLP), rebuilt fresh in this repo with `safewaytyre.com` as the visual and content reference. The catalogue is organised as Category → Pattern → Variant.
+The public website and product catalogue for Safeway Tyre (a brand of DEE RON Automotives LLP), rebuilt fresh in this repo. The catalogue is organised as Category → Pattern → Variant.
+
+## Source of truth
+
+- Product data comes only from the supplied master dataset (`supabase/master-product-data.json`).
+- The old `safewaytyre.com` website is a reference for information architecture and links only — never for content, product data, imagery, artwork, UI design, or media. Do not scrape it to fill missing inputs; render a labelled placeholder instead.
+- Missing external inputs are flagged, not invented (see `docs/missing-inputs.md`).
 
 ## Language
 

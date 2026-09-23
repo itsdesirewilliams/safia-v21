@@ -4,7 +4,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { SITE } from "@/lib/site";
 
-import { alfabet, archivo } from "./fonts";
+import { archivo } from "./fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -21,8 +21,8 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${alfabet.variable} ${archivo.variable}`}>
-      <body className="flex min-h-screen flex-col bg-white text-ink-900 antialiased">
+    <html lang="en" className={archivo.variable}>
+      <body className="flex min-h-screen flex-col bg-white text-ink-800 antialiased">
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />

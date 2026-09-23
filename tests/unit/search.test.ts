@@ -10,10 +10,10 @@ import {
 const AGRICULTURE_ROW = {
   category_slug: "agriculture",
   category_display_name: "Agriculture Tyres",
-  pattern_slug: "tractor-rear-tyres-r-1-tr-1042",
+  pattern_slug: "bias-tractor-tyres-tr-1042",
   pattern_code: "TR-1042",
-  display_name: "Tractor Rear Tyres (R-1)",
-  sizes: ["12.4-28", "13.6-28"],
+  display_name: "BIAS TRACTOR TYRES",
+  sizes: ["6.00-16", "6.50-16", "7.50-16"],
 };
 
 function fakeClient(
@@ -25,7 +25,7 @@ function fakeClient(
 
 describe("normalizeSearchQuery", () => {
   it("trims and collapses whitespace", () => {
-    expect(normalizeSearchQuery("  12.4-28  ")).toBe("12.4-28");
+    expect(normalizeSearchQuery("  6.00-16  ")).toBe("6.00-16");
     expect(normalizeSearchQuery("TR  1042")).toBe("TR 1042");
   });
 
@@ -44,16 +44,16 @@ describe("normalizeSearchQuery", () => {
 
 describe("searchPatterns", () => {
   it("resolves a size match to a Pattern", async () => {
-    const results = await searchPatterns(fakeClient([AGRICULTURE_ROW]), "12.4-28");
+    const results = await searchPatterns(fakeClient([AGRICULTURE_ROW]), "6.00-16");
 
     expect(results).toEqual([
       {
         categorySlug: "agriculture",
         categoryDisplayName: "Agriculture Tyres",
-        patternSlug: "tractor-rear-tyres-r-1-tr-1042",
+        patternSlug: "bias-tractor-tyres-tr-1042",
         patternCode: "TR-1042",
-        displayName: "Tractor Rear Tyres (R-1)",
-        sizes: ["12.4-28", "13.6-28"],
+        displayName: "BIAS TRACTOR TYRES",
+        sizes: ["6.00-16", "6.50-16", "7.50-16"],
       },
     ]);
   });

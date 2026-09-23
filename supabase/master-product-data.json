@@ -1,0 +1,3166 @@
+{
+  "schemaVersion": "1.0",
+  "company": "Safeway Tyre",
+  "notes": {
+    "dataBasis": "Cleaned Safeway Tyre Excel price lists uploaded for this project.",
+    "patternRule": "Pattern is the parent product entity; each size/configuration is a variant.",
+    "customerFacingNameRule": "Use the functional source name for Agriculture, OTR, and Forklift / Industrial patterns. Use the agreed category name for Motorcycle, Truck & Bus, and Three Wheeler patterns.",
+    "patternIdentifierRule": "patternCode remains the Safeway internal/product identifier and is displayed as a secondary identifier when a functional name exists.",
+    "slugRule": "Use the customer-facing functional name in the product slug where available; append the pattern code when needed for uniqueness.",
+    "nameRule": {
+      "motorcycle": "Motorcycle Tyres",
+      "truckBus": "Truck & Bus Tyres",
+      "threeWheeler": "Three Wheeler Tyres",
+      "agriculture": "Functional name shown with each pattern in the cleaned price list",
+      "otr": "Functional name shown with each pattern in the cleaned price list",
+      "forklift": "Functional name shown with each pattern in the cleaned price list"
+    },
+    "missingValueRule": "Blank source cells are represented as null. Source dash values such as '-' are preserved as strings.",
+    "numericNormalization": "Floating-point artifacts from spreadsheet formulas are rounded to practical displayed precision: weight to 3 decimals and FOB USD to 2 decimals.",
+    "images": "Pattern image is null because the uploaded Excel price lists are the structured data source; catalogue images can be linked later.",
+    "scopeNote": "Only patterns represented in the cleaned price lists are included. Catalogue-only patterns without corresponding price-list data are not invented."
+  },
+  "sourceSummary": [
+    {
+      "range": "Truck & Bus Tyres",
+      "patternCount": 7,
+      "variantCount": 29,
+      "sourceFile": "Safeway - Truck & Bus Tyres (1)(2).xlsx"
+    },
+    {
+      "range": "Three Wheeler Tyres",
+      "patternCount": 2,
+      "variantCount": 2,
+      "sourceFile": "Safeway - Three Wheeler Tyres (1)(2).xlsx"
+    },
+    {
+      "range": "Agriculture Tyres",
+      "patternCount": 10,
+      "variantCount": 53,
+      "sourceFile": "Safeway - Agriculture Tyres (1)(2).xlsx"
+    },
+    {
+      "range": "Off-The-Road (OTR) Tyres",
+      "patternCount": 9,
+      "variantCount": 29,
+      "sourceFile": "Safeway - Off The Road Tyres (1)(2).xlsx"
+    },
+    {
+      "range": "Forklift / Industrial Tyres",
+      "patternCount": 2,
+      "variantCount": 55,
+      "sourceFile": "Safeway - Forklift Tyres (1)(2).xlsx"
+    },
+    {
+      "range": "Motorcycle Tyres",
+      "patternCount": 25,
+      "variantCount": 47,
+      "sourceFile": "Safeway - Motorcycle Tyres (1)(2).xlsx"
+    }
+  ],
+  "productRanges": [
+    {
+      "slug": "truck-bus",
+      "name": "Truck & Bus Tyres",
+      "sourceFile": "Safeway - Truck & Bus Tyres (1)(2).xlsx",
+      "patterns": [
+        {
+          "patternCode": "TT-101",
+          "name": "Truck & Bus Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "6.50-14",
+              "plyRating": 8,
+              "ttTl": "TTF",
+              "application": "Light Truck",
+              "weightKg": 12.1,
+              "container": {
+                "type": "40HQ",
+                "quantity": 1070
+              },
+              "fobUsd": 32.5
+            },
+            {
+              "size": "6.50-15",
+              "plyRating": 10,
+              "ttTl": "TTF",
+              "application": "Light Truck",
+              "weightKg": 15.4,
+              "container": {
+                "type": "40HQ",
+                "quantity": 1050
+              },
+              "fobUsd": 41.5
+            },
+            {
+              "size": "7.00-15",
+              "plyRating": 12,
+              "ttTl": "TTF",
+              "application": "Light Truck",
+              "weightKg": 20.8,
+              "container": {
+                "type": "40HQ",
+                "quantity": 810
+              },
+              "fobUsd": 55.8
+            },
+            {
+              "size": "7.50-15",
+              "plyRating": 14,
+              "ttTl": "TTF",
+              "application": "Light Truck",
+              "weightKg": 22.6,
+              "container": {
+                "type": "40HQ",
+                "quantity": 740
+              },
+              "fobUsd": 60.5
+            },
+            {
+              "size": "7.00-16",
+              "plyRating": 14,
+              "ttTl": "TTF",
+              "application": "Light Truck",
+              "weightKg": 21.2,
+              "container": {
+                "type": "40HQ",
+                "quantity": 760
+              },
+              "fobUsd": 57
+            },
+            {
+              "size": "7.50-16",
+              "plyRating": 16,
+              "ttTl": "TTF",
+              "application": "Light Truck",
+              "weightKg": 22.7,
+              "container": {
+                "type": "40HQ",
+                "quantity": 630
+              },
+              "fobUsd": 61
+            },
+            {
+              "size": "8.25-16",
+              "plyRating": 16,
+              "ttTl": "TTF",
+              "application": "Light Truck",
+              "weightKg": 26.4,
+              "container": {
+                "type": "40HQ",
+                "quantity": 550
+              },
+              "fobUsd": 71
+            },
+            {
+              "size": "8.25-20",
+              "plyRating": 16,
+              "ttTl": "TTF",
+              "application": "Truck/Bus",
+              "weightKg": 44,
+              "container": {
+                "type": "40HQ",
+                "quantity": 430
+              },
+              "fobUsd": 118
+            },
+            {
+              "size": "9.00-20",
+              "plyRating": 16,
+              "ttTl": "TTF",
+              "application": "Truck/Bus",
+              "weightKg": 46,
+              "container": {
+                "type": "40HQ",
+                "quantity": 340
+              },
+              "fobUsd": 123.5
+            },
+            {
+              "size": "10.00-20",
+              "plyRating": 18,
+              "ttTl": "TTF",
+              "application": "Truck/Bus",
+              "weightKg": 52,
+              "container": {
+                "type": "40HQ",
+                "quantity": 300
+              },
+              "fobUsd": 139.5
+            },
+            {
+              "size": "11.00-20",
+              "plyRating": 18,
+              "ttTl": "TTF",
+              "application": "Truck/Bus",
+              "weightKg": 57,
+              "container": {
+                "type": "40HQ",
+                "quantity": 270
+              },
+              "fobUsd": 153
+            }
+          ]
+        },
+        {
+          "patternCode": "TT-108",
+          "name": "Truck & Bus Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "7.00-15",
+              "plyRating": 12,
+              "ttTl": "TTF",
+              "application": "Light Truck",
+              "weightKg": 21.9,
+              "container": {
+                "type": "40HQ",
+                "quantity": 790
+              },
+              "fobUsd": 58.5
+            },
+            {
+              "size": "7.50-15",
+              "plyRating": 14,
+              "ttTl": "TTF",
+              "application": "Light Truck",
+              "weightKg": 23.4,
+              "container": {
+                "type": "40HQ",
+                "quantity": 680
+              },
+              "fobUsd": 62.5
+            },
+            {
+              "size": "7.00-16",
+              "plyRating": 14,
+              "ttTl": "TTF",
+              "application": "Light Truck",
+              "weightKg": 24.3,
+              "container": {
+                "type": "40HQ",
+                "quantity": 720
+              },
+              "fobUsd": 65.2
+            },
+            {
+              "size": "7.50-16",
+              "plyRating": 16,
+              "ttTl": "TTF",
+              "application": "Light Truck",
+              "weightKg": 25.8,
+              "container": {
+                "type": "40HQ",
+                "quantity": 630
+              },
+              "fobUsd": 69.25
+            },
+            {
+              "size": "8.25-16",
+              "plyRating": 16,
+              "ttTl": "TTF",
+              "application": "Light Truck",
+              "weightKg": 28.8,
+              "container": {
+                "type": "40HQ",
+                "quantity": 600
+              },
+              "fobUsd": 77.5
+            },
+            {
+              "size": "10.00-20",
+              "plyRating": 18,
+              "ttTl": "TTF",
+              "application": "Truck/Bus",
+              "weightKg": 59,
+              "container": {
+                "type": "40HQ",
+                "quantity": 300
+              },
+              "fobUsd": 158.5
+            },
+            {
+              "size": "11.00-20",
+              "plyRating": 18,
+              "ttTl": "TTF",
+              "application": "Truck/Bus",
+              "weightKg": 60,
+              "container": {
+                "type": "40HQ",
+                "quantity": 260
+              },
+              "fobUsd": 161
+            },
+            {
+              "size": "12.00-20",
+              "plyRating": 18,
+              "ttTl": "TTF",
+              "application": "Truck/Bus",
+              "weightKg": 63,
+              "container": {
+                "type": "40HQ",
+                "quantity": 230
+              },
+              "fobUsd": 169
+            }
+          ]
+        },
+        {
+          "patternCode": "TT-119",
+          "name": "Truck & Bus Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "12.00-24",
+              "plyRating": 20,
+              "ttTl": "TTF",
+              "application": "Truck/Bus",
+              "weightKg": 72,
+              "container": {
+                "type": "40HQ",
+                "quantity": 200
+              },
+              "fobUsd": 193.5
+            }
+          ]
+        },
+        {
+          "patternCode": "TT-127",
+          "name": "Truck & Bus Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "7.50-16",
+              "plyRating": 16,
+              "ttTl": "TTF",
+              "application": "Light Truck",
+              "weightKg": 24.2,
+              "container": {
+                "type": "40HQ",
+                "quantity": 630
+              },
+              "fobUsd": 65
+            },
+            {
+              "size": "12.00-24",
+              "plyRating": 20,
+              "ttTl": "TTF",
+              "application": "Truck/Bus",
+              "weightKg": 69,
+              "container": {
+                "type": "40HQ",
+                "quantity": 200
+              },
+              "fobUsd": 185
+            }
+          ]
+        },
+        {
+          "patternCode": "TT-132",
+          "name": "Truck & Bus Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "7.50-16",
+              "plyRating": 16,
+              "ttTl": "TTF",
+              "application": "Light Truck",
+              "weightKg": 28.15,
+              "container": {
+                "type": "40HQ",
+                "quantity": 630
+              },
+              "fobUsd": 75.5
+            },
+            {
+              "size": "10.00-20",
+              "plyRating": 18,
+              "ttTl": "TTF",
+              "application": "Truck/Bus",
+              "weightKg": 61,
+              "container": {
+                "type": "40HQ",
+                "quantity": 290
+              },
+              "fobUsd": 163.5
+            }
+          ]
+        },
+        {
+          "patternCode": "TT-137",
+          "name": "Truck & Bus Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "7.50-16",
+              "plyRating": 16,
+              "ttTl": "TTF",
+              "application": "Light Truck",
+              "weightKg": 25.345,
+              "container": {
+                "type": "40HQ",
+                "quantity": 630
+              },
+              "fobUsd": 68
+            }
+          ]
+        },
+        {
+          "patternCode": "POWERMINER",
+          "name": "Truck & Bus Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "9.00-20",
+              "plyRating": 16,
+              "ttTl": "TTF",
+              "application": "Mining (Truck)",
+              "weightKg": 50,
+              "container": {
+                "type": "40HQ",
+                "quantity": 320
+              },
+              "fobUsd": 134.2
+            },
+            {
+              "size": "10.00-20",
+              "plyRating": 18,
+              "ttTl": "TTF",
+              "application": "Mining (Truck)",
+              "weightKg": 60.07,
+              "container": {
+                "type": "40HQ",
+                "quantity": 300
+              },
+              "fobUsd": 161.5
+            },
+            {
+              "size": "11.00-20",
+              "plyRating": 18,
+              "ttTl": "TTF",
+              "application": "Mining (Truck)",
+              "weightKg": 68.69,
+              "container": {
+                "type": "40HQ",
+                "quantity": 260
+              },
+              "fobUsd": 185.5
+            },
+            {
+              "size": "12.00-24",
+              "plyRating": 20,
+              "ttTl": "TTF",
+              "application": "Mining (Truck)",
+              "weightKg": 93,
+              "container": {
+                "type": "40HQ",
+                "quantity": 190
+              },
+              "fobUsd": 250.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "three-wheeler",
+      "name": "Three Wheeler Tyres",
+      "sourceFile": "Safeway - Three Wheeler Tyres (1)(2).xlsx",
+      "patterns": [
+        {
+          "patternCode": "TW-17",
+          "name": "Three Wheeler Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "4.00-8",
+              "plyRating": 6,
+              "ttTl": "TT",
+              "application": "Passenger",
+              "weightKg": 4.05,
+              "container": {
+                "type": "40HQ",
+                "quantity": 5400
+              },
+              "fobUsd": 9.25
+            }
+          ]
+        },
+        {
+          "patternCode": "TW-21",
+          "name": "Three Wheeler Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "4.00-8",
+              "plyRating": 8,
+              "ttTl": "TT",
+              "application": "Passenger",
+              "weightKg": 4.05,
+              "container": {
+                "type": "40HQ",
+                "quantity": 5300
+              },
+              "fobUsd": 9.3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "agriculture",
+      "name": "Agriculture Tyres",
+      "sourceFile": "Safeway - Agriculture Tyres (1)(2).xlsx",
+      "patterns": [
+        {
+          "patternCode": "TR-1010",
+          "name": "FLOATATION IMPLEMENT TYRE",
+          "image": null,
+          "variants": [
+            {
+              "size": "400/60-15.5",
+              "plyRating": 16,
+              "ttTl": "TL",
+              "application": "Implement",
+              "weightKg": 38,
+              "container": {
+                "type": "40HQ",
+                "quantity": 290
+              },
+              "fobUsd": 102
+            }
+          ]
+        },
+        {
+          "patternCode": "TR-1019",
+          "name": "AGRICULTURE IMPLEMENT TYRE",
+          "image": null,
+          "variants": [
+            {
+              "size": "9.5L-14",
+              "plyRating": 8,
+              "ttTl": "TL",
+              "application": "Implement",
+              "weightKg": 11.5,
+              "container": {
+                "type": "40HQ",
+                "quantity": 770
+              },
+              "fobUsd": 30.87
+            },
+            {
+              "size": "9.5L-15",
+              "plyRating": 10,
+              "ttTl": "TL",
+              "application": "Implement",
+              "weightKg": 14.5,
+              "container": {
+                "type": "40HQ",
+                "quantity": 680
+              },
+              "fobUsd": 38.92
+            },
+            {
+              "size": "11L-14",
+              "plyRating": 8,
+              "ttTl": "TL",
+              "application": "Implement",
+              "weightKg": 15,
+              "container": {
+                "type": "40HQ",
+                "quantity": 660
+              },
+              "fobUsd": 40.26
+            },
+            {
+              "size": "11L-15",
+              "plyRating": 10,
+              "ttTl": "TL",
+              "application": "Implement",
+              "weightKg": 15.5,
+              "container": {
+                "type": "40HQ",
+                "quantity": 600
+              },
+              "fobUsd": 41.61
+            }
+          ]
+        },
+        {
+          "patternCode": "TR-1020",
+          "name": "AGRICULTURE IMPLEMENT TYRE",
+          "image": null,
+          "variants": [
+            {
+              "size": "6.00-16",
+              "plyRating": 8,
+              "ttTl": "TL",
+              "application": "Implement",
+              "weightKg": 10.5,
+              "container": {
+                "type": "40HQ",
+                "quantity": 1080
+              },
+              "fobUsd": 28.18
+            },
+            {
+              "size": "7.50-16",
+              "plyRating": 8,
+              "ttTl": "TL",
+              "application": "Implement",
+              "weightKg": 16,
+              "container": {
+                "type": "40HQ",
+                "quantity": 710
+              },
+              "fobUsd": 42.95
+            },
+            {
+              "size": "9.00-16",
+              "plyRating": 10,
+              "ttTl": "TL",
+              "application": "Implement",
+              "weightKg": 24,
+              "container": {
+                "type": "40HQ",
+                "quantity": "-"
+              },
+              "fobUsd": 64.42
+            },
+            {
+              "size": "10.00-16",
+              "plyRating": 10,
+              "ttTl": "TL",
+              "application": "Implement",
+              "weightKg": 28,
+              "container": {
+                "type": "40HQ",
+                "quantity": 440
+              },
+              "fobUsd": 75.16
+            },
+            {
+              "size": "11.0-16",
+              "plyRating": 10,
+              "ttTl": "TL",
+              "application": "Implement",
+              "weightKg": 32,
+              "container": {
+                "type": "40HQ",
+                "quantity": 330
+              },
+              "fobUsd": 85.89
+            }
+          ]
+        },
+        {
+          "patternCode": "TR-1022",
+          "name": "AGRICULTURE IMPLEMENT TYRE",
+          "image": null,
+          "variants": [
+            {
+              "size": "10/80-12",
+              "plyRating": 10,
+              "ttTl": "TL",
+              "application": "Implement",
+              "weightKg": 12.5,
+              "container": {
+                "type": "40HQ",
+                "quantity": 740
+              },
+              "fobUsd": 33.55
+            },
+            {
+              "size": "10.0/75-15.3",
+              "plyRating": 12,
+              "ttTl": "TL",
+              "application": "Implement",
+              "weightKg": 18,
+              "container": {
+                "type": "40HQ",
+                "quantity": 580
+              },
+              "fobUsd": 48.32
+            },
+            {
+              "size": "11.5/80-15.3",
+              "plyRating": 12,
+              "ttTl": "TL",
+              "application": "Implement",
+              "weightKg": 23,
+              "container": {
+                "type": "40HQ",
+                "quantity": 500
+              },
+              "fobUsd": 61.74
+            },
+            {
+              "size": "12.5/80-15.3",
+              "plyRating": 14,
+              "ttTl": "TL",
+              "application": "Implement",
+              "weightKg": 27.5,
+              "container": {
+                "type": "40HQ",
+                "quantity": 400
+              },
+              "fobUsd": 73.82
+            },
+            {
+              "size": "10.5/65-16",
+              "plyRating": 14,
+              "ttTl": "TL",
+              "application": "Implement",
+              "weightKg": 19,
+              "container": {
+                "type": "40HQ",
+                "quantity": 580
+              },
+              "fobUsd": 51
+            },
+            {
+              "size": "10.5/80-18",
+              "plyRating": 14,
+              "ttTl": "TL",
+              "application": "Implement",
+              "weightKg": 24,
+              "container": {
+                "type": "40HQ",
+                "quantity": 300
+              },
+              "fobUsd": 64.42
+            },
+            {
+              "size": "12.5/80-18",
+              "plyRating": 12,
+              "ttTl": "TL",
+              "application": "Implement",
+              "weightKg": 28,
+              "container": {
+                "type": "40HQ",
+                "quantity": 260
+              },
+              "fobUsd": 75.16
+            }
+          ]
+        },
+        {
+          "patternCode": "TR-1042",
+          "name": "BIAS TRACTOR TYRES",
+          "image": null,
+          "variants": [
+            {
+              "size": "6.00-16",
+              "plyRating": 10,
+              "ttTl": "TT",
+              "application": "Tractor Front",
+              "weightKg": 13,
+              "container": {
+                "type": "40HQ",
+                "quantity": 1030
+              },
+              "fobUsd": 34.89
+            },
+            {
+              "size": "6.50-16",
+              "plyRating": 8,
+              "ttTl": null,
+              "application": "Tractor Front",
+              "weightKg": null,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": null
+            },
+            {
+              "size": "7.50-16",
+              "plyRating": 10,
+              "ttTl": "TT",
+              "application": "Tractor Front",
+              "weightKg": 18,
+              "container": {
+                "type": "40HQ",
+                "quantity": 700
+              },
+              "fobUsd": 48.32
+            }
+          ]
+        },
+        {
+          "patternCode": "TR-1047",
+          "name": "BIAS TRACTOR TYRES",
+          "image": null,
+          "variants": [
+            {
+              "size": "6.00-16",
+              "plyRating": 8,
+              "ttTl": "TT",
+              "application": "Tractor Front",
+              "weightKg": 10.5,
+              "container": {
+                "type": "40HQ",
+                "quantity": 1500
+              },
+              "fobUsd": 28.18
+            },
+            {
+              "size": "7.50-16",
+              "plyRating": 8,
+              "ttTl": "TT",
+              "application": "Tractor Front",
+              "weightKg": 16,
+              "container": {
+                "type": "40HQ",
+                "quantity": 800
+              },
+              "fobUsd": 42.95
+            },
+            {
+              "size": "9.00-16",
+              "plyRating": 8,
+              "ttTl": "TT",
+              "application": "Tractor Front",
+              "weightKg": 23,
+              "container": {
+                "type": "40HQ",
+                "quantity": 650
+              },
+              "fobUsd": 61.74
+            },
+            {
+              "size": "10.00-16",
+              "plyRating": 10,
+              "ttTl": "TT",
+              "application": "Tractor Front",
+              "weightKg": 28,
+              "container": {
+                "type": "40HQ",
+                "quantity": 500
+              },
+              "fobUsd": 75.16
+            },
+            {
+              "size": "11.00-16",
+              "plyRating": 10,
+              "ttTl": "TT",
+              "application": "Tractor Front",
+              "weightKg": 32,
+              "container": {
+                "type": "40HQ",
+                "quantity": 400
+              },
+              "fobUsd": 85.89
+            }
+          ]
+        },
+        {
+          "patternCode": "TR-1055",
+          "name": "BIAS TRACTOR REAR TYRES (R1)",
+          "image": null,
+          "variants": [
+            {
+              "size": "8.3-24",
+              "plyRating": 6,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 24,
+              "container": {
+                "type": "40HQ",
+                "quantity": 460
+              },
+              "fobUsd": 64.42
+            },
+            {
+              "size": "9.5-24",
+              "plyRating": 8,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 27,
+              "container": {
+                "type": "40HQ",
+                "quantity": 370
+              },
+              "fobUsd": 72.47
+            },
+            {
+              "size": "11.2-24",
+              "plyRating": 8,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 36,
+              "container": {
+                "type": "40HQ",
+                "quantity": 330
+              },
+              "fobUsd": 96.63
+            },
+            {
+              "size": "12.4-24",
+              "plyRating": 12,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 44,
+              "container": {
+                "type": "40HQ",
+                "quantity": 210
+              },
+              "fobUsd": 118.11
+            },
+            {
+              "size": "13.6-24",
+              "plyRating": 12,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 47,
+              "container": {
+                "type": "40HQ",
+                "quantity": 190
+              },
+              "fobUsd": 126.16
+            },
+            {
+              "size": "14.9-24",
+              "plyRating": 12,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 52.5,
+              "container": {
+                "type": "40HQ",
+                "quantity": 160
+              },
+              "fobUsd": 140.92
+            },
+            {
+              "size": "16.9-28",
+              "plyRating": 12,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 78.5,
+              "container": {
+                "type": "40HQ",
+                "quantity": 110
+              },
+              "fobUsd": 210.71
+            },
+            {
+              "size": "16.9-30",
+              "plyRating": 14,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 84,
+              "container": {
+                "type": "40HQ",
+                "quantity": 100
+              },
+              "fobUsd": 225.47
+            },
+            {
+              "size": "18.4-30",
+              "plyRating": 14,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 103.082,
+              "container": {
+                "type": "40HQ",
+                "quantity": 90
+              },
+              "fobUsd": 276.69
+            },
+            {
+              "size": "23.1-30",
+              "plyRating": 14,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 160,
+              "container": {
+                "type": "40HQ",
+                "quantity": 50
+              },
+              "fobUsd": 429.47
+            },
+            {
+              "size": "16.9-34",
+              "plyRating": 12,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": null,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": null
+            },
+            {
+              "size": "18.4-34",
+              "plyRating": 14,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 110,
+              "container": {
+                "type": "40HQ",
+                "quantity": 70
+              },
+              "fobUsd": 295.26
+            },
+            {
+              "size": "11.2-38",
+              "plyRating": 12,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 52,
+              "container": {
+                "type": "40HQ",
+                "quantity": 150
+              },
+              "fobUsd": 139.58
+            },
+            {
+              "size": "13.6-38",
+              "plyRating": 12,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 83.5,
+              "container": {
+                "type": "40HQ",
+                "quantity": 84
+              },
+              "fobUsd": 224.13
+            },
+            {
+              "size": "15.5-38",
+              "plyRating": 8,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 85,
+              "container": {
+                "type": "40HQ",
+                "quantity": 60
+              },
+              "fobUsd": 228.16
+            },
+            {
+              "size": "18.4-38",
+              "plyRating": 14,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 131.5,
+              "container": {
+                "type": "40HQ",
+                "quantity": 50
+              },
+              "fobUsd": 352.97
+            },
+            {
+              "size": "20.8-38",
+              "plyRating": 14,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 156,
+              "container": {
+                "type": "40HQ",
+                "quantity": 38
+              },
+              "fobUsd": 418.74
+            }
+          ]
+        },
+        {
+          "patternCode": "TR-1065",
+          "name": "IRRIGATION TYRES",
+          "image": null,
+          "variants": [
+            {
+              "size": "11.2-24",
+              "plyRating": 8,
+              "ttTl": "TL",
+              "application": "Farm",
+              "weightKg": 33,
+              "container": {
+                "type": "40HQ",
+                "quantity": 280
+              },
+              "fobUsd": 88.58
+            },
+            {
+              "size": "14.9-24",
+              "plyRating": 8,
+              "ttTl": "TL",
+              "application": "Farm",
+              "weightKg": 50,
+              "container": {
+                "type": "40HQ",
+                "quantity": 160
+              },
+              "fobUsd": 134.21
+            },
+            {
+              "size": "11.2-38",
+              "plyRating": 8,
+              "ttTl": "TL",
+              "application": "Farm",
+              "weightKg": 51.5,
+              "container": {
+                "type": "40HQ",
+                "quantity": 160
+              },
+              "fobUsd": 138.24
+            }
+          ]
+        },
+        {
+          "patternCode": "TR-1070",
+          "name": "TILLER APPLICATION TYRES",
+          "image": null,
+          "variants": [
+            {
+              "size": "6.00-12",
+              "plyRating": 8,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 8,
+              "container": {
+                "type": "40HQ",
+                "quantity": "-"
+              },
+              "fobUsd": 21.47
+            },
+            {
+              "size": "7.00-12",
+              "plyRating": 8,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 10,
+              "container": {
+                "type": "40HQ",
+                "quantity": "-"
+              },
+              "fobUsd": 26.84
+            },
+            {
+              "size": "6.00-16",
+              "plyRating": 10,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 13,
+              "container": {
+                "type": "40HQ",
+                "quantity": "-"
+              },
+              "fobUsd": 34.89
+            }
+          ]
+        },
+        {
+          "patternCode": "TR-1095",
+          "name": "DRIVE WHEEL TYRES (R2)",
+          "image": null,
+          "variants": [
+            {
+              "size": "12.4-28",
+              "plyRating": 12,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 54.18,
+              "container": {
+                "type": "40HQ",
+                "quantity": 180
+              },
+              "fobUsd": 145.43
+            },
+            {
+              "size": "13.6-28",
+              "plyRating": 12,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 62.96,
+              "container": {
+                "type": "40HQ",
+                "quantity": 150
+              },
+              "fobUsd": 169
+            },
+            {
+              "size": "14.9-28",
+              "plyRating": 12,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 74.57,
+              "container": {
+                "type": "40HQ",
+                "quantity": 130
+              },
+              "fobUsd": 200.16
+            },
+            {
+              "size": "18.4-30",
+              "plyRating": 14,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 117.71,
+              "container": {
+                "type": "40HQ",
+                "quantity": 80
+              },
+              "fobUsd": 315.96
+            },
+            {
+              "size": "16.9-30",
+              "plyRating": 12,
+              "ttTl": "TT",
+              "application": "Farm",
+              "weightKg": 95,
+              "container": {
+                "type": "40HQ",
+                "quantity": 74
+              },
+              "fobUsd": 255
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "otr",
+      "name": "Off-The-Road (OTR) Tyres",
+      "sourceFile": "Safeway - Off The Road Tyres (1)(2).xlsx",
+      "patterns": [
+        {
+          "patternCode": "OT-SS-01",
+          "name": "SKID SKEER TYRE",
+          "image": null,
+          "variants": [
+            {
+              "size": "10-16.5",
+              "plyRating": 12,
+              "ttTl": "TL",
+              "application": "Loader",
+              "weightKg": 35,
+              "container": {
+                "type": "40HQ",
+                "quantity": 580
+              },
+              "fobUsd": 93.95
+            },
+            {
+              "size": "12-16.5",
+              "plyRating": 12,
+              "ttTl": "TL",
+              "application": "Loader",
+              "weightKg": 46,
+              "container": {
+                "type": "40HQ",
+                "quantity": 410
+              },
+              "fobUsd": 123.47
+            },
+            {
+              "size": "14-17.5",
+              "plyRating": 14,
+              "ttTl": "TL",
+              "application": "Loader",
+              "weightKg": null,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": null
+            }
+          ]
+        },
+        {
+          "patternCode": "OT-SS-02",
+          "name": "SKID SKEER TYRE",
+          "image": null,
+          "variants": [
+            {
+              "size": "10-16.5",
+              "plyRating": 12,
+              "ttTl": "TL",
+              "application": "Loader",
+              "weightKg": 22.5,
+              "container": {
+                "type": "40HQ",
+                "quantity": 540
+              },
+              "fobUsd": 60.39
+            },
+            {
+              "size": "12-16.5",
+              "plyRating": 12,
+              "ttTl": "TL",
+              "application": "Loader",
+              "weightKg": 29.5,
+              "container": {
+                "type": "40HQ",
+                "quantity": 450
+              },
+              "fobUsd": 79.18
+            }
+          ]
+        },
+        {
+          "patternCode": "OT-E3",
+          "name": "EARTHMOVER (OT-E3) TYRES",
+          "image": null,
+          "variants": [
+            {
+              "size": "14.00-24",
+              "plyRating": 24,
+              "ttTl": "TL",
+              "application": "OTR",
+              "weightKg": 141,
+              "container": {
+                "type": "40HQ",
+                "quantity": 130
+              },
+              "fobUsd": 378.47
+            },
+            {
+              "size": "14.00-25",
+              "plyRating": 24,
+              "ttTl": "TL",
+              "application": "OTR",
+              "weightKg": 120,
+              "container": {
+                "type": "40HQ",
+                "quantity": 130
+              },
+              "fobUsd": 322.11
+            },
+            {
+              "size": "17.5-25",
+              "plyRating": 20,
+              "ttTl": "TL",
+              "application": "OTR",
+              "weightKg": 125.662,
+              "container": {
+                "type": "40HQ",
+                "quantity": 110
+              },
+              "fobUsd": 337.3
+            },
+            {
+              "size": "20.5-25",
+              "plyRating": 20,
+              "ttTl": "TL",
+              "application": "OTR",
+              "weightKg": 187.56,
+              "container": {
+                "type": "40HQ",
+                "quantity": 80
+              },
+              "fobUsd": 503.45
+            },
+            {
+              "size": "23.5-25",
+              "plyRating": 24,
+              "ttTl": "TL",
+              "application": "OTR",
+              "weightKg": 230.758,
+              "container": {
+                "type": "40HQ",
+                "quantity": 60
+              },
+              "fobUsd": 619.4
+            }
+          ]
+        },
+        {
+          "patternCode": "OT-E3-01",
+          "name": "EARTHMOVER (OT-E3-01) TYRES",
+          "image": null,
+          "variants": [
+            {
+              "size": "14.00-25",
+              "plyRating": 20,
+              "ttTl": "TL",
+              "application": "OTR",
+              "weightKg": 115,
+              "container": {
+                "type": "40HQ",
+                "quantity": 110
+              },
+              "fobUsd": 308.68
+            },
+            {
+              "size": "17.5-25",
+              "plyRating": 20,
+              "ttTl": "TL",
+              "application": "OTR",
+              "weightKg": 121.5,
+              "container": {
+                "type": "40HQ",
+                "quantity": 100
+              },
+              "fobUsd": 326.13
+            },
+            {
+              "size": "20.5-25",
+              "plyRating": 20,
+              "ttTl": "TL",
+              "application": "OTR",
+              "weightKg": 188,
+              "container": {
+                "type": "40HQ",
+                "quantity": 60
+              },
+              "fobUsd": 504.63
+            },
+            {
+              "size": "23.5-25",
+              "plyRating": 20,
+              "ttTl": "TL",
+              "application": "OTR",
+              "weightKg": 232,
+              "container": {
+                "type": "40HQ",
+                "quantity": 48
+              },
+              "fobUsd": 622.74
+            },
+            {
+              "size": "26.5-25",
+              "plyRating": 28,
+              "ttTl": "TL",
+              "application": "OTR",
+              "weightKg": 318,
+              "container": {
+                "type": "40HQ",
+                "quantity": 40
+              },
+              "fobUsd": 853.58
+            }
+          ]
+        },
+        {
+          "patternCode": "OT-G2",
+          "name": "GRADER TYRES",
+          "image": null,
+          "variants": [
+            {
+              "size": "13.00-24",
+              "plyRating": 16,
+              "ttTl": "TL",
+              "application": "Industrial",
+              "weightKg": 72.791,
+              "container": {
+                "type": "40HQ",
+                "quantity": 160
+              },
+              "fobUsd": 195.39
+            },
+            {
+              "size": "14.00-24",
+              "plyRating": 16,
+              "ttTl": "TL",
+              "application": "Industrial",
+              "weightKg": 82,
+              "container": {
+                "type": "40HQ",
+                "quantity": 130
+              },
+              "fobUsd": 220.11
+            },
+            {
+              "size": "16.9-24",
+              "plyRating": 16,
+              "ttTl": "TL",
+              "application": "Industrial",
+              "weightKg": 90,
+              "container": {
+                "type": "40HQ",
+                "quantity": 120
+              },
+              "fobUsd": 241.58
+            },
+            {
+              "size": "17.5-25",
+              "plyRating": 16,
+              "ttTl": "TL",
+              "application": "Industrial",
+              "weightKg": 93,
+              "container": {
+                "type": "40HQ",
+                "quantity": 120
+              },
+              "fobUsd": 249.63
+            },
+            {
+              "size": "20.5-25",
+              "plyRating": 16,
+              "ttTl": "TL",
+              "application": "Industrial",
+              "weightKg": null,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": null
+            },
+            {
+              "size": "23.5-25",
+              "plyRating": 16,
+              "ttTl": "TL",
+              "application": "Industrial",
+              "weightKg": null,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": null
+            }
+          ]
+        },
+        {
+          "patternCode": "OT-L5",
+          "name": "INDUSTRIAL BACKHOE LOADER TYRE (L5)",
+          "image": null,
+          "variants": [
+            {
+              "size": "10-16.5",
+              "plyRating": 12,
+              "ttTl": "TL",
+              "application": "Loader",
+              "weightKg": 34.727,
+              "container": {
+                "type": "40HQ",
+                "quantity": 570
+              },
+              "fobUsd": 93.21
+            },
+            {
+              "size": "12-16.5",
+              "plyRating": 12,
+              "ttTl": "TL",
+              "application": "Loader",
+              "weightKg": 46,
+              "container": {
+                "type": "40HQ",
+                "quantity": 410
+              },
+              "fobUsd": 123.47
+            }
+          ]
+        },
+        {
+          "patternCode": "OT-MPT-01",
+          "name": "MULTIPURPOSE TYRES (MPT-01)",
+          "image": null,
+          "variants": [
+            {
+              "size": "12.5/80-18",
+              "plyRating": 16,
+              "ttTl": "TL",
+              "application": "Loader",
+              "weightKg": 43,
+              "container": {
+                "type": "40HQ",
+                "quantity": 310
+              },
+              "fobUsd": 115.42
+            }
+          ]
+        },
+        {
+          "patternCode": "OT-R3",
+          "name": "DRIVE WHEEL TYRES (R3)",
+          "image": null,
+          "variants": [
+            {
+              "size": "23.1-26",
+              "plyRating": 20,
+              "ttTl": "TL",
+              "application": "Industrial",
+              "weightKg": 155,
+              "container": {
+                "type": "40HQ",
+                "quantity": 60
+              },
+              "fobUsd": 416.05
+            }
+          ]
+        },
+        {
+          "patternCode": "OT-R4",
+          "name": "INDUSTRIAL BACKHOE LOADER TYRE (R4)",
+          "image": null,
+          "variants": [
+            {
+              "size": "16.9-24",
+              "plyRating": 10,
+              "ttTl": "TL",
+              "application": "Industrial",
+              "weightKg": 75,
+              "container": {
+                "type": "40HQ",
+                "quantity": 120
+              },
+              "fobUsd": 201.32
+            },
+            {
+              "size": "19.5L-24",
+              "plyRating": 16,
+              "ttTl": "TL",
+              "application": "Industrial",
+              "weightKg": 92,
+              "container": {
+                "type": "40HQ",
+                "quantity": 110
+              },
+              "fobUsd": 246.95
+            },
+            {
+              "size": "18.4-26",
+              "plyRating": 14,
+              "ttTl": "TL",
+              "application": "Industrial",
+              "weightKg": 94,
+              "container": {
+                "type": "40HQ",
+                "quantity": 100
+              },
+              "fobUsd": 252.32
+            },
+            {
+              "size": "16.9-28",
+              "plyRating": 12,
+              "ttTl": "TL",
+              "application": "Industrial",
+              "weightKg": 91,
+              "container": {
+                "type": "40HQ",
+                "quantity": 110
+              },
+              "fobUsd": 244.26
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "forklift-industrial",
+      "name": "Forklift / Industrial Tyres",
+      "sourceFile": "Safeway - Forklift Tyres (1)(2).xlsx",
+      "patterns": [
+        {
+          "patternCode": "FKP-555",
+          "name": "INDUSTRIAL FORKLIFT TYRES",
+          "image": null,
+          "variants": [
+            {
+              "size": "4.00-8",
+              "plyRating": 8,
+              "ttTl": null,
+              "application": "Fork Lift",
+              "weightKg": null,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": null
+            },
+            {
+              "size": "5.00-8",
+              "plyRating": 10,
+              "ttTl": "TTF",
+              "application": "Fork Lift",
+              "weightKg": 8.3,
+              "container": {
+                "type": "40HQ",
+                "quantity": 3000
+              },
+              "fobUsd": 22.28
+            },
+            {
+              "size": "6.00-9",
+              "plyRating": 10,
+              "ttTl": "TTF",
+              "application": "Fork Lift",
+              "weightKg": 10.9,
+              "container": {
+                "type": "40HQ",
+                "quantity": 2000
+              },
+              "fobUsd": 29.26
+            },
+            {
+              "size": "6.50-10",
+              "plyRating": 10,
+              "ttTl": "TTF",
+              "application": "Fork Lift",
+              "weightKg": 14.1,
+              "container": {
+                "type": "40HQ",
+                "quantity": 1300
+              },
+              "fobUsd": 37.85
+            },
+            {
+              "size": "7.00-12",
+              "plyRating": 12,
+              "ttTl": "TTF",
+              "application": "Fork Lift",
+              "weightKg": 19,
+              "container": {
+                "type": "40HQ",
+                "quantity": 1000
+              },
+              "fobUsd": 51
+            },
+            {
+              "size": "8.15-15",
+              "plyRating": 14,
+              "ttTl": "TTF",
+              "application": "Fork Lift",
+              "weightKg": 26.9,
+              "container": {
+                "type": "40HQ",
+                "quantity": 800
+              },
+              "fobUsd": 72.21
+            },
+            {
+              "size": "8.25-15",
+              "plyRating": 14,
+              "ttTl": "TTF",
+              "application": "Fork Lift",
+              "weightKg": 33.4,
+              "container": {
+                "type": "40HQ",
+                "quantity": 650
+              },
+              "fobUsd": 89.65
+            }
+          ]
+        },
+        {
+          "patternCode": "FKL-555",
+          "name": "INDUSTRIAL SOLID TYRES",
+          "image": null,
+          "variants": [
+            {
+              "size": "4.00-8",
+              "rimWidthInch": 3,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 12.32,
+              "container": {
+                "type": "20HQ",
+                "quantity": 1800
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 25.74
+            },
+            {
+              "size": "4.00-8",
+              "rimWidthInch": 2.75,
+              "tread": "Y",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 12.02,
+              "container": {
+                "type": "20HQ",
+                "quantity": 1800
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 25.12
+            },
+            {
+              "size": "4.00-8",
+              "rimWidthInch": 2.75,
+              "tread": "Rib",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 12.1,
+              "container": {
+                "type": "20HQ",
+                "quantity": 1800
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 25.29
+            },
+            {
+              "size": "4.00-8",
+              "rimWidthInch": 3,
+              "tread": "Rib",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 12.4,
+              "container": {
+                "type": "20HQ",
+                "quantity": 1800
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 25.91
+            },
+            {
+              "size": "5.00-8",
+              "rimWidthInch": 3,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 16.35,
+              "container": {
+                "type": "20HQ",
+                "quantity": 1177
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 34.23
+            },
+            {
+              "size": "5.00-8",
+              "rimWidthInch": 3.75,
+              "tread": "Rib",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 17.1,
+              "container": {
+                "type": "20HQ",
+                "quantity": 1177
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 35.78
+            },
+            {
+              "size": "15x4 1/2-8",
+              "rimWidthInch": 3,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 9,
+              "container": {
+                "type": "20HQ",
+                "quantity": 2103
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 18.85
+            },
+            {
+              "size": "15x4 1/2-8",
+              "rimWidthInch": 3.25,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 9.75,
+              "container": {
+                "type": "20HQ",
+                "quantity": 2103
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 20.39
+            },
+            {
+              "size": "16x6-8",
+              "rimWidthInch": 4.33,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 14.68,
+              "container": {
+                "type": "20HQ",
+                "quantity": 1288
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 30.74
+            },
+            {
+              "size": "18x7-8",
+              "rimWidthInch": 4.33,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 20.1,
+              "container": {
+                "type": "20HQ",
+                "quantity": 933
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 42.1
+            },
+            {
+              "size": "6.00-9",
+              "rimWidthInch": 4,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 23.84,
+              "container": {
+                "type": "20HQ",
+                "quantity": 744
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 49.97
+            },
+            {
+              "size": "140/55-9",
+              "rimWidthInch": 4,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 8.6,
+              "container": {
+                "type": "20HQ",
+                "quantity": 1686
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 17.17
+            },
+            {
+              "size": "21x8-9",
+              "rimWidthInch": 6,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 32,
+              "container": {
+                "type": "20HQ",
+                "quantity": 600
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 66.99
+            },
+            {
+              "size": "6.50-10",
+              "rimWidthInch": 5,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 33.2,
+              "container": {
+                "type": "20HQ",
+                "quantity": 552
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 69.56
+            },
+            {
+              "size": "200x50-10",
+              "rimWidthInch": 6.5,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 22.3,
+              "container": {
+                "type": "20HQ",
+                "quantity": 765
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 46.77
+            },
+            {
+              "size": "7.00-12",
+              "rimWidthInch": 5,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 45.52,
+              "container": {
+                "type": "20HQ",
+                "quantity": 400
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 95.38
+            },
+            {
+              "size": "23x10-12",
+              "rimWidthInch": 8,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 50,
+              "container": {
+                "type": "20HQ",
+                "quantity": 386
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 104.67
+            },
+            {
+              "size": "27x10-12",
+              "rimWidthInch": 8,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 69.7,
+              "container": {
+                "type": "20HQ",
+                "quantity": 287
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 145.83
+            },
+            {
+              "size": "7.00-15",
+              "rimWidthInch": 5.5,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 49.41,
+              "container": {
+                "type": "20HQ",
+                "quantity": 300
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 103.9
+            },
+            {
+              "size": "7.50-15",
+              "rimWidthInch": 5.5,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 65.2,
+              "container": {
+                "type": "20HQ",
+                "quantity": 262
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 136.75
+            },
+            {
+              "size": "7.50-15",
+              "rimWidthInch": 6,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 65.3,
+              "container": {
+                "type": "20HQ",
+                "quantity": 262
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 136.96
+            },
+            {
+              "size": "7.50-15",
+              "rimWidthInch": 6.5,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 65.4,
+              "container": {
+                "type": "20HQ",
+                "quantity": 262
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 137.17
+            },
+            {
+              "size": "250-15",
+              "rimWidthInch": "7/7.50",
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 66.24,
+              "container": {
+                "type": "20HQ",
+                "quantity": 257
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 138.94
+            },
+            {
+              "size": "8.15-15",
+              "rimWidthInch": "7.00",
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 56,
+              "container": {
+                "type": "20HQ",
+                "quantity": 314
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 117.4
+            },
+            {
+              "size": "8.25-15",
+              "rimWidthInch": 6.5,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 83.25,
+              "container": {
+                "type": "20HQ",
+                "quantity": 212
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 174.52
+            },
+            {
+              "size": "300-15",
+              "rimWidthInch": "8.00",
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 103.5,
+              "container": {
+                "type": "20HQ",
+                "quantity": 257
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 215.78
+            },
+            {
+              "size": "28x12.5-15",
+              "rimWidthInch": "9.75",
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 84.83,
+              "container": {
+                "type": "20HQ",
+                "quantity": 201
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 177.93
+            },
+            {
+              "size": "355/65-15",
+              "rimWidthInch": 9.75,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 122,
+              "container": {
+                "type": "20HQ",
+                "quantity": 147
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 255.68
+            },
+            {
+              "size": "7.50-16",
+              "rimWidthInch": 5.5,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 59.11,
+              "container": {
+                "type": "20HQ",
+                "quantity": 262
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 124.19
+            },
+            {
+              "size": "7.50-16",
+              "rimWidthInch": 6,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std (both)",
+              "application": "Fork Lift",
+              "weightKg": 59.55,
+              "container": {
+                "type": "20HQ",
+                "quantity": 262
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 125.1
+            },
+            {
+              "size": "7.50-16",
+              "rimWidthInch": 6.5,
+              "tread": "Y",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 59.8,
+              "container": {
+                "type": "20HQ",
+                "quantity": 262
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 125.62
+            },
+            {
+              "size": "7.50-20",
+              "rimWidthInch": "6.00",
+              "tread": "Y",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 73.89,
+              "container": {
+                "type": "20HQ",
+                "quantity": 171
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 155.9
+            },
+            {
+              "size": "8.25-20",
+              "rimWidthInch": 6.5,
+              "tread": "Y",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 126,
+              "container": {
+                "type": "20HQ",
+                "quantity": 151
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 263.82
+            },
+            {
+              "size": "9.00-20",
+              "rimWidthInch": 6.5,
+              "tread": "Y",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 126,
+              "container": {
+                "type": "20HQ",
+                "quantity": 128
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 264.54
+            },
+            {
+              "size": "9.00-20",
+              "rimWidthInch": 7,
+              "tread": "Y",
+              "tyreTypeAvailability": "Lip/Std(both)",
+              "application": "Fork Lift",
+              "weightKg": 126,
+              "container": {
+                "type": "20HQ",
+                "quantity": 128
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 264.54
+            },
+            {
+              "size": "10.00-20",
+              "rimWidthInch": 7,
+              "tread": "Y",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 140,
+              "container": {
+                "type": "20HQ",
+                "quantity": 114
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 289.27
+            },
+            {
+              "size": "10.00-20",
+              "rimWidthInch": 7.5,
+              "tread": "Y",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 142.86,
+              "container": {
+                "type": "20HQ",
+                "quantity": 114
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 295.09
+            },
+            {
+              "size": "10.00-20",
+              "rimWidthInch": 7.5,
+              "tread": "S",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 165,
+              "container": {
+                "type": "20HQ",
+                "quantity": 93
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 341.15
+            },
+            {
+              "size": "10.00-20",
+              "rimWidthInch": 8,
+              "tread": "Y",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 145,
+              "container": {
+                "type": "20HQ",
+                "quantity": 114
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 299.43
+            },
+            {
+              "size": "10.00-20",
+              "rimWidthInch": 8,
+              "tread": "S",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 180.1,
+              "container": {
+                "type": "20HQ",
+                "quantity": 93
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 371.84
+            },
+            {
+              "size": "10.00-20",
+              "rimWidthInch": 8.5,
+              "tread": "S",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 181.2,
+              "container": {
+                "type": "20HQ",
+                "quantity": 93
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 374.08
+            },
+            {
+              "size": "11.00-20",
+              "rimWidthInch": 7.5,
+              "tread": "S",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 170.48,
+              "container": {
+                "type": "20HQ",
+                "quantity": 93
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 352.29
+            },
+            {
+              "size": "11.00-20",
+              "rimWidthInch": 8,
+              "tread": "S",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 180.5,
+              "container": {
+                "type": "20HQ",
+                "quantity": 93
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 372.66
+            },
+            {
+              "size": "12.00-20",
+              "rimWidthInch": 8,
+              "tread": "Y",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 198,
+              "container": {
+                "type": "20HQ",
+                "quantity": 89
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 408.48
+            },
+            {
+              "size": "12.00-20",
+              "rimWidthInch": 8,
+              "tread": "S",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 236.1,
+              "container": {
+                "type": "20HQ",
+                "quantity": 89
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 683.34
+            },
+            {
+              "size": "12.00-20",
+              "rimWidthInch": 8.5,
+              "tread": "S",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 236.1,
+              "container": {
+                "type": "20HQ",
+                "quantity": 75
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 684.61
+            },
+            {
+              "size": "12.00-24",
+              "rimWidthInch": 8.5,
+              "tread": "Y",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 234.2,
+              "container": {
+                "type": "20HQ",
+                "quantity": 77
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 581.73
+            },
+            {
+              "size": "14.00-24",
+              "rimWidthInch": 10,
+              "tread": "Y",
+              "tyreTypeAvailability": "Std only",
+              "application": "Fork Lift",
+              "weightKg": 344,
+              "container": {
+                "type": "20HQ",
+                "quantity": 56
+              },
+              "tyreType": "Tyre Only",
+              "fobUsd": 853.73
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "motorcycle",
+      "name": "Motorcycle Tyres",
+      "sourceFile": "Safeway - Motorcycle Tyres (1)(2).xlsx",
+      "patterns": [
+        {
+          "patternCode": "SFM-101",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "3.00-17",
+              "plyRating": 6,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.6,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 9
+            },
+            {
+              "size": "3.00-18",
+              "plyRating": 6,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.85,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 9.62
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-115",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "3.00-17",
+              "plyRating": 6,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.6,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 9
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-120",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "3.00-18",
+              "plyRating": 6,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.85,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 9.62
+            },
+            {
+              "size": "90/90-17",
+              "plyRating": 4,
+              "ttTl": "TL",
+              "application": "Two-Wheeler",
+              "weightKg": 3.85,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 9.62
+            },
+            {
+              "size": "2.75-17",
+              "plyRating": 4,
+              "ttTl": "TL",
+              "application": "Two-Wheeler",
+              "weightKg": 3,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 7.5
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-125",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "2.75-18",
+              "plyRating": 4,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.2,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 8
+            },
+            {
+              "size": "70/90-17",
+              "plyRating": 4,
+              "ttTl": "TL",
+              "application": "Two-Wheeler",
+              "weightKg": 2.8,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 7
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-130",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "2.75-18",
+              "plyRating": 6,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.2,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 8
+            },
+            {
+              "size": "3.00-17",
+              "plyRating": 6,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.66,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 9.15
+            },
+            {
+              "size": "3.00-18",
+              "plyRating": 6,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.85,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 9.62
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-135",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "90/90-12",
+              "plyRating": 4,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 2.9,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 7.25
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-140",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "90/90-18",
+              "plyRating": 6,
+              "ttTl": "TL",
+              "application": "Two-Wheeler",
+              "weightKg": 3.65,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 9.12
+            },
+            {
+              "size": "2.75-18",
+              "plyRating": 4,
+              "ttTl": "TL",
+              "application": "Two-Wheeler",
+              "weightKg": 3.65,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 9.12
+            },
+            {
+              "size": "2.75-17",
+              "plyRating": 4,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 2.6,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 6.5
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-145",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "90/100-10",
+              "plyRating": 4,
+              "ttTl": "TL",
+              "application": "Two-Wheeler",
+              "weightKg": 2.8,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 7
+            },
+            {
+              "size": "90/90-12",
+              "plyRating": 4,
+              "ttTl": "TL",
+              "application": "Two-Wheeler",
+              "weightKg": 2.9,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 7.25
+            },
+            {
+              "size": "110/90-13",
+              "plyRating": 4,
+              "ttTl": "TL",
+              "application": "Two-Wheeler",
+              "weightKg": 3,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 7.5
+            },
+            {
+              "size": "120/70-12",
+              "plyRating": 4,
+              "ttTl": "TL",
+              "application": "Two-Wheeler",
+              "weightKg": 3,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 7.5
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-150",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "3.00-17",
+              "plyRating": 6,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.85,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 9.62
+            },
+            {
+              "size": "3.00-18",
+              "plyRating": 6,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.7,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 9.25
+            },
+            {
+              "size": "2.75-17",
+              "plyRating": 4,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 7.5
+            },
+            {
+              "size": "110/90-16",
+              "plyRating": 6,
+              "ttTl": "TL",
+              "application": "Two-Wheeler",
+              "weightKg": 5.65,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 14.12
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-155",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "3.00-17",
+              "plyRating": 6,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.33,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 8.32
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-162",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "2.50-16",
+              "plyRating": 4,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 2.2,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 5.5
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-164",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "2.75-18",
+              "plyRating": 4,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 7.5
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-166",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "90/90-12",
+              "plyRating": 4,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 2.8,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 7
+            },
+            {
+              "size": "2.50-17",
+              "plyRating": 4,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 2.8,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 7
+            },
+            {
+              "size": "3.75-12",
+              "plyRating": 4,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.2,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 8
+            },
+            {
+              "size": "90/90-12",
+              "plyRating": 4,
+              "ttTl": "TL",
+              "application": "Two-Wheeler",
+              "weightKg": 3,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 7.5
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-180",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "3.00-17",
+              "plyRating": 6,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.6,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 9
+            },
+            {
+              "size": "2.75-18",
+              "plyRating": 6,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.2,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 8
+            },
+            {
+              "size": "3.00-18",
+              "plyRating": 6,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.85,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 9.62
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-185",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "90/90-12",
+              "plyRating": 4,
+              "ttTl": "TL",
+              "application": "Two-Wheeler",
+              "weightKg": 3,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 7.5
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-190",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "2.75-18",
+              "plyRating": 4,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 2.6,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 6.5
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-193",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "2.75-17",
+              "plyRating": 4,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 7.5
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-195",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "2.75-18",
+              "plyRating": 4,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 2.8,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 7
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-198",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "2.75-17",
+              "plyRating": 6,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.2,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 8
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-208",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "110/90-16",
+              "plyRating": 6,
+              "ttTl": "TL",
+              "application": "Two-Wheeler",
+              "weightKg": 5.65,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 14.12
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-215",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "2.75-18",
+              "plyRating": 4,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.2,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 8
+            },
+            {
+              "size": "2.75-17",
+              "plyRating": 4,
+              "ttTl": "TL",
+              "application": "Two-Wheeler",
+              "weightKg": 3,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 7.5
+            },
+            {
+              "size": "3.00-18",
+              "plyRating": 6,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.85,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 9.62
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-222",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "90/100-10",
+              "plyRating": 4,
+              "ttTl": "TL",
+              "application": "Two-Wheeler",
+              "weightKg": 2.8,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 7
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-225",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "2.75-17",
+              "plyRating": 4,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 2.8,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 7
+            },
+            {
+              "size": "2.75-18",
+              "plyRating": 4,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.2,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 8
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-230",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "2.75-18",
+              "plyRating": 6,
+              "ttTl": "TT",
+              "application": "Two-Wheeler",
+              "weightKg": 3.2,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 8
+            }
+          ]
+        },
+        {
+          "patternCode": "SFM-235",
+          "name": "Motorcycle Tyres",
+          "image": null,
+          "variants": [
+            {
+              "size": "90/90-14",
+              "plyRating": 4,
+              "ttTl": "TL",
+              "application": "Two-Wheeler",
+              "weightKg": 3.2,
+              "container": {
+                "type": "40HQ",
+                "quantity": null
+              },
+              "fobUsd": 8
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

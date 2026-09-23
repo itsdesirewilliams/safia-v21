@@ -10,7 +10,7 @@ import {
 import { CATEGORIES } from "@/lib/catalogue/categories";
 
 const FIELD_CLASS =
-  "mt-1 w-full rounded-lg border border-ink-100 bg-white px-3 py-2 text-sm text-ink-900 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20";
+  "mt-1.5 w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-ink-900 outline-none transition placeholder:text-ink-300 focus:border-brand-600 focus:ring-2 focus:ring-brand-600/15";
 
 function FieldError({ message }: { message?: string }) {
   if (!message) {
@@ -37,9 +37,9 @@ export function QueryForm() {
         <div>
           <label
             htmlFor="query-name"
-            className="text-sm font-medium text-ink-800"
+            className="text-sm font-medium text-ink-950"
           >
-            Name <span aria-hidden="true">*</span>
+            Name <span aria-hidden="true" className="text-brand-600">*</span>
           </label>
           <input
             id="query-name"
@@ -57,9 +57,9 @@ export function QueryForm() {
         <div>
           <label
             htmlFor="query-country"
-            className="text-sm font-medium text-ink-800"
+            className="text-sm font-medium text-ink-950"
           >
-            Country <span aria-hidden="true">*</span>
+            Country <span aria-hidden="true" className="text-brand-600">*</span>
           </label>
           <input
             id="query-country"
@@ -77,9 +77,9 @@ export function QueryForm() {
         <div>
           <label
             htmlFor="query-phone"
-            className="text-sm font-medium text-ink-800"
+            className="text-sm font-medium text-ink-950"
           >
-            Phone <span aria-hidden="true">*</span>
+            Phone <span aria-hidden="true" className="text-brand-600">*</span>
           </label>
           <input
             id="query-phone"
@@ -97,9 +97,9 @@ export function QueryForm() {
         <div>
           <label
             htmlFor="query-category"
-            className="text-sm font-medium text-ink-800"
+            className="text-sm font-medium text-ink-950"
           >
-            Category <span aria-hidden="true">*</span>
+            Category <span aria-hidden="true" className="text-brand-600">*</span>
           </label>
           <select
             id="query-category"
@@ -125,11 +125,11 @@ export function QueryForm() {
       <div className="mt-4">
         <label
           htmlFor="query-message"
-          className="text-sm font-medium text-ink-800"
+          className="text-sm font-medium text-ink-950"
         >
-          Message <span aria-hidden="true">*</span>
+          Message <span aria-hidden="true" className="text-brand-600">*</span>
         </label>
-        <p className="text-xs text-ink-800/60">
+        <p className="mt-0.5 text-xs text-ink-700">
           Tell us what you need, including sizes if applicable.
         </p>
         <textarea
