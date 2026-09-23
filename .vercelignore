@@ -9,7 +9,9 @@ supabase/.temp
 supabase/.branches
 
 # Source media is copied into src/app/fonts and public/ at build time.
-assets
+# Anchor to the repo root so served copies under public/assets/ are not
+# excluded from the deployment.
+/assets
 
 # VCS internals.
 .git
