@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 
+import { getCategory } from "@/lib/catalogue/categories";
 import { getEmailTransportEnv } from "@/lib/config";
 import { SITE } from "@/lib/site";
 
@@ -36,18 +37,35 @@ export const CONTACT_RECIPIENTS: readonly string[] = [
   SITE.emails.marketing,
 ];
 
+/**
+ * Strip CR/LF and control characters from a value before it is used in a mail
+ * header. User input is only ever placed in the subject, but this keeps a
+ * crafted name from injecting additional headers.
+ */
+export function sanitizeHeaderValue(value: string): string {
+  return value
+    .replace(/[\r\n]+/g, " ")
+    .replace(/[\u0000-\u001f\u007f]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export function buildContactEmail(
   submission: ContactSubmission,
   from: string,
 ): EmailMessage {
   const label = submission.formType === "query" ? "Query" : "Feedback";
+  // Relay the canonical category display name, not the internal slug.
+  const category = submission.category
+    ? (getCategory(submission.category)?.displayName ?? submission.category)
+    : null;
   const lines = [
     `New ${label} from the Safeway Tyre website`,
     "",
     `Name: ${submission.name}`,
     `Country: ${submission.country}`,
     `Phone: ${submission.phone}`,
-    ...(submission.category ? [`Category: ${submission.category}`] : []),
+    ...(category ? [`Category: ${category}`] : []),
     "",
     "Message:",
     submission.message,
@@ -56,7 +74,7 @@ export function buildContactEmail(
   return {
     to: [...CONTACT_RECIPIENTS],
     from,
-    subject: `Safeway Tyre — ${label} from ${submission.name}`,
+    subject: `Safeway Tyre — ${label} from ${sanitizeHeaderValue(submission.name)}`,
     text: lines.join("\n"),
   };
 }

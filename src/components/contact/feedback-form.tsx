@@ -2,9 +2,8 @@
 
 import { useActionState } from "react";
 
-import { submitQueryForm } from "@/app/(site)/contact-us/actions";
+import { submitFeedbackForm } from "@/app/(site)/contact-us/actions";
 import { buttonStyles } from "@/components/ui/button";
-import { CATEGORIES } from "@/lib/catalogue/categories";
 import {
   INITIAL_CONTACT_FORM_STATE,
   type ContactFormState,
@@ -14,28 +13,23 @@ import {
   FormStatus,
   FormSuccess,
   HoneypotField,
-  SelectField,
   TextAreaField,
   TextField,
 } from "./fields";
 
-const CATEGORY_OPTIONS = CATEGORIES.map((category) => ({
-  value: category.slug,
-  label: category.displayName,
-}));
-
 /**
- * The Query / Enquiry form (spec #6). The single implementation used on both
- * the Contact Us page and the homepage, so the two behave identically.
+ * The Feedback form (spec #6): intentionally simpler than the Query form — no
+ * Category. Same shared validation, honeypot, rate limiting and email
+ * delivery as the Query form.
  */
-export function QueryForm() {
+export function FeedbackForm() {
   const [state, formAction, isPending] = useActionState<
     ContactFormState,
     FormData
-  >(submitQueryForm, INITIAL_CONTACT_FORM_STATE);
+  >(submitFeedbackForm, INITIAL_CONTACT_FORM_STATE);
 
   if (state.status === "success" && state.message) {
-    return <FormSuccess message={state.message} kind="query" />;
+    return <FormSuccess message={state.message} kind="feedback" />;
   }
 
   const values = state.values;
@@ -44,7 +38,7 @@ export function QueryForm() {
     <form action={formAction} noValidate>
       <div className="grid gap-4 sm:grid-cols-2">
         <TextField
-          id="query-name"
+          id="feedback-name"
           name="name"
           label="Name"
           required
@@ -53,7 +47,7 @@ export function QueryForm() {
           error={state.errors?.name}
         />
         <TextField
-          id="query-country"
+          id="feedback-country"
           name="country"
           label="Country"
           required
@@ -62,7 +56,7 @@ export function QueryForm() {
           error={state.errors?.country}
         />
         <TextField
-          id="query-phone"
+          id="feedback-phone"
           name="phone"
           label="Phone"
           type="tel"
@@ -71,25 +65,15 @@ export function QueryForm() {
           defaultValue={values?.phone}
           error={state.errors?.phone}
         />
-        <SelectField
-          id="query-category"
-          name="category"
-          label="Category"
-          required
-          placeholder="Select a category"
-          options={CATEGORY_OPTIONS}
-          defaultValue={values?.category}
-          error={state.errors?.category}
-        />
       </div>
 
       <div className="mt-4">
         <TextAreaField
-          id="query-message"
+          id="feedback-message"
           name="message"
           label="Message"
           required
-          hint="Tell us what you need, including sizes if applicable."
+          hint="Share your comments, suggestions or concerns."
           defaultValue={values?.message}
           error={state.errors?.message}
         />
@@ -103,7 +87,7 @@ export function QueryForm() {
           disabled={isPending}
           className={buttonStyles("primary", "lg")}
         >
-          {isPending ? "Sending…" : "Send Enquiry"}
+          {isPending ? "Sending…" : "Send Feedback"}
         </button>
         <FormStatus state={state} />
       </div>

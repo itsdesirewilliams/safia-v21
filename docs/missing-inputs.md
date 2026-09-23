@@ -59,6 +59,9 @@ shell builds and runs without them; features that need them fail loudly with a
   Instagram feed (no `INSTAGRAM_ACCESS_TOKEN`), certifications, testimonials
   and the map (no `NEXT_PUBLIC_COMPANY_ADDRESS`). A configured Instagram token
   whose fetch fails hides the section instead.
-- The inquiry form validates and rate-limits server-side; when
-  `EMAIL_TRANSPORT_*` is unset it returns a graceful WhatsApp/email fallback
-  rather than silently dropping the submission.
+- The Contact Us Query and Feedback forms validate and rate-limit server-side;
+  when `EMAIL_TRANSPORT_*` is unset they return a graceful WhatsApp/email
+  fallback rather than silently dropping the submission. The same Query form is
+  reused on the homepage.
+- The Contact Us map renders only from the approved configured address; when
+  `NEXT_PUBLIC_COMPANY_ADDRESS` is unset it shows a labelled placeholder.

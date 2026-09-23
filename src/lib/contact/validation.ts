@@ -3,7 +3,8 @@ import { isCategorySlug, type CategorySlug } from "@/lib/catalogue/categories";
 /**
  * Shared validation for the Contact Us forms (spec #6). The Query form (used
  * on Contact Us and on the homepage) requires a Category; the Feedback form
- * does not. This is the single validation seam both forms pass through.
+ * does not. Both pass through the same field rules here, so the two forms
+ * behave identically for the fields they share.
  */
 
 export type QueryFormValues = {
@@ -16,11 +17,25 @@ export type QueryFormValues = {
   honeypot: string;
 };
 
-export type QueryFormErrors = Partial<Record<keyof QueryFormValues, string>>;
+export type FeedbackFormValues = {
+  name: string;
+  country: string;
+  phone: string;
+  message: string;
+  /** Honeypot field — must stay empty. */
+  honeypot: string;
+};
+
+export type QueryFormErrors = Record<string, string>;
+export type FeedbackFormErrors = Record<string, string>;
 
 export type QueryValidationResult =
   | { ok: true; value: QueryFormValues }
   | { ok: false; errors: QueryFormErrors };
+
+export type FeedbackValidationResult =
+  | { ok: true; value: FeedbackFormValues }
+  | { ok: false; errors: FeedbackFormErrors };
 
 const NAME_MIN = 2;
 const NAME_MAX = 120;
@@ -36,8 +51,10 @@ function readString(input: Record<string, unknown>, key: string): string {
 
 /**
  * Country-aware-enough phone validation: accepts an optional international
- * prefix and common separators, and requires 7–15 digits. Full
- * libphonenumber-grade validation is deferred to Ticket 6.
+ * prefix and common separators, and requires 7–15 digits (the ITU E.164 range,
+ * which covers national and international numbers). This is the project's
+ * shared approach for both forms; it deliberately rejects a naive
+ * "exactly N digits" rule so international visitors are supported.
  */
 export function isValidPhone(phone: string): boolean {
   const trimmed = phone.trim();
@@ -51,17 +68,24 @@ export function isValidPhone(phone: string): boolean {
   return digits.length >= 7 && digits.length <= 15;
 }
 
-export function validateQueryForm(
+type CommonValues = {
+  name: string;
+  country: string;
+  phone: string;
+  message: string;
+  honeypot: string;
+};
+
+function validateCommon(
   input: Record<string, unknown>,
-): QueryValidationResult {
+): { values: CommonValues; errors: Record<string, string> } {
   const name = readString(input, "name");
   const country = readString(input, "country");
   const phone = readString(input, "phone");
-  const category = readString(input, "category");
   const message = readString(input, "message");
   const honeypot = readString(input, "honeypot");
 
-  const errors: QueryFormErrors = {};
+  const errors: Record<string, string> = {};
 
   if (name.length < NAME_MIN || name.length > NAME_MAX) {
     errors.name = "Please enter your name.";
@@ -72,11 +96,21 @@ export function validateQueryForm(
   if (!isValidPhone(phone)) {
     errors.phone = "Please enter a valid phone number.";
   }
-  if (!isCategorySlug(category)) {
-    errors.category = "Please choose a product category.";
-  }
   if (message.length < MESSAGE_MIN || message.length > MESSAGE_MAX) {
     errors.message = "Tell us what you need, including sizes if applicable.";
+  }
+
+  return { values: { name, country, phone, message, honeypot }, errors };
+}
+
+export function validateQueryForm(
+  input: Record<string, unknown>,
+): QueryValidationResult {
+  const { values, errors } = validateCommon(input);
+  const category = readString(input, "category");
+
+  if (!isCategorySlug(category)) {
+    errors.category = "Please choose a product category.";
   }
 
   if (Object.keys(errors).length > 0) {
@@ -86,12 +120,20 @@ export function validateQueryForm(
   return {
     ok: true,
     value: {
-      name,
-      country,
-      phone,
+      ...values,
       category: category as CategorySlug,
-      message,
-      honeypot,
     },
   };
+}
+
+export function validateFeedbackForm(
+  input: Record<string, unknown>,
+): FeedbackValidationResult {
+  const { values, errors } = validateCommon(input);
+
+  if (Object.keys(errors).length > 0) {
+    return { ok: false, errors };
+  }
+
+  return { ok: true, value: values };
 }

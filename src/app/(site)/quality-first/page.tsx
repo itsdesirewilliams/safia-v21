@@ -14,12 +14,11 @@ import {
   QUALITY_FIRST_MACHINE_SECTION,
   QUALITY_FIRST_STORY_SECTION,
 } from "@/lib/quality-first";
-import { SITE } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: `Quality First | ${SITE.name}`,
+  title: "Quality First",
   description:
     "Safeway Tyre's testing and quality-control process: testing story videos, an explanation of the process, and the machines behind it.",
 };
