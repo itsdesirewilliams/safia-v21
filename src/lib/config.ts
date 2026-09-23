@@ -118,6 +118,15 @@ export function getOptionalInstagramAccessToken(): string | null {
   return optional("INSTAGRAM_ACCESS_TOKEN");
 }
 
+/**
+ * Optional catalogue download URL. The Catalogue slider surfaces a download
+ * action only when Safeway has supplied a link, so this returns `null` rather
+ * than throwing.
+ */
+export function getOptionalCatalogueDownloadUrl(): string | null {
+  return optional("NEXT_PUBLIC_CATALOGUE_DOWNLOAD_URL");
+}
+
 /** YouTube video ID for the homepage embed. */
 export function getYoutubeVideoId(): string {
   return readRequired(["YOUTUBE_VIDEO_ID"]).YOUTUBE_VIDEO_ID;

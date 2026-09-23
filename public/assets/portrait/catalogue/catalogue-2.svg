@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350" role="img" aria-label="Catalogue slide 2 portrait placeholder">
+  <rect width="1080" height="1350" fill="#0a0a0b"/>
+  <rect x="0" y="0" width="1080" height="10" fill="#c81e28"/>
+  <text x="540" y="620" fill="#ffffff" font-family="system-ui, sans-serif" font-size="60" font-weight="700" text-anchor="middle">Catalogue artwork</text>
+  <text x="540" y="690" fill="#e11d2a" font-family="system-ui, sans-serif" font-size="30" font-weight="600" letter-spacing="4" text-anchor="middle">PORTRAIT 4:5</text>
+  <text x="540" y="755" fill="rgba(255,255,255,0.55)" font-family="system-ui, sans-serif" font-size="24" text-anchor="middle">Placeholder — replace with slide 2</text>
+</svg>

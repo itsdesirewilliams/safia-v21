@@ -32,6 +32,8 @@ shell builds and runs without them; features that need them fail loudly with a
 | YouTube video ID | `YOUTUBE_VIDEO_ID` | Homepage "Take a Tour" | Homepage renders a labelled placeholder when absent |
 | Certification assets | — (asset) | Homepage / About Us | Not supplied; the homepage renders a labelled placeholder rather than inventing names or marks |
 | Testimonial content | — (content) | Homepage | Not supplied; the homepage renders a labelled placeholder rather than inventing quotes |
+| Slider artwork | — (asset) | Catalogue & Business Profile sliders | Not supplied; labelled placeholder SVGs ship in `public/assets/{landscape,portrait}/{catalogue,business-profile}` and are replaced by dropping matching filenames into both ratio folders |
+| Catalogue download URL | `NEXT_PUBLIC_CATALOGUE_DOWNLOAD_URL` | Catalogue slider download action | No PDF link supplied; the slider omits the download action until one is set |
 | Email transport credentials | `EMAIL_TRANSPORT_*` | Contact Us forms (ADR-0007) | Transport provider itself is a deferred implementation detail |
 | Alfabet font licence | — (asset) | Production typography | `src/app/fonts` currently uses the Fontspring **demo** cuts supplied in `assets/fonts`; licence must be verified before production |
 

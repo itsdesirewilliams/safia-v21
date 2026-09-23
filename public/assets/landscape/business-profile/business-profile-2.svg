@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Business Profile slide 2 landscape placeholder">
+  <rect width="1600" height="900" fill="#16171a"/>
+  <rect x="0" y="0" width="1600" height="10" fill="#c81e28"/>
+  <text x="800" y="410" fill="#ffffff" font-family="system-ui, sans-serif" font-size="64" font-weight="700" text-anchor="middle">Business Profile artwork</text>
+  <text x="800" y="480" fill="#e11d2a" font-family="system-ui, sans-serif" font-size="32" font-weight="600" letter-spacing="4" text-anchor="middle">LANDSCAPE 16:9</text>
+  <text x="800" y="545" fill="rgba(255,255,255,0.55)" font-family="system-ui, sans-serif" font-size="26" text-anchor="middle">Placeholder — replace with slide 2</text>
+</svg>
