@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: var(--font-alfabet), system-ui, sans-serif;
+  --font-sans: var(--font-archivo), system-ui, sans-serif;
+
+  --color-ink-950: #0a0a0b;
+  --color-ink-900: #16171a;
+  --color-ink-800: #26282d;
+  --color-ink-100: #f4f4f5;
+  --color-brand-600: #c81e28;
+  --color-brand-500: #e11d2a;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}

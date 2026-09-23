@@ -1,0 +1,16 @@
+# Never ship local secrets or the generated Vercel token to a deployment.
+.env*
+!.env.example
+
+# Local build / tooling artifacts.
+.next
+node_modules
+supabase/.temp
+supabase/.branches
+
+# Source media is copied into src/app/fonts and public/ at build time.
+assets
+
+# VCS internals.
+.git
+.gitignore
