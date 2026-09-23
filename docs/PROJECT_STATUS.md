@@ -32,10 +32,10 @@ Status: COMPLETE
 Status: COMPLETE
 
 ### Ticket #17 — Warranty
-Status: NEXT
+Status: COMPLETE
 
 ### Ticket #18 — Catalogue
-Status: PENDING
+Status: NEXT
 
 ### Ticket #19 — Blogs & CMS
 Status: PENDING
@@ -48,28 +48,16 @@ Status: PENDING
 
 ## Current next task
 
-Ticket #17 — Warranty
+Ticket #18 — Catalogue
 
 GitHub Issue:
-#5
+#1
 
 Route:
 
-/warranty
+/catalogue
 
-Special content source:
-
-https://www.safewaytyre.com/warrantly-policy
-
-This is an explicit exception to the normal old-site source rule.
-
-Use the existing Warranty Policy as the content source.
-
-Primary objective:
-
-Preserve the policy content/meaning/terminology while redesigning its presentation using the current Safeway Tyre design system.
-
-Do not invent or alter warranty terms.
+Uses the supplied responsive catalogue assets (landscape 16:9; portrait 4:5 / 1080×1350) through the shared responsive slider. Do not use old-site catalogue assets. Pricing is not public.
 
 ## Completed implementation commits
 
@@ -80,6 +68,10 @@ Ticket #15:
 Ticket #16:
 
 68c9361
+
+Ticket #17:
+
+c4bcd36
 
 The exact latest commit should be checked from Git before starting the next ticket.
 
@@ -164,8 +156,7 @@ Missing media/content should use documented placeholders rather than old-site sc
 
 ## Future sequence
 
-#17 Warranty
-→ #18 Catalogue
+#18 Catalogue
 → #19 Blogs & CMS
 → #20 About Us
 → #21 Gallery

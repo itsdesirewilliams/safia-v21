@@ -1108,12 +1108,12 @@ Status: COMPLETE
 Ticket #17
 GitHub Issue #5
 Warranty
-Status: NEXT
+Status: COMPLETE
 
 Ticket #18
 GitHub Issue #1
 Catalogue
-Status: PENDING
+Status: NEXT
 
 Ticket #19
 GitHub Issue #2
