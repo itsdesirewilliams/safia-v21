@@ -6,7 +6,7 @@ import {
   INITIAL_QUERY_FORM_STATE,
   submitQueryForm,
   type QueryFormState,
-} from "@/app/contact-us/actions";
+} from "@/app/(site)/contact-us/actions";
 import { buttonStyles } from "@/components/ui/button";
 import { CATEGORIES } from "@/lib/catalogue/categories";
 

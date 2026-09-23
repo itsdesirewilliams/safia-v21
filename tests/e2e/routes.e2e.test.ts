@@ -122,3 +122,35 @@ describe("Supabase connection", () => {
     expect(body.buckets.missing).toEqual([]);
   });
 });
+
+describe("admin routes are protected server-side", () => {
+  it("redirects signed-out visitors from /admin/media to the login screen", async () => {
+    const response = await fetch(`${BASE_URL}/admin/media`, {
+      redirect: "manual",
+    });
+
+    expect([302, 303, 307, 308]).toContain(response.status);
+    expect(response.headers.get("location") ?? "").toContain("/admin/login");
+  });
+
+  it("redirects signed-out visitors from the admin root", async () => {
+    const response = await fetch(`${BASE_URL}/admin`, { redirect: "manual" });
+    expect([302, 303, 307, 308]).toContain(response.status);
+    expect(response.headers.get("location") ?? "").toContain("/admin/login");
+  });
+
+  it("does not render the media library to signed-out visitors", async () => {
+    const response = await fetch(`${BASE_URL}/admin/media`, {
+      redirect: "manual",
+    });
+    const body = response.headers.get("location") ? "" : await response.text();
+    expect(body).not.toContain("Media library");
+  });
+
+  it("serves the sign-in page", async () => {
+    const response = await fetch(`${BASE_URL}/admin/login`);
+    expect(response.status).toBe(200);
+    const html = await response.text();
+    expect(html).toContain("Sign in to manage media");
+  });
+});

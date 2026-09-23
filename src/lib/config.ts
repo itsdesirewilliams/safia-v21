@@ -46,6 +46,11 @@ export type SupabaseEnv = {
   anonKey: string;
 };
 
+/** The public Supabase project URL (used to resolve media URLs). */
+export function getSupabaseUrl(): string {
+  return readRequired(["NEXT_PUBLIC_SUPABASE_URL"]).NEXT_PUBLIC_SUPABASE_URL;
+}
+
 /** Public Supabase connection (browser and server, anon key). */
 export function getSupabaseEnv(): SupabaseEnv {
   const env = readRequired([

@@ -24,6 +24,7 @@ shell builds and runs without them; features that need them fail loudly with a
 | Catalogue schema | `supabase/migrations/20260923010000_catalogue_minimal.sql` | Applied to `safeway-tyre` (homepage search) |
 | Master product data | `supabase/master-product-data.json` | Supplied — the authoritative Category → Pattern → Variant dataset (schemaVersion 1.0) |
 | Catalogue seed | `supabase/seed.sql` | Applied — generated from the master product data; Ticket 8 adds the full normalization seam |
+| Media schema + roles | `supabase/migrations/20260924000000_media_layer.sql` | Applied — `media`, `profiles`, RLS, storage policies, reference guard |
 | Homepage hero video | `NEXT_PUBLIC_HERO_VIDEO_URL` (fallback `/media/hero-tour.mp4`) | Interim placeholder — the supplied Manufacturing Unit Tour clip ships in `public/media`; replace when Safeway supplies a final hero video |
 
 ## Awaiting input (flagged, not invented)
@@ -38,6 +39,7 @@ shell builds and runs without them; features that need them fail loudly with a
 | Slider artwork | — (asset) | Catalogue & Business Profile sliders | Not supplied; labelled placeholder SVGs ship in `public/assets/{landscape,portrait}/{catalogue,business-profile}` and are replaced by dropping matching filenames into both ratio folders |
 | Catalogue download URL | `NEXT_PUBLIC_CATALOGUE_DOWNLOAD_URL` | Catalogue slider download action | No PDF link supplied; the slider omits the download action until one is set |
 | Email transport credentials | `EMAIL_TRANSPORT_*` | Contact Us forms (ADR-0007) | Transport provider itself is a deferred implementation detail |
+| First admin account | — (credential) | `/admin/media` access | No admin/editor user exists yet. Bootstrap with `ADMIN_EMAIL=... ADMIN_PASSWORD=... node scripts/create-admin.mjs` (see `docs/admin-media.md`). Roles are never self-assigned |
 | Final display font | — (design decision) | Production typography | Inter is the active typeface (Anek Devanagari for Devanagari copy). Alfabet is removed; the supplied Fontspring demo cuts in `assets/fonts` must not be used in production |
 
 ## How missing values behave
