@@ -2,6 +2,10 @@ import {
   CATEGORIES,
   type CategorySlug,
 } from "@/lib/catalogue/categories";
+import {
+  CATALOGUE_STATS,
+  PATTERNS_BY_CATEGORY,
+} from "@/lib/catalogue/stats";
 
 /**
  * Developer-owned homepage content (spec #8). Everything here ships via code;
@@ -14,6 +18,8 @@ export type HomeCategoryCard = {
   displayName: string;
   slug: CategorySlug;
   blurb: string;
+  /** Number of Patterns in this Category (from the master dataset). */
+  patterns: number;
 };
 
 const CATEGORY_CARD_BLURBS: Partial<Record<CategorySlug, string>> = {
@@ -30,10 +36,9 @@ const CATEGORY_CARD_BLURBS: Partial<Record<CategorySlug, string>> = {
 };
 
 /**
- * The six canonical categories shown as cards in the homepage "Product ranges"
- * section. Tubes is excluded here (its data is deferred) even though it
- * remains in the Products navigation — see the integration-review patch on
- * spec #8.
+ * The six canonical categories shown in the homepage product-range showcase.
+ * Tubes is excluded here (its data is deferred) even though it remains in the
+ * Products navigation — see the integration-review patch on spec #8.
  */
 export const HOME_CATEGORY_CARDS: readonly HomeCategoryCard[] =
   CATEGORIES.filter((category) => category.slug !== "tubes").map(
@@ -41,8 +46,19 @@ export const HOME_CATEGORY_CARDS: readonly HomeCategoryCard[] =
       displayName: category.displayName,
       slug: category.slug,
       blurb: CATEGORY_CARD_BLURBS[category.slug] ?? "",
+      patterns: PATTERNS_BY_CATEGORY[category.slug] ?? 0,
     }),
   );
+
+/**
+ * Aggregate catalogue figures for editorial use. These are derived from the
+ * master dataset — never invented.
+ */
+export const HOME_STATS = [
+  { value: CATALOGUE_STATS.productRanges, label: "Product ranges" },
+  { value: CATALOGUE_STATS.patterns, label: "Patterns" },
+  { value: CATALOGUE_STATS.variants, label: "Size variants" },
+] as const;
 
 export type Certification = {
   name: string;

@@ -3,7 +3,12 @@ export const SITE = {
   legalName: "DEE RON Automotives LLP",
   tagline: "Exporting Durable Tyres Worldwide",
   emails: {
-    director: "director@safewaytyre.com",
+    /**
+     * The Director address is displayed with a capital D by Safeway's
+     * instruction. Email is case-insensitive for delivery; keep this exact
+     * casing wherever the address is shown.
+     */
+    director: "Director@safewaytyre.com",
     marketing: "marketing01@safewaytyre.com",
   },
   phone: {

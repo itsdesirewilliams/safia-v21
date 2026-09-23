@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { getPublicConfig, type SocialLink } from "@/lib/config";
+import { ArrowIcon } from "@/components/ui/button";
+import { CATEGORIES } from "@/lib/catalogue/categories";
+import { getPublicConfig } from "@/lib/config";
 import { FOOTER_NAV, ROUTES } from "@/lib/routes";
 import { SITE } from "@/lib/site";
 
@@ -44,40 +46,39 @@ function SocialIcon({ name }: { name: string }) {
           <path d="M12 2.2a9.8 9.8 0 0 0-3.57 18.93c-.09-.8-.17-2.03.03-2.9.19-.8 1.2-5.1 1.2-5.1s-.3-.61-.3-1.51c0-1.42.82-2.48 1.85-2.48.87 0 1.29.66 1.29 1.44 0 .88-.56 2.2-.85 3.42-.24 1.02.51 1.86 1.52 1.86 1.83 0 3.23-1.93 3.23-4.71 0-2.46-1.77-4.18-4.3-4.18-2.93 0-4.65 2.2-4.65 4.47 0 .88.34 1.83.76 2.35.08.1.1.19.07.29l-.29 1.15c-.04.19-.15.23-.35.14-1.28-.6-2.08-2.47-2.08-3.97 0-3.23 2.35-6.2 6.77-6.2 3.56 0 6.32 2.53 6.32 5.92 0 3.53-2.23 6.38-5.32 6.38-1.04 0-2.01-.54-2.35-1.18l-.64 2.43c-.23.89-.85 2-1.27 2.68A9.8 9.8 0 1 0 12 2.2Z" />
         </svg>
       );
+    case "WhatsApp":
+      return (
+        <svg {...common}>
+          <path d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.74.46 3.44 1.32 4.94L2.1 22l5.34-1.4a9.8 9.8 0 0 0 4.6 1.17h.01c5.43 0 9.85-4.4 9.85-9.85C21.9 6.4 17.48 2 12.04 2Zm0 17.96h-.01a8.1 8.1 0 0 1-4.13-1.13l-.3-.18-3.06.8.82-2.99-.19-.3a8.09 8.09 0 0 1-1.24-4.32c0-4.48 3.65-8.13 8.13-8.13 2.17 0 4.2.85 5.74 2.38a8.07 8.07 0 0 1 2.38 5.75c0 4.48-3.65 8.12-8.14 8.12Zm4.46-6.08c-.24-.12-1.45-.72-1.67-.8-.22-.08-.39-.12-.55.12-.16.24-.63.8-.77.96-.14.16-.28.18-.52.06-.24-.12-1.03-.38-1.96-1.21-.72-.65-1.21-1.44-1.35-1.68-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.55-1.32-.75-1.81-.2-.48-.4-.42-.55-.42h-.47c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 1.99 0 1.18.86 2.31.98 2.47.12.16 1.69 2.58 4.09 3.62.57.25 1.02.4 1.37.5.57.18 1.09.16 1.5.1.46-.07 1.45-.59 1.65-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.46-.28Z" />
+        </svg>
+      );
     default:
       return null;
   }
 }
 
-function SocialLinks({ links }: { links: readonly SocialLink[] }) {
-  if (links.length === 0) {
-    return null;
-  }
-
+function FooterHeading({ children }: { children: string }) {
   return (
-    <ul className="flex flex-wrap items-center gap-2">
-      {links.map((link) => (
-        <li key={link.name}>
-          <a
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-ink-100/70 transition-colors hover:border-brand-600 hover:bg-brand-600 hover:text-white"
-          >
-            <SocialIcon name={link.name} />
-            <span className="sr-only">{`${SITE.name} on ${link.name}`}</span>
-          </a>
-        </li>
-      ))}
-    </ul>
+    <h2 className="text-eyebrow text-white/40">{children}</h2>
   );
 }
 
-function FooterHeading({ children }: { children: string }) {
+function FooterLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
   return (
-    <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-white/45">
-      {children}
-    </h2>
+    <li>
+      <Link
+        href={href}
+        className="text-sm text-white/65 transition-colors hover:text-white"
+      >
+        {children}
+      </Link>
+    </li>
   );
 }
 
@@ -85,109 +86,167 @@ export function SiteFooter() {
   const { companyAddress, socialLinks } = getPublicConfig();
   const year = new Date().getFullYear();
 
+  const socials = [
+    ...socialLinks,
+    { name: "WhatsApp", url: SITE.whatsappUrl },
+  ];
+
   return (
-    <footer className="border-t-2 border-brand-600 bg-ink-950 text-ink-100">
-      <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr] lg:gap-8 lg:px-8">
-        <div className="space-y-5">
-          <Image
-            src="/brand/safeway-logo-white.png"
-            alt={SITE.name}
-            width={180}
-            height={42}
-            className="h-9 w-auto"
-          />
-          <p className="max-w-xs text-sm leading-relaxed text-ink-100/60">
-            {SITE.legalName}. {SITE.tagline}.
-          </p>
-          {companyAddress && (
-            <p className="max-w-xs text-sm leading-relaxed text-ink-100/60">
-              {companyAddress}
-            </p>
-          )}
-        </div>
-
-        <nav aria-label="Footer">
-          <FooterHeading>Explore</FooterHeading>
-          <ul className="mt-5 space-y-2.5">
-            {FOOTER_NAV.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="text-sm text-ink-100/70 transition-colors hover:text-white"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <div>
-          <FooterHeading>Contact</FooterHeading>
-          <ul className="mt-5 space-y-2.5 text-sm text-ink-100/70">
-            <li>
+    <footer className="bg-ink-50 px-4 pb-8 pt-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[96rem] overflow-hidden rounded-card bg-ink-950 text-white">
+        <div className="px-6 py-14 sm:px-10 sm:py-16 lg:px-14 lg:py-20">
+          <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-xl">
+              <p className="text-eyebrow text-accent-500">
+                Let&rsquo;s work together
+              </p>
+              <h2 className="text-h2 mt-5 text-white">
+                Sourcing tyres?
+                <br />
+                Start the conversation.
+              </h2>
+            </div>
+            <div className="shrink-0">
               <a
                 href={`mailto:${SITE.emails.director}`}
-                className="transition-colors hover:text-white"
+                className="group inline-flex items-center gap-4"
               >
-                {SITE.emails.director}
+                <span className="text-2xl font-bold tracking-tight break-all sm:text-3xl lg:text-4xl">
+                  {SITE.emails.director}
+                </span>
+                <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent-500 text-white transition-transform duration-200 group-hover:translate-x-1">
+                  <ArrowIcon className="h-5 w-5" />
+                </span>
               </a>
-            </li>
-            <li>
-              <a
-                href={`mailto:${SITE.emails.marketing}`}
-                className="transition-colors hover:text-white"
-              >
-                {SITE.emails.marketing}
-              </a>
-            </li>
-            <li>
-              <a
-                href={`tel:${SITE.phone.primary.replace(/\s/g, "")}`}
-                className="transition-colors hover:text-white"
-              >
-                {SITE.phone.primary}
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div className="space-y-8">
-          <div>
-            <FooterHeading>Opening Hours</FooterHeading>
-            <p className="mt-5 text-sm text-ink-100/70">
-              {SITE.openingHours.days}
-              <br />
-              {SITE.openingHours.hours}
-            </p>
-            <p className="mt-1 text-sm text-ink-100/40">
-              {SITE.openingHours.closed} closed
-            </p>
+              <p className="mt-4 text-sm text-white/50">
+                {SITE.legalName}
+              </p>
+            </div>
           </div>
-          {socialLinks.length > 0 && (
-            <div>
-              <FooterHeading>Follow</FooterHeading>
-              <div className="mt-5">
-                <SocialLinks links={socialLinks} />
+
+          <div className="mt-14 grid gap-10 border-t border-white/10 pt-12 sm:grid-cols-2 lg:grid-cols-12">
+            <div className="space-y-5 lg:col-span-4">
+              <Image
+                src="/brand/safeway-logo-white.png"
+                alt={SITE.name}
+                width={180}
+                height={42}
+                className="h-9 w-auto"
+              />
+              <p className="max-w-xs text-sm leading-relaxed text-white/55">
+                {SITE.tagline}. Manufactured in India and exported worldwide.
+              </p>
+              {companyAddress && (
+                <p className="max-w-xs text-sm leading-relaxed text-white/55">
+                  {companyAddress}
+                </p>
+              )}
+              <div className="flex flex-wrap gap-2 pt-1">
+                {socials.map((link) => (
+                  <a
+                    key={link.name}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/70 transition-colors hover:border-accent-500 hover:bg-accent-500 hover:text-white"
+                  >
+                    <SocialIcon name={link.name} />
+                    <span className="sr-only">
+                      {`${SITE.name} on ${link.name}`}
+                    </span>
+                  </a>
+                ))}
               </div>
             </div>
-          )}
-        </div>
-      </div>
 
-      <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-6 text-xs text-ink-100/45 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-          <p>
-            © {year} {SITE.legalName}. All rights reserved.
-          </p>
-          <p>
-            <Link
-              href={ROUTES.contactUs}
-              className="transition-colors hover:text-white"
-            >
-              Contact Us
-            </Link>
-          </p>
+            <nav aria-label="Products" className="lg:col-span-3">
+              <FooterHeading>Products</FooterHeading>
+              <ul className="mt-5 space-y-3">
+                {CATEGORIES.map((category) => (
+                  <FooterLink
+                    key={category.slug}
+                    href={ROUTES.category(category.slug)}
+                  >
+                    {category.displayName}
+                  </FooterLink>
+                ))}
+              </ul>
+            </nav>
+
+            <nav aria-label="Company" className="lg:col-span-2">
+              <FooterHeading>Company</FooterHeading>
+              <ul className="mt-5 space-y-3">
+                {FOOTER_NAV.map((item) => (
+                  <FooterLink key={item.href} href={item.href}>
+                    {item.label}
+                  </FooterLink>
+                ))}
+              </ul>
+            </nav>
+
+            <div className="lg:col-span-3">
+              <FooterHeading>Contact</FooterHeading>
+              <ul className="mt-5 space-y-3 text-sm text-white/65">
+                <li>
+                  <a
+                    href={`mailto:${SITE.emails.director}`}
+                    className="transition-colors hover:text-white"
+                  >
+                    {SITE.emails.director}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href={`mailto:${SITE.emails.marketing}`}
+                    className="transition-colors hover:text-white"
+                  >
+                    {SITE.emails.marketing}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href={`tel:${SITE.phone.primary.replace(/\s/g, "")}`}
+                    className="transition-colors hover:text-white"
+                  >
+                    {SITE.phone.primary}
+                  </a>
+                </li>
+              </ul>
+              <p className="mt-6 text-sm text-white/50">
+                {SITE.openingHours.days}
+                <br />
+                {SITE.openingHours.hours}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-12 flex flex-col gap-4 border-t border-white/10 pt-8 text-xs text-white/45 sm:flex-row sm:items-center sm:justify-between">
+            <p>
+              © {year} {SITE.legalName}. All rights reserved.
+            </p>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+              <Link
+                href={ROUTES.contactUs}
+                className="transition-colors hover:text-white"
+              >
+                Contact Us
+              </Link>
+              <Link
+                href={ROUTES.catalogue}
+                className="transition-colors hover:text-white"
+              >
+                Catalogue
+              </Link>
+              <a
+                href={SITE.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-colors hover:text-white"
+              >
+                WhatsApp
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

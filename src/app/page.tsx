@@ -1,376 +1,492 @@
-import Image from "next/image";
 import Link from "next/link";
 
-import { QueryForm } from "@/components/contact/query-form";
+import { CategoryVisual } from "@/components/home/category-visual";
 import { InstagramFeed } from "@/components/home/instagram-feed";
 import { SearchBox } from "@/components/home/search-box";
-import { SectionPlaceholder } from "@/components/home/section-placeholder";
+import { QueryForm } from "@/components/contact/query-form";
+import { ArrowIcon, ButtonLink } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
+import { Eyebrow } from "@/components/ui/eyebrow";
+import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
+import { Reveal } from "@/components/ui/reveal";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { Stat } from "@/components/ui/stat";
+import { getHeroVideoUrl, getOptionalYoutubeVideoId, getPublicConfig } from "@/lib/config";
 import {
   CERTIFICATIONS,
   HOME_CATEGORY_CARDS,
+  HOME_STATS,
   TESTIMONIALS,
 } from "@/lib/homepage";
-import { getOptionalYoutubeVideoId, getPublicConfig } from "@/lib/config";
 import { ROUTES } from "@/lib/routes";
 import { SITE } from "@/lib/site";
 
 export const metadata = {
   title: `${SITE.name} | ${SITE.tagline}`,
   description:
-    "Search Safeway Tyre's catalogue by size, pattern code or category, explore our six product ranges, and send an enquiry.",
+    "Search Safeway Tyre's catalogue by size, pattern code or category, explore our product ranges, and send an enquiry.",
 };
 
 const YOUTUBE_ID_PATTERN = /^[A-Za-z0-9_-]{11}$/;
 
-function SectionHeading({
-  eyebrow,
-  title,
-  description,
-}: {
-  eyebrow: string;
-  title: string;
-  description?: string;
-}) {
+function TourPlaceholder() {
   return (
-    <div className="max-w-2xl">
-      <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-brand-600">
-        <span aria-hidden="true" className="h-px w-8 bg-brand-600" />
-        {eyebrow}
-      </p>
-      <h2 className="mt-4 text-3xl font-bold tracking-tight text-ink-950 sm:text-4xl">
-        {title}
-      </h2>
-      {description && (
-        <p className="mt-4 text-base leading-relaxed text-ink-700">
-          {description}
-        </p>
-      )}
-    </div>
-  );
-}
-
-function ArrowRight({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 20 20"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.75"
-      className={className}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"
+    <div className="relative aspect-video w-full overflow-hidden rounded-card bg-ink-950">
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 [background:radial-gradient(100%_100%_at_75%_10%,rgba(11,99,246,0.35),transparent_60%),radial-gradient(80%_80%_at_0%_100%,rgba(255,106,0,0.16),transparent_55%)]"
       />
-    </svg>
+      <div className="relative flex h-full flex-col items-center justify-center gap-5 px-6 text-center">
+        <span className="inline-flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur">
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="ml-1 h-6 w-6"
+          >
+            <path d="M8 5.5v13l11-6.5-11-6.5Z" />
+          </svg>
+        </span>
+        <p className="text-sm font-semibold text-white">
+          Factory tour video not configured
+        </p>
+        <p className="max-w-sm text-sm text-white/60">
+          No YouTube video ID is available yet, so the tour is shown as a
+          placeholder. Set YOUTUBE_VIDEO_ID to embed the tour.
+        </p>
+      </div>
+    </div>
   );
 }
 
 export default function HomePage() {
   const youtubeId = getOptionalYoutubeVideoId();
-  const hasValidVideo = Boolean(
-    youtubeId && YOUTUBE_ID_PATTERN.test(youtubeId),
-  );
+  const hasValidVideo = Boolean(youtubeId && YOUTUBE_ID_PATTERN.test(youtubeId));
   const { companyAddress } = getPublicConfig();
+  const heroVideoUrl = getHeroVideoUrl();
 
   return (
     <>
-      {/* Hero + product search */}
-      <section className="relative overflow-hidden bg-ink-950 text-white">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 [background-image:repeating-linear-gradient(115deg,rgba(255,255,255,0.025)_0_1px,transparent_1px_64px)]"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-white/10"
-        />
-        <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-16 sm:px-6 sm:pt-20 lg:px-8 lg:pb-28 lg:pt-28">
-          <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-brand-500">
-            <span aria-hidden="true" className="h-px w-8 bg-brand-500" />
-            Premium tyres made right
-          </p>
-          <h1 className="mt-6 max-w-3xl text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-            Find the right tyre for every load and every road.
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/65">
-            {SITE.name} manufactures and exports durable tyres worldwide. Search
-            the catalogue by size, pattern code, name or category.
-          </p>
-
-          <div className="mt-10 max-w-2xl">
-            <SearchBox />
-          </div>
-
-          <div className="mt-10 flex flex-wrap items-center gap-4">
-            <Link
-              href={ROUTES.contactUs}
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-500"
+      {/* Hero — video + product search */}
+      <section className="bg-ink-50 px-4 pt-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[96rem]">
+          <div className="relative overflow-hidden rounded-card bg-ink-950">
+            <video
+              className="absolute inset-0 h-full w-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              poster="/media/hero-poster.svg"
+              aria-hidden="true"
             >
-              Request a Quotation
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <a
-              href={SITE.whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-lg border border-white/20 px-6 py-3 text-sm font-semibold text-white transition-colors hover:border-white/40 hover:bg-white/5"
-            >
-              Chat on WhatsApp
-            </a>
+              <source src={heroVideoUrl} type="video/mp4" />
+            </video>
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/75 to-ink-950/35"
+            />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 [background:radial-gradient(110%_90%_at_12%_100%,rgba(7,16,24,0.9),transparent_62%)]"
+            />
+
+            <div className="relative flex min-h-[88svh] flex-col justify-between gap-12 px-6 py-10 sm:px-10 lg:min-h-[44rem] lg:px-14 lg:py-14">
+              <div className="max-w-3xl animate-fade-up">
+                <Eyebrow tone="dark">
+                  Exporting durable tyres worldwide
+                </Eyebrow>
+                <h1 className="text-display mt-6 text-white">
+                  Tyres that keep the world moving.
+                </h1>
+                <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/70">
+                  {SITE.name} manufactures and exports durable tyres worldwide.
+                  Search the catalogue by size, pattern code, name or category.
+                </p>
+              </div>
+
+              <div className="animate-fade-up [animation-delay:160ms]">
+                <div id="search" className="max-w-2xl scroll-mt-28">
+                  <SearchBox />
+                </div>
+
+                <ul className="mt-6 flex flex-wrap gap-2">
+                  {HOME_CATEGORY_CARDS.map((card) => (
+                    <li key={card.slug}>
+                      <Link
+                        href={ROUTES.category(card.slug)}
+                        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/80 backdrop-blur transition-colors hover:border-white/35 hover:bg-white/10 hover:text-white"
+                      >
+                        {card.displayName}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <ButtonLink
+                    href={ROUTES.contactUs}
+                    variant="accent"
+                    size="lg"
+                  >
+                    Request a Quotation
+                    <ArrowIcon className="h-4 w-4" />
+                  </ButtonLink>
+                  <ButtonLink
+                    href={ROUTES.catalogue}
+                    variant="onDark"
+                    size="lg"
+                  >
+                    Explore the Catalogue
+                  </ButtonLink>
+                </div>
+              </div>
+
+              <div className="grid max-w-3xl grid-cols-3 gap-6 border-t border-white/10 pt-8">
+                {HOME_STATS.map((item) => (
+                  <Stat
+                    key={item.label}
+                    value={item.value}
+                    label={item.label}
+                    tone="dark"
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Take a Tour */}
-      <section className="border-b border-ink-200 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-          <SectionHeading
-            eyebrow="Take a Tour"
-            title="Take a tour of our industry"
-            description="See Safeway Tyre's operations, testing and quality process in action."
-          />
-          <div className="mt-10">
-            {hasValidVideo ? (
-              <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-ink-200 shadow-card">
-                <iframe
-                  className="absolute inset-0 h-full w-full"
-                  src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
-                  title="Safeway Tyre factory tour"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  loading="lazy"
+      <section className="bg-white py-20 lg:py-28">
+        <Container>
+          <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-16">
+            <div>
+              <Reveal>
+                <SectionHeading
+                  eyebrow="Take a Tour"
+                  title="Take a tour of our industry"
+                  description="See Safeway Tyre's operations, testing and quality process in action."
                 />
-              </div>
-            ) : (
-              <SectionPlaceholder
-                label="Factory tour video not configured"
-                detail="No YouTube video ID is available yet, so the tour is shown as a placeholder. Set YOUTUBE_VIDEO_ID to embed the tour."
-              />
-            )}
+              </Reveal>
+              <Reveal delay={80}>
+                <ButtonLink
+                  href={ROUTES.qualityFirst}
+                  variant="outline"
+                  size="md"
+                  className="mt-8"
+                >
+                  Explore Quality First
+                  <ArrowIcon className="h-4 w-4" />
+                </ButtonLink>
+              </Reveal>
+            </div>
+            <Reveal delay={120}>
+              {hasValidVideo ? (
+                <div className="relative aspect-video w-full overflow-hidden rounded-card border border-ink-200 shadow-card">
+                  <iframe
+                    className="absolute inset-0 h-full w-full"
+                    src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
+                    title="Safeway Tyre factory tour"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                </div>
+              ) : (
+                <TourPlaceholder />
+              )}
+            </Reveal>
           </div>
-        </div>
+        </Container>
       </section>
 
-      {/* Product Ranges */}
-      <section className="border-b border-ink-200 bg-ink-50">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-          <SectionHeading
-            eyebrow="Our Range"
-            title="Product ranges"
-            description="Six ranges covering transport, agriculture and industry. Browse each range to see its patterns."
-          />
-          <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+      {/* Product ranges */}
+      <section className="bg-ink-50 py-20 lg:py-28">
+        <Container>
+          <Reveal>
+            <SectionHeading
+              eyebrow="Our Range"
+              title="Product ranges"
+              description="Six ranges covering transport, agriculture and industry. Browse each range to see its patterns."
+            />
+          </Reveal>
+
+          <ul className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {HOME_CATEGORY_CARDS.map((card, index) => (
               <li key={card.slug}>
-                <Link
-                  href={ROUTES.category(card.slug)}
-                  className="group flex h-full flex-col rounded-xl border border-ink-200 bg-white p-6 transition duration-200 hover:border-brand-600/50 hover:shadow-card"
-                >
-                  <span className="flex items-center justify-between">
-                    <span className="text-sm font-semibold tabular-nums text-ink-300">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <ArrowRight className="h-4 w-4 text-ink-300 transition duration-200 group-hover:translate-x-0.5 group-hover:text-brand-600" />
-                  </span>
-                  <span className="mt-6 text-lg font-semibold tracking-tight text-ink-950">
-                    {card.displayName}
-                  </span>
-                  <span className="mt-2 flex-1 text-sm leading-relaxed text-ink-700">
-                    {card.blurb}
-                  </span>
-                  <span className="mt-6 text-sm font-semibold text-brand-600">
-                    View range
-                  </span>
-                </Link>
+                <Reveal delay={(index % 3) * 90} className="h-full">
+                  <Link
+                    href={ROUTES.category(card.slug)}
+                    className="group flex h-full flex-col rounded-card border border-ink-200 bg-white p-3 transition duration-300 hover:border-ink-300 hover:shadow-card"
+                  >
+                    <CategoryVisual
+                      index={index}
+                      label={card.displayName}
+                    />
+                    <div className="flex flex-1 flex-col px-2 pb-2 pt-5">
+                      <div className="flex items-start justify-between gap-4">
+                        <h3 className="text-h3 text-ink-950">
+                          {card.displayName}
+                        </h3>
+                        <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-ink-200 text-ink-700 transition-colors duration-200 group-hover:border-brand-600 group-hover:bg-brand-600 group-hover:text-white">
+                          <ArrowIcon className="h-4 w-4" />
+                        </span>
+                      </div>
+                      <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-600">
+                        {card.blurb}
+                      </p>
+                      <p className="mt-5 text-xs font-semibold uppercase tracking-[0.16em] text-ink-400">
+                        {card.patterns}{" "}
+                        {card.patterns === 1 ? "pattern" : "patterns"}
+                      </p>
+                    </div>
+                  </Link>
+                </Reveal>
               </li>
             ))}
           </ul>
-        </div>
+        </Container>
       </section>
 
       {/* Catalogue */}
-      <section className="border-b border-ink-200 bg-white">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:items-end lg:px-8 lg:py-20">
-          <SectionHeading
-            eyebrow="Catalogue"
-            title="Explore the official catalogue"
-            description="Browse the full Safeway Tyre catalogue of patterns and sizes. The interactive catalogue viewer ships with the catalogue module."
-          />
-          <div className="lg:justify-self-end">
-            <Link
-              href={ROUTES.catalogue}
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-ink-950 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-ink-800"
-            >
-              Open the Catalogue
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
+      <section className="bg-white py-20 lg:py-28">
+        <Container>
+          <Reveal>
+            <div className="relative overflow-hidden rounded-card bg-ink-950 px-6 py-14 sm:px-12 lg:px-16 lg:py-20">
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 [background:radial-gradient(110%_120%_at_90%_0%,rgba(11,99,246,0.4),transparent_58%),radial-gradient(70%_70%_at_0%_110%,rgba(255,106,0,0.18),transparent_55%)]"
+              />
+              <div className="relative grid gap-14 lg:grid-cols-2 lg:items-center">
+                <div>
+                  <SectionHeading
+                    tone="dark"
+                    eyebrow="Catalogue"
+                    title="Explore the official catalogue"
+                    description="Browse the full Safeway Tyre catalogue of patterns and sizes. The interactive catalogue viewer ships with the catalogue module."
+                  />
+                  <div className="mt-8">
+                    <ButtonLink
+                      href={ROUTES.catalogue}
+                      variant="accent"
+                      size="lg"
+                    >
+                      Open the Catalogue
+                      <ArrowIcon className="h-4 w-4" />
+                    </ButtonLink>
+                  </div>
+                </div>
+
+                <div
+                  aria-hidden="true"
+                  className="relative hidden h-72 lg:block"
+                >
+                  <div className="absolute left-6 top-4 h-64 w-52 -rotate-6 rounded-2xl border border-white/10 bg-white/[0.06]" />
+                  <div className="absolute left-24 top-8 h-64 w-56 rotate-3 rounded-2xl border border-white/15 bg-white/[0.09] p-5">
+                    <div className="h-3 w-24 rounded-full bg-accent-500/80" />
+                    <div className="mt-5 space-y-3">
+                      <div className="h-2.5 w-full rounded-full bg-white/20" />
+                      <div className="h-2.5 w-4/5 rounded-full bg-white/15" />
+                      <div className="h-2.5 w-3/5 rounded-full bg-white/10" />
+                    </div>
+                    <div className="mt-8 grid grid-cols-3 gap-2">
+                      {Array.from({ length: 6 }).map((_, index) => (
+                        <div
+                          key={index}
+                          className="h-14 rounded-lg bg-white/[0.07]"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </Container>
       </section>
 
-      {/* Quality & Certifications */}
-      <section className="border-b border-ink-200 bg-ink-50">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-          <SectionHeading
-            eyebrow="Quality First"
-            title="Quality &amp; certifications"
-            description="Safeway Tyre products are backed by recognised quality and compliance marks."
-          />
-          {CERTIFICATIONS.length > 0 ? (
-            <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {CERTIFICATIONS.map((certification) => (
-                <li
-                  key={certification.name}
-                  className="flex items-center gap-4 rounded-xl border border-ink-200 bg-white p-5"
-                >
-                  {certification.logo ? (
-                    <span className="relative h-12 w-16 shrink-0">
-                      <Image
-                        src={certification.logo}
-                        alt={certification.name}
-                        fill
-                        sizes="64px"
-                        className="object-contain"
-                      />
-                    </span>
-                  ) : (
-                    <span className="grid h-12 w-16 shrink-0 place-items-center rounded-md bg-ink-100 text-[10px] font-semibold uppercase tracking-wide text-ink-800">
-                      Mark
-                    </span>
-                  )}
-                  <span className="min-w-0">
-                    <span className="block text-sm font-semibold text-ink-950">
-                      {certification.name}
-                    </span>
-                    <span className="block text-xs text-ink-700">
-                      {certification.detail}
-                    </span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div className="mt-10">
-              <SectionPlaceholder
-                label="Certification marks not supplied"
-                detail="Certification logos and documents have not been supplied yet, so none are shown rather than inventing names or marks."
-              />
-            </div>
-          )}
-        </div>
+      {/* Quality & certifications */}
+      <section className="bg-white pb-20 lg:pb-28">
+        <Container>
+          <Reveal>
+            <SectionHeading
+              eyebrow="Quality First"
+              title="Quality & certifications"
+              description="Safeway Tyre products are backed by recognised quality and compliance marks."
+            />
+          </Reveal>
+          <div className="mt-14 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+            <Reveal>
+              <div className="h-full rounded-card bg-ink-950 p-8 sm:p-10">
+                <p className="text-lg leading-relaxed text-white/75">
+                  From freight and agriculture to industry and off-road, every
+                  Safeway range is built on the same manufacturing discipline.
+                </p>
+                <div className="mt-10 grid grid-cols-3 gap-6">
+                  {HOME_STATS.map((item) => (
+                    <Stat
+                      key={item.label}
+                      value={item.value}
+                      label={item.label}
+                      tone="dark"
+                    />
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+            <Reveal delay={100}>
+              {CERTIFICATIONS.length > 0 ? (
+                <ul className="grid gap-4 sm:grid-cols-2">
+                  {CERTIFICATIONS.map((certification) => (
+                    <li
+                      key={certification.name}
+                      className="rounded-card border border-ink-200 bg-white p-6"
+                    >
+                      <p className="text-sm font-semibold text-ink-950">
+                        {certification.name}
+                      </p>
+                      <p className="mt-1 text-sm text-ink-500">
+                        {certification.detail}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <PlaceholderPanel
+                  kind="certification"
+                  label="Certification marks not supplied"
+                  detail="Certification logos and documents have not been supplied yet, so none are shown rather than inventing names or marks."
+                  className="h-full"
+                />
+              )}
+            </Reveal>
+          </div>
+        </Container>
       </section>
 
       {/* Testimonials */}
-      <section className="border-b border-ink-200 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-          <SectionHeading
-            eyebrow="What our clients say"
-            title="Trusted by importers worldwide"
-          />
-          <div className="mt-10">
-            {TESTIMONIALS.length > 0 ? (
-              <ul className="grid gap-6 md:grid-cols-3">
-                {TESTIMONIALS.map((testimonial) => (
-                  <li
-                    key={testimonial.author}
-                    className="rounded-xl border border-ink-200 bg-ink-50 p-6"
-                  >
-                    <blockquote className="text-sm leading-relaxed text-ink-800">
-                      &ldquo;{testimonial.quote}&rdquo;
-                    </blockquote>
-                    <p className="mt-4 text-sm font-semibold text-ink-950">
-                      {testimonial.author}
-                    </p>
-                    <p className="text-xs text-ink-700">
-                      {testimonial.location}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <SectionPlaceholder
-                label="Testimonials not supplied"
-                detail="Customer testimonials have not been supplied yet, so none are shown rather than inventing quotes."
+      <section className="bg-ink-50 py-20 lg:py-28">
+        <Container>
+          <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-16">
+            <Reveal>
+              <SectionHeading
+                eyebrow="What our clients say"
+                title="Trusted by importers worldwide"
               />
-            )}
+            </Reveal>
+            <Reveal delay={100}>
+              {TESTIMONIALS.length > 0 ? (
+                <ul className="grid gap-5 md:grid-cols-2">
+                  {TESTIMONIALS.map((testimonial) => (
+                    <li
+                      key={testimonial.author}
+                      className="rounded-card border border-ink-200 bg-white p-8"
+                    >
+                      <blockquote className="text-lg leading-relaxed text-ink-800">
+                        &ldquo;{testimonial.quote}&rdquo;
+                      </blockquote>
+                      <p className="mt-6 text-sm font-semibold text-ink-950">
+                        {testimonial.author}
+                      </p>
+                      <p className="text-sm text-ink-500">
+                        {testimonial.location}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <PlaceholderPanel
+                  kind="testimonial"
+                  label="Testimonials not supplied"
+                  detail="Customer testimonials have not been supplied yet, so none are shown rather than inventing quotes."
+                />
+              )}
+            </Reveal>
           </div>
-        </div>
+        </Container>
       </section>
 
       {/* Instagram */}
-      <section className="border-b border-ink-200 bg-ink-50">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-          <SectionHeading
-            eyebrow="Follow us"
-            title="Latest on Instagram"
-            description="The four most recent posts from Safeway Tyre's Instagram."
-          />
-          <div className="mt-10">
+      <section className="bg-white py-20 lg:py-28">
+        <Container>
+          <Reveal>
+            <SectionHeading
+              eyebrow="Follow us"
+              title="Latest on Instagram"
+              description="The four most recent posts from Safeway Tyre's Instagram."
+            />
+          </Reveal>
+          <div className="mt-14">
             <InstagramFeed />
           </div>
-        </div>
+        </Container>
       </section>
 
-      {/* Inquiry Form */}
-      <section className="border-b border-ink-200 bg-white">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_1.2fr] lg:gap-16 lg:px-8 lg:py-20">
-          <div>
+      {/* Inquiry */}
+      <section className="bg-ink-50 py-20 lg:py-28">
+        <Container>
+          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+            <div>
+              <Reveal>
+                <SectionHeading
+                  eyebrow="Get in touch"
+                  title="Send us an enquiry"
+                  description="Tell us the sizes and patterns you need and our team will respond with a quotation."
+                />
+              </Reveal>
+              <Reveal delay={80}>
+                <dl className="mt-10 space-y-5 text-sm">
+                  <div className="border-t border-ink-200 pt-5">
+                    <dt className="text-eyebrow text-ink-500">Email</dt>
+                    <dd className="mt-2">
+                      <a
+                        href={`mailto:${SITE.emails.director}`}
+                        className="font-semibold text-brand-600 hover:underline"
+                      >
+                        {SITE.emails.director}
+                      </a>
+                    </dd>
+                  </div>
+                  <div className="border-t border-ink-200 pt-5">
+                    <dt className="text-eyebrow text-ink-500">WhatsApp</dt>
+                    <dd className="mt-2">
+                      <a
+                        href={SITE.whatsappUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-semibold text-brand-600 hover:underline"
+                      >
+                        {SITE.phone.primary}
+                      </a>
+                    </dd>
+                  </div>
+                </dl>
+              </Reveal>
+            </div>
+            <Reveal delay={120}>
+              <div className="rounded-card border border-ink-200 bg-white p-6 shadow-card sm:p-8">
+                <QueryForm />
+              </div>
+            </Reveal>
+          </div>
+        </Container>
+      </section>
+
+      {/* Map */}
+      <section className="bg-white py-20 lg:py-28">
+        <Container>
+          <Reveal>
             <SectionHeading
-              eyebrow="Get in touch"
-              title="Send us an enquiry"
-              description="Tell us the sizes and patterns you need and our team will respond with a quotation."
+              eyebrow="Visit us"
+              title="Find us on the map"
+              description="Safeway Tyre's corporate office in Ludhiana, India."
             />
-            <dl className="mt-8 space-y-4 text-sm">
-              <div className="flex flex-col gap-1 border-t border-ink-200 pt-4">
-                <dt className="text-xs font-semibold uppercase tracking-[0.18em] text-ink-700">
-                  Email
-                </dt>
-                <dd>
-                  <a
-                    href={`mailto:${SITE.emails.director}`}
-                    className="font-medium text-brand-600 hover:underline"
-                  >
-                    {SITE.emails.director}
-                  </a>
-                </dd>
-              </div>
-              <div className="flex flex-col gap-1 border-t border-ink-200 pt-4">
-                <dt className="text-xs font-semibold uppercase tracking-[0.18em] text-ink-700">
-                  WhatsApp
-                </dt>
-                <dd>
-                  <a
-                    href={SITE.whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-medium text-brand-600 hover:underline"
-                  >
-                    {SITE.phone.primary}
-                  </a>
-                </dd>
-              </div>
-            </dl>
-          </div>
-          <div className="rounded-xl border border-ink-200 bg-white p-6 shadow-card sm:p-8">
-            <QueryForm />
-          </div>
-        </div>
-      </section>
-
-      {/* Google Map */}
-      <section className="bg-ink-50">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-          <SectionHeading
-            eyebrow="Visit us"
-            title="Find us on the map"
-            description="Safeway Tyre's corporate office in Ludhiana, India."
-          />
-          <div className="mt-10">
+          </Reveal>
+          <div className="mt-14">
             {companyAddress ? (
-              <div className="h-96 overflow-hidden rounded-xl border border-ink-200 shadow-card">
+              <div className="h-96 overflow-hidden rounded-card border border-ink-200 shadow-card">
                 <iframe
                   className="h-full w-full"
                   src={`https://www.google.com/maps?q=${encodeURIComponent(
@@ -382,13 +498,14 @@ export default function HomePage() {
                 />
               </div>
             ) : (
-              <SectionPlaceholder
+              <PlaceholderPanel
+                kind="location"
                 label="Map location not configured"
                 detail="No physical address is available yet, so the map is shown as a placeholder. Set NEXT_PUBLIC_COMPANY_ADDRESS to embed the map."
               />
             )}
           </div>
-        </div>
+        </Container>
       </section>
     </>
   );

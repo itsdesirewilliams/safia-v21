@@ -140,6 +140,15 @@ export function getOptionalYoutubeVideoId(): string | null {
   return optional("YOUTUBE_VIDEO_ID");
 }
 
+/**
+ * Optional homepage hero background video. Falls back to the supplied
+ * manufacturing-unit tour clip that ships in `public/media`; Safeway has not
+ * supplied a final hero video yet, so this is a replaceable placeholder.
+ */
+export function getHeroVideoUrl(): string {
+  return optional("NEXT_PUBLIC_HERO_VIDEO_URL") ?? "/media/hero-tour.mp4";
+}
+
 export type SocialLink = {
   name: string;
   url: string;

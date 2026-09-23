@@ -1,27 +1,27 @@
-import Link from "next/link";
-
+import { ButtonLink } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
+import { Eyebrow } from "@/components/ui/eyebrow";
 import { ROUTES } from "@/lib/routes";
 
 export default function NotFound() {
   return (
-    <section className="mx-auto max-w-3xl px-4 py-24 text-center sm:px-6 lg:px-8 lg:py-32">
-      <p className="flex items-center justify-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-brand-600">
-        <span aria-hidden="true" className="h-px w-8 bg-brand-600" />
-        404
-        <span aria-hidden="true" className="h-px w-8 bg-brand-600" />
-      </p>
-      <h1 className="mt-4 text-4xl font-bold tracking-tight text-ink-950 sm:text-5xl">
-        Page not found
-      </h1>
-      <p className="mt-4 text-base leading-relaxed text-ink-700">
-        The page you are looking for does not exist or has moved.
-      </p>
-      <Link
-        href={ROUTES.home}
-        className="mt-10 inline-flex rounded-lg bg-ink-950 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-ink-800"
-      >
-        Back to home
-      </Link>
-    </section>
+    <div className="bg-white">
+      <Container size="narrow" className="py-24 text-center lg:py-32">
+        <div className="flex justify-center">
+          <Eyebrow>Error 404</Eyebrow>
+        </div>
+        <h1 className="text-h1 mt-6 text-balance text-ink-950">
+          Page not found
+        </h1>
+        <p className="mt-5 text-lg leading-relaxed text-ink-600">
+          The page you are looking for does not exist or has moved.
+        </p>
+        <div className="mt-10 flex justify-center">
+          <ButtonLink href={ROUTES.home} variant="dark" size="lg">
+            Back to home
+          </ButtonLink>
+        </div>
+      </Container>
+    </div>
   );
 }

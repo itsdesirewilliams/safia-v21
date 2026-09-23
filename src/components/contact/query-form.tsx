@@ -7,17 +7,18 @@ import {
   submitQueryForm,
   type QueryFormState,
 } from "@/app/contact-us/actions";
+import { buttonStyles } from "@/components/ui/button";
 import { CATEGORIES } from "@/lib/catalogue/categories";
 
 const FIELD_CLASS =
-  "mt-1.5 w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-ink-900 outline-none transition placeholder:text-ink-300 focus:border-brand-600 focus:ring-2 focus:ring-brand-600/15";
+  "mt-2 w-full rounded-xl border border-ink-200 bg-white px-3.5 py-3 text-sm text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-brand-600 focus:ring-4 focus:ring-brand-500/15";
 
 function FieldError({ message }: { message?: string }) {
   if (!message) {
     return null;
   }
   return (
-    <p className="mt-1 text-xs font-medium text-brand-600" role="alert">
+    <p className="mt-1.5 text-xs font-medium text-brand-600" role="alert">
       {message}
     </p>
   );
@@ -129,7 +130,7 @@ export function QueryForm() {
         >
           Message <span aria-hidden="true" className="text-brand-600">*</span>
         </label>
-        <p className="mt-0.5 text-xs text-ink-700">
+        <p className="mt-1 text-xs text-ink-500">
           Tell us what you need, including sizes if applicable.
         </p>
         <textarea
@@ -156,17 +157,17 @@ export function QueryForm() {
         />
       </div>
 
-      <div className="mt-6 flex flex-wrap items-center gap-4">
+      <div className="mt-7 flex flex-wrap items-center gap-4">
         <button
           type="submit"
           disabled={isPending}
-          className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-500 disabled:cursor-not-allowed disabled:opacity-60"
+          className={buttonStyles("primary", "lg")}
         >
           {isPending ? "Sending…" : "Send Enquiry"}
         </button>
 
         {state.status === "success" && state.message && (
-          <p className="text-sm font-medium text-green-700" role="status">
+          <p className="text-sm font-medium text-success-600" role="status">
             {state.message}
           </p>
         )}

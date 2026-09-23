@@ -67,7 +67,7 @@ describe("homepage vertical slice", () => {
   it("renders every section end-to-end", async () => {
     const html = await (await fetch(`${BASE_URL}/`)).text();
 
-    expect(html).toContain("Find the right tyre");
+    expect(html).toContain("Tyres that keep the world moving");
     expect(html).toContain("Take a tour of our industry");
     expect(html).toContain("Product ranges");
     expect(html).toContain("Explore the official catalogue");
@@ -76,7 +76,7 @@ describe("homepage vertical slice", () => {
     expect(html).toContain("Latest on Instagram");
     expect(html).toContain("Send us an enquiry");
     expect(html).toContain("Find us on the map");
-    expect(html).toContain("director@safewaytyre.com");
+    expect(html).toContain("Director@safewaytyre.com");
   });
 
   it("shows the six product range cards linking to canonical routes", async () => {

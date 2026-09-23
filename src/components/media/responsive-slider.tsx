@@ -1,4 +1,4 @@
-import { SectionPlaceholder } from "@/components/home/section-placeholder";
+import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { readSliderSlides, sliderAssetDirectory } from "@/lib/media/slider-assets";
 import { resolveSliderConfig, type SliderCollection } from "@/lib/media/slider";
 
@@ -26,7 +26,8 @@ export function ResponsiveSlider({
 
   if (slides.length === 0) {
     return (
-      <SectionPlaceholder
+      <PlaceholderPanel
+        kind="media"
         label={`${config.label} slider artwork not supplied`}
         detail={`Add matching image files to ${sliderAssetDirectory(
           collection,

@@ -84,7 +84,7 @@ export function ResponsiveSliderView({
       aria-roledescription="carousel"
       aria-label={config.label}
     >
-      <div className="relative overflow-hidden rounded-xl border border-ink-200 bg-ink-100 shadow-card">
+      <div className="relative overflow-hidden rounded-card border border-ink-200 bg-ink-100 shadow-card">
         <div
           className="flex transition-transform duration-500 ease-out motion-reduce:transition-none"
           style={{ transform: `translateX(-${index * 100}%)` }}
@@ -124,7 +124,7 @@ export function ResponsiveSliderView({
               onClick={() => goTo(index - 1)}
               aria-label="Previous slide"
               aria-controls={labelId}
-              className="absolute left-3 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-ink-950/10 bg-white/90 text-ink-900 shadow-card backdrop-blur transition-colors hover:bg-white sm:left-4"
+              className="absolute left-3 top-1/2 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-ink-950/10 bg-white/90 text-ink-900 shadow-pop backdrop-blur transition-colors hover:bg-white sm:left-4"
             >
               <Chevron direction="left" />
             </button>
@@ -133,7 +133,7 @@ export function ResponsiveSliderView({
               onClick={() => goTo(index + 1)}
               aria-label="Next slide"
               aria-controls={labelId}
-              className="absolute right-3 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-ink-950/10 bg-white/90 text-ink-900 shadow-card backdrop-blur transition-colors hover:bg-white sm:right-4"
+              className="absolute right-3 top-1/2 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-ink-950/10 bg-white/90 text-ink-900 shadow-pop backdrop-blur transition-colors hover:bg-white sm:right-4"
             >
               <Chevron direction="right" />
             </button>
@@ -169,7 +169,7 @@ export function ResponsiveSliderView({
             href={config.downloadUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-500"
+            className="inline-flex items-center justify-center rounded-full bg-brand-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
           >
             Download {config.label}
           </a>

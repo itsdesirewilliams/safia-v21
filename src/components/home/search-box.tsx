@@ -127,7 +127,7 @@ export function SearchBox() {
           fill="none"
           stroke="currentColor"
           strokeWidth="1.75"
-            className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-300"
+          className="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-400"
         >
           <circle cx="11" cy="11" r="7" />
           <path strokeLinecap="round" d="m20 20-3.5-3.5" />
@@ -148,7 +148,7 @@ export function SearchBox() {
             activeIndex >= 0 ? `${listId}-${activeIndex}` : undefined
           }
           autoComplete="off"
-          className="w-full rounded-xl border border-white/15 bg-white py-3.5 pl-12 pr-4 text-base text-ink-900 shadow-pop outline-none transition placeholder:text-ink-300 focus:border-brand-500/60 focus:ring-4 focus:ring-brand-500/15"
+          className="w-full rounded-full border border-transparent bg-white py-4 pl-14 pr-5 text-base font-medium text-ink-900 shadow-pop outline-none transition placeholder:font-normal placeholder:text-ink-400 focus:ring-4 focus:ring-brand-500/30"
         />
       </div>
 
@@ -157,15 +157,16 @@ export function SearchBox() {
           id={listId}
           role="listbox"
           aria-label="Product search results"
-          className="absolute z-30 mt-3 max-h-96 w-full overflow-auto rounded-xl border border-ink-200 bg-white py-2 text-left shadow-pop"
+          className="absolute z-30 mt-3 max-h-96 w-full overflow-auto rounded-2xl border border-ink-200 bg-white py-2 text-left shadow-pop"
         >
           {loading ? (
-            <li className="px-4 py-3 text-sm text-ink-700">Searching…</li>
+            <li className="px-5 py-3 text-sm text-ink-600">Searching…</li>
           ) : showEmpty ? (
-            <li className="px-4 py-3 text-sm text-ink-700">
+            <li className="px-5 py-3 text-sm text-ink-600">
               No matching patterns found. Try a size such as{" "}
-              <span className="font-medium">6.00-16</span> or a code such as{" "}
-              <span className="font-medium">TR-1042</span>.
+              <span className="font-medium text-ink-900">6.00-16</span> or a
+              code such as{" "}
+              <span className="font-medium text-ink-900">TR-1042</span>.
             </li>
           ) : (
             results.map((result, index) => (
@@ -179,7 +180,7 @@ export function SearchBox() {
                   href={patternHref(result)}
                   onClick={() => setOpen(false)}
                   onMouseEnter={() => setActiveIndex(index)}
-                  className={`flex items-start justify-between gap-4 px-4 py-3 transition-colors ${
+                  className={`flex items-start justify-between gap-4 px-5 py-3 transition-colors ${
                     index === activeIndex ? "bg-ink-50" : "hover:bg-ink-50"
                   }`}
                 >
@@ -187,7 +188,7 @@ export function SearchBox() {
                     <span className="block truncate text-sm font-semibold text-ink-950">
                       {result.displayName}
                     </span>
-                    <span className="mt-0.5 block text-xs text-ink-700">
+                    <span className="mt-0.5 block text-xs text-ink-600">
                       {result.categoryDisplayName}
                       {result.sizes.length > 0 &&
                         ` · ${result.sizes.slice(0, 3).join(", ")}${

@@ -19,7 +19,7 @@ const SUBMISSION: ContactSubmission = {
 describe("contact email contract", () => {
   it("targets both fixed Safeway addresses", () => {
     expect(CONTACT_RECIPIENTS).toEqual([
-      "director@safewaytyre.com",
+      "Director@safewaytyre.com",
       "marketing01@safewaytyre.com",
     ]);
 

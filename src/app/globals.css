@@ -1,22 +1,103 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+ * Safeway Tyre design tokens.
+ * One coherent system: neutral ink scale, brand blue, accent orange, soft
+ * surfaces, restrained shadows. Components consume these tokens only.
+ * ------------------------------------------------------------------------- */
 @theme {
-  --font-sans: var(--font-archivo), system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-devanagari: var(--font-anek-devanagari), var(--font-inter), sans-serif;
 
-  --color-ink-950: #0b0c0e;
-  --color-ink-900: #17181c;
-  --color-ink-800: #26282e;
-  --color-ink-700: #3f424a;
-  --color-ink-300: #c6c8cd;
-  --color-ink-200: #e4e5e8;
-  --color-ink-100: #f1f1f3;
-  --color-ink-50: #f8f8f9;
-  --color-brand-700: #a51721;
-  --color-brand-600: #c81e28;
-  --color-brand-500: #e11d2a;
+  /* Neutral scale (cool charcoal → off-white) */
+  --color-ink-950: #071018; /* deep */
+  --color-ink-900: #111820; /* charcoal */
+  --color-ink-800: #1c2530;
+  --color-ink-700: #37424f;
+  --color-ink-600: #4d5966;
+  --color-ink-500: #6b7684;
+  --color-ink-400: #98a2ae;
+  --color-ink-300: #c3cad3;
+  --color-ink-200: #e8ecf0; /* soft grey */
+  --color-ink-100: #f0f3f6;
+  --color-ink-50: #f7f8fa; /* off-white */
 
-  --shadow-card: 0 1px 2px rgb(11 12 14 / 0.04), 0 4px 16px rgb(11 12 14 / 0.06);
-  --shadow-pop: 0 1px 2px rgb(11 12 14 / 0.05), 0 12px 32px rgb(11 12 14 / 0.14);
+  /* Brand blue */
+  --color-brand-700: #0847c9;
+  --color-brand-600: #0b63f6;
+  --color-brand-500: #3b82f6;
+  --color-brand-100: #dbe7ff;
+
+  /* Accent orange */
+  --color-accent-700: #c94e00;
+  --color-accent-600: #e85d00;
+  --color-accent-500: #ff6a00;
+  --color-accent-100: #ffe6d1;
+
+  /* Functional */
+  --color-success-600: #16a34a;
+
+  --shadow-card: 0 1px 2px rgb(7 16 24 / 0.04), 0 12px 32px -12px rgb(7 16 24 / 0.12);
+  --shadow-pop: 0 2px 6px rgb(7 16 24 / 0.06), 0 24px 60px -18px rgb(7 16 24 / 0.28);
+  --shadow-soft: 0 1px 2px rgb(7 16 24 / 0.04);
+
+  --radius-card: 1.75rem;
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 0.9s ease both;
+  --animate-scale-in: scale-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-slide-in-right: slide-in-right 0.35s cubic-bezier(0.22, 1, 0.36, 1)
+    both;
+  --animate-marquee: marquee 40s linear infinite;
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 :root {
@@ -25,6 +106,13 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
@@ -39,4 +127,44 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-brand-600);
   outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Editorial display scale — keeps hero/section headings intentional. */
+@layer components {
+  .text-display {
+    font-size: clamp(2.75rem, 7vw, 5.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    font-weight: 800;
+  }
+
+  .text-h1 {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    font-weight: 800;
+  }
+
+  .text-h2 {
+    font-size: clamp(1.875rem, 3.6vw, 3rem);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    font-weight: 800;
+  }
+
+  .text-h3 {
+    font-size: clamp(1.25rem, 2vw, 1.625rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  .text-eyebrow {
+    font-size: 0.6875rem;
+    line-height: 1;
+    letter-spacing: 0.2em;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
 }

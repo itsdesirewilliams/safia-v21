@@ -84,7 +84,7 @@ describe("global shell", () => {
     const response = await fetch(`${BASE_URL}/`);
     const html = await response.text();
 
-    expect(html).toContain("director@safewaytyre.com");
+    expect(html).toContain("Director@safewaytyre.com");
     expect(html).toContain("Monday");
     expect(html).toContain("9:00 AM");
     expect(html).toContain("/gallery");

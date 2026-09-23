@@ -1,9 +1,8 @@
 import Image from "next/image";
 
+import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { getOptionalInstagramAccessToken } from "@/lib/config";
 import { fetchInstagramPosts, type InstagramPost } from "@/lib/instagram";
-
-import { SectionPlaceholder } from "./section-placeholder";
 
 function PostTile({ post }: { post: InstagramPost }) {
   return (
@@ -13,17 +12,17 @@ function PostTile({ post }: { post: InstagramPost }) {
       rel="noopener noreferrer"
       className="group block"
     >
-      <span className="relative block aspect-[4/5] overflow-hidden rounded-xl bg-ink-100">
+      <span className="relative block aspect-[4/5] overflow-hidden rounded-2xl bg-ink-100">
         <Image
           src={post.imageUrl}
           alt={post.caption ?? "Safeway Tyre on Instagram"}
           fill
           sizes="(max-width: 640px) 50vw, 25vw"
-          className="object-cover transition-transform duration-500 ease-out motion-reduce:transition-none group-hover:scale-[1.03]"
+          className="object-cover transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-[1.04]"
         />
       </span>
       {post.caption && (
-        <span className="mt-2.5 block line-clamp-2 text-xs leading-relaxed text-ink-700">
+        <span className="mt-2.5 block line-clamp-2 text-xs leading-relaxed text-ink-600">
           {post.caption}
         </span>
       )}
@@ -41,7 +40,8 @@ export async function InstagramFeed() {
 
   if (!token) {
     return (
-      <SectionPlaceholder
+      <PlaceholderPanel
+        kind="media"
         label="Instagram feed not connected"
         detail="No Instagram access token is configured, so the latest posts are hidden for now. Set INSTAGRAM_ACCESS_TOKEN to enable this feed."
       />
