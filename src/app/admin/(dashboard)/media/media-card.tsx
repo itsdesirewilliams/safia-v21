@@ -9,14 +9,16 @@ import { CATEGORIES } from "@/lib/catalogue/categories";
 import { INITIAL_MEDIA_ACTION_STATE } from "@/lib/media/action-state";
 import type { Media } from "@/lib/media/types";
 
-import { deleteMediaAction, updateMediaAction } from "./actions";
+import { deleteMediaAction, setMediaHiddenAction, updateMediaAction } from "./actions";
 
 export function MediaCard({
   media,
   canDelete,
+  canHide,
 }: {
   media: Media;
   canDelete: boolean;
+  canHide: boolean;
 }) {
   const [updateState, updateAction, updating] = useActionState(
     updateMediaAction,
@@ -24,6 +26,10 @@ export function MediaCard({
   );
   const [deleteState, deleteAction, deleting] = useActionState(
     deleteMediaAction,
+    INITIAL_MEDIA_ACTION_STATE,
+  );
+  const [hideState, hideAction, hiding] = useActionState(
+    setMediaHiddenAction,
     INITIAL_MEDIA_ACTION_STATE,
   );
   const [editing, setEditing] = useState(false);
@@ -55,6 +61,11 @@ export function MediaCard({
         <span className="absolute left-3 top-3 rounded-full bg-ink-950/80 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-white">
           {media.type}
         </span>
+        {media.hidden && (
+          <span className="absolute right-3 top-3 rounded-full bg-accent-500 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-white">
+            Hidden
+          </span>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col p-4">
@@ -98,6 +109,28 @@ export function MediaCard({
           >
             {editing ? "Close" : "Edit details"}
           </button>
+
+          {canHide && (
+            <form action={hideAction}>
+              <input type="hidden" name="mediaId" value={media.id} />
+              <input
+                type="hidden"
+                name="hidden"
+                value={media.hidden ? "false" : "true"}
+              />
+              <button
+                type="submit"
+                disabled={hiding}
+                className={buttonStyles("outline", "sm")}
+              >
+                {hiding
+                  ? "Saving…"
+                  : media.hidden
+                    ? "Reveal"
+                    : "Hide"}
+              </button>
+            </form>
+          )}
 
           {canDelete &&
             (confirming ? (
@@ -216,6 +249,16 @@ export function MediaCard({
         {deleteState.status === "error" && (
           <p role="alert" className="mt-3 text-xs font-medium text-brand-600">
             {deleteState.message}
+          </p>
+        )}
+        {hideState.status === "success" && (
+          <p role="status" className="mt-3 text-xs font-medium text-success-600">
+            {hideState.message}
+          </p>
+        )}
+        {hideState.status === "error" && (
+          <p role="alert" className="mt-3 text-xs font-medium text-brand-600">
+            {hideState.message}
           </p>
         )}
       </div>

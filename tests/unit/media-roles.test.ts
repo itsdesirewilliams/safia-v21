@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   canDeleteMedia,
   canManageMedia,
+  canManageQualityFirstMedia,
   isRole,
   parseRole,
 } from "@/lib/auth/roles";
@@ -42,5 +43,11 @@ describe("media authorization", () => {
 
   it("grants admins full media management", () => {
     expect(canManageMedia("admin")).toBe(true);
+  });
+
+  it("reserves Quality First media management for admins", () => {
+    expect(canManageQualityFirstMedia("editor")).toBe(false);
+    expect(canManageQualityFirstMedia(null)).toBe(false);
+    expect(canManageQualityFirstMedia("admin")).toBe(true);
   });
 });

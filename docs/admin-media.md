@@ -9,7 +9,8 @@ without changing the architecture.
 - **`public.media`** — the shared Media entity: `bucket`, `storage_path`,
   `type` (`image` | `video` | `document`), `mime_type`, `alt`, `caption`,
   optional `pattern_code`, optional `category_slug`, `uploaded_by`,
-  `created_at`. Uniqueness on `(bucket, storage_path)`.
+  `created_at`, `hidden` (default `false`). Uniqueness on `(bucket,
+  storage_path)`.
 - **`public.profiles`** — `role` (`admin` | `editor`) for each auth user,
   auto-created with **no role** on signup. Authorization is read from this
   column via `public.current_user_role()`; never from JWT claims.
@@ -17,7 +18,7 @@ without changing the architecture.
   `product-images`, `blog-images`, `gallery`, `testing-videos`,
   `machine-images`, `catalogue-pdfs`.
 - **Admin** at **`/admin/media`** — upload, list, search/filter, preview, edit
-  caption/alt and Pattern/Category associations, and delete (admins only).
+  caption/alt and Pattern/Category associations, hide/reveal, and delete.
 - **Shared media layer** in `src/lib/media/` — validation, storage-path
   building, row mapping, public-URL resolution, reference protection. Public
   components should consume media through this layer, never hard-coded URLs.
@@ -28,7 +29,8 @@ without changing the architecture.
 | Capability | admin | editor |
 | --- | --- | --- |
 | Read media (public site) | ✔ | ✔ |
-| Upload media / edit metadata | ✔ | ✔ |
+| Upload media / edit metadata (general buckets) | ✔ | ✔ |
+| Upload/edit/hide Quality First media (`testing-videos`, `machine-images`) | ✔ | ✘ |
 | Delete media | ✔ | ✘ |
 
 Access is enforced by Postgres RLS (`public.media`, `storage.objects`) and by
@@ -91,11 +93,25 @@ exact check and keep the Post columns in sync with these functions.
 product-images/[patternCode|categorySlug|]YYYY-MM/<id>-<name>
 blog-images/YYYY-MM/<id>-<name>
 gallery/YYYY-MM/<id>-<name>
-testing-videos/YYYY-MM/<id>-<name>
+testing-videos/stories/YYYY-MM/<id>-<name>
 machine-images/YYYY-MM/<id>-<name>
 catalogue-pdfs/YYYY-MM/<id>-<name>
 ```
 
 Gallery and Quality First discovery read from their buckets, so a file dropped
-into `gallery/` or `machine-images/` appears without a database record; an
-optional Media record supplies caption/alt.
+into `gallery/`, `machine-images/`, or `testing-videos/stories/` appears without
+a database record; an optional Media record supplies caption/alt. Quality First
+story videos live under the dedicated `stories/` folder (spec #3).
+
+## Hiding without deleting
+
+`public.media.hidden` removes an item from public discovery without touching its
+file. Quality First discovery excludes hidden items at read time; reveal the
+item to bring it back. Hide/reveal is Admin-only and is offered on the Quality
+First buckets (`testing-videos`, `machine-images`).
+
+Hiding acts on a Media record, so it applies to items uploaded through the
+admin (which always create a record). A file dropped straight into a bucket with
+no Media record is publicly visible but has no admin row to hide; upload it
+through the admin, or add a `media` record for its `(bucket, storage_path)`, to
+manage it.

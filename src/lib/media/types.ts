@@ -36,4 +36,9 @@ export type Media = {
   categorySlug: string | null;
   uploadedBy: string | null;
   createdAt: string;
+  /**
+   * Hidden from public discovery without deleting the file. Used by Quality
+   * First (ADR-0006); other surfaces may ignore it.
+   */
+  hidden: boolean;
 };

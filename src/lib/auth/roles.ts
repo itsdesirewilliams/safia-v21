@@ -24,6 +24,18 @@ export function canDeleteMedia(role: Role | null | undefined): boolean {
   return role === "admin";
 }
 
+/**
+ * Which buckets a role may manage. Quality First buckets (testing videos,
+ * machine images) are Admin-only (spec #3); every other bucket follows the
+ * shared Media rule (admin + editor). The database RLS is the authority — this
+ * only shapes the admin UI.
+ */
+export function canManageQualityFirstMedia(
+  role: Role | null | undefined,
+): boolean {
+  return role === "admin";
+}
+
 /** A short, human label for a role in the admin UI. */
 export function roleLabel(role: Role): string {
   return role === "admin" ? "Admin" : "Editor";

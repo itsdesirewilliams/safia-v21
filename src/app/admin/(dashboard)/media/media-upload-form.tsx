@@ -7,11 +7,15 @@ import { fieldClass as FIELD_CLASS, fieldLabelClass as LABEL_CLASS } from "@/com
 import { CATEGORIES } from "@/lib/catalogue/categories";
 import { INITIAL_MEDIA_ACTION_STATE } from "@/lib/media/action-state";
 import { UPLOAD_ACCEPT } from "@/lib/media/upload";
-import { STORAGE_BUCKETS } from "@/lib/supabase/buckets";
+import type { StorageBucketId } from "@/lib/supabase/buckets";
 
 import { uploadMediaAction } from "./actions";
 
-export function MediaUploadForm() {
+export function MediaUploadForm({
+  allowedBuckets,
+}: {
+  allowedBuckets: readonly { id: StorageBucketId }[];
+}) {
   const [state, formAction, isPending] = useActionState(
     uploadMediaAction,
     INITIAL_MEDIA_ACTION_STATE,
@@ -49,7 +53,7 @@ export function MediaUploadForm() {
             defaultValue="gallery"
             className={FIELD_CLASS}
           >
-            {STORAGE_BUCKETS.map((bucket) => (
+            {allowedBuckets.map((bucket) => (
               <option key={bucket.id} value={bucket.id}>
                 {bucket.id}
               </option>

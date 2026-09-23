@@ -2,16 +2,18 @@
 
 import { revalidatePath } from "next/cache";
 
+import { canManageQualityFirstMedia } from "@/lib/auth/roles";
 import { requireAdmin, requireMediaManager } from "@/lib/auth/session";
 import type { MediaActionState } from "@/lib/media/action-state";
 import { validateMediaMetadata } from "@/lib/media/metadata";
 import {
   deleteMedia,
+  setMediaHidden,
   updateMediaMetadata,
   uploadMedia,
 } from "@/lib/media/server";
 import { buildStoragePath, validateUpload } from "@/lib/media/upload";
-import { isStorageBucketId } from "@/lib/supabase/buckets";
+import { isQualityFirstBucket, isStorageBucketId } from "@/lib/supabase/buckets";
 
 /**
  * Admin media server actions (Ticket 4).
@@ -46,6 +48,13 @@ export async function uploadMediaAction(
     return { status: "error", message: "Choose a valid storage bucket." };
   }
 
+  if (isQualityFirstBucket(bucket) && !canManageQualityFirstMedia(profile.role)) {
+    return {
+      status: "error",
+      message: "Quality First media can only be managed by an admin.",
+    };
+  }
+
   const fileValidation = validateUpload({
     fileName: fileEntry.name,
     mimeType: fileEntry.type,
@@ -71,12 +80,17 @@ export async function uploadMediaAction(
   }
 
   const id = crypto.randomUUID();
-  const path = buildStoragePath({
+  const builtPath = buildStoragePath({
     safeName: fileValidation.safeName,
     id,
     createdAt: new Date(),
-    scope: metadata.value.patternCode ?? metadata.value.categorySlug,
+    scope: isQualityFirstBucket(bucket)
+      ? null
+      : (metadata.value.patternCode ?? metadata.value.categorySlug),
   });
+  // Story videos live in the dedicated `stories` folder discovery reads
+  // (spec #3); machine images stay in the bucket's year-month folders.
+  const path = bucket === "testing-videos" ? `stories/${builtPath}` : builtPath;
 
   const result = await uploadMedia({
     bucket,
@@ -154,4 +168,32 @@ export async function deleteMediaAction(
 
   revalidatePath(MEDIA_PATH);
   return { status: "success", message: "Media deleted." };
+}
+
+/**
+ * Hide or reveal a media item (Admin-only). Hiding removes it from public
+ * discovery without deleting the file (spec #3).
+ */
+export async function setMediaHiddenAction(
+  _previous: MediaActionState,
+  formData: FormData,
+): Promise<MediaActionState> {
+  await requireAdmin();
+
+  const mediaId = readField(formData, "mediaId");
+  if (!mediaId) {
+    return { status: "error", message: "Missing media id." };
+  }
+
+  const hidden = readField(formData, "hidden") === "true";
+  const result = await setMediaHidden(mediaId, hidden);
+  if (!result.ok) {
+    return { status: "error", message: result.error };
+  }
+
+  revalidatePath(MEDIA_PATH);
+  return {
+    status: "success",
+    message: hidden ? "Media hidden from the public page." : "Media revealed.",
+  };
 }

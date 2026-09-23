@@ -48,3 +48,19 @@ export function bucketAcceptsType(
 
 /** The buckets the public site reads from. All six are public-read. */
 export const PUBLIC_BUCKETS: readonly StorageBucketId[] = STORAGE_BUCKET_IDS;
+
+/**
+ * Buckets whose contents belong to the Quality First page (spec #3). They are
+ * managed by Admins only — Editors have no access, since the testing footage
+ * and machine imagery is brand-sensitive.
+ */
+export const QUALITY_FIRST_BUCKET_IDS = [
+  "testing-videos",
+  "machine-images",
+] as const satisfies readonly StorageBucketId[];
+
+export function isQualityFirstBucket(
+  bucket: StorageBucketId,
+): boolean {
+  return (QUALITY_FIRST_BUCKET_IDS as readonly string[]).includes(bucket);
+}

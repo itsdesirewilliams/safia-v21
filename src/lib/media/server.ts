@@ -212,6 +212,37 @@ export async function updateMediaMetadata(
   return { ok: true, media };
 }
 
+/**
+ * Hide or reveal a Media record without deleting its file. Hiding is enforced
+ * at discovery time, so the public page simply stops listing the item.
+ */
+export async function setMediaHidden(
+  id: string,
+  hidden: boolean,
+): Promise<{ ok: true; media: Media } | { ok: false; error: string }> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("media")
+    .update({ hidden })
+    .eq("id", id)
+    .select("*")
+    .single();
+
+  if (error) {
+    return {
+      ok: false,
+      error: `Could not ${hidden ? "hide" : "reveal"} the media: ${error.message}`,
+    };
+  }
+
+  const media = mapMediaRow(data as MediaRow, getSupabaseUrl());
+  if (!media) {
+    return { ok: false, error: "The updated media record could not be read." };
+  }
+
+  return { ok: true, media };
+}
+
 export type DeleteResult =
   | { ok: true; media: Media }
   | { ok: false; blocked: true; reason: string; references: MediaReference[] }

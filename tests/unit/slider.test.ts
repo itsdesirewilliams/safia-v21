@@ -3,7 +3,6 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   assetUrl,
   buildSliderSlides,
-  naturalCompare,
   pairSliderAssets,
   ratioForViewport,
   resolveSlideSource,
@@ -13,6 +12,7 @@ import {
   SLIDER_PORTRAIT_MEDIA,
   type SliderSlide,
 } from "@/lib/media/slider";
+import { naturalCompare } from "@/lib/natural-order";
 import { readSliderSlides } from "@/lib/media/slider-assets";
 
 afterEach(() => {

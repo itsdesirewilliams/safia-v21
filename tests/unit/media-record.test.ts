@@ -16,6 +16,7 @@ const ROW = {
   category_slug: "truck-bus",
   uploaded_by: "user-1",
   created_at: "2026-09-23T12:00:00.000Z",
+  hidden: false,
 };
 
 describe("mapMediaRow", () => {
@@ -33,6 +34,7 @@ describe("mapMediaRow", () => {
       categorySlug: "truck-bus",
       uploadedBy: "user-1",
       createdAt: "2026-09-23T12:00:00.000Z",
+      hidden: false,
     });
   });
 
@@ -42,6 +44,11 @@ describe("mapMediaRow", () => {
 
   it("returns null for an unknown media type", () => {
     expect(mapMediaRow({ ...ROW, type: "audio" }, BASE)).toBeNull();
+  });
+
+  it("treats a missing hidden flag as visible", () => {
+    const legacyRow = { ...ROW, hidden: undefined };
+    expect(mapMediaRow(legacyRow, BASE)?.hidden).toBe(false);
   });
 });
 

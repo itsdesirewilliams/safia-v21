@@ -3,12 +3,12 @@ import Link from "next/link";
 import { buttonStyles } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { fieldClass, fieldLabelClass } from "@/components/ui/form";
-import { canDeleteMedia } from "@/lib/auth/roles";
+import { canDeleteMedia, canManageQualityFirstMedia } from "@/lib/auth/roles";
 import { getCurrentProfile, requireMediaManager } from "@/lib/auth/session";
 import { listMedia } from "@/lib/media/server";
 import type { Media } from "@/lib/media/types";
 import { MEDIA_TYPES } from "@/lib/media/types";
-import { STORAGE_BUCKETS } from "@/lib/supabase/buckets";
+import { isQualityFirstBucket, STORAGE_BUCKETS } from "@/lib/supabase/buckets";
 
 import { MediaCard } from "./media-card";
 import { MediaUploadForm } from "./media-upload-form";
@@ -29,6 +29,10 @@ export default async function AdminMediaPage({
   await requireMediaManager();
   const profile = await getCurrentProfile();
   const canDelete = canDeleteMedia(profile?.role ?? null);
+  const canManageQualityFirst = canManageQualityFirstMedia(profile?.role ?? null);
+  const allowedBuckets = STORAGE_BUCKETS.filter(
+    (bucket) => canManageQualityFirst || !isQualityFirstBucket(bucket.id),
+  );
 
   const params = await searchParams;
   const query = typeof params.q === "string" ? params.q : "";
@@ -61,7 +65,7 @@ export default async function AdminMediaPage({
         metadata and optional Pattern/Category association.
       </p>
 
-      <MediaUploadForm />
+      <MediaUploadForm allowedBuckets={allowedBuckets} />
 
       <form
         method="get"
@@ -156,7 +160,11 @@ export default async function AdminMediaPage({
         <ul className="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {media.map((item) => (
             <li key={item.id}>
-              <MediaCard media={item} canDelete={canDelete} />
+              <MediaCard
+                media={item}
+                canDelete={canDelete}
+                canHide={canDelete && isQualityFirstBucket(item.bucket)}
+              />
             </li>
           ))}
         </ul>

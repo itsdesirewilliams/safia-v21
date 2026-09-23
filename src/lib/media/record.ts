@@ -20,6 +20,7 @@ export type MediaRow = {
   category_slug: string | null;
   uploaded_by: string | null;
   created_at: string;
+  hidden?: boolean | null;
 };
 
 /** Map a database row to a resolved Media asset; null when malformed. */
@@ -44,6 +45,7 @@ export function mapMediaRow(
     categorySlug: row.category_slug,
     uploadedBy: row.uploaded_by,
     createdAt: row.created_at,
+    hidden: row.hidden === true,
   };
 }
 

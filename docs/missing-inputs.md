@@ -40,6 +40,10 @@ shell builds and runs without them; features that need them fail loudly with a
 | Catalogue download URL | `NEXT_PUBLIC_CATALOGUE_DOWNLOAD_URL` | Catalogue slider download action | No PDF link supplied; the slider omits the download action until one is set |
 | Email transport credentials | `EMAIL_TRANSPORT_*` | Contact Us forms (ADR-0007) | Transport provider itself is a deferred implementation detail |
 | First admin account | — (credential) | `/admin/media` access | No admin/editor user exists yet. Bootstrap with `ADMIN_EMAIL=... ADMIN_PASSWORD=... node scripts/create-admin.mjs` (see `docs/admin-media.md`). Roles are never self-assigned |
+| Quality First testing videos | — (asset) | `/quality-first` story rail | Not supplied; the rail renders a labelled empty state until `.mp4`/`.webm` files are added to `testing-videos/stories/` (Admin-only) |
+| Quality First machine images | — (asset) | `/quality-first` machine gallery | Not supplied; the masonry renders a labelled empty state until images are added to the `machine-images` bucket (Admin-only) |
+| Quality First hero footage | — (asset) | `/quality-first` hero | Not supplied; the hero uses a designed placeholder panel rather than old-site or stock media |
+| Quality First process specifics | — (content) | `/quality-first` testing explanation | Specific standards, machine names, laboratory capabilities and certifications are not supplied; a labelled note stands in rather than inventing them (the surrounding copy is developer-owned) |
 | Final display font | — (design decision) | Production typography | Inter is the active typeface (Anek Devanagari for Devanagari copy). Alfabet is removed; the supplied Fontspring demo cuts in `assets/fonts` must not be used in production |
 
 ## How missing values behave

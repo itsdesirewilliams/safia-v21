@@ -1,4 +1,5 @@
 import { getOptionalCatalogueDownloadUrl } from "@/lib/config";
+import { naturalCompare } from "@/lib/natural-order";
 
 /**
  * Shared responsive-slider contract (spec #9).
@@ -63,20 +64,6 @@ const SLIDER_LABELS: Record<SliderCollection, string> = {
   catalogue: "Catalogue",
   "business-profile": "Business Profile",
 };
-
-/**
- * Natural filename ordering: `slide-2` sorts before `slide-10`. Numeric runs
- * inside a filename are compared as numbers, so developer-named slides appear
- * in the order a human expects regardless of padding.
- */
-const NATURAL_COLLATOR = new Intl.Collator(undefined, {
-  numeric: true,
-  sensitivity: "base",
-});
-
-export function naturalCompare(a: string, b: string): number {
-  return NATURAL_COLLATOR.compare(a, b);
-}
 
 /** The public URL for one asset, or `null` when it was not supplied. */
 export function assetUrl(

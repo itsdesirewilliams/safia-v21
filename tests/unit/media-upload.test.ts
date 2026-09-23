@@ -11,7 +11,9 @@ import {
 import { isMediaType } from "@/lib/media/types";
 import {
   bucketAcceptsType,
+  isQualityFirstBucket,
   isStorageBucketId,
+  QUALITY_FIRST_BUCKET_IDS,
 } from "@/lib/supabase/buckets";
 
 const CREATED_AT = new Date("2026-09-23T12:00:00.000Z");
@@ -33,6 +35,16 @@ describe("storage bucket vocabulary", () => {
     expect(bucketAcceptsType("gallery", "image")).toBe(true);
     expect(bucketAcceptsType("machine-images", "image")).toBe(true);
     expect(bucketAcceptsType("product-images", "video")).toBe(false);
+  });
+
+  it("marks the Quality First buckets for admin-only management", () => {
+    expect(QUALITY_FIRST_BUCKET_IDS).toEqual([
+      "testing-videos",
+      "machine-images",
+    ]);
+    expect(isQualityFirstBucket("testing-videos")).toBe(true);
+    expect(isQualityFirstBucket("machine-images")).toBe(true);
+    expect(isQualityFirstBucket("gallery")).toBe(false);
   });
 });
 
