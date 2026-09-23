@@ -35,10 +35,10 @@ Status: COMPLETE
 Status: COMPLETE
 
 ### Ticket #18 — Catalogue
-Status: NEXT
+Status: COMPLETE
 
 ### Ticket #19 — Blogs & CMS
-Status: PENDING
+Status: NEXT
 
 ### Ticket #20 — About Us
 Status: PENDING
@@ -48,16 +48,17 @@ Status: PENDING
 
 ## Current next task
 
-Ticket #18 — Catalogue
+Ticket #19 — Blogs & CMS
 
 GitHub Issue:
-#1
+#2
 
-Route:
+Routes:
 
-/catalogue
+/blogs
+/blogs/<slug>
 
-Uses the supplied responsive catalogue assets (landscape 16:9; portrait 4:5 / 1080×1350) through the shared responsive slider. Do not use old-site catalogue assets. Pricing is not public.
+Posts (title, slug, author, thumbnail Media, structured body JSON, status Draft/Published, publishedAt, optional excerpt). Blog images reference Media IDs. Admin: all content/media; Editor: Posts + required media. Custom Next.js Admin — no third-party CMS.
 
 ## Completed implementation commits
 
@@ -72,6 +73,10 @@ Ticket #16:
 Ticket #17:
 
 c4bcd36
+
+Ticket #18:
+
+6456f00
 
 The exact latest commit should be checked from Git before starting the next ticket.
 
@@ -156,7 +161,6 @@ Missing media/content should use documented placeholders rather than old-site sc
 
 ## Future sequence
 
-#18 Catalogue
-→ #19 Blogs & CMS
+#19 Blogs & CMS
 → #20 About Us
 → #21 Gallery

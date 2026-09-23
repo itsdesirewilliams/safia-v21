@@ -1113,12 +1113,12 @@ Status: COMPLETE
 Ticket #18
 GitHub Issue #1
 Catalogue
-Status: NEXT
+Status: COMPLETE
 
 Ticket #19
 GitHub Issue #2
 Blogs & CMS
-Status: PENDING
+Status: NEXT
 
 Ticket #20
 GitHub Issue #4
