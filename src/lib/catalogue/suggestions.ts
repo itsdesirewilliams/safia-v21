@@ -31,7 +31,7 @@ export type HeroSuggestionPool = {
 export const HERO_SUGGESTION_COUNT = 6;
 export const HERO_SUGGESTION_PER_KIND = 2;
 /** Rotation cadence for the six suggestions, in milliseconds. */
-export const HERO_SUGGESTION_ROTATE_MS = 4500;
+export const HERO_SUGGESTION_ROTATE_MS = 40_000;
 
 function seededShuffle<T>(items: readonly T[], seed: number): T[] {
   const shuffled = [...items];

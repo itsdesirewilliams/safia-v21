@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 import { CategoryVisual } from "@/components/home/category-visual";
-import { HeroEyebrow } from "@/components/home/hero-eyebrow";
 import { InstagramFeed } from "@/components/home/instagram-feed";
 import { SearchBox } from "@/components/home/search-box";
 import { QueryForm } from "@/components/contact/query-form";
@@ -79,8 +78,7 @@ export default function HomePage() {
 
             <div className="relative grid gap-10 px-6 py-12 sm:px-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-14 lg:px-14 lg:py-16">
               <div className="animate-fade-up">
-                <HeroEyebrow />
-                <h1 className="text-h1 mt-6 text-white">
+                <h1 className="text-h1 text-white">
                   Tires That Keep the World Moving
                 </h1>
                 <p className="mt-5 max-w-xl text-base leading-relaxed text-white/70 sm:text-lg">
@@ -98,7 +96,7 @@ export default function HomePage() {
                     href={ROUTES.contactUs}
                     variant="accent"
                     size="lg"
-                    className="max-lg:rounded-xl"
+                    shape="rounded-rectangle"
                   >
                     Request a Quotation
                     <ArrowIcon className="h-4 w-4" />
@@ -107,7 +105,7 @@ export default function HomePage() {
                     href={ROUTES.catalogue}
                     variant="onDark"
                     size="lg"
-                    className="max-lg:rounded-xl"
+                    shape="rounded-rectangle"
                   >
                     Explore the Catalogue
                   </ButtonLink>

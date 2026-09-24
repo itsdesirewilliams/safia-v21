@@ -196,6 +196,7 @@ export function SiteHeader() {
           <ButtonLink
             href={ROUTES.contactUs}
             size="sm"
+            shape="rounded-rectangle"
             className="hidden lg:inline-flex"
           >
             Request a Quotation
@@ -327,7 +328,8 @@ export function SiteHeader() {
               <ButtonLink
                 href={ROUTES.contactUs}
                 size="lg"
-                className="w-full max-lg:rounded-xl"
+                shape="rounded-rectangle"
+                className="w-full"
                 onClick={closeMenus}
               >
                 Request a Quotation

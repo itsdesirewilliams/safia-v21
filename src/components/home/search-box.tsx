@@ -9,18 +9,11 @@ import {
   HERO_SUGGESTION_ROTATE_MS,
   pickHeroSuggestions,
   type HeroSuggestion,
-  type HeroSuggestionKind,
   type HeroSuggestionPool,
 } from "@/lib/catalogue/suggestions";
 import { ROUTES } from "@/lib/routes";
 
 const DEBOUNCE_MS = 250;
-
-const KIND_LABEL: Record<HeroSuggestionKind, string> = {
-  category: "Category",
-  size: "Size",
-  name: "Pattern",
-};
 
 function patternHref(result: SearchResult): string {
   return ROUTES.pattern(result.categorySlug, result.patternSlug);
@@ -46,12 +39,9 @@ function SuggestionChips({
           <li key={`${suggestion.kind}-${suggestion.href}`}>
             <Link
               href={suggestion.href}
-              className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-white/15 bg-white/[0.06] px-3 py-2 text-sm text-white/75 transition-colors hover:border-white/35 hover:bg-white/10 hover:text-white"
+              className="inline-flex min-h-11 items-center rounded-lg border border-white/15 bg-white/[0.06] px-3.5 py-2 text-sm font-medium text-white/75 transition-colors hover:border-white/35 hover:bg-white/10 hover:text-white"
             >
-              <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-accent-500">
-                {KIND_LABEL[suggestion.kind]}
-              </span>
-              <span className="font-medium">{suggestion.label}</span>
+              {suggestion.label}
             </Link>
           </li>
         ))}

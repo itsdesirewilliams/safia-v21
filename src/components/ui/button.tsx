@@ -11,8 +11,15 @@ export type ButtonVariant =
 
 export type ButtonSize = "sm" | "md" | "lg";
 
+export type ButtonShape = "pill" | "rounded-rectangle";
+
 const BASE =
-  "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-[background-color,border-color,color,transform] duration-200 ease-out disabled:cursor-not-allowed disabled:opacity-60 active:scale-[0.98]";
+  "inline-flex items-center justify-center gap-2 font-semibold transition-[background-color,border-color,color,transform] duration-200 ease-out disabled:cursor-not-allowed disabled:opacity-60 active:scale-[0.98]";
+
+const SHAPES: Record<ButtonShape, string> = {
+  pill: "rounded-full",
+  "rounded-rectangle": "rounded-lg",
+};
 
 const VARIANTS: Record<ButtonVariant, string> = {
   primary: "bg-brand-600 text-white hover:bg-brand-700",
@@ -34,8 +41,9 @@ export function buttonStyles(
   variant: ButtonVariant = "primary",
   size: ButtonSize = "md",
   className?: string,
+  shape: ButtonShape = "pill",
 ): string {
-  return cn(BASE, VARIANTS[variant], SIZES[size], className);
+  return cn(BASE, SHAPES[shape], VARIANTS[variant], SIZES[size], className);
 }
 
 export type ButtonLinkProps = {
@@ -43,6 +51,7 @@ export type ButtonLinkProps = {
   children: React.ReactNode;
   variant?: ButtonVariant;
   size?: ButtonSize;
+  shape?: ButtonShape;
   className?: string;
   target?: string;
   rel?: string;
@@ -56,12 +65,13 @@ export function ButtonLink({
   children,
   variant = "primary",
   size = "md",
+  shape = "pill",
   className,
   target,
   rel,
   ...rest
 }: ButtonLinkProps) {
-  const classes = buttonStyles(variant, size, className);
+  const classes = buttonStyles(variant, size, className, shape);
 
   if (/^(https?:|mailto:|tel:)/.test(href)) {
     return (
