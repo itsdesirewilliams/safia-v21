@@ -1118,12 +1118,12 @@ Status: COMPLETE
 Ticket #19
 GitHub Issue #2
 Blogs & CMS
-Status: NEXT
+Status: COMPLETE
 
 Ticket #20
 GitHub Issue #4
 About Us
-Status: PENDING
+Status: NEXT
 
 Ticket #21
 GitHub Issue #7

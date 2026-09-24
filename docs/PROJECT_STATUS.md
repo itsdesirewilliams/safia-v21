@@ -38,27 +38,26 @@ Status: COMPLETE
 Status: COMPLETE
 
 ### Ticket #19 — Blogs & CMS
-Status: NEXT
+Status: COMPLETE
 
 ### Ticket #20 — About Us
-Status: PENDING
+Status: NEXT
 
 ### Ticket #21 — Gallery
 Status: PENDING
 
 ## Current next task
 
-Ticket #19 — Blogs & CMS
+Ticket #20 — About Us
 
 GitHub Issue:
-#2
+#4
 
-Routes:
+Route:
 
-/blogs
-/blogs/<slug>
+/about-us
 
-Posts (title, slug, author, thumbnail Media, structured body JSON, status Draft/Published, publishedAt, optional excerpt). Blog images reference Media IDs. Admin: all content/media; Editor: Posts + required media. Custom Next.js Admin — no third-party CMS.
+Developer-owned/static: company/about content, a Team section, and the Business Profile slider (landscape 16:9; portrait 4:5 / 1080×1350) using the supplied repository assets and the shared responsive slider. Do not substitute old-site assets.
 
 ## Completed implementation commits
 
@@ -77,6 +76,10 @@ c4bcd36
 Ticket #18:
 
 6456f00
+
+Ticket #19:
+
+75f648a
 
 The exact latest commit should be checked from Git before starting the next ticket.
 
@@ -161,6 +164,5 @@ Missing media/content should use documented placeholders rather than old-site sc
 
 ## Future sequence
 
-#19 Blogs & CMS
-→ #20 About Us
+#20 About Us
 → #21 Gallery
