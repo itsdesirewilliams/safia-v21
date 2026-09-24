@@ -13,10 +13,12 @@ import { deleteMediaAction, setMediaHiddenAction, updateMediaAction } from "./ac
 
 export function MediaCard({
   media,
+  canEdit,
   canDelete,
   canHide,
 }: {
   media: Media;
+  canEdit: boolean;
   canDelete: boolean;
   canHide: boolean;
 }) {
@@ -102,13 +104,15 @@ export function MediaCard({
         </dl>
 
         <div className="mt-4 flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setEditing((open) => !open)}
-            className={buttonStyles("outline", "sm")}
-          >
-            {editing ? "Close" : "Edit details"}
-          </button>
+          {canEdit && (
+            <button
+              type="button"
+              onClick={() => setEditing((open) => !open)}
+              className={buttonStyles("outline", "sm")}
+            >
+              {editing ? "Close" : "Edit details"}
+            </button>
+          )}
 
           {canHide && (
             <form action={hideAction}>
@@ -164,7 +168,7 @@ export function MediaCard({
             ))}
         </div>
 
-        {editing && (
+        {canEdit && editing && (
           <form
             action={updateAction}
             className="mt-4 space-y-3 border-t border-ink-100 pt-4"

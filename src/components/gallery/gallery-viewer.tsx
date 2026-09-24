@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
+import { useModalDialog } from "@/components/media/use-modal-dialog";
 import { wrapIndex } from "@/lib/gallery";
 import type { GalleryImage } from "@/lib/media/gallery";
 
-const FOCUSABLE_SELECTOR =
-  'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 const SWIPE_THRESHOLD_PX = 40;
 
 function Chevron({ direction }: { direction: "left" | "right" }) {
@@ -55,64 +54,20 @@ export function GalleryViewer({
 
   const image = images[index];
 
-  useEffect(() => {
-    const previouslyFocused =
-      document.activeElement instanceof HTMLElement
-        ? document.activeElement
-        : null;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    closeRef.current?.focus();
-
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        onClose();
-        return;
-      }
-
+  useModalDialog({
+    dialogRef,
+    initialFocusRef: closeRef,
+    onClose,
+    onKeyDown: (event) => {
       if (event.key === "ArrowRight") {
         event.preventDefault();
         setIndex((current) => wrapIndex(current + 1, count));
-        return;
-      }
-
-      if (event.key === "ArrowLeft") {
+      } else if (event.key === "ArrowLeft") {
         event.preventDefault();
         setIndex((current) => wrapIndex(current - 1, count));
-        return;
       }
-
-      if (event.key !== "Tab" || !dialogRef.current) {
-        return;
-      }
-
-      const focusables = Array.from(
-        dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
-      );
-      if (focusables.length === 0) {
-        return;
-      }
-
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
-
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    }
-
-    document.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = previousOverflow;
-      previouslyFocused?.focus();
-    };
-  }, [onClose, count]);
+    },
+  });
 
   if (!image) {
     return null;

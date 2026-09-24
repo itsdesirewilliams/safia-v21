@@ -33,7 +33,7 @@ export function isStorageBucketId(value: unknown): value is StorageBucketId {
 export const BUCKET_ACCEPTS: Record<StorageBucketId, readonly MediaType[]> = {
   "product-images": ["image"],
   "blog-images": ["image", "video", "document"],
-  gallery: ["image", "video"],
+  gallery: ["image"],
   "testing-videos": ["video"],
   "machine-images": ["image"],
   "catalogue-pdfs": ["document"],

@@ -8,6 +8,7 @@ import type { MediaActionState } from "@/lib/media/action-state";
 import { validateMediaMetadata } from "@/lib/media/metadata";
 import {
   deleteMedia,
+  getMediaById,
   setMediaHidden,
   updateMediaMetadata,
   uploadMedia,
@@ -121,11 +122,23 @@ export async function updateMediaAction(
   _previous: MediaActionState,
   formData: FormData,
 ): Promise<MediaActionState> {
-  await requireMediaManager();
+  const profile = await requireMediaManager();
 
   const mediaId = readField(formData, "mediaId");
   if (!mediaId) {
     return { status: "error", message: "Missing media id." };
+  }
+
+  const existing = await getMediaById(mediaId);
+  if (
+    existing &&
+    isAdminOnlyBucket(existing.bucket) &&
+    !canManageAdminOnlyMedia(profile.role)
+  ) {
+    return {
+      status: "error",
+      message: "Gallery and Quality First media can only be managed by an admin.",
+    };
   }
 
   const metadata = validateMediaMetadata({

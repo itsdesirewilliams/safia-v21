@@ -1,12 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
+import { useModalDialog } from "@/components/media/use-modal-dialog";
 import type { QualityFirstStory } from "@/lib/media/quality-first";
-
-const FOCUSABLE_SELECTOR =
-  'a[href], button:not([disabled]), video, [tabindex]:not([tabindex="-1"])';
 
 export type VideoViewerProps = {
   story: QualityFirstStory;
@@ -26,52 +24,7 @@ export function VideoViewer({ story, label, onClose }: VideoViewerProps) {
   const closeRef = useRef<HTMLButtonElement>(null);
   const [failed, setFailed] = useState(false);
 
-  useEffect(() => {
-    const previouslyFocused =
-      document.activeElement instanceof HTMLElement
-        ? document.activeElement
-        : null;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    closeRef.current?.focus();
-
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        onClose();
-        return;
-      }
-
-      if (event.key !== "Tab" || !dialogRef.current) {
-        return;
-      }
-
-      const focusables = Array.from(
-        dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
-      );
-      if (focusables.length === 0) {
-        return;
-      }
-
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
-
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    }
-
-    document.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = previousOverflow;
-      previouslyFocused?.focus();
-    };
-  }, [onClose]);
+  useModalDialog({ dialogRef, initialFocusRef: closeRef, onClose });
 
   const titleId = `story-viewer-title-${story.path.replace(/[^a-z0-9]+/gi, "-")}`;
 

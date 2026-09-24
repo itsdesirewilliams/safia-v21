@@ -14,6 +14,8 @@
  * are tested directly.
  */
 
+import type { StorageObjectFile } from "./storage-list";
+
 /** The storage bucket that backs the Gallery. */
 export const GALLERY_BUCKET = "gallery";
 
@@ -31,12 +33,7 @@ export const GALLERY_IMAGE_EXTENSIONS = [
 ] as const;
 
 /** A file discovered in the gallery bucket listing. */
-export type GalleryFile = {
-  /** Bucket-relative object key, no leading slash. */
-  path: string;
-  /** Storage object creation time (ISO 8601). */
-  createdAt: string;
-};
+export type GalleryFile = StorageObjectFile;
 
 /**
  * Optional metadata attached to a discovered file by a Media record. Only

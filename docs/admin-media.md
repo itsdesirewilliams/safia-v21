@@ -31,6 +31,7 @@ without changing the architecture.
 | Read media (public site) | ✔ | ✔ |
 | Upload media / edit metadata (general buckets) | ✔ | ✔ |
 | Upload/edit/hide Quality First media (`testing-videos`, `machine-images`) | ✔ | ✘ |
+| Manage Gallery media (`gallery`) | ✔ | ✘ |
 | Delete media | ✔ | ✘ |
 
 Access is enforced by Postgres RLS (`public.media`, `storage.objects`) and by
@@ -59,7 +60,7 @@ update public.profiles set role = 'editor' where email = 'editor@example.com';
 | --- | --- |
 | `product-images` | image |
 | `blog-images` | image, video, document |
-| `gallery` | image, video |
+| `gallery` | image |
 | `testing-videos` | video |
 | `machine-images` | image |
 | `catalogue-pdfs` | document |

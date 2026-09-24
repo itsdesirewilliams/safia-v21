@@ -166,6 +166,7 @@ export default async function AdminMediaPage({
             <li key={item.id}>
               <MediaCard
                 media={item}
+                canEdit={canManageRestricted || !isAdminOnlyBucket(item.bucket)}
                 canDelete={canDelete}
                 canHide={canDelete && isQualityFirstBucket(item.bucket)}
               />

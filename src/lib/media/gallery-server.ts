@@ -4,10 +4,10 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import {
   discoverGalleryImages,
   GALLERY_BUCKET,
-  type GalleryFile,
   type GalleryImage,
   type GalleryMetadata,
 } from "./gallery";
+import { listStorageObjects } from "./storage-list";
 import { resolveMediaPublicUrl } from "./url";
 
 /**
@@ -19,46 +19,6 @@ import { resolveMediaPublicUrl } from "./url";
  * failure never breaks the page — it logs and returns an empty set so the grid
  * falls back to its labelled empty state.
  */
-
-/** How deep to descend into year-month folders created by the uploader. */
-const MAX_LIST_DEPTH = 3;
-
-type SupabaseListEntry = {
-  name: string;
-  id: string | null;
-  created_at?: string | null;
-};
-
-async function listObjects(
-  prefix = "",
-  depth = MAX_LIST_DEPTH,
-): Promise<GalleryFile[]> {
-  const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase.storage
-    .from(GALLERY_BUCKET)
-    .list(prefix, { limit: 1000, sortBy: { column: "name", order: "asc" } });
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  const files: GalleryFile[] = [];
-
-  for (const entry of (data ?? []) as SupabaseListEntry[]) {
-    const path = prefix ? `${prefix}/${entry.name}` : entry.name;
-
-    if (entry.id === null) {
-      if (depth > 0) {
-        files.push(...(await listObjects(path, depth - 1)));
-      }
-      continue;
-    }
-
-    files.push({ path, createdAt: entry.created_at ?? "" });
-  }
-
-  return files;
-}
 
 type MetadataRow = {
   storage_path: string;
@@ -87,7 +47,10 @@ async function loadMetadata(): Promise<GalleryMetadata[]> {
 /** The gallery images, newest first, with caption/alt resolved and URLs added. */
 export async function listGalleryImages(): Promise<GalleryImage[]> {
   try {
-    const [files, metadata] = await Promise.all([listObjects(), loadMetadata()]);
+    const [files, metadata] = await Promise.all([
+      listStorageObjects(GALLERY_BUCKET),
+      loadMetadata(),
+    ]);
 
     const base = getSupabaseUrl();
 

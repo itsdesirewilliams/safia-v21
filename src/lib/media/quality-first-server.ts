@@ -9,8 +9,8 @@ import {
   type QualityFirstMachineImage,
   type QualityFirstMetadata,
   type QualityFirstStory,
-  type StorageFile,
 } from "./quality-first";
+import { listStorageObjects } from "./storage-list";
 import { resolveMediaPublicUrl } from "./url";
 
 /**
@@ -22,46 +22,6 @@ import { resolveMediaPublicUrl } from "./url";
  * failure never breaks the page — it logs and returns an empty set so the
  * section falls back to its labelled empty state.
  */
-
-/** How deep to descend into year-month folders created by the uploader. */
-const MAX_LIST_DEPTH = 3;
-
-type SupabaseListEntry = {
-  name: string;
-  id: string | null;
-};
-
-async function listObjects(
-  bucket: string,
-  prefix = "",
-  depth = MAX_LIST_DEPTH,
-): Promise<StorageFile[]> {
-  const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase.storage
-    .from(bucket)
-    .list(prefix, { limit: 1000, sortBy: { column: "name", order: "asc" } });
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  const files: StorageFile[] = [];
-
-  for (const entry of (data ?? []) as SupabaseListEntry[]) {
-    const path = prefix ? `${prefix}/${entry.name}` : entry.name;
-
-    if (entry.id === null) {
-      if (depth > 0) {
-        files.push(...(await listObjects(bucket, path, depth - 1)));
-      }
-      continue;
-    }
-
-    files.push({ path });
-  }
-
-  return files;
-}
 
 type MetadataRow = {
   storage_path: string;
@@ -109,7 +69,7 @@ async function loadMetadata(bucket: string): Promise<QualityFirstMetadata[]> {
 export async function listQualityFirstStories(): Promise<QualityFirstStory[]> {
   try {
     const [files, metadata] = await Promise.all([
-      listObjects(STORY_BUCKET),
+      listStorageObjects(STORY_BUCKET),
       loadMetadata(STORY_BUCKET),
     ]);
 
@@ -137,7 +97,7 @@ export async function listQualityFirstMachineImages(): Promise<
 > {
   try {
     const [files, metadata] = await Promise.all([
-      listObjects(MACHINE_BUCKET),
+      listStorageObjects(MACHINE_BUCKET),
       loadMetadata(MACHINE_BUCKET),
     ]);
 
