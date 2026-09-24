@@ -205,7 +205,7 @@ export function SearchBox({
             activeIndex >= 0 ? `${listId}-${activeIndex}` : undefined
           }
           autoComplete="off"
-          className="w-full rounded-full border border-transparent bg-white py-4 pl-14 pr-5 text-base font-medium text-ink-900 shadow-pop outline-none transition placeholder:font-normal placeholder:text-ink-400 focus:ring-4 focus:ring-brand-500/30"
+          className="w-full rounded-lg border border-transparent bg-white py-4 pl-14 pr-5 text-base font-medium text-ink-900 shadow-pop outline-none transition placeholder:font-normal placeholder:text-ink-400 focus:ring-4 focus:ring-brand-500/30"
         />
       </div>
 
