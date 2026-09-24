@@ -1123,12 +1123,12 @@ Status: COMPLETE
 Ticket #20
 GitHub Issue #4
 About Us
-Status: NEXT
+Status: COMPLETE
 
 Ticket #21
 GitHub Issue #7
 Gallery
-Status: PENDING
+Status: NEXT
 
 ---
 

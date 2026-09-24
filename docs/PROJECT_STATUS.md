@@ -41,23 +41,23 @@ Status: COMPLETE
 Status: COMPLETE
 
 ### Ticket #20 — About Us
-Status: NEXT
+Status: COMPLETE
 
 ### Ticket #21 — Gallery
-Status: PENDING
+Status: NEXT
 
 ## Current next task
 
-Ticket #20 — About Us
+Ticket #21 — Gallery
 
 GitHub Issue:
-#4
+#7
 
 Route:
 
-/about-us
+/gallery
 
-Developer-owned/static: company/about content, a Team section, and the Business Profile slider (landscape 16:9; portrait 4:5 / 1080×1350) using the supplied repository assets and the shared responsive slider. Do not substitute old-site assets.
+Public, regular responsive image grid (NOT Masonry), newest first by storage object creation time, with a modal/fullscreen viewer: next/previous, mobile swipe, desktop arrows, close, keyboard navigation where practical, and a caption in the viewer (default "Safeway Tyre" when absent). Gallery does not require Pattern/Category tags. Administration reuses Media Admin and is Admin-only.
 
 ## Completed implementation commits
 
@@ -80,6 +80,10 @@ Ticket #18:
 Ticket #19:
 
 75f648a
+
+Ticket #20:
+
+6126fd8
 
 The exact latest commit should be checked from Git before starting the next ticket.
 
@@ -164,5 +168,4 @@ Missing media/content should use documented placeholders rather than old-site sc
 
 ## Future sequence
 
-#20 About Us
-→ #21 Gallery
+#21 Gallery (final ticket in the current sequence)
