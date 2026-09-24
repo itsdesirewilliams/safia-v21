@@ -188,7 +188,7 @@ describeLive("media layer integrity (live Supabase)", () => {
     const insert = await client
       .from("media")
       .insert({
-        bucket: "gallery",
+        bucket: "blog-images",
         storage_path: `e2e/${crypto.randomUUID()}.png`,
         type: "image",
         uploaded_by: userId,
@@ -208,6 +208,19 @@ describeLive("media layer integrity (live Supabase)", () => {
       .eq("id", mediaId)
       .maybeSingle();
     expect(data?.id).toBe(mediaId);
+  });
+
+  it("refuses an editor writing a Media record to the restricted gallery bucket", async () => {
+    const { client, userId } = await createSignedInUser("editor");
+
+    const { error } = await client.from("media").insert({
+      bucket: "gallery",
+      storage_path: `e2e/${crypto.randomUUID()}.png`,
+      type: "image",
+      uploaded_by: userId,
+    });
+
+    expect(error).not.toBeNull();
   });
 
   it("lets an admin delete media", async () => {
@@ -236,15 +249,15 @@ describeLive("media layer integrity (live Supabase)", () => {
     const path = `e2e/${crypto.randomUUID()}.png`;
 
     const upload = await client.storage
-      .from("gallery")
+      .from("blog-images")
       .upload(path, pngBytes(), { contentType: "image/png" });
     expect(upload.error).toBeNull();
-    uploadedObjects.push({ bucket: "gallery", path });
+    uploadedObjects.push({ bucket: "blog-images", path });
 
     const record = await client
       .from("media")
       .insert({
-        bucket: "gallery",
+        bucket: "blog-images",
         storage_path: path,
         type: "image",
         mime_type: "image/png",
@@ -257,6 +270,17 @@ describeLive("media layer integrity (live Supabase)", () => {
     if (record.data?.id) {
       createdMedia.push(record.data.id);
     }
+  });
+
+  it("refuses an editor uploading a storage object to the restricted gallery bucket", async () => {
+    const { client } = await createSignedInUser("editor");
+    const path = `e2e/${crypto.randomUUID()}.png`;
+
+    const { error } = await client.storage
+      .from("gallery")
+      .upload(path, pngBytes(), { contentType: "image/png" });
+
+    expect(error).not.toBeNull();
   });
 
   it("refuses anonymous storage uploads", async () => {

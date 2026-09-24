@@ -10,7 +10,11 @@ import {
 } from "@/lib/media/upload";
 import { isMediaType } from "@/lib/media/types";
 import {
+  ADMIN_ONLY_BUCKET_IDS,
   bucketAcceptsType,
+  GALLERY_BUCKET_IDS,
+  isAdminOnlyBucket,
+  isGalleryBucket,
   isQualityFirstBucket,
   isStorageBucketId,
   QUALITY_FIRST_BUCKET_IDS,
@@ -45,6 +49,23 @@ describe("storage bucket vocabulary", () => {
     expect(isQualityFirstBucket("testing-videos")).toBe(true);
     expect(isQualityFirstBucket("machine-images")).toBe(true);
     expect(isQualityFirstBucket("gallery")).toBe(false);
+  });
+
+  it("treats the gallery bucket as restricted to admins, with Quality First", () => {
+    expect(GALLERY_BUCKET_IDS).toEqual(["gallery"]);
+    expect(isGalleryBucket("gallery")).toBe(true);
+    expect(isGalleryBucket("blog-images")).toBe(false);
+
+    expect(ADMIN_ONLY_BUCKET_IDS).toEqual([
+      "testing-videos",
+      "machine-images",
+      "gallery",
+    ]);
+    expect(isAdminOnlyBucket("gallery")).toBe(true);
+    expect(isAdminOnlyBucket("testing-videos")).toBe(true);
+    expect(isAdminOnlyBucket("machine-images")).toBe(true);
+    expect(isAdminOnlyBucket("blog-images")).toBe(false);
+    expect(isAdminOnlyBucket("product-images")).toBe(false);
   });
 });
 

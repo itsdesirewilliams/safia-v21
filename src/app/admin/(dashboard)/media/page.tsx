@@ -3,12 +3,16 @@ import Link from "next/link";
 import { buttonStyles } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { fieldClass, fieldLabelClass } from "@/components/ui/form";
-import { canDeleteMedia, canManageQualityFirstMedia } from "@/lib/auth/roles";
+import { canDeleteMedia, canManageAdminOnlyMedia } from "@/lib/auth/roles";
 import { getCurrentProfile, requireMediaManager } from "@/lib/auth/session";
 import { listMedia } from "@/lib/media/server";
 import type { Media } from "@/lib/media/types";
 import { MEDIA_TYPES } from "@/lib/media/types";
-import { isQualityFirstBucket, STORAGE_BUCKETS } from "@/lib/supabase/buckets";
+import {
+  isAdminOnlyBucket,
+  isQualityFirstBucket,
+  STORAGE_BUCKETS,
+} from "@/lib/supabase/buckets";
 
 import { MediaCard } from "./media-card";
 import { MediaUploadForm } from "./media-upload-form";
@@ -29,9 +33,9 @@ export default async function AdminMediaPage({
   await requireMediaManager();
   const profile = await getCurrentProfile();
   const canDelete = canDeleteMedia(profile?.role ?? null);
-  const canManageQualityFirst = canManageQualityFirstMedia(profile?.role ?? null);
+  const canManageRestricted = canManageAdminOnlyMedia(profile?.role ?? null);
   const allowedBuckets = STORAGE_BUCKETS.filter(
-    (bucket) => canManageQualityFirst || !isQualityFirstBucket(bucket.id),
+    (bucket) => canManageRestricted || !isAdminOnlyBucket(bucket.id),
   );
 
   const params = await searchParams;

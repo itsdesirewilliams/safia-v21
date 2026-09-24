@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { canManageQualityFirstMedia } from "@/lib/auth/roles";
+import { canManageAdminOnlyMedia } from "@/lib/auth/roles";
 import { requireAdmin, requireMediaManager } from "@/lib/auth/session";
 import type { MediaActionState } from "@/lib/media/action-state";
 import { validateMediaMetadata } from "@/lib/media/metadata";
@@ -13,7 +13,11 @@ import {
   uploadMedia,
 } from "@/lib/media/server";
 import { buildStoragePath, validateUpload } from "@/lib/media/upload";
-import { isQualityFirstBucket, isStorageBucketId } from "@/lib/supabase/buckets";
+import {
+  isAdminOnlyBucket,
+  isQualityFirstBucket,
+  isStorageBucketId,
+} from "@/lib/supabase/buckets";
 
 /**
  * Admin media server actions (Ticket 4).
@@ -48,10 +52,10 @@ export async function uploadMediaAction(
     return { status: "error", message: "Choose a valid storage bucket." };
   }
 
-  if (isQualityFirstBucket(bucket) && !canManageQualityFirstMedia(profile.role)) {
+  if (isAdminOnlyBucket(bucket) && !canManageAdminOnlyMedia(profile.role)) {
     return {
       status: "error",
-      message: "Quality First media can only be managed by an admin.",
+      message: "Gallery and Quality First media can only be managed by an admin.",
     };
   }
 

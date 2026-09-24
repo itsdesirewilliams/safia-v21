@@ -64,3 +64,29 @@ export function isQualityFirstBucket(
 ): boolean {
   return (QUALITY_FIRST_BUCKET_IDS as readonly string[]).includes(bucket);
 }
+
+/**
+ * The Gallery bucket (spec #7). Its media is managed by Admins only — Editors
+ * cannot upload, edit or delete Gallery images.
+ */
+export const GALLERY_BUCKET_IDS = [
+  "gallery",
+] as const satisfies readonly StorageBucketId[];
+
+export function isGalleryBucket(bucket: StorageBucketId): boolean {
+  return (GALLERY_BUCKET_IDS as readonly string[]).includes(bucket);
+}
+
+/**
+ * Buckets only Admins may manage: Quality First media plus the Gallery. The
+ * database RLS is the authority; this only shapes the admin UI and the
+ * server-side guard.
+ */
+export const ADMIN_ONLY_BUCKET_IDS = [
+  ...QUALITY_FIRST_BUCKET_IDS,
+  ...GALLERY_BUCKET_IDS,
+] as const satisfies readonly StorageBucketId[];
+
+export function isAdminOnlyBucket(bucket: StorageBucketId): boolean {
+  return (ADMIN_ONLY_BUCKET_IDS as readonly string[]).includes(bucket);
+}
