@@ -2,6 +2,7 @@ import {
   CATEGORIES,
   type CategorySlug,
 } from "@/lib/catalogue/categories";
+import { slugify } from "@/lib/slug";
 
 /**
  * Catalogue normalization seam (spec #1 / Ticket #18).
@@ -101,14 +102,6 @@ const MASTER_RANGE_CATEGORY: Record<string, CategorySlug> = {
   // category slug is "forklift".
   "forklift-industrial": "forklift",
 };
-
-/** Lowercase, non-alphanumeric runs to a single dash, trimmed. */
-export function slugify(value: string): string {
-  return value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
 
 /** `displayName` + always-appended `patternCode` → unique Pattern slug. */
 export function patternSlug(displayName: string, patternCode: string): string {

@@ -45,6 +45,8 @@ shell builds and runs without them; features that need them fail loudly with a
 | Quality First hero footage | — (asset) | `/quality-first` hero | Not supplied; the hero uses a designed placeholder panel rather than old-site or stock media |
 | Quality First process specifics | — (content) | `/quality-first` testing explanation | Specific standards, machine names, laboratory capabilities and certifications are not supplied; a labelled note stands in rather than inventing them (the surrounding copy is developer-owned) |
 | Final display font | — (design decision) | Production typography | Inter is the active typeface (Anek Devanagari for Devanagari copy). Alfabet is removed; the supplied Fontspring demo cuts in `assets/fonts` must not be used in production |
+| Blog posts | — (content) | `/blogs`, `/blogs/<slug>` | No posts have been authored yet; the listing shows a labelled empty state until posts are published from `/admin/posts` |
+| Rich-text editor library | — (design decision) | Blog authoring | The block body is edited with a simple developer-built editor (paragraph / heading / image). A rich-text library (TipTap, ProseMirror) is deferred and out of scope for spec #2 (ADR-0005 keeps the block model editor-agnostic) |
 
 ## How missing values behave
 

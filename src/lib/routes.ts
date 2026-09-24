@@ -78,10 +78,11 @@ export const FOOTER_NAV: readonly NavLink[] = [
 ];
 
 /**
- * Concrete paths exercised by the route-resolution test. Dynamic routes use
- * representative slugs; the Pattern slug is a real catalogue pattern (the
- * Pattern detail route now 404s unknown slugs), while the Post slug remains a
- * placeholder until its owning ticket lands.
+ * Concrete paths exercised by the route-resolution test. Dynamic routes use a
+ * real catalogue Pattern slug (the Pattern detail route 404s unknown slugs).
+ * The Post detail route is deliberately excluded: its slugs are CMS content, so
+ * there is no fixed slug that resolves without seeded data — the Blogs e2e test
+ * covers it with a fixture.
  */
 export const SMOKE_ROUTES: readonly string[] = [
   ROUTES.home,
@@ -94,5 +95,4 @@ export const SMOKE_ROUTES: readonly string[] = [
   ...CATEGORIES.map((category) => ROUTES.category(category.slug)),
   ROUTES.pattern("motorcycle", "motorcycle-tyres-sfm-101"),
   ROUTES.blogs,
-  ROUTES.post("example-post"),
 ];

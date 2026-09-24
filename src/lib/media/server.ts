@@ -95,6 +95,29 @@ export async function getMediaById(id: string): Promise<Media | null> {
   return data ? mapMediaRow(data as MediaRow, getSupabaseUrl()) : null;
 }
 
+/** Resolve several Media records by id; missing ids are simply omitted. */
+export async function getMediaByIds(ids: readonly string[]): Promise<Media[]> {
+  const unique = [...new Set(ids.filter((id) => id !== ""))];
+  if (unique.length === 0) {
+    return [];
+  }
+
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("media")
+    .select("*")
+    .in("id", unique);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const supabaseUrl = getSupabaseUrl();
+  return ((data ?? []) as MediaRow[])
+    .map((row) => mapMediaRow(row, supabaseUrl))
+    .filter((media): media is Media => media !== null);
+}
+
 /** References that block deletion, resolved by the database. */
 export async function listMediaReferences(
   mediaId: string,

@@ -12,9 +12,9 @@ import {
 import {
   normalizeMasterData,
   patternSlug,
-  slugify,
   type MasterDataset,
 } from "@/lib/catalogue/normalize";
+import { slugify } from "@/lib/slug";
 
 const RAW = JSON.parse(
   readFileSync(

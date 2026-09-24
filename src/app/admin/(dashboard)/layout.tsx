@@ -7,6 +7,7 @@ import { roleLabel } from "@/lib/auth/roles";
 import { requireMediaManager } from "@/lib/auth/session";
 
 import { signOutAction } from "../actions";
+import { AdminNav } from "./admin-nav";
 
 export const metadata = { title: "Media admin" };
 
@@ -41,15 +42,7 @@ export default async function AdminDashboardLayout({
                 Admin
               </span>
             </Link>
-            <nav aria-label="Admin" className="hidden items-center gap-1 sm:flex">
-              <Link
-                href="/admin/media"
-                aria-current="page"
-                className="rounded-full bg-ink-100 px-3.5 py-1.5 text-sm font-medium text-ink-950"
-              >
-                Media
-              </Link>
-            </nav>
+            <AdminNav />
           </div>
 
           <div className="flex items-center gap-3">
