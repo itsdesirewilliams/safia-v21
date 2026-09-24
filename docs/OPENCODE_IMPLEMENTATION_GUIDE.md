@@ -1128,7 +1128,7 @@ Status: COMPLETE
 Ticket #21
 GitHub Issue #7
 Gallery
-Status: NEXT
+Status: COMPLETE
 
 ---
 

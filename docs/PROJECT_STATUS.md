@@ -44,20 +44,11 @@ Status: COMPLETE
 Status: COMPLETE
 
 ### Ticket #21 — Gallery
-Status: NEXT
+Status: COMPLETE
 
 ## Current next task
 
-Ticket #21 — Gallery
-
-GitHub Issue:
-#7
-
-Route:
-
-/gallery
-
-Public, regular responsive image grid (NOT Masonry), newest first by storage object creation time, with a modal/fullscreen viewer: next/previous, mobile swipe, desktop arrows, close, keyboard navigation where practical, and a caption in the viewer (default "Safeway Tyre" when absent). Gallery does not require Pattern/Category tags. Administration reuses Media Admin and is Admin-only.
+None — every ticket in the current sequence (#11–#21) is complete. Await the next batch of tickets.
 
 ## Completed implementation commits
 
@@ -84,6 +75,10 @@ Ticket #19:
 Ticket #20:
 
 6126fd8
+
+Ticket #21:
+
+298efa4
 
 The exact latest commit should be checked from Git before starting the next ticket.
 
@@ -168,4 +163,4 @@ Missing media/content should use documented placeholders rather than old-site sc
 
 ## Future sequence
 
-#21 Gallery (final ticket in the current sequence)
+All tickets in the current sequence (#11–#21) are complete.
