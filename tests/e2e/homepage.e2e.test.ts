@@ -67,7 +67,7 @@ describe("homepage vertical slice", () => {
   it("renders every section end-to-end", async () => {
     const html = await (await fetch(`${BASE_URL}/`)).text();
 
-    expect(html).toContain("Tyres that keep the world moving");
+    expect(html).toContain("Tires That Keep the World Moving");
     expect(html).toContain("Take a tour of our industry");
     expect(html).toContain("Product ranges");
     expect(html).toContain("Explore the official catalogue");

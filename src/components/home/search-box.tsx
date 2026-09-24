@@ -2,27 +2,95 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 
 import { MIN_SEARCH_LENGTH, type SearchResult } from "@/lib/catalogue/search";
+import {
+  HERO_SUGGESTION_ROTATE_MS,
+  pickHeroSuggestions,
+  type HeroSuggestion,
+  type HeroSuggestionKind,
+  type HeroSuggestionPool,
+} from "@/lib/catalogue/suggestions";
 import { ROUTES } from "@/lib/routes";
 
 const DEBOUNCE_MS = 250;
+
+const KIND_LABEL: Record<HeroSuggestionKind, string> = {
+  category: "Category",
+  size: "Size",
+  name: "Pattern",
+};
 
 function patternHref(result: SearchResult): string {
   return ROUTES.pattern(result.categorySlug, result.patternSlug);
 }
 
-export function SearchBox() {
+function SuggestionChips({
+  suggestions,
+  rotation,
+}: {
+  suggestions: HeroSuggestion[];
+  rotation: number;
+}) {
+  return (
+    <div className="mt-3">
+      <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-white/40">
+        Popular searches
+      </p>
+      <ul
+        key={rotation}
+        className="mt-2.5 flex flex-wrap gap-2 animate-fade-in motion-reduce:animate-none"
+      >
+        {suggestions.map((suggestion) => (
+          <li key={`${suggestion.kind}-${suggestion.href}`}>
+            <Link
+              href={suggestion.href}
+              className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-white/15 bg-white/[0.06] px-3 py-2 text-sm text-white/75 transition-colors hover:border-white/35 hover:bg-white/10 hover:text-white"
+            >
+              <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-accent-500">
+                {KIND_LABEL[suggestion.kind]}
+              </span>
+              <span className="font-medium">{suggestion.label}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export function SearchBox({
+  suggestions = { category: [], size: [], name: [] },
+}: {
+  suggestions?: HeroSuggestionPool;
+}) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [rotation, setRotation] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const listId = useId();
   const inputId = useId();
+
+  const heroSuggestions = useMemo(
+    () => pickHeroSuggestions(suggestions, rotation),
+    [suggestions, rotation],
+  );
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+    const interval = setInterval(
+      () => setRotation((current) => current + 1),
+      HERO_SUGGESTION_ROTATE_MS,
+    );
+    return () => clearInterval(interval);
+  }, []);
 
   function onQueryChange(value: string) {
     setQuery(value);
@@ -102,18 +170,17 @@ export function SearchBox() {
       setActiveIndex(
         (index) => (index - 1 + results.length) % results.length,
       );
-    } else if (event.key === "Enter" && activeIndex >= 0) {
+    } else if (event.key === "Enter") {
       event.preventDefault();
+      const target = results[activeIndex >= 0 ? activeIndex : 0];
       setOpen(false);
-      router.push(patternHref(results[activeIndex]));
+      router.push(patternHref(target));
     }
   }
 
-  const showEmpty =
-    open &&
-    !loading &&
-    results.length === 0 &&
-    query.trim().length >= MIN_SEARCH_LENGTH;
+  const trimmedQuery = query.trim();
+  const showEmpty = open && !loading && results.length === 0 && trimmedQuery.length >= MIN_SEARCH_LENGTH;
+  const showSuggestions = trimmedQuery.length === 0 && heroSuggestions.length > 0;
 
   return (
     <div ref={containerRef} className="relative">
@@ -151,6 +218,13 @@ export function SearchBox() {
           className="w-full rounded-full border border-transparent bg-white py-4 pl-14 pr-5 text-base font-medium text-ink-900 shadow-pop outline-none transition placeholder:font-normal placeholder:text-ink-400 focus:ring-4 focus:ring-brand-500/30"
         />
       </div>
+
+      {showSuggestions && (
+        <SuggestionChips
+          suggestions={heroSuggestions}
+          rotation={rotation}
+        />
+      )}
 
       {open && (
         <ul

@@ -1,11 +1,18 @@
 import {
   CATEGORIES,
+  getCategory,
   type CategorySlug,
 } from "@/lib/catalogue/categories";
+import { CATALOGUE, patternSizes } from "@/lib/catalogue/dataset";
 import {
   CATALOGUE_STATS,
   PATTERNS_BY_CATEGORY,
 } from "@/lib/catalogue/stats";
+import type {
+  HeroSuggestion,
+  HeroSuggestionPool,
+} from "@/lib/catalogue/suggestions";
+import { ROUTES } from "@/lib/routes";
 
 /**
  * Developer-owned homepage content (spec #8). Everything here ships via code;
@@ -86,3 +93,67 @@ export type Testimonial = {
  * inventing quotes.
  */
 export const TESTIMONIALS: readonly Testimonial[] = [];
+
+const HERO_SIZE_SUGGESTION_LIMIT = 24;
+
+/**
+ * The pool the hero search suggestions rotate through. Every value is taken
+ * from the bundled master dataset — categories, real Variant sizes and real
+ * functional/display names — so nothing is invented. Built once at module load
+ * and passed to the client search box.
+ */
+function buildHeroSuggestionPool(): HeroSuggestionPool {
+  const category: HeroSuggestion[] = HOME_CATEGORY_CARDS.map((card) => ({
+    kind: "category",
+    label: card.displayName,
+    hint: `${card.patterns} ${card.patterns === 1 ? "pattern" : "patterns"}`,
+    query: card.displayName,
+    href: ROUTES.category(card.slug),
+  }));
+
+  const name: HeroSuggestion[] = [];
+  const size: HeroSuggestion[] = [];
+  const seenNames = new Set<string>();
+  const seenSizes = new Set<string>();
+
+  for (const pattern of CATALOGUE.patterns) {
+    const categoryInfo = getCategory(pattern.categorySlug);
+    const isFunctionalName =
+      categoryInfo !== undefined &&
+      pattern.displayName !== categoryInfo.displayName;
+
+    if (isFunctionalName && !seenNames.has(pattern.displayName)) {
+      seenNames.add(pattern.displayName);
+      name.push({
+        kind: "name",
+        label: pattern.displayName,
+        hint: pattern.patternCode,
+        query: pattern.displayName,
+        href: ROUTES.pattern(pattern.categorySlug, pattern.slug),
+      });
+    }
+
+    for (const variantSize of patternSizes(pattern)) {
+      if (seenSizes.has(variantSize)) {
+        continue;
+      }
+      seenSizes.add(variantSize);
+      size.push({
+        kind: "size",
+        label: variantSize,
+        hint: pattern.patternCode,
+        query: variantSize,
+        href: ROUTES.pattern(pattern.categorySlug, pattern.slug),
+      });
+    }
+  }
+
+  return {
+    category,
+    size: size.slice(0, HERO_SIZE_SUGGESTION_LIMIT),
+    name,
+  };
+}
+
+export const HERO_SUGGESTION_POOL: HeroSuggestionPool =
+  buildHeroSuggestionPool();

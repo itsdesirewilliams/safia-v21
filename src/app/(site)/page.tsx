@@ -1,12 +1,12 @@
 import Link from "next/link";
 
 import { CategoryVisual } from "@/components/home/category-visual";
+import { HeroEyebrow } from "@/components/home/hero-eyebrow";
 import { InstagramFeed } from "@/components/home/instagram-feed";
 import { SearchBox } from "@/components/home/search-box";
 import { QueryForm } from "@/components/contact/query-form";
 import { ArrowIcon, ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { Eyebrow } from "@/components/ui/eyebrow";
 import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -14,6 +14,7 @@ import { Stat } from "@/components/ui/stat";
 import { getHeroVideoUrl, getOptionalYoutubeVideoId, getPublicConfig } from "@/lib/config";
 import {
   CERTIFICATIONS,
+  HERO_SUGGESTION_POOL,
   HOME_CATEGORY_CARDS,
   HOME_STATS,
   TESTIMONIALS,
@@ -67,68 +68,37 @@ export default function HomePage() {
 
   return (
     <>
-      {/* Hero — video + product search */}
+      {/* Hero — two-panel: copy/search + factory video */}
       <section className="bg-ink-50 px-4 pt-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-[96rem]">
           <div className="relative overflow-hidden rounded-card bg-ink-950">
-            <video
-              className="absolute inset-0 h-full w-full object-cover"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              poster="/media/hero-poster.svg"
-              aria-hidden="true"
-            >
-              <source src={heroVideoUrl} type="video/mp4" />
-            </video>
             <div
               aria-hidden="true"
-              className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/75 to-ink-950/35"
-            />
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 [background:radial-gradient(110%_90%_at_12%_100%,rgba(7,16,24,0.9),transparent_62%)]"
+              className="absolute inset-0 [background:radial-gradient(120%_110%_at_88%_0%,rgba(11,99,246,0.28),transparent_58%),radial-gradient(90%_90%_at_0%_100%,rgba(255,106,0,0.16),transparent_55%)]"
             />
 
-            <div className="relative flex min-h-[88svh] flex-col justify-between gap-12 px-6 py-10 sm:px-10 lg:min-h-[44rem] lg:px-14 lg:py-14">
-              <div className="max-w-3xl animate-fade-up">
-                <Eyebrow tone="dark">
-                  Exporting durable tyres worldwide
-                </Eyebrow>
-                <h1 className="text-display mt-6 text-white">
-                  Tyres that keep the world moving.
+            <div className="relative grid gap-10 px-6 py-12 sm:px-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-14 lg:px-14 lg:py-16">
+              <div className="animate-fade-up">
+                <HeroEyebrow />
+                <h1 className="text-h1 mt-6 text-white">
+                  Tires That Keep the World Moving
                 </h1>
-                <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/70">
-                  {SITE.name} manufactures and exports durable tyres worldwide.
-                  Search the catalogue by size, pattern code, name or category.
+                <p className="mt-5 max-w-xl text-base leading-relaxed text-white/70 sm:text-lg">
+                  {SITE.name} manufactures and exports durable tyres for
+                  international markets. Search the catalogue by size, pattern
+                  code, name or category.
                 </p>
-              </div>
 
-              <div className="animate-fade-up [animation-delay:160ms]">
-                <div id="search" className="max-w-2xl scroll-mt-28">
-                  <SearchBox />
+                <div id="search" className="mt-8 max-w-2xl scroll-mt-28">
+                  <SearchBox suggestions={HERO_SUGGESTION_POOL} />
                 </div>
-
-                <ul className="mt-6 flex flex-wrap gap-2">
-                  {HOME_CATEGORY_CARDS.map((card) => (
-                    <li key={card.slug}>
-                      <Link
-                        href={ROUTES.category(card.slug)}
-                        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/80 backdrop-blur transition-colors hover:border-white/35 hover:bg-white/10 hover:text-white"
-                      >
-                        {card.displayName}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
 
                 <div className="mt-8 flex flex-wrap gap-3">
                   <ButtonLink
                     href={ROUTES.contactUs}
                     variant="accent"
                     size="lg"
+                    className="max-lg:rounded-xl"
                   >
                     Request a Quotation
                     <ArrowIcon className="h-4 w-4" />
@@ -137,22 +107,31 @@ export default function HomePage() {
                     href={ROUTES.catalogue}
                     variant="onDark"
                     size="lg"
+                    className="max-lg:rounded-xl"
                   >
                     Explore the Catalogue
                   </ButtonLink>
                 </div>
               </div>
 
-              <div className="grid max-w-3xl grid-cols-3 gap-6 border-t border-white/10 pt-8">
-                {HOME_STATS.map((item) => (
-                  <Stat
-                    key={item.label}
-                    value={item.value}
-                    label={item.label}
-                    tone="dark"
-                  />
-                ))}
-              </div>
+              <figure className="relative overflow-hidden rounded-card border border-white/10 bg-ink-900 shadow-pop animate-fade-up [animation-delay:160ms]">
+                <div className="aspect-video w-full">
+                  <video
+                    className="h-full w-full object-cover"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    poster="/media/hero-poster.svg"
+                  >
+                    <source src={heroVideoUrl} type="video/mp4" />
+                  </video>
+                </div>
+                <figcaption className="sr-only">
+                  {SITE.name} factory and manufacturing
+                </figcaption>
+              </figure>
             </div>
           </div>
         </div>

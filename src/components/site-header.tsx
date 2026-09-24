@@ -327,7 +327,7 @@ export function SiteHeader() {
               <ButtonLink
                 href={ROUTES.contactUs}
                 size="lg"
-                className="w-full"
+                className="w-full max-lg:rounded-xl"
                 onClick={closeMenus}
               >
                 Request a Quotation
