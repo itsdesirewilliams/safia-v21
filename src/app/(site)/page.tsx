@@ -1,8 +1,10 @@
 import Link from "next/link";
 
 import { CategoryVisual } from "@/components/home/category-visual";
+import { HeroVideo } from "@/components/home/hero-video";
 import { InstagramFeed } from "@/components/home/instagram-feed";
 import { SearchBox } from "@/components/home/search-box";
+import { YouTubeTour } from "@/components/home/youtube-tour";
 import { QueryForm } from "@/components/contact/query-form";
 import { ArrowIcon, ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -10,7 +12,12 @@ import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Stat } from "@/components/ui/stat";
-import { getHeroVideoUrl, getOptionalYoutubeVideoId, getPublicConfig } from "@/lib/config";
+import {
+  DEFAULT_YOUTUBE_VIDEO_ID,
+  getHeroVideoUrl,
+  getPublicConfig,
+  getYoutubeVideoId,
+} from "@/lib/config";
 import {
   CERTIFICATIONS,
   HERO_SUGGESTION_POOL,
@@ -18,6 +25,7 @@ import {
   HOME_STATS,
   TESTIMONIALS,
 } from "@/lib/homepage";
+import { isValidYoutubeVideoId } from "@/lib/media/youtube";
 import { ROUTES } from "@/lib/routes";
 import { SITE } from "@/lib/site";
 
@@ -27,41 +35,11 @@ export const metadata = {
     "Search Safeway Tyre's catalogue by size, pattern code or category, explore our product ranges, and send an enquiry.",
 };
 
-const YOUTUBE_ID_PATTERN = /^[A-Za-z0-9_-]{11}$/;
-
-function TourPlaceholder() {
-  return (
-    <div className="relative aspect-video w-full overflow-hidden rounded-card bg-ink-950">
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 [background:radial-gradient(100%_100%_at_75%_10%,rgba(11,99,246,0.35),transparent_60%),radial-gradient(80%_80%_at_0%_100%,rgba(255,106,0,0.16),transparent_55%)]"
-      />
-      <div className="relative flex h-full flex-col items-center justify-center gap-5 px-6 text-center">
-        <span className="inline-flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur">
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="ml-1 h-6 w-6"
-          >
-            <path d="M8 5.5v13l11-6.5-11-6.5Z" />
-          </svg>
-        </span>
-        <p className="text-sm font-semibold text-white">
-          Factory tour video not configured
-        </p>
-        <p className="max-w-sm text-sm text-white/60">
-          No YouTube video ID is available yet, so the tour is shown as a
-          placeholder. Set YOUTUBE_VIDEO_ID to embed the tour.
-        </p>
-      </div>
-    </div>
-  );
-}
-
 export default function HomePage() {
-  const youtubeId = getOptionalYoutubeVideoId();
-  const hasValidVideo = Boolean(youtubeId && YOUTUBE_ID_PATTERN.test(youtubeId));
+  const configuredYoutubeId = getYoutubeVideoId();
+  const youtubeId = isValidYoutubeVideoId(configuredYoutubeId)
+    ? configuredYoutubeId
+    : DEFAULT_YOUTUBE_VIDEO_ID;
   const { companyAddress } = getPublicConfig();
   const heroVideoUrl = getHeroVideoUrl();
 
@@ -112,24 +90,13 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <figure className="relative overflow-hidden rounded-card border border-white/10 bg-ink-900 shadow-pop animate-fade-up [animation-delay:160ms]">
-                <div className="aspect-video w-full">
-                  <video
-                    className="h-full w-full object-cover"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                    poster="/media/hero-poster.svg"
-                  >
-                    <source src={heroVideoUrl} type="video/mp4" />
-                  </video>
-                </div>
-                <figcaption className="sr-only">
-                  {SITE.name} factory and manufacturing
-                </figcaption>
-              </figure>
+              <div className="animate-fade-up [animation-delay:160ms]">
+                <HeroVideo
+                  src={heroVideoUrl}
+                  poster="/media/hero-poster.svg"
+                  label={`${SITE.name} factory and manufacturing`}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -160,20 +127,10 @@ export default function HomePage() {
               </Reveal>
             </div>
             <Reveal delay={120}>
-              {hasValidVideo ? (
-                <div className="relative aspect-video w-full overflow-hidden rounded-card border border-ink-200 shadow-card">
-                  <iframe
-                    className="absolute inset-0 h-full w-full"
-                    src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
-                    title="Safeway Tyre factory tour"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    loading="lazy"
-                  />
-                </div>
-              ) : (
-                <TourPlaceholder />
-              )}
+              <YouTubeTour
+                id={youtubeId}
+                title="Safeway Tyre factory tour"
+              />
             </Reveal>
           </div>
         </Container>
@@ -392,7 +349,7 @@ export default function HomePage() {
             <SectionHeading
               eyebrow="Follow us"
               title="Latest on Instagram"
-              description="The four most recent posts from Safeway Tyre's Instagram."
+              description="A rotating selection of Safeway Tyre imagery."
             />
           </Reveal>
           <div className="mt-14">

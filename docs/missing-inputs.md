@@ -25,14 +25,14 @@ shell builds and runs without them; features that need them fail loudly with a
 | Master product data | `supabase/master-product-data.json` | Supplied — the authoritative Category → Pattern → Variant dataset (schemaVersion 1.0) |
 | Catalogue seed | `supabase/seed.sql` | Applied — generated from the master product data; Ticket 8 adds the full normalization seam |
 | Media schema + roles | `supabase/migrations/20260924000000_media_layer.sql` | Applied — `media`, `profiles`, RLS, storage policies, reference guard |
-| Homepage hero video | `NEXT_PUBLIC_HERO_VIDEO_URL` (fallback `/media/hero-tour.mp4`) | Interim placeholder — the supplied Manufacturing Unit Tour clip ships in `public/media`; replace when Safeway supplies a final hero video |
+| Homepage hero video | `public/media/hero-tour.mp4` (override `NEXT_PUBLIC_HERO_VIDEO_URL`) | Supplied — the final factory clip ships at `public/media/hero-tour.mp4`; it is shown at its natural aspect ratio (never cropped) |
+| Homepage tour video | `YOUTUBE_VIDEO_ID` | Supplied — defaults to `4jM2jUcc5Kc` when unset |
+| Homepage Instagram images | `public/assets/instagram` | Supplied — discovered at read time; add `.webp` / `.jpg` / `.jpeg` / `.png` files to update the section (no API, token or database) |
 
 ## Awaiting input (flagged, not invented)
 
 | Input | Env var | Blocks | Notes |
 | --- | --- | --- | --- |
-| Instagram long-lived access token | `INSTAGRAM_ACCESS_TOKEN` | Homepage Instagram feed (ADR-0008) | Homepage renders a labelled placeholder when absent; a configured token whose fetch fails hides the section |
-| YouTube video ID | `YOUTUBE_VIDEO_ID` | Homepage "Take a Tour" | Homepage renders a labelled placeholder when absent |
 | Certification assets | — (asset) | Homepage / About Us | Not supplied; the homepage renders a labelled placeholder rather than inventing names or marks |
 | Testimonial content | — (content) | Homepage | Not supplied; the homepage renders a labelled placeholder rather than inventing quotes |
 | Product / category imagery | — (asset) | Homepage product ranges, Pattern pages | Not supplied; the homepage uses branded abstract tiles as clearly-temporary placeholders rather than stock or old-site imagery |
@@ -59,10 +59,11 @@ shell builds and runs without them; features that need them fail loudly with a
 - `/api/health` reports `503` and `supabase: "unconfigured"` when Supabase
   configuration is absent.
 - Homepage sections with an unsupplied input render a labelled placeholder
-  rather than inventing content: the tour (no `YOUTUBE_VIDEO_ID`), the
-  Instagram feed (no `INSTAGRAM_ACCESS_TOKEN`), certifications, testimonials
-  and the map (no `NEXT_PUBLIC_COMPANY_ADDRESS`). A configured Instagram token
-  whose fetch fails hides the section instead.
+  rather than inventing content: certifications, testimonials and the map (no
+  `NEXT_PUBLIC_COMPANY_ADDRESS`). The homepage tour uses the supplied YouTube
+  video (`4jM2jUcc5Kc`), and the homepage Instagram section reads the local
+  `public/assets/instagram` folder — it falls back to a labelled state only
+  when that folder contains no supported images (no API or token involved).
 - The Contact Us Query and Feedback forms validate and rate-limit server-side;
   when `EMAIL_TRANSPORT_*` is unset they return a graceful WhatsApp/email
   fallback rather than silently dropping the submission. The same Query form is

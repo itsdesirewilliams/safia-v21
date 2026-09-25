@@ -2,11 +2,11 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   ConfigError,
-  getOptionalInstagramAccessToken,
-  getOptionalYoutubeVideoId,
+  DEFAULT_YOUTUBE_VIDEO_ID,
   getPublicConfig,
   getSupabaseAdminEnv,
   getSupabaseEnv,
+  getYoutubeVideoId,
 } from "@/lib/config";
 
 afterEach(() => {
@@ -56,21 +56,18 @@ describe("required configuration", () => {
   });
 });
 
-describe("optional homepage configuration", () => {
-  it("returns null rather than throwing when inputs are absent", () => {
-    vi.stubEnv("INSTAGRAM_ACCESS_TOKEN", "");
+describe("homepage tour video configuration", () => {
+  it("falls back to the supplied video id when none is configured", () => {
     vi.stubEnv("YOUTUBE_VIDEO_ID", "");
 
-    expect(getOptionalInstagramAccessToken()).toBeNull();
-    expect(getOptionalYoutubeVideoId()).toBeNull();
+    expect(DEFAULT_YOUTUBE_VIDEO_ID).toBe("4jM2jUcc5Kc");
+    expect(getYoutubeVideoId()).toBe(DEFAULT_YOUTUBE_VIDEO_ID);
   });
 
-  it("returns the configured values when present", () => {
-    vi.stubEnv("INSTAGRAM_ACCESS_TOKEN", "ig-token");
+  it("uses a configured video id when present", () => {
     vi.stubEnv("YOUTUBE_VIDEO_ID", "dQw4w9WgXcQ");
 
-    expect(getOptionalInstagramAccessToken()).toBe("ig-token");
-    expect(getOptionalYoutubeVideoId()).toBe("dQw4w9WgXcQ");
+    expect(getYoutubeVideoId()).toBe("dQw4w9WgXcQ");
   });
 });
 

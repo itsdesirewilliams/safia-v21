@@ -74,6 +74,7 @@ describe("homepage vertical slice", () => {
     expect(html).toContain("Certification marks not supplied");
     expect(html).toContain("Testimonials not supplied");
     expect(html).toContain("Latest on Instagram");
+    expect(html).toContain("youtube-nocookie.com/embed/4jM2jUcc5Kc");
     expect(html).toContain("Send us an enquiry");
     expect(html).toContain("Find us on the map");
     expect(html).toContain("Director@safewaytyre.com");
@@ -98,11 +99,13 @@ describe("homepage vertical slice", () => {
     expect(html).toContain('name="company"');
   });
 
-  it("embeds the configured map and hides the Instagram feed gracefully", async () => {
+  it("embeds the configured map and shows the local Instagram images", async () => {
     const html = await (await fetch(`${BASE_URL}/`)).text();
 
     expect(html).toContain("google.com/maps?q=");
-    expect(html).toContain("Instagram feed not connected");
+    expect(html).toContain("aspect-[4/5]");
+    expect(html).toContain("lg:grid-cols-4");
+    expect(html).not.toContain("Instagram feed not connected");
   });
 
   it("exposes no pricing anywhere", async () => {

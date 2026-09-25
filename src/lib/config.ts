@@ -2,8 +2,8 @@
  * External configuration resolution.
  *
  * Deployment- and instance-specific values (Supabase keys, email transport,
- * Instagram token, YouTube ID, address, social URLs) are read from the
- * environment here — never hardcoded. Fixed, confirmed company content
+ * YouTube ID, address, social URLs) are read from the environment here — never
+ * hardcoded. Fixed, confirmed company content
  * (emails, phone, opening hours, navigation) lives in `src/lib/site.ts` and
  * `src/lib/routes.ts` as developer-owned content.
  *
@@ -109,18 +109,15 @@ export function getEmailTransportEnv(): EmailTransportEnv {
   };
 }
 
-/** Long-lived Instagram Graph API access token (ADR-0008). */
-export function getInstagramAccessToken(): string {
-  return readRequired(["INSTAGRAM_ACCESS_TOKEN"]).INSTAGRAM_ACCESS_TOKEN;
-}
-
 /**
- * Optional long-lived Instagram Graph API access token. The homepage feed
- * hides gracefully when this is absent (ADR-0008), so this getter returns
- * `null` instead of throwing.
+ * The supplied homepage tour video. Safeway has provided the id, so it is the
+ * default; `YOUTUBE_VIDEO_ID` can still override it per environment.
  */
-export function getOptionalInstagramAccessToken(): string | null {
-  return optional("INSTAGRAM_ACCESS_TOKEN");
+export const DEFAULT_YOUTUBE_VIDEO_ID = "4jM2jUcc5Kc";
+
+/** YouTube video ID for the homepage "Take a Tour" embed. */
+export function getYoutubeVideoId(): string {
+  return optional("YOUTUBE_VIDEO_ID") ?? DEFAULT_YOUTUBE_VIDEO_ID;
 }
 
 /**
@@ -132,23 +129,10 @@ export function getOptionalCatalogueDownloadUrl(): string | null {
   return optional("NEXT_PUBLIC_CATALOGUE_DOWNLOAD_URL");
 }
 
-/** YouTube video ID for the homepage embed. */
-export function getYoutubeVideoId(): string {
-  return readRequired(["YOUTUBE_VIDEO_ID"]).YOUTUBE_VIDEO_ID;
-}
-
 /**
- * Optional YouTube video ID. The homepage tour renders a labelled placeholder
- * when this is absent, so this getter returns `null` instead of throwing.
- */
-export function getOptionalYoutubeVideoId(): string | null {
-  return optional("YOUTUBE_VIDEO_ID");
-}
-
-/**
- * Optional homepage hero background video. Falls back to the supplied
- * manufacturing-unit tour clip that ships in `public/media`; Safeway has not
- * supplied a final hero video yet, so this is a replaceable placeholder.
+ * The homepage hero video. Safeway's final factory clip ships at
+ * `public/media/hero-tour.mp4`, which is the default; `NEXT_PUBLIC_HERO_VIDEO_URL`
+ * can still point at a remote source without a code change.
  */
 export function getHeroVideoUrl(): string {
   return optional("NEXT_PUBLIC_HERO_VIDEO_URL") ?? "/media/hero-tour.mp4";
