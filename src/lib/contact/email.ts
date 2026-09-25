@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 
 import { getCategory } from "@/lib/catalogue/categories";
 import { getEmailTransportEnv } from "@/lib/config";
+import { getCountry } from "@/lib/contact/countries";
 import { SITE } from "@/lib/site";
 
 /**
@@ -14,9 +15,11 @@ import { SITE } from "@/lib/site";
 export type ContactSubmission = {
   formType: "query" | "feedback";
   name: string;
+  /** ISO country code; rendered as the full country name in the email. */
   country: string;
   phone: string;
-  category?: string;
+  /** Canonical category slugs; rendered as display names in the email. */
+  categories?: readonly string[];
   message: string;
 };
 
@@ -54,18 +57,21 @@ export function buildContactEmail(
   submission: ContactSubmission,
   from: string,
 ): EmailMessage {
-  const label = submission.formType === "query" ? "Query" : "Feedback";
-  // Relay the canonical category display name, not the internal slug.
-  const category = submission.category
-    ? (getCategory(submission.category)?.displayName ?? submission.category)
-    : null;
+  const label = submission.formType === "query" ? "Inquiry" : "Feedback";
+  // Relay the full country name and canonical category names, not internal codes.
+  const country = getCountry(submission.country)?.name ?? submission.country;
+  const categories = (submission.categories ?? []).map(
+    (slug) => getCategory(slug)?.displayName ?? slug,
+  );
   const lines = [
     `New ${label} from the Safeway Tyre website`,
     "",
     `Name: ${submission.name}`,
-    `Country: ${submission.country}`,
+    `Country: ${country}`,
     `Phone: ${submission.phone}`,
-    ...(category ? [`Category: ${category}`] : []),
+    ...(categories.length > 0
+      ? [`Categories: ${categories.join(", ")}`]
+      : []),
     "",
     "Message:",
     submission.message,

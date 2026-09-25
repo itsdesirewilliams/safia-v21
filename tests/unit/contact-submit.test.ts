@@ -6,17 +6,17 @@ import { processContactSubmission } from "@/lib/contact/submit";
 
 const QUERY = {
   name: "Jane Importer",
-  country: "Kenya",
-  phone: "+254 712 345678",
-  category: "truck-bus",
+  country: "KE",
+  phone: "712 345678",
+  category: ["truck-bus", "agriculture"],
   message: "We need 10.00-20 truck tyres, quantity 200.",
   honeypot: "",
 };
 
 const FEEDBACK = {
   name: "Jane Importer",
-  country: "Kenya",
-  phone: "+254 712 345678",
+  country: "KE",
+  phone: "712 345678",
   message: "The catalogue was easy to use.",
   honeypot: "",
 };
@@ -46,9 +46,9 @@ describe("processContactSubmission — query", () => {
     expect(send.mock.calls[0][0]).toMatchObject({
       formType: "query",
       name: "Jane Importer",
-      country: "Kenya",
+      country: "KE",
       phone: "+254 712 345678",
-      category: "truck-bus",
+      categories: ["truck-bus", "agriculture"],
     });
   });
 
@@ -82,7 +82,7 @@ describe("processContactSubmission — feedback", () => {
     expect(send).toHaveBeenCalledTimes(1);
     const submission = send.mock.calls[0][0];
     expect(submission.formType).toBe("feedback");
-    expect(submission).not.toHaveProperty("category");
+    expect(submission).not.toHaveProperty("categories");
   });
 });
 

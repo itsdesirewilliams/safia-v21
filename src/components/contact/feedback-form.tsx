@@ -9,6 +9,7 @@ import {
   type ContactFormState,
 } from "@/lib/contact/form-state";
 
+import { CountryPhoneField } from "./country-phone-field";
 import {
   FormStatus,
   FormSuccess,
@@ -18,9 +19,9 @@ import {
 } from "./fields";
 
 /**
- * The Feedback form (spec #6): intentionally simpler than the Query form — no
- * Category. Same shared validation, honeypot, rate limiting and email
- * delivery as the Query form.
+ * The Feedback form (spec #6): intentionally simpler than the Inquiry form — no
+ * Category. Same shared validation, honeypot, rate limiting and email delivery
+ * as the Inquiry form.
  */
 export function FeedbackForm() {
   const [state, formAction, isPending] = useActionState<
@@ -46,24 +47,13 @@ export function FeedbackForm() {
           defaultValue={values?.name}
           error={state.errors?.name}
         />
-        <TextField
-          id="feedback-country"
-          name="country"
-          label="Country"
+        <CountryPhoneField
+          idPrefix="feedback"
+          countryDefault={values?.country}
+          phoneDefault={values?.phone}
+          countryError={state.errors?.country}
+          phoneError={state.errors?.phone}
           required
-          autoComplete="country-name"
-          defaultValue={values?.country}
-          error={state.errors?.country}
-        />
-        <TextField
-          id="feedback-phone"
-          name="phone"
-          label="Phone"
-          type="tel"
-          required
-          autoComplete="tel"
-          defaultValue={values?.phone}
-          error={state.errors?.phone}
         />
       </div>
 
@@ -81,7 +71,7 @@ export function FeedbackForm() {
 
       <HoneypotField />
 
-      <div className="mt-7 flex flex-wrap items-center gap-4">
+      <div className="mt-7 flex flex-wrap items-center gap-3">
         <button
           type="submit"
           disabled={isPending}

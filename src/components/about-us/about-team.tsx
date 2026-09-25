@@ -8,13 +8,19 @@ import {
   type TeamMember,
 } from "@/lib/about-us";
 
-function initials(name: string): string {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase() ?? "")
-    .join("");
+/** Neutral person silhouette used while real portraits are unavailable. */
+function Silhouette() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="h-20 w-20 text-white/35"
+    >
+      <circle cx="12" cy="8.5" r="4" />
+      <path d="M4.5 20a7.5 7.5 0 0 1 15 0v.5h-15V20Z" />
+    </svg>
+  );
 }
 
 export type AboutTeamProps = {
@@ -61,11 +67,8 @@ export function AboutTeam({ members = ABOUT_TEAM_MEMBERS }: AboutTeamProps) {
                         className="block aspect-[4/5] w-full bg-ink-100"
                       />
                     ) : (
-                      <div
-                        aria-hidden="true"
-                        className="flex aspect-[4/5] w-full items-center justify-center bg-ink-950 text-4xl font-extrabold tracking-tight text-white/80"
-                      >
-                        {initials(member.name)}
+                      <div className="flex aspect-[4/5] w-full items-center justify-center bg-ink-950">
+                        <Silhouette />
                       </div>
                     )}
 
@@ -85,6 +88,12 @@ export function AboutTeam({ members = ABOUT_TEAM_MEMBERS }: AboutTeamProps) {
               </li>
             ))}
           </ul>
+        )}
+
+        {members.length > 0 && (
+          <p className="mt-8 text-sm text-ink-500">
+            {ABOUT_TEAM.temporaryNote}
+          </p>
         )}
       </Container>
     </section>

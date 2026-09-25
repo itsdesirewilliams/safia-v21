@@ -221,7 +221,7 @@ export function SearchBox({
           id={listId}
           role="listbox"
           aria-label="Product search results"
-          className="absolute z-30 mt-3 max-h-96 w-full overflow-auto rounded-2xl border border-ink-200 bg-white py-2 text-left shadow-pop"
+          className="absolute z-30 mt-3 max-h-96 w-full overflow-auto rounded-lg border border-ink-200 bg-white py-2 text-left shadow-pop"
         >
           {loading ? (
             <li className="px-5 py-3 text-sm text-ink-600">Searching…</li>
@@ -260,7 +260,7 @@ export function SearchBox({
                         }`}
                     </span>
                   </span>
-                  <span className="shrink-0 rounded-md bg-ink-950 px-2 py-1 text-[11px] font-semibold tracking-wide text-white">
+                  <span className="shrink-0 rounded-lg bg-ink-950 px-2 py-1 text-[11px] font-semibold tracking-wide text-white">
                     {result.patternCode}
                   </span>
                 </Link>

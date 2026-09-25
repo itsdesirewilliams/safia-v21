@@ -71,7 +71,7 @@ export function MediaUploadForm({
             type="file"
             required
             accept={UPLOAD_ACCEPT}
-            className="mt-1.5 block w-full rounded-xl border border-ink-200 bg-white text-sm text-ink-600 file:mr-3 file:rounded-full file:border-0 file:bg-ink-950 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-ink-800"
+            className="mt-1.5 block w-full rounded-lg border border-ink-200 bg-white text-sm text-ink-600 file:mr-3 file:rounded-lg file:border-0 file:bg-ink-950 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-ink-800"
           />
         </div>
 

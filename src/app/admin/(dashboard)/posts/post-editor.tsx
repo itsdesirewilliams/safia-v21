@@ -211,7 +211,7 @@ export function PostEditor({
         </div>
 
         {blocks.length === 0 ? (
-          <p className="mt-5 rounded-xl border border-dashed border-ink-300 bg-ink-50 p-6 text-sm text-ink-600">
+          <p className="mt-5 rounded-lg border border-dashed border-ink-300 bg-ink-50 p-6 text-sm text-ink-600">
             The body is empty. Add a paragraph, heading or image block above.
           </p>
         ) : (
@@ -222,7 +222,7 @@ export function PostEditor({
               return (
                 <li
                   key={entry.key}
-                  className="rounded-xl border border-ink-200 bg-ink-50/60 p-4"
+                  className="rounded-lg border border-ink-200 bg-ink-50/60 p-4"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <span className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-500">

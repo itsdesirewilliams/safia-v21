@@ -119,7 +119,7 @@ export function SiteHeader() {
                       onClick={closeMenus}
                       aria-current={active ? "page" : undefined}
                       className={cn(
-                        "relative rounded-full px-3.5 py-2 text-sm font-medium transition-colors",
+                        "relative rounded-lg px-3.5 py-2 text-sm font-medium transition-colors",
                         active
                           ? "text-brand-600"
                           : "text-ink-600 hover:bg-ink-50 hover:text-ink-950",
@@ -145,7 +145,7 @@ export function SiteHeader() {
                     aria-expanded={productsOpen}
                     onClick={() => setProductsOpen((open) => !open)}
                     className={cn(
-                      "flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm font-medium transition-colors",
+                      "flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition-colors",
                       active
                         ? "text-brand-600"
                         : "text-ink-600 hover:bg-ink-50 hover:text-ink-950",
@@ -156,7 +156,7 @@ export function SiteHeader() {
                   </button>
                   <div
                     className={cn(
-                      "absolute left-1/2 top-full z-50 mt-3 w-[22rem] -translate-x-1/2 rounded-2xl border border-ink-200 bg-white p-2 shadow-pop transition duration-150",
+                      "absolute left-1/2 top-full z-50 mt-3 w-[22rem] -translate-x-1/2 rounded-lg border border-ink-200 bg-white p-2 shadow-pop transition duration-150",
                       productsOpen
                         ? "visible translate-y-0 opacity-100"
                         : "invisible -translate-y-1 opacity-0",
@@ -171,7 +171,7 @@ export function SiteHeader() {
                           <Link
                             href={child.href}
                             onClick={closeMenus}
-                            className="block rounded-xl px-3 py-2 text-sm text-ink-600 transition-colors hover:bg-ink-50 hover:text-ink-950"
+                            className="block rounded-lg px-3 py-2 text-sm text-ink-600 transition-colors hover:bg-ink-50 hover:text-ink-950"
                           >
                             {child.label}
                           </Link>
@@ -280,7 +280,7 @@ export function SiteHeader() {
                           onClick={closeMenus}
                           aria-current={active ? "page" : undefined}
                           className={cn(
-                            "block rounded-xl px-3.5 py-3 text-base font-medium transition-colors",
+                            "block rounded-lg px-3.5 py-3 text-base font-medium transition-colors",
                             active
                               ? "bg-brand-100/60 text-brand-700"
                               : "text-ink-800 hover:bg-ink-50",
@@ -298,7 +298,7 @@ export function SiteHeader() {
                         type="button"
                         aria-expanded={mobileProductsOpen}
                         onClick={() => setMobileProductsOpen((open) => !open)}
-                        className="flex w-full items-center justify-between rounded-xl px-3.5 py-3 text-base font-medium text-ink-800 transition-colors hover:bg-ink-50"
+                        className="flex w-full items-center justify-between rounded-lg px-3.5 py-3 text-base font-medium text-ink-800 transition-colors hover:bg-ink-50"
                       >
                         {item.label}
                         <Chevron open={mobileProductsOpen} />

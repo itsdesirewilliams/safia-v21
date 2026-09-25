@@ -76,11 +76,11 @@ describe("Contact Us page", () => {
 
     expect(html).toMatch(/Let.s Talk\./);
     expect(html).toContain('role="tablist"');
-    expect(html).toContain("Query / Enquiry");
+    expect(html).toContain("Inquiry Form");
     expect(html).toContain("Feedback");
   });
 
-  it("renders the query form fields and the canonical categories", async () => {
+  it("renders the inquiry form fields and the six product categories", async () => {
     const html = await getContactHtml();
 
     for (const id of [
@@ -94,8 +94,12 @@ describe("Contact Us page", () => {
     }
 
     for (const category of CATEGORIES) {
+      if (category.slug === "tubes") {
+        continue;
+      }
       expect(html).toContain(`value="${category.slug}"`);
     }
+    expect(html).not.toContain('value="tubes"');
   });
 
   it("renders the simpler feedback form without a category", async () => {
@@ -150,6 +154,6 @@ describe("Homepage Query form reuse", () => {
 
     expect(html).toContain('id="query-name"');
     expect(html).toContain('id="query-category"');
-    expect(html).toContain("Send Enquiry");
+    expect(html).toContain("Send Inquiry");
   });
 });

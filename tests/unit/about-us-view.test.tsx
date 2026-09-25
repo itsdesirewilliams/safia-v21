@@ -7,13 +7,12 @@ import { AboutTeam } from "@/components/about-us/about-team";
 import type { TeamMember } from "@/lib/about-us";
 
 describe("About Us bio", () => {
-  it("leads with the About heading and links onward", () => {
+  it("leads with the About heading and is not CTA-driven", () => {
     const html = renderToStaticMarkup(<AboutBio />);
 
     expect(html.match(/<h1/g)).toHaveLength(1);
     expect(html).toContain("About Safeway Tyre");
-    expect(html).toContain('href="/catalogue"');
-    expect(html).toContain('href="/contact-us"');
+    expect(html).not.toContain("<a ");
   });
 });
 

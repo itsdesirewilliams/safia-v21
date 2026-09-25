@@ -107,7 +107,7 @@ export function PlaceholderPanel({
     >
       <span
         className={cn(
-          "inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl",
+          "inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg",
           tone === "light"
             ? "bg-white text-ink-700 shadow-soft"
             : "bg-white/10 text-white/80",

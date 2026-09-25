@@ -4,29 +4,24 @@ import { useActionState } from "react";
 
 import { submitQueryForm } from "@/app/(site)/contact-us/actions";
 import { buttonStyles } from "@/components/ui/button";
-import { CATEGORIES } from "@/lib/catalogue/categories";
 import {
   INITIAL_CONTACT_FORM_STATE,
   type ContactFormState,
 } from "@/lib/contact/form-state";
 
+import { CategoryCheckboxes } from "./category-checkboxes";
+import { CountryPhoneField } from "./country-phone-field";
 import {
   FormStatus,
   FormSuccess,
   HoneypotField,
-  SelectField,
   TextAreaField,
   TextField,
 } from "./fields";
 
-const CATEGORY_OPTIONS = CATEGORIES.map((category) => ({
-  value: category.slug,
-  label: category.displayName,
-}));
-
 /**
- * The Query / Enquiry form (spec #6). The single implementation used on both
- * the Contact Us page and the homepage, so the two behave identically.
+ * The Inquiry form (spec #6). The single implementation used on both the
+ * Contact Us page and the homepage, so the two behave identically.
  */
 export function QueryForm() {
   const [state, formAction, isPending] = useActionState<
@@ -52,34 +47,22 @@ export function QueryForm() {
           defaultValue={values?.name}
           error={state.errors?.name}
         />
-        <TextField
-          id="query-country"
-          name="country"
-          label="Country"
+        <CountryPhoneField
+          idPrefix="query"
+          countryDefault={values?.country}
+          phoneDefault={values?.phone}
+          countryError={state.errors?.country}
+          phoneError={state.errors?.phone}
           required
-          autoComplete="country-name"
-          defaultValue={values?.country}
-          error={state.errors?.country}
         />
-        <TextField
-          id="query-phone"
-          name="phone"
-          label="Phone"
-          type="tel"
+      </div>
+
+      <div className="mt-4">
+        <CategoryCheckboxes
+          idPrefix="query"
+          defaultSelected={values?.categories}
+          error={state.errors?.categories}
           required
-          autoComplete="tel"
-          defaultValue={values?.phone}
-          error={state.errors?.phone}
-        />
-        <SelectField
-          id="query-category"
-          name="category"
-          label="Category"
-          required
-          placeholder="Select a category"
-          options={CATEGORY_OPTIONS}
-          defaultValue={values?.category}
-          error={state.errors?.category}
         />
       </div>
 
@@ -103,7 +86,7 @@ export function QueryForm() {
           disabled={isPending}
           className={buttonStyles("primary", "lg")}
         >
-          {isPending ? "Sending…" : "Send Enquiry"}
+          {isPending ? "Sending…" : "Send Inquiry"}
         </button>
         <FormStatus state={state} />
       </div>

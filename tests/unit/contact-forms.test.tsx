@@ -6,22 +6,32 @@ import { FeedbackForm } from "@/components/contact/feedback-form";
 import { QueryForm } from "@/components/contact/query-form";
 import { CATEGORIES } from "@/lib/catalogue/categories";
 
-describe("Query form", () => {
+const PRODUCT_CATEGORIES = CATEGORIES.filter(
+  (category) => category.slug !== "tubes",
+);
+
+describe("Inquiry form", () => {
   const html = renderToStaticMarkup(<QueryForm />);
 
-  it("renders the required query fields", () => {
-    for (const label of ["Name", "Country", "Phone", "Category", "Message"]) {
+  it("renders the required fields", () => {
+    for (const label of ["Name", "Country", "Phone", "Message"]) {
       expect(html).toContain(`>${label} <`);
     }
+    expect(html).toContain("Which category are you interested in?");
   });
 
-  it("limits the category selector to the canonical categories", () => {
-    for (const category of CATEGORIES) {
+  it("offers the six product categories as checkboxes", () => {
+    expect(html.match(/name="category"/g)).toHaveLength(
+      PRODUCT_CATEGORIES.length,
+    );
+
+    for (const category of PRODUCT_CATEGORIES) {
       expect(html).toContain(`value="${category.slug}"`);
       const escapedLabel = category.displayName.replace(/&/g, "&amp;");
       expect(html).toContain(escapedLabel);
     }
-    expect(html.match(/<option /g)).toHaveLength(CATEGORIES.length + 1);
+
+    expect(html).not.toContain('value="tubes"');
   });
 
   it("carries a hidden honeypot field", () => {
@@ -32,7 +42,7 @@ describe("Query form", () => {
 
   it("submits with a single labelled button", () => {
     expect(html).toContain('type="submit"');
-    expect(html).toContain("Send Enquiry");
+    expect(html).toContain("Send Inquiry");
   });
 });
 
@@ -43,7 +53,7 @@ describe("Feedback form", () => {
     for (const label of ["Name", "Country", "Phone", "Message"]) {
       expect(html).toContain(`>${label} <`);
     }
-    expect(html).not.toContain("Category");
+    expect(html).not.toContain("Which category");
     expect(html).not.toContain('name="category"');
   });
 
@@ -59,13 +69,13 @@ describe("Contact forms tabs", () => {
   it("renders an accessible tablist with both forms", () => {
     expect(html).toContain('role="tablist"');
     expect(html).toContain('role="tab"');
-    expect(html).toContain("Query / Enquiry");
+    expect(html).toContain("Inquiry Form");
     expect(html).toContain("Feedback");
     expect(html).toContain('id="contact-panel-query"');
     expect(html).toContain('id="contact-panel-feedback"');
   });
 
-  it("shows the query panel and hides the feedback panel initially", () => {
+  it("shows the inquiry panel and hides the feedback panel initially", () => {
     expect(html).toMatch(/id="contact-panel-query"[^>]*role="tabpanel"/);
     expect(html).toMatch(/id="contact-panel-feedback"[^>]*hidden/);
   });

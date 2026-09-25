@@ -11,16 +11,16 @@ import {
 const SUBMISSION: ContactSubmission = {
   formType: "query",
   name: "Jane Importer",
-  country: "Kenya",
+  country: "KE",
   phone: "+254 712 345678",
-  category: "truck-bus",
+  categories: ["truck-bus", "agriculture"],
   message: "We need 10.00-20 truck tyres.",
 };
 
 const FEEDBACK: ContactSubmission = {
   formType: "feedback",
   name: "Jane Importer",
-  country: "Kenya",
+  country: "KE",
   phone: "+254 712 345678",
   message: "The catalogue was easy to use.",
 };
@@ -39,19 +39,21 @@ describe("contact email contract", () => {
     expect(message.text).toContain("Truck & Bus Tyres");
   });
 
-  it("labels a query clearly and includes the canonical category name", () => {
+  it("labels an inquiry clearly and lists every canonical category name", () => {
     const message = buildContactEmail(SUBMISSION, "no-reply@safewaytyre.com");
-    expect(message.subject).toContain("Query");
-    expect(message.text).toContain("New Query");
-    expect(message.text).toContain("Category: Truck & Bus Tyres");
-    expect(message.text).not.toContain("Category: truck-bus");
+    expect(message.subject).toContain("Inquiry");
+    expect(message.text).toContain("New Inquiry");
+    expect(message.text).toContain(
+      "Categories: Truck & Bus Tyres, Agriculture Tyres",
+    );
+    expect(message.text).not.toContain("Categories: truck-bus");
   });
 
-  it("labels feedback clearly and omits the category", () => {
+  it("labels feedback clearly and omits the categories", () => {
     const message = buildContactEmail(FEEDBACK, "no-reply@safewaytyre.com");
     expect(message.subject).toContain("Feedback");
     expect(message.text).toContain("New Feedback");
-    expect(message.text).not.toContain("Category:");
+    expect(message.text).not.toContain("Categories:");
   });
 
   it("sends through the injected transport", async () => {

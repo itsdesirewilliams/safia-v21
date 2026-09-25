@@ -1,10 +1,9 @@
-import { ArrowIcon, ButtonLink } from "@/components/ui/button";
 import { ABOUT_BIO } from "@/lib/about-us";
 
 /**
  * The company bio — the first of About Us's three fixed sections. A dark
- * editorial panel carries the heading, the short bio and the approved
- * catalogue figures; the copy lives in `src/lib/about-us.ts`.
+ * editorial panel carries the heading and the short bio; the copy lives in
+ * `src/lib/about-us.ts`. It is informational, not CTA-driven.
  */
 export function AboutBio() {
   return (
@@ -25,24 +24,6 @@ export function AboutBio() {
                 <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/70">
                   {ABOUT_BIO.lead}
                 </p>
-
-                <div className="mt-8 flex flex-wrap gap-3">
-                  <ButtonLink
-                    href={ABOUT_BIO.primary.href}
-                    variant="accent"
-                    size="lg"
-                  >
-                    {ABOUT_BIO.primary.label}
-                    <ArrowIcon className="h-4 w-4" />
-                  </ButtonLink>
-                  <ButtonLink
-                    href={ABOUT_BIO.secondary.href}
-                    variant="onDark"
-                    size="lg"
-                  >
-                    {ABOUT_BIO.secondary.label}
-                  </ButtonLink>
-                </div>
               </div>
 
               <div className="animate-fade-up space-y-5 [animation-delay:120ms] lg:pt-4">

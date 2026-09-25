@@ -75,7 +75,7 @@ describe("homepage vertical slice", () => {
     expect(html).toContain("Testimonials Coming Soon");
     expect(html).toContain("Follow Us on Instagram");
     expect(html).toContain("youtube-nocookie.com/embed/4jM2jUcc5Kc");
-    expect(html).toContain("Send Us an Enquiry");
+    expect(html).toContain("Inquiry Form");
     expect(html).toContain("Find Us on the Map");
     expect(html).toContain("Director@safewaytyre.com");
   });

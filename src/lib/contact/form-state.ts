@@ -8,9 +8,12 @@ export type ContactFormKind = "query" | "feedback";
 
 export type ContactFormValues = {
   name: string;
+  /** ISO country code, so the country dropdown can restore its selection. */
   country: string;
+  /** The national number as typed; the dialing code is restored separately. */
   phone: string;
-  category?: string;
+  /** Selected category slugs (Inquiry form only). */
+  categories?: string[];
   message: string;
 };
 

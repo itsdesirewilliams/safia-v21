@@ -52,7 +52,7 @@ export default async function AdminLoginPage({
 
           {error === "forbidden" && (
             <p
-              className="mt-5 rounded-xl border border-accent-500/30 bg-accent-100 px-4 py-3 text-sm text-accent-700"
+              className="mt-5 rounded-lg border border-accent-500/30 bg-accent-100 px-4 py-3 text-sm text-accent-700"
               role="alert"
             >
               That account does not have media access. Ask an administrator to

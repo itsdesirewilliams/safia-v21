@@ -86,7 +86,7 @@ export function VideoViewer({ story, label, onClose }: VideoViewerProps) {
                 href={story.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 inline-flex items-center justify-center rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-ink-950 transition-colors hover:bg-white/90"
+                className="mt-2 inline-flex items-center justify-center rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-ink-950 transition-colors hover:bg-white/90"
               >
                 Open video
               </a>

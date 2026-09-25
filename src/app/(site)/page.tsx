@@ -205,8 +205,8 @@ export default function HomePage() {
                   aria-hidden="true"
                   className="relative hidden h-72 lg:block"
                 >
-                  <div className="absolute left-6 top-4 h-64 w-52 -rotate-6 rounded-2xl border border-white/10 bg-white/[0.06]" />
-                  <div className="absolute left-24 top-8 h-64 w-56 rotate-3 rounded-2xl border border-white/15 bg-white/[0.09] p-5">
+                  <div className="absolute left-6 top-4 h-64 w-52 -rotate-6 rounded-lg border border-white/10 bg-white/[0.06]" />
+                  <div className="absolute left-24 top-8 h-64 w-56 rotate-3 rounded-lg border border-white/15 bg-white/[0.09] p-5">
                     <div className="h-3 w-24 rounded-full bg-accent-500/80" />
                     <div className="mt-5 space-y-3">
                       <div className="h-2.5 w-full rounded-full bg-white/20" />
@@ -338,7 +338,7 @@ export default function HomePage() {
             <div>
               <Reveal>
                 <SectionHeading
-                  title="Send Us an Enquiry"
+                  title="Inquiry Form"
                   description="Tell us the sizes and patterns you need and our team will respond with a quotation."
                 />
               </Reveal>

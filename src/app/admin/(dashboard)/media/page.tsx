@@ -146,7 +146,7 @@ export default async function AdminMediaPage({
       {loadError && (
         <p
           role="alert"
-          className="mt-6 rounded-xl border border-brand-600/30 bg-brand-100/40 px-4 py-3 text-sm text-brand-700"
+          className="mt-6 rounded-lg border border-brand-600/30 bg-brand-100/40 px-4 py-3 text-sm text-brand-700"
         >
           {loadError}
         </p>

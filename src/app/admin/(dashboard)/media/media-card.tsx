@@ -60,11 +60,11 @@ export function MediaCard({
             </span>
           </div>
         )}
-        <span className="absolute left-3 top-3 rounded-full bg-ink-950/80 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-white">
+        <span className="absolute left-3 top-3 rounded-lg bg-ink-950/80 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-white">
           {media.type}
         </span>
         {media.hidden && (
-          <span className="absolute right-3 top-3 rounded-full bg-accent-500 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-white">
+          <span className="absolute right-3 top-3 rounded-lg bg-accent-500 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-white">
             Hidden
           </span>
         )}

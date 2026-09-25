@@ -22,7 +22,7 @@ export function Pagination({ page, pageCount }: PaginationProps) {
   const next = Math.min(pageCount, page + 1);
 
   const itemClass =
-    "inline-flex h-11 items-center justify-center rounded-full border px-5 text-sm font-semibold transition-colors";
+    "inline-flex h-11 items-center justify-center rounded-lg border px-5 text-sm font-semibold transition-colors";
   const activeClass = "border-ink-200 bg-white text-ink-900 hover:bg-ink-50";
   const disabledClass = "border-ink-100 bg-ink-50 text-ink-300";
 

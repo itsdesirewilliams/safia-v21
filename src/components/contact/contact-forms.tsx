@@ -8,7 +8,7 @@ import { FeedbackForm } from "./feedback-form";
 import { QueryForm } from "./query-form";
 
 const TABS = [
-  { id: "query", label: "Query / Enquiry" },
+  { id: "query", label: "Inquiry Form" },
   { id: "feedback", label: "Feedback" },
 ] as const;
 
@@ -44,11 +44,11 @@ export function ContactForms() {
   }
 
   return (
-    <div className="rounded-card border border-ink-200 bg-white p-6 shadow-card sm:p-8">
+    <div className="rounded-lg border border-ink-200 bg-white p-6 shadow-card sm:p-8">
       <div
         role="tablist"
         aria-label="Contact form"
-        className="flex gap-1 rounded-full border border-ink-200 bg-ink-50 p-1"
+        className="flex gap-1 rounded-lg border border-ink-200 bg-ink-50 p-1"
       >
         {TABS.map((tab) => {
           const selected = active === tab.id;
@@ -67,7 +67,7 @@ export function ContactForms() {
               onClick={() => selectTab(tab.id)}
               onKeyDown={onKeyDown}
               className={cn(
-                "flex-1 rounded-full px-4 py-2.5 text-sm font-semibold transition-colors duration-200",
+                "flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors duration-200",
                 selected
                   ? "bg-white text-ink-950 shadow-soft"
                   : "text-ink-600 hover:text-ink-900",

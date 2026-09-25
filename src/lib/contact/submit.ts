@@ -6,7 +6,11 @@ import type {
   ContactFormState,
   ContactFormValues,
 } from "./form-state";
-import { validateFeedbackForm, validateQueryForm } from "./validation";
+import {
+  validateFeedbackForm,
+  validateQueryForm,
+  type QueryFormValues,
+} from "./validation";
 
 /**
  * The shared submission pipeline for both Contact Us forms (spec #6). It is
@@ -49,6 +53,13 @@ const MESSAGES: Record<ContactFormKind, ContactMessages> = {
 const RATE_LIMIT_MESSAGE =
   "Too many submissions. Please try again in a minute.";
 
+function readList(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value.filter((entry): entry is string => typeof entry === "string");
+  }
+  return typeof value === "string" ? [value] : [];
+}
+
 function readValues(
   input: Record<string, unknown>,
   kind: ContactFormKind,
@@ -61,7 +72,7 @@ function readValues(
     country: read("country"),
     phone: read("phone"),
     message: read("message"),
-    ...(kind === "query" ? { category: read("category") } : {}),
+    ...(kind === "query" ? { categories: readList(input.category) } : {}),
   };
 }
 
@@ -103,10 +114,11 @@ export async function processContactSubmission(
     country: value.country,
     phone: value.phone,
     message: value.message,
-    ...("category" in value && typeof value.category === "string"
-      ? { category: value.category }
-      : {}),
   };
+
+  if (kind === "query") {
+    submission.categories = (value as QueryFormValues).categories;
+  }
 
   try {
     await deps.send(submission);

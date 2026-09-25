@@ -12,9 +12,9 @@ import { SITE } from "@/lib/site";
  */
 
 export const FIELD_CLASS =
-  "mt-2 w-full rounded-xl border border-ink-200 bg-white px-3.5 py-3 text-sm text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-brand-600 focus:ring-4 focus:ring-brand-500/15";
+  "mt-2 w-full rounded-lg border border-ink-200 bg-white px-3.5 py-3 text-sm text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-brand-600 focus:ring-4 focus:ring-brand-500/15";
 
-function RequiredMark() {
+export function RequiredMark() {
   return (
     <span aria-hidden="true" className="text-brand-600">
       *
@@ -222,7 +222,7 @@ export function FormSuccess({
       <p className="text-lg font-semibold text-ink-950">{message}</p>
       <p className="mt-2 max-w-md text-sm leading-relaxed text-ink-600">
         We have received your{" "}
-        {kind === "query" ? "enquiry" : "feedback"}. For an immediate response,
+        {kind === "query" ? "inquiry" : "feedback"}. For an immediate response,
         reach us on WhatsApp or continue browsing the range.
       </p>
       <div className="mt-6 flex flex-wrap gap-3">

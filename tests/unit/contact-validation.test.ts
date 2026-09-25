@@ -8,37 +8,46 @@ import {
 
 const VALID = {
   name: "Jane Importer",
-  country: "Kenya",
-  phone: "+254 712 345678",
-  category: "truck-bus",
+  country: "KE",
+  phone: "712 345678",
+  category: ["truck-bus", "agriculture"],
   message: "We need 10.00-20 truck tyres, quantity 200.",
   honeypot: "",
 };
 
 const VALID_FEEDBACK = {
   name: "Jane Importer",
-  country: "Kenya",
-  phone: "+254 712 345678",
+  country: "KE",
+  phone: "712 345678",
   message: "The website was easy to use, thank you.",
   honeypot: "",
 };
 
 describe("validateQueryForm", () => {
-  it("accepts a complete query", () => {
+  it("accepts a complete query and reports every selected category", () => {
     const result = validateQueryForm(VALID);
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.value.category).toBe("truck-bus");
+      expect(result.value.categories).toEqual(["truck-bus", "agriculture"]);
       expect(result.value.name).toBe("Jane Importer");
+      expect(result.value.country).toBe("KE");
     }
   });
 
-  it("requires name, country, phone, category and message", () => {
+  it("combines the country dialing code with the national number", () => {
+    const result = validateQueryForm({ ...VALID, phone: "712 345678" });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.phone).toBe("+254 712 345678");
+    }
+  });
+
+  it("requires name, country, phone, at least one category and message", () => {
     const result = validateQueryForm({});
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(Object.keys(result.errors).sort()).toEqual([
-        "category",
+        "categories",
         "country",
         "message",
         "name",
@@ -47,11 +56,30 @@ describe("validateQueryForm", () => {
     }
   });
 
-  it("rejects a category outside the canonical set", () => {
-    const result = validateQueryForm({ ...VALID, category: "spaceships" });
+  it("rejects categories outside the canonical set", () => {
+    const result = validateQueryForm({ ...VALID, category: ["spaceships"] });
     expect(result.ok).toBe(false);
     if (!result.ok) {
-      expect(result.errors.category).toBeTruthy();
+      expect(result.errors.categories).toBeTruthy();
+    }
+  });
+
+  it("ignores an unknown category when at least one canonical is selected", () => {
+    const result = validateQueryForm({
+      ...VALID,
+      category: ["truck-bus", "spaceships"],
+    });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.categories).toEqual(["truck-bus"]);
+    }
+  });
+
+  it("rejects an unknown country", () => {
+    const result = validateQueryForm({ ...VALID, country: "ZZ" });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.errors.country).toBeTruthy();
     }
   });
 
@@ -78,7 +106,7 @@ describe("validateFeedbackForm", () => {
     expect(result.ok).toBe(true);
     if (result.ok) {
       expect(result.value.name).toBe("Jane Importer");
-      expect(result.value).not.toHaveProperty("category");
+      expect(result.value).not.toHaveProperty("categories");
     }
   });
 
@@ -96,15 +124,15 @@ describe("validateFeedbackForm", () => {
   });
 
   it("ignores a supplied category", () => {
-    const result = validateFeedbackForm({ ...VALID_FEEDBACK, category: "tubes" });
+    const result = validateFeedbackForm({ ...VALID_FEEDBACK, category: ["tubes"] });
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.value).not.toHaveProperty("category");
+      expect(result.value).not.toHaveProperty("categories");
     }
   });
 
-  it("applies the same phone rule as the query form", () => {
-    const result = validateFeedbackForm({ ...VALID_FEEDBACK, phone: "123" });
+  it("applies the same phone rule as the inquiry form", () => {
+    const result = validateFeedbackForm({ ...VALID_FEEDBACK, phone: "1" });
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(result.errors.phone).toBeTruthy();

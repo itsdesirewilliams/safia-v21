@@ -43,7 +43,7 @@ export default async function AdminPostsPage() {
       {loadError && (
         <p
           role="alert"
-          className="mt-6 rounded-xl border border-brand-600/30 bg-brand-100/40 px-4 py-3 text-sm text-brand-700"
+          className="mt-6 rounded-lg border border-brand-600/30 bg-brand-100/40 px-4 py-3 text-sm text-brand-700"
         >
           {loadError}
         </p>
@@ -80,8 +80,8 @@ export default async function AdminPostsPage() {
                     <span
                       className={
                         post.status === "published"
-                          ? "rounded-full bg-success-600/10 px-2.5 py-1 text-xs font-semibold text-success-600"
-                          : "rounded-full bg-ink-100 px-2.5 py-1 text-xs font-semibold text-ink-600"
+                          ? "rounded-lg bg-success-600/10 px-2.5 py-1 text-xs font-semibold text-success-600"
+                          : "rounded-lg bg-ink-100 px-2.5 py-1 text-xs font-semibold text-ink-600"
                       }
                     >
                       {postStatusLabel(post.status)}
