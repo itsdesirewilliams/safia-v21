@@ -58,9 +58,7 @@ function SocialIcon({ name }: { name: string }) {
 }
 
 function FooterHeading({ children }: { children: string }) {
-  return (
-    <h2 className="text-eyebrow text-white/40">{children}</h2>
-  );
+  return <h2 className="text-sm font-semibold text-white/70">{children}</h2>;
 }
 
 function FooterLink({
@@ -83,7 +81,7 @@ function FooterLink({
 }
 
 export function SiteFooter() {
-  const { companyAddress, socialLinks } = getPublicConfig();
+  const { socialLinks } = getPublicConfig();
   const year = new Date().getFullYear();
 
   const socials = [
@@ -97,13 +95,10 @@ export function SiteFooter() {
         <div className="px-6 py-14 sm:px-10 sm:py-16 lg:px-14 lg:py-20">
           <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-xl">
-              <p className="text-eyebrow text-accent-500">
-                Let&rsquo;s work together
-              </p>
-              <h2 className="text-h2 mt-5 text-white">
-                Sourcing tyres?
+              <h2 className="text-h2 text-white">
+                Sourcing Tyres?
                 <br />
-                Start the conversation.
+                Start the Conversation.
               </h2>
             </div>
             <div className="shrink-0">
@@ -111,16 +106,14 @@ export function SiteFooter() {
                 href={`mailto:${SITE.emails.director}`}
                 className="group inline-flex items-center gap-4"
               >
-                <span className="text-2xl font-bold tracking-tight break-all sm:text-3xl lg:text-4xl">
+                <span className="text-lg font-semibold tracking-tight break-all sm:text-xl lg:text-2xl">
                   {SITE.emails.director}
                 </span>
-                <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent-500 text-white transition-transform duration-200 group-hover:translate-x-1">
-                  <ArrowIcon className="h-5 w-5" />
+                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent-500 text-white transition-transform duration-200 group-hover:translate-x-1">
+                  <ArrowIcon className="h-4 w-4" />
                 </span>
               </a>
-              <p className="mt-4 text-sm text-white/50">
-                {SITE.legalName}
-              </p>
+              <p className="mt-3 text-sm text-white/50">{SITE.legalName}</p>
             </div>
           </div>
 
@@ -136,11 +129,22 @@ export function SiteFooter() {
               <p className="max-w-xs text-sm leading-relaxed text-white/55">
                 {SITE.tagline}. Manufactured in India and exported worldwide.
               </p>
-              {companyAddress && (
-                <p className="max-w-xs text-sm leading-relaxed text-white/55">
-                  {companyAddress}
-                </p>
-              )}
+              <address className="max-w-xs space-y-4 not-italic">
+                {SITE.addresses.map((location) => (
+                  <div key={location.label}>
+                    <p className="text-sm font-semibold text-white/75">
+                      {location.label}
+                    </p>
+                    <p className="mt-1 text-sm leading-relaxed text-white/55">
+                      {location.lines.map((line) => (
+                        <span key={line} className="block">
+                          {line}
+                        </span>
+                      ))}
+                    </p>
+                  </div>
+                ))}
+              </address>
               <div className="flex flex-wrap gap-2 pt-1">
                 {socials.map((link) => (
                   <a

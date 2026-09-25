@@ -41,7 +41,7 @@ describe("gallery grid", () => {
   it("shows a labelled placeholder when no images are supplied", () => {
     const html = renderToStaticMarkup(<GalleryGrid images={[]} />);
 
-    expect(html).toContain("Gallery images not supplied");
+    expect(html).toContain("Gallery Coming Soon");
   });
 
   it("renders a regular responsive grid, not a masonry layout", () => {

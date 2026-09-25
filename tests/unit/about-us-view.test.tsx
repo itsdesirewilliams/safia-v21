@@ -12,7 +12,6 @@ describe("About Us bio", () => {
 
     expect(html.match(/<h1/g)).toHaveLength(1);
     expect(html).toContain("About Safeway Tyre");
-    expect(html).toContain("About Us");
     expect(html).toContain('href="/catalogue"');
     expect(html).toContain('href="/contact-us"');
   });
@@ -22,7 +21,7 @@ describe("About Us team", () => {
   it("shows a labelled placeholder when no members are supplied", () => {
     const html = renderToStaticMarkup(<AboutTeam members={[]} />);
 
-    expect(html).toContain("Team profiles not supplied");
+    expect(html).toContain("Team Profiles Coming Soon");
   });
 
   it("renders a card per member", () => {
@@ -36,7 +35,7 @@ describe("About Us team", () => {
     expect(html).toContain("Ada Lovelace");
     expect(html).toContain("Director");
     expect(html).toContain("Alan Turing");
-    expect(html).not.toContain("Team profiles not supplied");
+    expect(html).not.toContain("Team Profiles Coming Soon");
   });
 });
 

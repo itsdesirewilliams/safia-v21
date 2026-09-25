@@ -1,4 +1,3 @@
-import { Eyebrow } from "@/components/ui/eyebrow";
 import type { PolicySection as PolicySectionModel } from "@/lib/warranty";
 
 import { PolicyBlock } from "./policy-block";
@@ -15,12 +14,10 @@ export function PolicySection({ section }: PolicySectionProps) {
       aria-labelledby={`${section.id}-heading`}
       className="scroll-mt-28"
     >
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-        <Eyebrow>{section.number}</Eyebrow>
-        <h2 id={`${section.id}-heading`} className="text-h2 text-ink-950">
-          {section.title}
-        </h2>
-      </div>
+      <h2 id={`${section.id}-heading`} className="text-h2 text-ink-950">
+        <span className="mr-3 text-ink-400">{section.number}</span>
+        {section.title}
+      </h2>
 
       {section.blocks.length > 0 && (
         <div className="mt-6 space-y-5">

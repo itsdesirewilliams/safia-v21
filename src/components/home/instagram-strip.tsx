@@ -47,7 +47,7 @@ export function InstagramStrip({
       {displayed.map((image) => (
         <div
           key={image.url}
-          className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-ink-100 animate-fade-in motion-reduce:animate-none"
+          className="relative aspect-[4/5] overflow-hidden rounded-lg bg-ink-100 animate-fade-in motion-reduce:animate-none"
         >
           <Image
             src={image.url}

@@ -3,9 +3,9 @@
  *
  * The suggestion *pool* is built server-side from the bundled master dataset
  * (see `src/lib/homepage.ts`) and passed to the client. This module is pure and
- * dataset-free so the client only ships the selection logic: exactly two
- * categories, two real tyre sizes and two real functional/display names, drawn
- * from the pool and rotated on a timer.
+ * dataset-free so the client only ships the selection logic: one category, one
+ * real tyre size and one real functional/display name, drawn from the pool and
+ * rotated on a timer.
  */
 
 export type HeroSuggestionKind = "category" | "size" | "name";
@@ -28,9 +28,9 @@ export type HeroSuggestionPool = {
   name: readonly HeroSuggestion[];
 };
 
-export const HERO_SUGGESTION_COUNT = 6;
-export const HERO_SUGGESTION_PER_KIND = 2;
-/** Rotation cadence for the six suggestions, in milliseconds. */
+export const HERO_SUGGESTION_COUNT = 3;
+export const HERO_SUGGESTION_PER_KIND = 1;
+/** Rotation cadence for the suggestions, in milliseconds (three per two minutes). */
 export const HERO_SUGGESTION_ROTATE_MS = 40_000;
 
 function seededShuffle<T>(items: readonly T[], seed: number): T[] {

@@ -11,7 +11,6 @@ import { Container } from "@/components/ui/container";
 import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { Stat } from "@/components/ui/stat";
 import {
   DEFAULT_YOUTUBE_VIDEO_ID,
   getHeroVideoUrl,
@@ -22,7 +21,6 @@ import {
   CERTIFICATIONS,
   HERO_SUGGESTION_POOL,
   HOME_CATEGORY_CARDS,
-  HOME_STATS,
   TESTIMONIALS,
 } from "@/lib/homepage";
 import { isValidYoutubeVideoId } from "@/lib/media/youtube";
@@ -48,7 +46,7 @@ export default function HomePage() {
       {/* Hero — two-panel: copy/search + factory video */}
       <section className="bg-ink-50 px-4 pt-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-[96rem]">
-          <div className="relative overflow-hidden rounded-card bg-ink-950">
+          <div className="relative overflow-hidden rounded-lg bg-ink-950">
             <div
               aria-hidden="true"
               className="absolute inset-0 [background:radial-gradient(120%_110%_at_88%_0%,rgba(11,99,246,0.28),transparent_58%),radial-gradient(90%_90%_at_0%_100%,rgba(255,106,0,0.16),transparent_55%)]"
@@ -109,8 +107,7 @@ export default function HomePage() {
             <div>
               <Reveal>
                 <SectionHeading
-                  eyebrow="Take a Tour"
-                  title="Take a tour of our industry"
+                  title="Take a Tour of Our Industry"
                   description="See Safeway Tyre's operations, testing and quality process in action."
                 />
               </Reveal>
@@ -141,9 +138,8 @@ export default function HomePage() {
         <Container>
           <Reveal>
             <SectionHeading
-              eyebrow="Our Range"
-              title="Product ranges"
-              description="Six ranges covering transport, agriculture and industry. Browse each range to see its patterns."
+              title="Product Ranges"
+              description="Six ranges covering transport, agriculture and industry."
             />
           </Reveal>
 
@@ -155,10 +151,7 @@ export default function HomePage() {
                     href={ROUTES.category(card.slug)}
                     className="group flex h-full flex-col rounded-card border border-ink-200 bg-white p-3 transition duration-300 hover:border-ink-300 hover:shadow-card"
                   >
-                    <CategoryVisual
-                      index={index}
-                      label={card.displayName}
-                    />
+                    <CategoryVisual label={card.displayName} />
                     <div className="flex flex-1 flex-col px-2 pb-2 pt-5">
                       <div className="flex items-start justify-between gap-4">
                         <h3 className="text-h3 text-ink-950">
@@ -170,10 +163,6 @@ export default function HomePage() {
                       </div>
                       <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-600">
                         {card.blurb}
-                      </p>
-                      <p className="mt-5 text-xs font-semibold uppercase tracking-[0.16em] text-ink-400">
-                        {card.patterns}{" "}
-                        {card.patterns === 1 ? "pattern" : "patterns"}
                       </p>
                     </div>
                   </Link>
@@ -197,9 +186,8 @@ export default function HomePage() {
                 <div>
                   <SectionHeading
                     tone="dark"
-                    eyebrow="Catalogue"
-                    title="Explore the official catalogue"
-                    description="Browse the full Safeway Tyre catalogue of patterns and sizes. The interactive catalogue viewer ships with the catalogue module."
+                    title="Explore the Official Catalogue"
+                    description="Browse the full Safeway Tyre catalogue of patterns and sizes."
                   />
                   <div className="mt-8">
                     <ButtonLink
@@ -246,8 +234,7 @@ export default function HomePage() {
         <Container>
           <Reveal>
             <SectionHeading
-              eyebrow="Quality First"
-              title="Quality & certifications"
+              title="Quality & Certifications"
               description="Safeway Tyre products are backed by recognised quality and compliance marks."
             />
           </Reveal>
@@ -258,16 +245,6 @@ export default function HomePage() {
                   From freight and agriculture to industry and off-road, every
                   Safeway range is built on the same manufacturing discipline.
                 </p>
-                <div className="mt-10 grid grid-cols-3 gap-6">
-                  {HOME_STATS.map((item) => (
-                    <Stat
-                      key={item.label}
-                      value={item.value}
-                      label={item.label}
-                      tone="dark"
-                    />
-                  ))}
-                </div>
               </div>
             </Reveal>
             <Reveal delay={100}>
@@ -290,8 +267,8 @@ export default function HomePage() {
               ) : (
                 <PlaceholderPanel
                   kind="certification"
-                  label="Certification marks not supplied"
-                  detail="Certification logos and documents have not been supplied yet, so none are shown rather than inventing names or marks."
+                  label="Certifications Coming Soon"
+                  detail="Our certification marks and documents will be published here soon."
                   className="h-full"
                 />
               )}
@@ -305,10 +282,7 @@ export default function HomePage() {
         <Container>
           <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-16">
             <Reveal>
-              <SectionHeading
-                eyebrow="What our clients say"
-                title="Trusted by importers worldwide"
-              />
+              <SectionHeading title="Trusted by Importers Worldwide" />
             </Reveal>
             <Reveal delay={100}>
               {TESTIMONIALS.length > 0 ? (
@@ -333,8 +307,8 @@ export default function HomePage() {
               ) : (
                 <PlaceholderPanel
                   kind="testimonial"
-                  label="Testimonials not supplied"
-                  detail="Customer testimonials have not been supplied yet, so none are shown rather than inventing quotes."
+                  label="Testimonials Coming Soon"
+                  detail="Customer testimonials will be published here soon."
                 />
               )}
             </Reveal>
@@ -347,9 +321,8 @@ export default function HomePage() {
         <Container>
           <Reveal>
             <SectionHeading
-              eyebrow="Follow us"
-              title="Latest on Instagram"
-              description="A rotating selection of Safeway Tyre imagery."
+              title="Follow Us on Instagram"
+              description="A look at the latest from Safeway Tyre."
             />
           </Reveal>
           <div className="mt-14">
@@ -365,15 +338,14 @@ export default function HomePage() {
             <div>
               <Reveal>
                 <SectionHeading
-                  eyebrow="Get in touch"
-                  title="Send us an enquiry"
+                  title="Send Us an Enquiry"
                   description="Tell us the sizes and patterns you need and our team will respond with a quotation."
                 />
               </Reveal>
               <Reveal delay={80}>
                 <dl className="mt-10 space-y-5 text-sm">
                   <div className="border-t border-ink-200 pt-5">
-                    <dt className="text-eyebrow text-ink-500">Email</dt>
+                    <dt className="text-sm font-semibold text-ink-500">Email</dt>
                     <dd className="mt-2">
                       <a
                         href={`mailto:${SITE.emails.director}`}
@@ -384,7 +356,9 @@ export default function HomePage() {
                     </dd>
                   </div>
                   <div className="border-t border-ink-200 pt-5">
-                    <dt className="text-eyebrow text-ink-500">WhatsApp</dt>
+                    <dt className="text-sm font-semibold text-ink-500">
+                      WhatsApp
+                    </dt>
                     <dd className="mt-2">
                       <a
                         href={SITE.whatsappUrl}
@@ -413,8 +387,7 @@ export default function HomePage() {
         <Container>
           <Reveal>
             <SectionHeading
-              eyebrow="Visit us"
-              title="Find us on the map"
+              title="Find Us on the Map"
               description="Safeway Tyre's corporate office in Ludhiana, India."
             />
           </Reveal>
@@ -434,8 +407,8 @@ export default function HomePage() {
             ) : (
               <PlaceholderPanel
                 kind="location"
-                label="Map location not configured"
-                detail="No physical address is available yet, so the map is shown as a placeholder. Set NEXT_PUBLIC_COMPANY_ADDRESS to embed the map."
+                label="Map Coming Soon"
+                detail="Our location map is not available right now. Contact us and we will help you find us."
               />
             )}
           </div>

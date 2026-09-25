@@ -15,7 +15,7 @@ function LinkList({
 }) {
   return (
     <nav aria-label={label}>
-      <p className="text-eyebrow text-ink-500">{label}</p>
+      <p className="text-sm font-semibold text-ink-500">{label}</p>
       <ul className="mt-5 space-y-3">
         {links.map((link) => (
           <li key={link.href}>
@@ -40,10 +40,7 @@ export function WarrantyRelated() {
       <Container>
         <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
           <Reveal>
-            <SectionHeading
-              eyebrow={WARRANTY_RELATED.eyebrow}
-              title={WARRANTY_RELATED.title}
-            />
+            <SectionHeading title={WARRANTY_RELATED.title} />
           </Reveal>
 
           <Reveal delay={120}>

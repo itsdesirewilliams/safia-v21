@@ -71,7 +71,7 @@ describe("Catalogue page", () => {
   it("renders the responsive slider from the supplied artwork", async () => {
     const html = await get("/catalogue");
 
-    expect(html).toContain("Explore the Catalogue");
+    expect(html).toContain("The Safeway Tyre Catalogue");
     expect(html).toContain("<picture>");
     expect(html).toContain("/assets/landscape/catalogue/");
     expect(html).toContain("/assets/portrait/catalogue/");
@@ -81,7 +81,7 @@ describe("Catalogue page", () => {
 
   it("surfaces the catalogue download region", async () => {
     const html = await get("/catalogue");
-    expect(html).toContain("Catalogue PDF not supplied");
+    expect(html).toContain("Catalogue Download Coming Soon");
   });
 
   it("links every canonical category", async () => {
@@ -97,7 +97,9 @@ describe("Catalogue page", () => {
     ]) {
       expect(html).toContain(`href="/products/${slug}"`);
     }
-    expect(html).toContain("deferred");
+    expect(html).toContain(
+      "Purpose-built tyres for tractors and agricultural equipment",
+    );
   });
 });
 
@@ -113,11 +115,11 @@ describe("Category listing", () => {
     );
   });
 
-  it("shows Tubes as a category with deferred data", async () => {
+  it("shows Tubes as a category whose data is still to come", async () => {
     const html = await get("/products/tubes");
 
     expect(html).toContain("Tubes");
-    expect(html).toContain("deferred");
+    expect(html).toContain("Tubes Coming Soon");
   });
 
   it("404s an unknown category", async () => {

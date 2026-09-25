@@ -1,13 +1,10 @@
 import {
   CATEGORIES,
+  CATEGORY_DESCRIPTIONS,
   getCategory,
   type CategorySlug,
 } from "@/lib/catalogue/categories";
 import { CATALOGUE, patternSizes } from "@/lib/catalogue/dataset";
-import {
-  CATALOGUE_STATS,
-  PATTERNS_BY_CATEGORY,
-} from "@/lib/catalogue/stats";
 import type {
   HeroSuggestion,
   HeroSuggestionPool,
@@ -25,21 +22,6 @@ export type HomeCategoryCard = {
   displayName: string;
   slug: CategorySlug;
   blurb: string;
-  /** Number of Patterns in this Category (from the master dataset). */
-  patterns: number;
-};
-
-const CATEGORY_CARD_BLURBS: Partial<Record<CategorySlug, string>> = {
-  motorcycle: "Grip and handling for every ride, on road and off.",
-  "three-wheeler":
-    "Durable tyres built for the daily load of three-wheeled transport.",
-  "truck-bus":
-    "Bias and radial constructions engineered for freight and passenger duty.",
-  agriculture:
-    "Traction and soil protection for tractors and farm machinery.",
-  otr: "Off-the-road tyres for mining, construction and heavy equipment.",
-  forklift:
-    "Solid and pneumatic tyres for forklifts and industrial handling.",
 };
 
 /**
@@ -52,20 +34,9 @@ export const HOME_CATEGORY_CARDS: readonly HomeCategoryCard[] =
     (category) => ({
       displayName: category.displayName,
       slug: category.slug,
-      blurb: CATEGORY_CARD_BLURBS[category.slug] ?? "",
-      patterns: PATTERNS_BY_CATEGORY[category.slug] ?? 0,
+      blurb: CATEGORY_DESCRIPTIONS[category.slug],
     }),
   );
-
-/**
- * Aggregate catalogue figures for editorial use. These are derived from the
- * master dataset — never invented.
- */
-export const HOME_STATS = [
-  { value: CATALOGUE_STATS.productRanges, label: "Product ranges" },
-  { value: CATALOGUE_STATS.patterns, label: "Patterns" },
-  { value: CATALOGUE_STATS.variants, label: "Size variants" },
-] as const;
 
 export type Certification = {
   name: string;
@@ -106,7 +77,7 @@ function buildHeroSuggestionPool(): HeroSuggestionPool {
   const category: HeroSuggestion[] = HOME_CATEGORY_CARDS.map((card) => ({
     kind: "category",
     label: card.displayName,
-    hint: `${card.patterns} ${card.patterns === 1 ? "pattern" : "patterns"}`,
+    hint: "Category",
     query: card.displayName,
     href: ROUTES.category(card.slug),
   }));

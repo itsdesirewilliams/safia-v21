@@ -17,8 +17,7 @@ export function ContactMap({ companyAddress }: ContactMapProps) {
       <Container>
         <Reveal>
           <SectionHeading
-            eyebrow="Visit us"
-            title="Find us on the map"
+            title="Find Us on the Map"
             description="Safeway Tyre's corporate office."
           />
         </Reveal>
@@ -39,8 +38,8 @@ export function ContactMap({ companyAddress }: ContactMapProps) {
           ) : (
             <PlaceholderPanel
               kind="location"
-              label="Map location not configured"
-              detail="No physical address is available yet, so the map is shown as a placeholder. Set NEXT_PUBLIC_COMPANY_ADDRESS to embed the map."
+              label="Map Coming Soon"
+              detail="Our location map is not available right now. Contact us and we will help you find us."
             />
           )}
         </div>

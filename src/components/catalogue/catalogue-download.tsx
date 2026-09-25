@@ -16,8 +16,8 @@ export function CatalogueDownload() {
       <div className="mt-8">
         <PlaceholderPanel
           kind="media"
-          label="Catalogue PDF not supplied"
-          detail="No catalogue download link has been supplied yet. Once NEXT_PUBLIC_CATALOGUE_DOWNLOAD_URL is set, the download action appears here."
+          label="Catalogue Download Coming Soon"
+          detail="The downloadable catalogue will be available here soon."
         />
       </div>
     );

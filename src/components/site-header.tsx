@@ -162,8 +162,8 @@ export function SiteHeader() {
                         : "invisible -translate-y-1 opacity-0",
                     )}
                   >
-                    <p className="px-3 pb-2 pt-2 text-eyebrow text-ink-400">
-                      Product ranges
+                    <p className="px-3 pb-2 pt-2 text-sm font-semibold text-ink-400">
+                      Product Ranges
                     </p>
                     <ul className="grid grid-cols-2 gap-0.5">
                       {item.children.map((child) => (

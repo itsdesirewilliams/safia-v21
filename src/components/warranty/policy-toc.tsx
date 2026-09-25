@@ -6,8 +6,8 @@ import { WARRANTY_SECTIONS } from "@/lib/warranty";
  */
 export function PolicyToc() {
   return (
-    <nav aria-label="On this page" className="lg:sticky lg:top-28">
-      <p className="text-eyebrow text-ink-500">On this page</p>
+    <nav aria-label="On This Page" className="lg:sticky lg:top-28">
+      <p className="text-sm font-semibold text-ink-500">On This Page</p>
       <ol className="mt-5 space-y-1 border-l border-ink-200">
         {WARRANTY_SECTIONS.map((section) => (
           <li key={section.id}>

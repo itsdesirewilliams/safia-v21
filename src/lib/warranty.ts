@@ -48,7 +48,6 @@ export type PolicySection = {
 };
 
 export const WARRANTY_HERO = {
-  eyebrow: "Warranty",
   title: "Warranty Policy",
   description:
     "Safeway Tyres warrants each Tyre against manufacturing defects in materials and workmanship, and provides a pro-rata wear credit. The full terms, exclusions and claim procedure are set out below.",
@@ -338,8 +337,7 @@ export const WARRANTY_CONTACT = {
 } as const;
 
 export const WARRANTY_RELATED = {
-  eyebrow: "Related pages",
-  title: "Where to go next",
+  title: "Where to Go Next",
   productsLabel: "Products",
   products: CATEGORIES.map((category) => ({
     label: category.displayName,

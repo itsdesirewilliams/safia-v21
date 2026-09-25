@@ -49,7 +49,7 @@ describe("Quality First hero", () => {
   it("leads with the Quality First heading and in-page anchors", () => {
     const html = renderToStaticMarkup(<QualityFirstHero />);
 
-    expect(html).toContain("Quality is a process, not a promise.");
+    expect(html).toContain("Quality Is a Process, Not a Promise.");
     expect(html).toContain('href="#stories"');
     expect(html).toContain('href="#machines"');
     expect(html).toContain("<h1");
@@ -60,7 +60,7 @@ describe("story rail", () => {
   it("shows a labelled empty state when there are no videos", () => {
     const html = renderToStaticMarkup(<StoryRail stories={[]} />);
 
-    expect(html).toContain("Testing videos not supplied");
+    expect(html).toContain("Testing Videos Coming Soon");
     expect(html).not.toContain("Scroll stories left");
   });
 
@@ -80,7 +80,7 @@ describe("machine masonry", () => {
   it("shows a labelled empty state when there are no images", () => {
     const html = renderToStaticMarkup(<MachineMasonry images={[]} />);
 
-    expect(html).toContain("Testing machine images not supplied");
+    expect(html).toContain("Machine Images Coming Soon");
   });
 
   it("renders a masonry column layout with natural-ratio images and captions", () => {
@@ -103,9 +103,9 @@ describe("testing explanation", () => {
   it("renders developer-owned headings and internal links", () => {
     const html = renderToStaticMarkup(<TestingExplanation />);
 
-    expect(html).toContain("How quality is built in");
-    expect(html).toContain("A discipline that runs through production");
-    expect(html).toContain("Detailed process copy pending");
+    expect(html).toContain("How Quality Is Built In");
+    expect(html).toContain("A Discipline That Runs Through Production");
+    expect(html).toContain("More Detail Coming Soon");
     expect(html).toContain('href="/products/truck-bus"');
     expect(html).toContain('href="/catalogue"');
     expect(html).toContain('href="/contact-us"');

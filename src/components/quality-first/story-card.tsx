@@ -7,7 +7,6 @@ import type { QualityFirstStory } from "@/lib/media/quality-first";
 
 export type StoryCardProps = {
   story: QualityFirstStory;
-  index: number;
   label: string;
   onOpen: () => void;
 };
@@ -16,7 +15,7 @@ export type StoryCardProps = {
  * A single portrait story card. Shows the companion poster when one exists and
  * falls back to a branded placeholder when it is missing or fails to load.
  */
-export function StoryCard({ story, index, label, onOpen }: StoryCardProps) {
+export function StoryCard({ story, label, onOpen }: StoryCardProps) {
   const [posterFailed, setPosterFailed] = useState(false);
   const showPoster = Boolean(story.posterUrl) && !posterFailed;
 
@@ -27,7 +26,7 @@ export function StoryCard({ story, index, label, onOpen }: StoryCardProps) {
       className="group flex w-40 flex-col text-left focus-visible:outline-none sm:w-48 lg:w-52"
       aria-label={`Play ${label}`}
     >
-      <span className="relative block aspect-[9/16] overflow-hidden rounded-2xl border border-ink-200 bg-ink-950 shadow-card transition-transform duration-300 ease-out group-hover:-translate-y-1 group-focus-visible:ring-2 group-focus-visible:ring-brand-600 group-focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0">
+      <span className="relative block aspect-[9/16] overflow-hidden rounded-lg border border-ink-200 bg-ink-950 shadow-card transition-transform duration-300 ease-out group-hover:-translate-y-1 group-focus-visible:ring-2 group-focus-visible:ring-brand-600 group-focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0">
         {showPoster ? (
           <Image
             src={story.posterUrl as string}
@@ -48,10 +47,6 @@ export function StoryCard({ story, index, label, onOpen }: StoryCardProps) {
           aria-hidden="true"
           className="absolute inset-0 bg-gradient-to-t from-ink-950/70 via-transparent to-ink-950/20"
         />
-
-        <span className="text-eyebrow absolute left-3 top-3 rounded-full bg-ink-950/70 px-2.5 py-1 text-white/80 backdrop-blur">
-          {`/0${index + 1}`}
-        </span>
 
         <span
           aria-hidden="true"

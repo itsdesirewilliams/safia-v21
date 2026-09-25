@@ -71,13 +71,13 @@ describe("Quality First page structure", () => {
   it("renders the hero and the three fixed sections in order", async () => {
     const html = await getQualityFirstHtml();
 
-    expect(html).toContain("Quality is a process, not a promise.");
-    expect(html).toContain("Stories from the testing floor");
-    expect(html).toContain("How quality is built in");
-    expect(html).toContain("The machines behind the testing");
+    expect(html).toContain("Quality Is a Process, Not a Promise.");
+    expect(html).toContain("Stories from the Testing Floor");
+    expect(html).toContain("How Quality Is Built In");
+    expect(html).toContain("The Machines Behind the Testing");
 
     const storiesIndex = html.indexOf('id="stories"');
-    const explanationIndex = html.indexOf("How quality is built in");
+    const explanationIndex = html.indexOf("How Quality Is Built In");
     const machinesIndex = html.indexOf('id="machines"');
 
     expect(storiesIndex).toBeGreaterThan(-1);
@@ -98,8 +98,8 @@ describe("Quality First page structure", () => {
   it("renders labelled empty states when no media has been supplied", async () => {
     const html = await getQualityFirstHtml();
 
-    expect(html).toContain("Testing videos not supplied");
-    expect(html).toContain("Testing machine images not supplied");
+    expect(html).toContain("Testing Videos Coming Soon");
+    expect(html).toContain("Machine Images Coming Soon");
   });
 
   it("does not open a video dialog before a story is selected", async () => {

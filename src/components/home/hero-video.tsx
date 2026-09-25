@@ -97,7 +97,7 @@ export function HeroVideo({ src, poster, label }: HeroVideoProps) {
     <figure className="relative">
       <video
         ref={videoRef}
-        className="w-full h-auto block rounded-card border border-white/10 bg-ink-900 shadow-pop"
+        className="w-full h-auto block rounded-lg border border-white/10 bg-ink-900 shadow-pop"
         autoPlay
         muted
         loop
@@ -114,7 +114,7 @@ export function HeroVideo({ src, poster, label }: HeroVideoProps) {
         <button
           type="button"
           onClick={startPlayback}
-          className="absolute inset-0 flex items-center justify-center rounded-card bg-ink-950/40 transition-colors hover:bg-ink-950/50"
+          className="absolute inset-0 flex items-center justify-center rounded-lg bg-ink-950/40 transition-colors hover:bg-ink-950/50"
         >
           <span className="inline-flex h-16 w-16 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white backdrop-blur">
             <svg

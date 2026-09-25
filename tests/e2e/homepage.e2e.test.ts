@@ -68,15 +68,15 @@ describe("homepage vertical slice", () => {
     const html = await (await fetch(`${BASE_URL}/`)).text();
 
     expect(html).toContain("Tires That Keep the World Moving");
-    expect(html).toContain("Take a tour of our industry");
-    expect(html).toContain("Product ranges");
-    expect(html).toContain("Explore the official catalogue");
-    expect(html).toContain("Certification marks not supplied");
-    expect(html).toContain("Testimonials not supplied");
-    expect(html).toContain("Latest on Instagram");
+    expect(html).toContain("Take a Tour of Our Industry");
+    expect(html).toContain("Product Ranges");
+    expect(html).toContain("Explore the Official Catalogue");
+    expect(html).toContain("Certifications Coming Soon");
+    expect(html).toContain("Testimonials Coming Soon");
+    expect(html).toContain("Follow Us on Instagram");
     expect(html).toContain("youtube-nocookie.com/embed/4jM2jUcc5Kc");
-    expect(html).toContain("Send us an enquiry");
-    expect(html).toContain("Find us on the map");
+    expect(html).toContain("Send Us an Enquiry");
+    expect(html).toContain("Find Us on the Map");
     expect(html).toContain("Director@safewaytyre.com");
   });
 

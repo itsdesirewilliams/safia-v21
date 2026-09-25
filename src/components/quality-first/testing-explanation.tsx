@@ -16,7 +16,6 @@ export function TestingExplanation() {
     <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
       <Reveal>
         <SectionHeading
-          eyebrow={QUALITY_FIRST_EXPLANATION.eyebrow}
           title={QUALITY_FIRST_EXPLANATION.title}
           description={QUALITY_FIRST_EXPLANATION.intro}
         />
@@ -51,7 +50,7 @@ export function TestingExplanation() {
 
         <Reveal delay={200}>
           <nav aria-label="Related pages" className="border-t border-ink-200 pt-8">
-            <p className="text-eyebrow text-ink-500">Continue</p>
+            <p className="text-sm font-semibold text-ink-500">Continue</p>
             <ul className="mt-4 flex flex-wrap gap-2">
               {QUALITY_FIRST_EXPLANATION.links.map((link) => (
                 <li key={link.href}>

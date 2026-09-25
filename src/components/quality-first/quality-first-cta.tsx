@@ -10,7 +10,7 @@ export function QualityFirstCta() {
     <section className="bg-ink-50 py-20 lg:py-28">
       <Container>
         <Reveal>
-          <div className="relative overflow-hidden rounded-card bg-ink-950 px-6 py-14 sm:px-12 lg:px-16 lg:py-20">
+          <div className="relative overflow-hidden rounded-lg bg-ink-950 px-6 py-14 sm:px-12 lg:px-16 lg:py-20">
             <div
               aria-hidden="true"
               className="absolute inset-0 [background:radial-gradient(110%_120%_at_90%_0%,rgba(11,99,246,0.4),transparent_58%),radial-gradient(70%_70%_at_0%_110%,rgba(255,106,0,0.18),transparent_55%)]"
@@ -18,7 +18,6 @@ export function QualityFirstCta() {
             <div className="relative max-w-3xl">
               <SectionHeading
                 tone="dark"
-                eyebrow={QUALITY_FIRST_CTA.eyebrow}
                 title={QUALITY_FIRST_CTA.title}
                 description={QUALITY_FIRST_CTA.description}
               />

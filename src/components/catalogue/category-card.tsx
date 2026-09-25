@@ -1,18 +1,16 @@
 import Link from "next/link";
 
 import { ArrowIcon } from "@/components/ui/button";
+import { CATEGORY_DESCRIPTIONS } from "@/lib/catalogue/categories";
 import type { NormalizedCategory } from "@/lib/catalogue/normalize";
 import { ROUTES } from "@/lib/routes";
 
 export type CategoryCardProps = {
   category: NormalizedCategory;
-  patternCount: number;
 };
 
 /** A category range card for the Catalogue page. Tubes is shown, deferred. */
-export function CategoryCard({ category, patternCount }: CategoryCardProps) {
-  const deferred = !category.hasData;
-
+export function CategoryCard({ category }: CategoryCardProps) {
   return (
     <Link
       href={ROUTES.category(category.slug)}
@@ -25,11 +23,7 @@ export function CategoryCard({ category, patternCount }: CategoryCardProps) {
         </span>
       </div>
       <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-600">
-        {deferred
-          ? "Tubes are a Safeway range whose data is deferred — this category is coming soon."
-          : `${patternCount} ${
-              patternCount === 1 ? "pattern" : "patterns"
-            } in this range.`}
+        {CATEGORY_DESCRIPTIONS[category.slug]}
       </p>
     </Link>
   );

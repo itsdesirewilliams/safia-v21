@@ -5,15 +5,12 @@ import { ResponsiveSlider } from "@/components/media/responsive-slider";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
-import {
-  CATALOGUE,
-  listPatternsByCategory,
-} from "@/lib/catalogue/dataset";
+import { CATALOGUE } from "@/lib/catalogue/dataset";
 
 export const metadata = {
   title: "Catalogue",
   description:
-    "Browse the Safeway Tyre catalogue: the responsive catalogue viewer and every product range, from motorcycle and truck & bus to agriculture, OTR and forklift tyres.",
+    "Browse the Safeway Tyre catalogue: the catalogue viewer and every product range, from motorcycle and truck & bus to agriculture, OTR and forklift tyres.",
 };
 
 /**
@@ -31,9 +28,8 @@ export default function CataloguePage() {
         <Container>
           <Reveal>
             <SectionHeading
-              eyebrow="Flip through"
-              title="The Safeway Tyre catalogue"
-              description="Page through the supplied catalogue artwork. On a phone it switches to the portrait edition; on larger screens, the landscape edition."
+              title="Browse the Catalogue"
+              description="Page through the full Safeway Tyre catalogue."
             />
           </Reveal>
           <div className="mx-auto mt-12 max-w-5xl">
@@ -47,9 +43,8 @@ export default function CataloguePage() {
         <Container>
           <Reveal>
             <SectionHeading
-              eyebrow="Product ranges"
-              title="Browse the catalogue by category"
-              description="Every Safeway Tyre range, with its patterns and sizes. Select a range to see the patterns it covers."
+              title="Browse the Catalogue by Category"
+              description="Every Safeway Tyre range, with its patterns and sizes."
             />
           </Reveal>
 
@@ -57,10 +52,7 @@ export default function CataloguePage() {
             {CATALOGUE.categories.map((category, index) => (
               <li key={category.slug}>
                 <Reveal delay={(index % 3) * 90} className="h-full">
-                  <CategoryCard
-                    category={category}
-                    patternCount={listPatternsByCategory(category.slug).length}
-                  />
+                  <CategoryCard category={category} />
                 </Reveal>
               </li>
             ))}

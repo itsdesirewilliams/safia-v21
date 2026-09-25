@@ -132,7 +132,6 @@ export function StoryRail({ stories }: StoryRailProps) {
               <Reveal delay={Math.min(index, 6) * 60}>
                 <StoryCard
                   story={story}
-                  index={index}
                   label={label}
                   onOpen={() => setOpenIndex(index)}
                 />

@@ -11,6 +11,25 @@ export const CATEGORIES = [
 export type Category = (typeof CATEGORIES)[number];
 export type CategorySlug = Category["slug"];
 
+/**
+ * Customer-facing one-line descriptions for each range. Display copy only —
+ * never product data — shared by the homepage range cards and the catalogue.
+ */
+export const CATEGORY_DESCRIPTIONS: Record<CategorySlug, string> = {
+  motorcycle:
+    "Reliable tyre solutions designed for everyday riding and demanding road conditions.",
+  "three-wheeler":
+    "Durable tyres built for the daily load of three-wheeled transport.",
+  "truck-bus":
+    "Bias and radial tyres engineered for freight and passenger duty.",
+  agriculture:
+    "Purpose-built tyres for tractors and agricultural equipment across varied working conditions.",
+  otr: "Off-the-road tyres for mining, construction and heavy equipment.",
+  forklift:
+    "Solid and pneumatic tyres for forklifts and industrial handling.",
+  tubes: "Inner tubes for a range of tyre applications.",
+};
+
 export function isCategorySlug(value: string): value is CategorySlug {
   return CATEGORIES.some((category) => category.slug === value);
 }

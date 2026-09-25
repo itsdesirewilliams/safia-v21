@@ -1,7 +1,6 @@
 import { Pagination } from "@/components/blog/pagination";
 import { PostCard } from "@/components/blog/post-card";
 import { Container } from "@/components/ui/container";
-import { Eyebrow } from "@/components/ui/eyebrow";
 import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { Reveal } from "@/components/ui/reveal";
 import { listPublishedPosts } from "@/lib/blog/server";
@@ -25,25 +24,17 @@ export default async function BlogsPage({
 }) {
   const params = await searchParams;
   const requested = Number.parseInt(params.page ?? "1", 10);
-  const { posts, page, pageCount, total } =
-    await listPublishedPosts(requested);
+  const { posts, page, pageCount } = await listPublishedPosts(requested);
 
   return (
     <>
       <section className="border-b border-ink-200 bg-ink-50">
         <Container className="py-14 lg:py-20">
-          <Eyebrow>Blog</Eyebrow>
-          <h1 className="text-h1 mt-5 max-w-3xl text-balance text-ink-950">
-            News &amp; updates
+          <h1 className="text-h1 max-w-3xl text-balance text-ink-950">
+            News &amp; Updates
           </h1>
           <p className="mt-4 max-w-2xl text-lg leading-relaxed text-pretty text-ink-600">
             Product notes, range updates and stories from Safeway Tyre.
-            {total > 0 && (
-              <>
-                {" "}
-                {total} {total === 1 ? "article" : "articles"} published.
-              </>
-            )}
           </p>
         </Container>
       </section>
@@ -53,8 +44,8 @@ export default async function BlogsPage({
           {posts.length === 0 ? (
             <PlaceholderPanel
               kind="media"
-              label="No posts published yet"
-              detail="Posts published from the admin appear here, newest first. Drafts stay hidden until they are published."
+              label="No Posts Yet"
+              detail="News and updates from Safeway Tyre will appear here soon."
             />
           ) : (
             <>

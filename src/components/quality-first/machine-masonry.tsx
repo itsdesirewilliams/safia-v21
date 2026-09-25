@@ -38,7 +38,7 @@ export function MachineMasonry({ images }: MachineMasonryProps) {
             className="mb-4 break-inside-avoid"
           >
             <figure className="group">
-              <div className="overflow-hidden rounded-2xl border border-ink-200 bg-ink-100">
+              <div className="overflow-hidden rounded-lg border border-ink-200 bg-ink-100">
                 {/* Natural aspect ratio is preserved; the masonry layout relies on it. */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img

@@ -19,7 +19,6 @@ export function AboutBusinessProfile() {
       <Container>
         <Reveal>
           <SectionHeading
-            eyebrow={ABOUT_BUSINESS_PROFILE.eyebrow}
             title={ABOUT_BUSINESS_PROFILE.title}
             description={ABOUT_BUSINESS_PROFILE.description}
           />

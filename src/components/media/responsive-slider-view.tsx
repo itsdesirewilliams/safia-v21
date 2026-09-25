@@ -84,7 +84,7 @@ export function ResponsiveSliderView({
       aria-roledescription="carousel"
       aria-label={config.label}
     >
-      <div className="relative overflow-hidden rounded-card border border-ink-200 bg-ink-100 shadow-card">
+      <div className="relative overflow-hidden rounded-lg border border-ink-200 bg-ink-100 shadow-card">
         <div
           className="flex transition-transform duration-500 ease-out motion-reduce:transition-none"
           style={{ transform: `translateX(-${index * 100}%)` }}
@@ -169,7 +169,7 @@ export function ResponsiveSliderView({
             href={config.downloadUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center rounded-full bg-brand-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
+            className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
           >
             Download {config.label}
           </a>

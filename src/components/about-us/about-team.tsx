@@ -34,7 +34,6 @@ export function AboutTeam({ members = ABOUT_TEAM_MEMBERS }: AboutTeamProps) {
       <Container>
         <Reveal>
           <SectionHeading
-            eyebrow={ABOUT_TEAM.eyebrow}
             title={ABOUT_TEAM.title}
             description={ABOUT_TEAM.description}
           />
@@ -72,7 +71,7 @@ export function AboutTeam({ members = ABOUT_TEAM_MEMBERS }: AboutTeamProps) {
 
                     <div className="flex flex-1 flex-col p-6">
                       <h3 className="text-h3 text-ink-950">{member.name}</h3>
-                      <p className="text-eyebrow mt-2 text-brand-600">
+                      <p className="mt-2 text-sm font-semibold text-brand-600">
                         {member.role}
                       </p>
                       {member.bio && (

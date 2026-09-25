@@ -1,9 +1,6 @@
 import { cn } from "@/lib/cn";
 
-import { Eyebrow } from "./eyebrow";
-
 export type SectionHeadingProps = {
-  eyebrow: string;
   title: React.ReactNode;
   description?: React.ReactNode;
   tone?: "light" | "dark";
@@ -11,9 +8,8 @@ export type SectionHeadingProps = {
   className?: string;
 };
 
-/** The recurring eyebrow → heading → description block. */
+/** The recurring heading → description block. */
 export function SectionHeading({
-  eyebrow,
   title,
   description,
   tone = "light",
@@ -28,10 +24,9 @@ export function SectionHeading({
         className,
       )}
     >
-      <Eyebrow tone={tone}>{eyebrow}</Eyebrow>
       <h2
         className={cn(
-          "text-h2 mt-5 max-w-3xl text-balance",
+          "text-h2 max-w-3xl text-balance",
           tone === "light" ? "text-ink-950" : "text-white",
         )}
       >

@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/catalogue/breadcrumbs";
 import { VariantTable } from "@/components/catalogue/variant-table";
 import { Container } from "@/components/ui/container";
-import { Eyebrow } from "@/components/ui/eyebrow";
 import { getCategory } from "@/lib/catalogue/categories";
 import { CATALOGUE, getPattern } from "@/lib/catalogue/dataset";
 import { ROUTES } from "@/lib/routes";
@@ -47,8 +46,6 @@ export default async function PatternPage({
     notFound();
   }
 
-  const variantCount = pattern.variants.length;
-
   return (
     <div className="bg-white">
       <section className="border-b border-ink-200 bg-ink-50">
@@ -63,13 +60,11 @@ export default async function PatternPage({
               { label: pattern.displayName },
             ]}
           />
-          <Eyebrow className="mt-6">{pattern.patternCode}</Eyebrow>
-          <h1 className="text-h1 mt-5 max-w-3xl text-balance text-ink-950">
+          <h1 className="text-h1 mt-6 max-w-3xl text-balance text-ink-950">
             {pattern.displayName}
           </h1>
           <p className="mt-4 max-w-2xl text-lg leading-relaxed text-pretty text-ink-600">
-            {category.displayName} · {variantCount}{" "}
-            {variantCount === 1 ? "variant" : "variants"}
+            Pattern {pattern.patternCode} · {category.displayName}
           </p>
         </Container>
       </section>
@@ -78,8 +73,7 @@ export default async function PatternPage({
         <Container>
           <h2 className="text-h2 text-ink-950">Specifications</h2>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-600">
-            Every size and configuration available for this pattern. Variants
-            share this page.
+            Every size and configuration available for this pattern.
           </p>
           <div className="mt-8">
             <VariantTable variants={pattern.variants} />

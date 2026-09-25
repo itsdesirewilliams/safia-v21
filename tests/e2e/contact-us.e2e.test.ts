@@ -74,7 +74,7 @@ describe("Contact Us page", () => {
   it("renders the hero and both form tabs", async () => {
     const html = await getContactHtml();
 
-    expect(html).toMatch(/Let.s talk\./);
+    expect(html).toMatch(/Let.s Talk\./);
     expect(html).toContain('role="tablist"');
     expect(html).toContain("Query / Enquiry");
     expect(html).toContain("Feedback");
@@ -129,7 +129,7 @@ describe("Contact Us page", () => {
       expect(html).toContain("google.com/maps");
       expect(html).toContain("output=embed");
     } else {
-      expect(html).toContain("Map location not configured");
+      expect(html).toContain("Map Coming Soon");
     }
   });
 

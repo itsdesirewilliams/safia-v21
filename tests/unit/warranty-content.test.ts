@@ -49,7 +49,6 @@ function listItems(blocks: readonly PolicyBlock[] | undefined): readonly string[
 describe("warranty content contract", () => {
   it("has the hero heading and the eight policy sections in order", () => {
     expect(WARRANTY_HERO.title).toBe("Warranty Policy");
-    expect(WARRANTY_HERO.eyebrow).toBe("Warranty");
 
     expect(WARRANTY_SECTIONS.map((section) => section.number)).toEqual([
       "1",

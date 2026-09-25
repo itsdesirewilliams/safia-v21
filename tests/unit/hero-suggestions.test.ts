@@ -80,7 +80,7 @@ describe("hero suggestion pool", () => {
 });
 
 describe("pickHeroSuggestions", () => {
-  it("always returns exactly six suggestions", () => {
+  it("always returns exactly three suggestions", () => {
     for (const seed of [0, 1, 2, 7, 42, 99]) {
       expect(pickHeroSuggestions(HERO_SUGGESTION_POOL, seed)).toHaveLength(
         HERO_SUGGESTION_COUNT,
@@ -88,12 +88,12 @@ describe("pickHeroSuggestions", () => {
     }
   });
 
-  it("returns two categories, two sizes and two names", () => {
+  it("returns one category, one size and one name", () => {
     for (const seed of [0, 3, 11, 25]) {
       const counts = kindCounts(HERO_SUGGESTION_POOL, seed);
-      expect(counts.category).toBe(2);
-      expect(counts.size).toBe(2);
-      expect(counts.name).toBe(2);
+      expect(counts.category).toBe(1);
+      expect(counts.size).toBe(1);
+      expect(counts.name).toBe(1);
     }
   });
 

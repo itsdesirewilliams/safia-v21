@@ -41,7 +41,7 @@ export function buttonStyles(
   variant: ButtonVariant = "primary",
   size: ButtonSize = "md",
   className?: string,
-  shape: ButtonShape = "pill",
+  shape: ButtonShape = "rounded-rectangle",
 ): string {
   return cn(BASE, SHAPES[shape], VARIANTS[variant], SIZES[size], className);
 }
@@ -65,7 +65,7 @@ export function ButtonLink({
   children,
   variant = "primary",
   size = "md",
-  shape = "pill",
+  shape = "rounded-rectangle",
   className,
   target,
   rel,

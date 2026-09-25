@@ -19,7 +19,7 @@ export function PatternCard({ pattern }: { pattern: NormalizedPattern }) {
       className="group flex h-full flex-col rounded-card border border-ink-200 bg-white p-6 transition duration-300 hover:border-ink-300 hover:shadow-card"
     >
       <div className="flex items-center justify-between gap-4">
-        <span className="text-eyebrow rounded-full border border-ink-200 bg-ink-50 px-3 py-1 text-ink-600">
+        <span className="rounded-lg border border-ink-200 bg-ink-50 px-3 py-1 text-xs font-semibold tracking-wide text-ink-600">
           {pattern.patternCode}
         </span>
         <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-ink-200 text-ink-700 transition-colors duration-200 group-hover:border-brand-600 group-hover:bg-brand-600 group-hover:text-white">
@@ -30,15 +30,8 @@ export function PatternCard({ pattern }: { pattern: NormalizedPattern }) {
       <h3 className="text-h3 mt-5 text-ink-950">{pattern.displayName}</h3>
 
       <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-600">
-        {pattern.variants.length}{" "}
-        {pattern.variants.length === 1 ? "variant" : "variants"}
-        {sizes.length > 0 && (
-          <>
-            {" · "}
-            {preview.join(", ")}
-            {remaining > 0 ? ` +${remaining} more` : ""}
-          </>
-        )}
+        {preview.join(", ")}
+        {remaining > 0 ? ` +${remaining} more` : ""}
       </p>
     </Link>
   );

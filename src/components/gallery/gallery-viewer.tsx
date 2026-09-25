@@ -151,7 +151,7 @@ export function GalleryViewer({
             src={image.url}
             alt={image.alt}
             draggable={false}
-            className="max-h-full max-w-full rounded-2xl object-contain"
+            className="max-h-full max-w-full rounded-lg object-contain"
           />
 
           {count > 1 && (

@@ -1,8 +1,6 @@
 import { cn } from "@/lib/cn";
 
 export type CategoryVisualProps = {
-  /** Zero-based position, rendered as `/01`. */
-  index: number;
   label: string;
   className?: string;
 };
@@ -13,11 +11,11 @@ export type CategoryVisualProps = {
  * motif — not a stock photo and not old-site material — and is replaced by
  * real imagery when Safeway supplies it.
  */
-export function CategoryVisual({ index, label, className }: CategoryVisualProps) {
+export function CategoryVisual({ label, className }: CategoryVisualProps) {
   return (
     <div
       className={cn(
-        "relative aspect-[4/3] overflow-hidden rounded-[1.25rem] bg-ink-950",
+        "relative aspect-[4/3] overflow-hidden rounded-lg bg-ink-950",
         className,
       )}
     >
@@ -38,9 +36,6 @@ export function CategoryVisual({ index, label, className }: CategoryVisualProps)
           <circle cx="120" cy="120" r="118" />
         </g>
       </svg>
-      <span className="text-eyebrow absolute left-5 top-5 text-white/45">
-        {`/0${index + 1}`}
-      </span>
       <span className="absolute bottom-5 left-5 right-5 text-base font-semibold tracking-tight text-white">
         {label}
       </span>

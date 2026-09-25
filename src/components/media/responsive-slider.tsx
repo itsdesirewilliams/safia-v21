@@ -1,5 +1,5 @@
 import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
-import { readSliderSlides, sliderAssetDirectory } from "@/lib/media/slider-assets";
+import { readSliderSlides } from "@/lib/media/slider-assets";
 import { resolveSliderConfig, type SliderCollection } from "@/lib/media/slider";
 
 import { ResponsiveSliderView } from "./responsive-slider-view";
@@ -35,14 +35,8 @@ export function ResponsiveSlider({
     return (
       <PlaceholderPanel
         kind="media"
-        label={`${config.label} slider artwork not supplied`}
-        detail={`Add matching image files to ${sliderAssetDirectory(
-          collection,
-          "landscape",
-        )} and ${sliderAssetDirectory(
-          collection,
-          "portrait",
-        )} to show this slider.`}
+        label={`${config.label} Coming Soon`}
+        detail={`This ${config.label.toLowerCase()} will be available here soon.`}
       />
     );
   }

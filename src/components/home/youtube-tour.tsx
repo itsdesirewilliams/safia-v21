@@ -62,7 +62,7 @@ export function YouTubeTour({ id, title }: YouTubeTourProps) {
   return (
     <div
       ref={containerRef}
-      className="relative aspect-video w-full overflow-hidden rounded-card border border-ink-200 bg-ink-950 shadow-card"
+      className="relative aspect-video w-full overflow-hidden rounded-lg border border-ink-200 bg-ink-950 shadow-card"
     >
       {approaching ? (
         <iframe

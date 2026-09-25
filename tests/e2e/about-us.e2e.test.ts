@@ -86,7 +86,7 @@ describe("About Us page", () => {
   it("renders the Team section", async () => {
     const html = await getAboutHtml();
 
-    expect(html).toContain("The people behind Safeway Tyre");
+    expect(html).toContain("The People Behind Safeway Tyre");
   });
 
   it("renders the Business Profile slider with prev/next controls", async () => {

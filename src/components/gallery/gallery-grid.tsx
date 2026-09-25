@@ -42,7 +42,7 @@ export function GalleryGrid({ images }: GalleryGridProps) {
                 type="button"
                 onClick={() => setOpenIndex(index)}
                 aria-label={`Open image ${index + 1} of ${images.length}: ${image.caption}`}
-                className="group block w-full overflow-hidden rounded-2xl border border-ink-200 bg-ink-100 shadow-soft transition-shadow hover:shadow-card"
+                className="group block w-full overflow-hidden rounded-lg border border-ink-200 bg-ink-100 shadow-soft transition-shadow hover:shadow-card"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img

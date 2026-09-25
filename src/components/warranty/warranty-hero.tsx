@@ -1,5 +1,4 @@
 import { ArrowIcon, ButtonLink } from "@/components/ui/button";
-import { Eyebrow } from "@/components/ui/eyebrow";
 import { ROUTES } from "@/lib/routes";
 import { WARRANTY_HERO } from "@/lib/warranty";
 
@@ -8,7 +7,7 @@ export function WarrantyHero() {
   return (
     <section className="bg-ink-50 px-4 pt-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-[96rem]">
-        <div className="relative overflow-hidden rounded-card bg-ink-950">
+        <div className="relative overflow-hidden rounded-lg bg-ink-950">
           <div
             aria-hidden="true"
             className="absolute inset-0 [background:radial-gradient(110%_120%_at_88%_0%,rgba(11,99,246,0.42),transparent_58%),radial-gradient(75%_75%_at_0%_115%,rgba(255,106,0,0.2),transparent_55%)]"
@@ -16,8 +15,7 @@ export function WarrantyHero() {
 
           <div className="relative px-6 py-14 sm:px-10 lg:px-14 lg:py-20">
             <div className="animate-fade-up">
-              <Eyebrow tone="dark">{WARRANTY_HERO.eyebrow}</Eyebrow>
-              <h1 className="text-display mt-6 max-w-3xl text-white">
+              <h1 className="text-display max-w-3xl text-white">
                 {WARRANTY_HERO.title}
               </h1>
               <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/70">

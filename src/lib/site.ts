@@ -16,6 +16,21 @@ export const SITE = {
     secondary: "+91 90416 62182",
   },
   whatsappUrl: "https://wa.me/+919915762182",
+  /** The two published Safeway Tyre locations. */
+  addresses: [
+    {
+      label: "Corporate Office",
+      lines: [
+        "SCO No. 21, SEC 17,",
+        "Omaxe Residency Pakhowal Road,",
+        "Ludhiana, 142022, India",
+      ],
+    },
+    {
+      label: "Factory",
+      lines: ["115 Dhandari Kalan,", "Ludhiana, India"],
+    },
+  ],
   openingHours: {
     days: "Monday – Saturday",
     hours: "9:00 AM – 5:00 PM",

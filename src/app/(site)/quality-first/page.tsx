@@ -47,7 +47,6 @@ export default async function QualityFirstPage() {
         <Container>
           <Reveal>
             <SectionHeading
-              eyebrow={QUALITY_FIRST_STORY_SECTION.eyebrow}
               title={QUALITY_FIRST_STORY_SECTION.title}
               description={QUALITY_FIRST_STORY_SECTION.description}
             />
@@ -71,7 +70,6 @@ export default async function QualityFirstPage() {
         <Container>
           <Reveal>
             <SectionHeading
-              eyebrow={QUALITY_FIRST_MACHINE_SECTION.eyebrow}
               title={QUALITY_FIRST_MACHINE_SECTION.title}
               description={QUALITY_FIRST_MACHINE_SECTION.description}
             />

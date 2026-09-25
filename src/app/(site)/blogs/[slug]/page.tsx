@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { PostBody } from "@/components/blog/post-body";
 import { formatPostDate } from "@/components/blog/format";
 import { Container } from "@/components/ui/container";
-import { Eyebrow } from "@/components/ui/eyebrow";
 import { collectMediaIds } from "@/lib/blog/blocks";
 import { getPublishedPostBySlug } from "@/lib/blog/server";
 import { getMediaByIds } from "@/lib/media/server";
@@ -50,8 +49,7 @@ export default async function PostPage({
     <article className="bg-white">
       <section className="border-b border-ink-200 bg-ink-50">
         <Container className="py-14 lg:py-20">
-          <Eyebrow>Blog</Eyebrow>
-          <h1 className="text-h1 mt-5 max-w-3xl text-balance text-ink-950">
+          <h1 className="text-h1 max-w-3xl text-balance text-ink-950">
             {post.title}
           </h1>
           <p className="mt-4 text-sm font-semibold uppercase tracking-[0.16em] text-ink-500">
@@ -63,7 +61,7 @@ export default async function PostPage({
 
       {post.thumbnail && (
         <Container className="pt-12">
-          <figure className="overflow-hidden rounded-card border border-ink-200">
+          <figure className="overflow-hidden rounded-lg border border-ink-200">
             {/* eslint-disable-next-line @next/next/no-img-element -- media has no intrinsic dimensions to hand next/image */}
             <img
               src={post.thumbnail.url}

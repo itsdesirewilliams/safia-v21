@@ -19,7 +19,9 @@ export function PolicyBlock({ block }: PolicyBlockProps) {
         <dl className="grid gap-px overflow-hidden rounded-card border border-ink-200 bg-ink-200 sm:grid-cols-2">
           {block.items.map((item) => (
             <div key={item.term} className="bg-white p-5 sm:p-6">
-              <dt className="text-eyebrow text-ink-500">{item.term}</dt>
+              <dt className="text-sm font-semibold text-ink-700">
+                {item.term}
+              </dt>
               <dd className="mt-2 text-sm leading-relaxed text-ink-700">
                 {item.definition}
               </dd>

@@ -8,16 +8,14 @@
  */
 
 export const GALLERY_PAGE = {
-  eyebrow: "Gallery",
   title: "Gallery",
   description:
     "A look at Safeway Tyre — the ranges we make and the places they run. Select any image to view it larger.",
 } as const;
 
 export const GALLERY_EMPTY_STATE = {
-  label: "Gallery images not supplied",
-  detail:
-    "No images have been added to the gallery bucket yet. Upload images from /admin/media (Admins only) to populate this grid — no code change is required.",
+  label: "Gallery Coming Soon",
+  detail: "Photographs from Safeway Tyre will be published here soon.",
 } as const;
 
 /**
