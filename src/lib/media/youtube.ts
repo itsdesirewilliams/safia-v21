@@ -15,14 +15,16 @@ export function isValidYoutubeVideoId(id: string): boolean {
 }
 
 export type YoutubeEmbedOptions = {
+  /**
+   * Start playback automatically. Browsers only permit this when muted, so the
+   * two are set together — there is no unmuted autoplay to ask for.
+   */
   autoplay?: boolean;
-  mute?: boolean;
 };
 
 /**
- * Build the embed URL. Muted autoplay is only added when explicitly requested,
- * so a caller can fall back to a normal click-to-play player without changing
- * the base URL.
+ * Build the embed URL. Autoplay is only added when explicitly requested, and is
+ * always muted; without it the caller gets a normal click-to-play player.
  */
 export function youtubeEmbedUrl(
   id: string,
@@ -32,8 +34,6 @@ export function youtubeEmbedUrl(
 
   if (options.autoplay) {
     params.set("autoplay", "1");
-  }
-  if (options.mute) {
     params.set("mute", "1");
   }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
   INSTAGRAM_DISPLAY_COUNT,
@@ -12,16 +12,19 @@ import {
 
 /**
  * The four local Instagram images, with a quiet rotation: every five minutes a
- * single tile is replaced while the other three stay put. The changed tile is
- * the only one that remounts, so only it cross-fades — the grid never shuffles
- * as a whole.
+ * single tile is replaced, in place, while the other three stay exactly where
+ * they are. Only the changed tile remounts, so only it cross-fades — the grid
+ * never shuffles as a whole.
  */
 export function InstagramStrip({
   images,
 }: {
   images: readonly InstagramImage[];
 }) {
-  const [step, setStep] = useState(0);
+  const [displayed, setDisplayed] = useState<InstagramImage[]>(() =>
+    nextInstagramDisplay(images, [], 0),
+  );
+  const stepRef = useRef(0);
   const canRotate = images.length > INSTAGRAM_DISPLAY_COUNT;
 
   useEffect(() => {
@@ -29,14 +32,15 @@ export function InstagramStrip({
       return;
     }
 
-    const interval = setInterval(
-      () => setStep((current) => current + 1),
-      INSTAGRAM_ROTATE_MS,
-    );
-    return () => clearInterval(interval);
-  }, [canRotate]);
+    const interval = setInterval(() => {
+      stepRef.current += 1;
+      setDisplayed((current) =>
+        nextInstagramDisplay(images, current, stepRef.current),
+      );
+    }, INSTAGRAM_ROTATE_MS);
 
-  const displayed = nextInstagramDisplay(images, step);
+    return () => clearInterval(interval);
+  }, [canRotate, images]);
 
   return (
     <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">

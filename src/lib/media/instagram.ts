@@ -89,15 +89,19 @@ export function discoverInstagramImages(
 }
 
 /**
- * The images to display for a given rotation step.
+ * The images to display after a rotation.
  *
- * The selection is a window over the naturally-ordered pool: consecutive steps
- * shift the window by one, so exactly one displayed image changes while the
- * others stay put. With no spare image (pool is empty or no larger than the
- * display count) the selection is static.
+ * On the first step the first `count` images are shown. Each later step
+ * replaces exactly one slot — cycling through the slots in turn — with the next
+ * unused image from the natural-order pool. The other slots keep their position
+ * and value, so the visitor sees one photo quietly change rather than the grid
+ * reshuffling. With no spare image (pool empty or no larger than the display
+ * count) the selection is static, and an unknown/absent `current` falls back to
+ * the initial selection.
  */
 export function nextInstagramDisplay(
   images: readonly InstagramImage[],
+  current: readonly InstagramImage[],
   step: number,
 ): InstagramImage[] {
   const count = Math.min(INSTAGRAM_DISPLAY_COUNT, images.length);
@@ -106,14 +110,25 @@ export function nextInstagramDisplay(
     return [];
   }
 
-  if (images.length <= count) {
+  if (images.length <= count || step <= 0 || current.length !== count) {
     return images.slice(0, count);
   }
 
-  const start = ((step % images.length) + images.length) % images.length;
-
-  return Array.from(
-    { length: count },
-    (_, index) => images[(start + index) % images.length],
+  const slot = (step - 1) % count;
+  const retained = new Set(
+    current
+      .filter((_, index) => index !== slot)
+      .map((image) => image.url),
   );
+
+  let incoming = current[slot];
+  for (let offset = 0; offset < images.length; offset += 1) {
+    const candidate = images[(count + step - 1 + offset) % images.length];
+    if (!retained.has(candidate.url) && candidate.url !== current[slot].url) {
+      incoming = candidate;
+      break;
+    }
+  }
+
+  return current.map((image, index) => (index === slot ? incoming : image));
 }

@@ -65,14 +65,14 @@ describe("hero video", () => {
 });
 
 describe("YouTube tour", () => {
-  it("renders the real YouTube player lazily, without forcing autoplay", () => {
+  it("defers the player until the section approaches, without forcing autoplay", () => {
     const html = renderToStaticMarkup(
       <YouTubeTour id="4jM2jUcc5Kc" title="Safeway Tyre factory tour" />,
     );
 
-    expect(html).toContain("<iframe");
+    expect(html).toContain("<noscript>");
     expect(html).toContain(
-      "https://www.youtube-nocookie.com/embed/4jM2jUcc5Kc",
+      "youtube-nocookie.com/embed/4jM2jUcc5Kc",
     );
     expect(html).toContain('loading="lazy"');
     expect(html).toContain('title="Safeway Tyre factory tour"');

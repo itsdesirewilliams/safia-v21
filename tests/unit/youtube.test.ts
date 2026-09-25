@@ -30,8 +30,8 @@ describe("youtube embed url", () => {
     expect(url).not.toContain("mute=1");
   });
 
-  it("adds muted autoplay only when requested", () => {
-    expect(youtubeEmbedUrl(SUPPLIED_ID, { autoplay: true, mute: true })).toBe(
+  it("adds autoplay, always muted, only when requested", () => {
+    expect(youtubeEmbedUrl(SUPPLIED_ID, { autoplay: true })).toBe(
       `https://www.youtube-nocookie.com/embed/${SUPPLIED_ID}?rel=0&playsinline=1&autoplay=1&mute=1`,
     );
   });

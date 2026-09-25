@@ -104,52 +104,62 @@ describe("display count and rotation cadence", () => {
 
 describe("the displayed selection", () => {
   it("starts with the first four images in natural order", () => {
-    expect(urls(nextInstagramDisplay(images(10), 0))).toEqual(
+    expect(urls(nextInstagramDisplay(images(10), [], 0))).toEqual(
       urls(images(10).slice(0, 4)),
     );
   });
 
   it("shows only the available images when fewer than four exist", () => {
-    expect(nextInstagramDisplay(images(2), 0)).toHaveLength(2);
-    expect(nextInstagramDisplay(images(3), 5)).toHaveLength(3);
+    expect(nextInstagramDisplay(images(2), [], 0)).toHaveLength(2);
+    expect(nextInstagramDisplay(images(3), [], 5)).toHaveLength(3);
   });
 
   it("returns nothing when there are no images", () => {
-    expect(nextInstagramDisplay([], 3)).toEqual([]);
+    expect(nextInstagramDisplay([], [], 3)).toEqual([]);
   });
 
-  it("replaces exactly one image per rotation, keeping the rest", () => {
+  it("falls back to the initial selection without a known current set", () => {
+    expect(urls(nextInstagramDisplay(images(10), [], 3))).toEqual(
+      urls(images(10).slice(0, 4)),
+    );
+  });
+
+  it("replaces exactly one image in place, keeping the other three where they are", () => {
     const all = images(10);
+    let current = nextInstagramDisplay(all, [], 0);
 
-    for (let step = 1; step < 12; step += 1) {
-      const previous = nextInstagramDisplay(all, step - 1);
-      const current = nextInstagramDisplay(all, step);
+    for (let step = 1; step <= 12; step += 1) {
+      const next = nextInstagramDisplay(all, current, step);
 
-      expect(current).toHaveLength(INSTAGRAM_DISPLAY_COUNT);
+      expect(next).toHaveLength(INSTAGRAM_DISPLAY_COUNT);
+      expect(new Set(urls(next)).size).toBe(INSTAGRAM_DISPLAY_COUNT);
 
-      const previousUrls = new Set(urls(previous));
-      const unchanged = urls(current).filter((url) =>
-        previousUrls.has(url),
+      const changed = next.filter(
+        (image, index) => image.url !== current[index].url,
       );
-      expect(unchanged).toHaveLength(INSTAGRAM_DISPLAY_COUNT - 1);
+      expect(changed).toHaveLength(1);
 
-      expect(new Set(urls(current)).size).toBe(INSTAGRAM_DISPLAY_COUNT);
+      current = next;
+    }
+  });
+
+  it("never runs out of images to rotate in", () => {
+    const all = images(5);
+    let current = nextInstagramDisplay(all, [], 0);
+
+    for (let step = 1; step <= 25; step += 1) {
+      const next = nextInstagramDisplay(all, current, step);
+      expect(new Set(urls(next)).size).toBe(INSTAGRAM_DISPLAY_COUNT);
+      current = next;
     }
   });
 
   it("stays static when there is no spare image to rotate in", () => {
     const all = images(INSTAGRAM_DISPLAY_COUNT);
 
-    expect(urls(nextInstagramDisplay(all, 0))).toEqual(urls(all));
-    expect(urls(nextInstagramDisplay(all, 1))).toEqual(urls(all));
-    expect(urls(nextInstagramDisplay(all, 7))).toEqual(urls(all));
-  });
-
-  it("wraps around the pool instead of running out", () => {
-    const all = images(6);
-    expect(urls(nextInstagramDisplay(all, 6))).toEqual(
-      urls(nextInstagramDisplay(all, 0)),
-    );
+    expect(urls(nextInstagramDisplay(all, [], 0))).toEqual(urls(all));
+    expect(urls(nextInstagramDisplay(all, all, 1))).toEqual(urls(all));
+    expect(urls(nextInstagramDisplay(all, all, 7))).toEqual(urls(all));
   });
 });
 
