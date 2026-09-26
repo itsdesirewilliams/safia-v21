@@ -23,7 +23,7 @@ describe("About Us team", () => {
     expect(html).toContain("Team Profiles Coming Soon");
   });
 
-  it("renders a card per member", () => {
+  it("overlays the name and position on the image with the quote below", () => {
     const members: TeamMember[] = [
       { name: "Ada Lovelace", role: "Director", bio: "Leads the company." },
       { name: "Alan Turing", role: "Operations" },
@@ -34,7 +34,26 @@ describe("About Us team", () => {
     expect(html).toContain("Ada Lovelace");
     expect(html).toContain("Director");
     expect(html).toContain("Alan Turing");
+    expect(html).toContain("Leads the company.");
+    // Readable scrim behind the overlaid name, over the placeholder portrait.
+    expect(html).toContain("from-ink-950/90");
+    expect(html).toContain("Portrait placeholder");
     expect(html).not.toContain("Team Profiles Coming Soon");
+  });
+
+  it("uses a supplied portrait instead of the placeholder when present", () => {
+    const members: TeamMember[] = [
+      {
+        name: "Grace Hopper",
+        role: "Advisor",
+        image: "/media/team/grace.jpg",
+      },
+    ];
+
+    const html = renderToStaticMarkup(<AboutTeam members={members} />);
+
+    expect(html).toContain('src="/media/team/grace.jpg"');
+    expect(html).not.toContain("Portrait placeholder");
   });
 });
 

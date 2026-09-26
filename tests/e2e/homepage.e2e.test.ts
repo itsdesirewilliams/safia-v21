@@ -4,7 +4,7 @@ import { resolve } from "node:path";
 
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import { HOME_CATEGORY_CARDS } from "@/lib/homepage";
+import { HOME_CATEGORY_CARDS, TESTIMONIALS } from "@/lib/homepage";
 
 const PORT = 4312;
 const BASE_URL = `http://127.0.0.1:${PORT}`;
@@ -72,12 +72,30 @@ describe("homepage vertical slice", () => {
     expect(html).toContain("Product Ranges");
     expect(html).toContain("Explore the Official Catalogue");
     expect(html).toContain("Certifications Coming Soon");
-    expect(html).toContain("Testimonials Coming Soon");
+    expect(html).toContain("Trusted by Importers Worldwide");
     expect(html).toContain("Follow Us on Instagram");
     expect(html).toContain("youtube-nocookie.com/embed/4jM2jUcc5Kc");
     expect(html).toContain("Inquiry Form");
     expect(html).toContain("Find Us on the Map");
     expect(html).toContain("Director@safewaytyre.com");
+  });
+
+  it("invites a factory tour without a Quality First CTA", async () => {
+    const html = await (await fetch(`${BASE_URL}/`)).text();
+
+    expect(html).toContain("Take a Tour of Our Industry");
+    expect(html).toContain("a short sneak peek");
+    expect(html).not.toContain("Explore Quality First");
+  });
+
+  it("shows the three sample testimonials, each with a name and country", async () => {
+    const html = await (await fetch(`${BASE_URL}/`)).text();
+
+    expect(TESTIMONIALS).toHaveLength(3);
+    for (const testimonial of TESTIMONIALS) {
+      expect(html).toContain(testimonial.author);
+      expect(html).toContain(testimonial.location);
+    }
   });
 
   it("shows the six product range cards linking to canonical routes", async () => {

@@ -27,14 +27,13 @@ export type TeamMember = {
 
 export const ABOUT_TEAM = {
   title: "Meet the Team",
-  description: "The people who lead Safeway Tyre.",
+  description: "A few members of the Safeway Tyre team.",
   /** Makes the placeholder nature of the current profiles explicit. */
   temporaryNote:
     "Team portraits and quotations are temporary placeholders pending supplied content.",
   empty: {
     label: "Team Profiles Coming Soon",
-    detail:
-      "We are preparing profiles of the people who lead Safeway Tyre. Please check back soon.",
+    detail: "We are preparing team-member profiles. Please check back soon.",
   },
 } as const;
 

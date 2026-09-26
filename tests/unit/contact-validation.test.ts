@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  isValidPhone,
+  normalizePhone,
   validateFeedbackForm,
   validateQueryForm,
 } from "@/lib/contact/validation";
@@ -34,11 +34,11 @@ describe("validateQueryForm", () => {
     }
   });
 
-  it("combines the country dialing code with the national number", () => {
+  it("normalizes the national number to full international E.164", () => {
     const result = validateQueryForm({ ...VALID, phone: "712 345678" });
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.value.phone).toBe("+254 712 345678");
+      expect(result.value.phone).toBe("+254712345678");
     }
   });
 
@@ -148,18 +148,23 @@ describe("validateFeedbackForm", () => {
   });
 });
 
-describe("isValidPhone", () => {
-  it.each(["+91 99157 62182", "254712345678", "(020) 7946 0958", "+1-202-555-0173"])(
-    "accepts %s",
-    (phone) => {
-      expect(isValidPhone(phone)).toBe(true);
-    },
-  );
+describe("normalizePhone", () => {
+  it.each([
+    ["9915762182", "IN", "+919915762182"],
+    ["712 345678", "KE", "+254712345678"],
+    ["4155552671", "US", "+14155552671"],
+    ["020 7946 0958", "GB", "+442079460958"],
+  ])("normalizes %s (%s) to %s", (national, country, expected) => {
+    expect(normalizePhone(national, country)).toBe(expected);
+  });
 
-  it.each(["", "123", "not a phone", "+12345678901234567890"])(
-    "rejects %s",
-    (phone) => {
-      expect(isValidPhone(phone)).toBe(false);
-    },
-  );
+  it.each([
+    ["", "IN"],
+    ["123", "KE"],
+    ["call me", "IN"],
+    ["9915762182", "ZZ"],
+    ["9915762182", ""],
+  ])("rejects %s for country %s", (national, country) => {
+    expect(normalizePhone(national, country)).toBeNull();
+  });
 });

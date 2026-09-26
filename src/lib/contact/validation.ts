@@ -1,6 +1,9 @@
+import type { CountryCode } from "libphonenumber-js";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
+
 import { isCategorySlug, type CategorySlug } from "@/lib/catalogue/categories";
 
-import { dialCodeFor, isCountryCode } from "./countries";
+import { isCountryCode } from "./countries";
 
 /**
  * Shared validation for the Contact Us forms (spec #6). The Inquiry form (used
@@ -8,9 +11,9 @@ import { dialCodeFor, isCountryCode } from "./countries";
  * Feedback form does not. Both pass through the same field rules here, so the
  * two forms behave identically for the fields they share.
  *
- * The visitor selects a country from the full country list and types only the
- * national number; this module combines the two into the international number
- * before it is validated or delivered.
+ * The visitor selects a country and types only the national number; this module
+ * validates that number against the country's own rules and normalizes it to the
+ * full international (E.164) number before it is delivered.
  */
 
 export type QueryFormValues = {
@@ -64,21 +67,31 @@ function readList(input: Record<string, unknown>, key: string): string[] {
 }
 
 /**
- * Country-aware-enough phone validation: accepts common international
- * separators and requires 7–15 digits (the ITU E.164 range, which covers
- * national and international numbers). The project applies it to the combined
- * dialing-code + national number so the two inputs behave as one.
+ * Country-aware phone validation. The visitor types only the national number;
+ * it is parsed against the selected country so the country's own length and
+ * format rules apply (via libphonenumber-js). Returns the full international
+ * number in E.164 form, or `null` when the number is not valid for that
+ * country.
  */
-export function isValidPhone(phone: string): boolean {
-  const trimmed = phone.trim();
-  if (trimmed.length === 0 || trimmed.length > 40) {
-    return false;
+export function normalizePhone(
+  national: string,
+  country: string,
+): string | null {
+  const trimmed = national.trim();
+  if (trimmed.length === 0 || trimmed.length > 20) {
+    return null;
   }
   if (!/^\+?[0-9()\s.-]+$/.test(trimmed)) {
-    return false;
+    return null;
   }
-  const digits = trimmed.replace(/\D/g, "");
-  return digits.length >= 7 && digits.length <= 15;
+  if (!isCountryCode(country)) {
+    return null;
+  }
+  const parsed = parsePhoneNumberFromString(trimmed, country as CountryCode);
+  if (!parsed || !parsed.isValid()) {
+    return null;
+  }
+  return parsed.number;
 }
 
 type CommonValues = {
@@ -104,13 +117,12 @@ function validateCommon(
     errors.name = "Please enter your name.";
   }
 
-  const dialCode = isCountryCode(country) ? dialCodeFor(country) : null;
-  if (!dialCode) {
+  if (!isCountryCode(country)) {
     errors.country = "Please choose your country.";
   }
 
-  const phone = dialCode ? `${dialCode} ${nationalPhone}`.trim() : nationalPhone;
-  if (!dialCode || !isValidPhone(phone)) {
+  const phone = normalizePhone(nationalPhone, country);
+  if (!phone) {
     errors.phone = "Please enter a valid phone number.";
   }
 
@@ -118,7 +130,10 @@ function validateCommon(
     errors.message = "Tell us what you need, including sizes if applicable.";
   }
 
-  return { values: { name, country, phone, message, honeypot }, errors };
+  return {
+    values: { name, country, phone: phone ?? nationalPhone, message, honeypot },
+    errors,
+  };
 }
 
 export function validateQueryForm(

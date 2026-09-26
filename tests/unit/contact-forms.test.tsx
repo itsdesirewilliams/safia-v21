@@ -13,11 +13,29 @@ const PRODUCT_CATEGORIES = CATEGORIES.filter(
 describe("Inquiry form", () => {
   const html = renderToStaticMarkup(<QueryForm />);
 
-  it("renders the required fields", () => {
-    for (const label of ["Name", "Country", "Phone", "Message"]) {
+  it("renders the required fields with one joined country + phone control", () => {
+    for (const label of ["Name", "Phone", "Message"]) {
       expect(html).toContain(`>${label} <`);
     }
+    // The separate Country field is gone; its label is not rendered.
+    expect(html).not.toContain(">Country <");
+
+    expect(html).toContain('name="country"');
+    expect(html).toContain('name="phone"');
+    expect(html.toLowerCase()).toContain('inputmode="numeric"');
+    // The two segments join as a single rectangle.
+    expect(html).toContain("rounded-l-lg");
+    expect(html).toContain("rounded-r-lg");
+
     expect(html).toContain("Which category are you interested in?");
+  });
+
+  it("lists every country as an alpha-3 code with its dialing code only", () => {
+    expect(html).toContain(">IND (+91)</option>");
+    expect(html).toContain(">USA (+1)</option>");
+    // The full country name must not appear in the selector.
+    expect(html).not.toContain(">India (");
+    expect(html.match(/name="country"/g)).toHaveLength(1);
   });
 
   it("offers the six product categories as checkboxes", () => {
@@ -50,9 +68,12 @@ describe("Feedback form", () => {
   const html = renderToStaticMarkup(<FeedbackForm />);
 
   it("renders the simpler feedback fields without a category", () => {
-    for (const label of ["Name", "Country", "Phone", "Message"]) {
+    for (const label of ["Name", "Phone", "Message"]) {
       expect(html).toContain(`>${label} <`);
     }
+    expect(html).not.toContain(">Country <");
+    expect(html).toContain('name="country"');
+    expect(html).toContain('name="phone"');
     expect(html).not.toContain("Which category");
     expect(html).not.toContain('name="category"');
   });

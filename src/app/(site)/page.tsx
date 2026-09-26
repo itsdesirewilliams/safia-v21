@@ -22,6 +22,7 @@ import {
   HERO_SUGGESTION_POOL,
   HOME_CATEGORY_CARDS,
   TESTIMONIALS,
+  TESTIMONIALS_NOTE,
 } from "@/lib/homepage";
 import { isValidYoutubeVideoId } from "@/lib/media/youtube";
 import { ROUTES } from "@/lib/routes";
@@ -108,19 +109,8 @@ export default function HomePage() {
               <Reveal>
                 <SectionHeading
                   title="Take a Tour of Our Industry"
-                  description="See Safeway Tyre's operations, testing and quality process in action."
+                  description="Step inside our factory online — a short sneak peek at how Safeway Tyre makes its tyres."
                 />
-              </Reveal>
-              <Reveal delay={80}>
-                <ButtonLink
-                  href={ROUTES.qualityFirst}
-                  variant="outline"
-                  size="md"
-                  className="mt-8"
-                >
-                  Explore Quality First
-                  <ArrowIcon className="h-4 w-4" />
-                </ButtonLink>
               </Reveal>
             </div>
             <Reveal delay={120}>
@@ -286,24 +276,30 @@ export default function HomePage() {
             </Reveal>
             <Reveal delay={100}>
               {TESTIMONIALS.length > 0 ? (
-                <ul className="grid gap-5 md:grid-cols-2">
-                  {TESTIMONIALS.map((testimonial) => (
-                    <li
-                      key={testimonial.author}
-                      className="rounded-card border border-ink-200 bg-white p-8"
-                    >
-                      <blockquote className="text-lg leading-relaxed text-ink-800">
-                        &ldquo;{testimonial.quote}&rdquo;
-                      </blockquote>
-                      <p className="mt-6 text-sm font-semibold text-ink-950">
-                        {testimonial.author}
-                      </p>
-                      <p className="text-sm text-ink-500">
-                        {testimonial.location}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
+                <div>
+                  <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                    {TESTIMONIALS.map((testimonial) => (
+                      <li
+                        key={`${testimonial.author}-${testimonial.location}`}
+                        className="rounded-card border border-ink-200 bg-white p-6"
+                      >
+                        <blockquote className="text-base leading-relaxed text-ink-800">
+                          &ldquo;{testimonial.quote}&rdquo;
+                        </blockquote>
+                        <p className="mt-5 text-sm font-semibold text-ink-950">
+                          {testimonial.author}
+                          <span className="font-normal text-ink-500">
+                            {" "}
+                            — {testimonial.location}
+                          </span>
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-5 text-sm text-ink-500">
+                    {TESTIMONIALS_NOTE}
+                  </p>
+                </div>
               ) : (
                 <PlaceholderPanel
                   kind="testimonial"

@@ -12,7 +12,7 @@ const SUBMISSION: ContactSubmission = {
   formType: "query",
   name: "Jane Importer",
   country: "KE",
-  phone: "+254 712 345678",
+  phone: "+254712345678",
   categories: ["truck-bus", "agriculture"],
   message: "We need 10.00-20 truck tyres.",
 };

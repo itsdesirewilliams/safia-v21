@@ -23,9 +23,16 @@ describe("About Us content", () => {
   });
 
   it("names the Team section and its labelled empty state", () => {
-    expect(ABOUT_TEAM.title.length).toBeGreaterThan(0);
+    expect(ABOUT_TEAM.title).toBe("Meet the Team");
     expect(ABOUT_TEAM.empty.label.length).toBeGreaterThan(0);
     expect(ABOUT_TEAM.empty.detail.length).toBeGreaterThan(0);
+  });
+
+  it("describes the team neutrally, not as the company leadership", () => {
+    const description = ABOUT_TEAM.description.toLowerCase();
+    expect(description).toContain("team");
+    expect(description).not.toContain("lead");
+    expect(description).not.toContain("who lead");
   });
 
   it("names the Business Profile section", () => {

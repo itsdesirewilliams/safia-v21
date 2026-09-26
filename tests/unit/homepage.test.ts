@@ -5,6 +5,7 @@ import {
   CERTIFICATIONS,
   HOME_CATEGORY_CARDS,
   TESTIMONIALS,
+  TESTIMONIALS_NOTE,
 } from "@/lib/homepage";
 import { ROUTES } from "@/lib/routes";
 
@@ -55,11 +56,17 @@ describe("homepage certifications", () => {
 });
 
 describe("homepage testimonials", () => {
-  it("only uses supplied testimonials, each with an author and location", () => {
+  it("ships three temporary sample testimonials, each with quote, author and country", () => {
+    expect(TESTIMONIALS).toHaveLength(3);
+
     for (const testimonial of TESTIMONIALS) {
       expect(testimonial.quote.length).toBeGreaterThan(0);
       expect(testimonial.author.length).toBeGreaterThan(0);
       expect(testimonial.location.length).toBeGreaterThan(0);
     }
+  });
+
+  it("labels the samples as placeholders", () => {
+    expect(TESTIMONIALS_NOTE.toLowerCase()).toContain("placeholder");
   });
 });

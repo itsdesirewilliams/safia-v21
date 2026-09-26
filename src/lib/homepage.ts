@@ -59,11 +59,34 @@ export type Testimonial = {
 };
 
 /**
- * Customer testimonials for the homepage. None have been supplied yet, so
- * this is empty and the section renders a labelled placeholder rather than
- * inventing quotes.
+ * Temporary sample testimonials for the homepage. These are clearly fictional
+ * placeholders shown until real customer stories are supplied; replace the
+ * entries here when Safeway provides approved testimonials. No photos are used.
  */
-export const TESTIMONIALS: readonly Testimonial[] = [];
+export const TESTIMONIALS: readonly Testimonial[] = [
+  {
+    quote:
+      "The samples matched the catalogue specifications exactly and the shipment reached us on schedule.",
+    author: "Juan Carlos",
+    location: "Brazil",
+  },
+  {
+    quote:
+      "Clear sizes, quick answers and a straightforward ordering process from start to finish.",
+    author: "Aisha Rahman",
+    location: "United Arab Emirates",
+  },
+  {
+    quote:
+      "A dependable partner for our agricultural range — the pattern data is easy to work with.",
+    author: "Milan Novak",
+    location: "Czech Republic",
+  },
+];
+
+/** Makes the placeholder nature of the sample testimonials explicit. */
+export const TESTIMONIALS_NOTE =
+  "Sample testimonials shown as placeholders until customer stories are supplied.";
 
 const HERO_SIZE_SUGGESTION_LIMIT = 24;
 
