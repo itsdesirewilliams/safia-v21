@@ -1,9 +1,6 @@
 import Link from "next/link";
 
-import { ArrowIcon } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { Reveal } from "@/components/ui/reveal";
-import { SectionHeading } from "@/components/ui/section-heading";
 import { WARRANTY_RELATED } from "@/lib/warranty";
 
 function LinkList({
@@ -15,16 +12,17 @@ function LinkList({
 }) {
   return (
     <nav aria-label={label}>
-      <p className="text-sm font-semibold text-ink-500">{label}</p>
-      <ul className="mt-5 space-y-3">
+      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-500">
+        {label}
+      </p>
+      <ul className="mt-3 space-y-2">
         {links.map((link) => (
           <li key={link.href}>
             <Link
               href={link.href}
-              className="group inline-flex items-center gap-2 text-sm font-semibold text-ink-700 transition-colors hover:text-brand-600"
+              className="text-sm text-ink-700 underline-offset-4 transition-colors hover:text-brand-600 hover:underline"
             >
               {link.label}
-              <ArrowIcon className="h-4 w-4 text-ink-300 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-brand-600" />
             </Link>
           </li>
         ))}
@@ -33,25 +31,21 @@ function LinkList({
   );
 }
 
-/** Closing band linking onward to Products, Quality First, Contact Us and Catalogue. */
+/** Closing documentation footer linking onward to Products and related pages. */
 export function WarrantyRelated() {
   return (
-    <section className="bg-ink-50 py-20 lg:py-28">
+    <section className="border-t border-ink-200 bg-white py-14 lg:py-20">
       <Container>
-        <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
-          <Reveal>
-            <SectionHeading title={WARRANTY_RELATED.title} />
-          </Reveal>
+        <h2 className="text-xl font-bold tracking-tight text-ink-950 sm:text-2xl">
+          {WARRANTY_RELATED.title}
+        </h2>
 
-          <Reveal delay={120}>
-            <div className="grid gap-10 sm:grid-cols-2">
-              <LinkList
-                label={WARRANTY_RELATED.productsLabel}
-                links={WARRANTY_RELATED.products}
-              />
-              <LinkList label="More" links={WARRANTY_RELATED.links} />
-            </div>
-          </Reveal>
+        <div className="mt-8 grid max-w-3xl gap-10 sm:grid-cols-2">
+          <LinkList
+            label={WARRANTY_RELATED.productsLabel}
+            links={WARRANTY_RELATED.products}
+          />
+          <LinkList label="More" links={WARRANTY_RELATED.links} />
         </div>
       </Container>
     </section>

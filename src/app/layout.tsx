@@ -13,6 +13,22 @@ export const metadata: Metadata = {
   },
   description:
     "Safeway Tyre is a tyre manufacturer in India, exporting truck, bus, agriculture, motorcycle, three-wheeler, industrial and OTR tyres worldwide.",
+  // Existing Safeway Tyre brand icons under `public/brand/` (no duplicates).
+  icons: {
+    icon: [
+      { url: "/brand/favicon.ico" },
+      { url: "/brand/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+      { url: "/brand/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+    ],
+    apple: [
+      {
+        url: "/brand/apple-touch-icon.png",
+        type: "image/png",
+        sizes: "180x180",
+      },
+    ],
+  },
+  manifest: "/brand/site.webmanifest",
 };
 
 export default function RootLayout({

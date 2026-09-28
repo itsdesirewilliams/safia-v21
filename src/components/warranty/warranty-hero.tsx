@@ -1,60 +1,36 @@
-import { ArrowIcon, ButtonLink } from "@/components/ui/button";
-import { ROUTES } from "@/lib/routes";
+import { Container } from "@/components/ui/container";
 import { WARRANTY_HERO } from "@/lib/warranty";
 
-/** Warranty hero: the policy heading, a short orientation and the key facts. */
+/**
+ * Warranty header. The policy title, orientation and key figures are set as
+ * plain documentation — no hero panel, gradients or oversized type.
+ */
 export function WarrantyHero() {
   return (
-    <section className="bg-ink-50 px-4 pt-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-[96rem]">
-        <div className="relative overflow-hidden rounded-lg bg-ink-950">
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 [background:radial-gradient(110%_120%_at_88%_0%,rgba(11,99,246,0.42),transparent_58%),radial-gradient(75%_75%_at_0%_115%,rgba(255,106,0,0.2),transparent_55%)]"
-          />
+    <header className="border-b border-ink-200 bg-white">
+      <Container>
+        <div className="pb-10 pt-14 lg:pb-12 lg:pt-20">
+          <h1 className="max-w-3xl text-3xl font-bold tracking-tight text-ink-950 sm:text-4xl">
+            {WARRANTY_HERO.title}
+          </h1>
+          <p className="mt-4 max-w-3xl text-base leading-relaxed text-ink-600">
+            {WARRANTY_HERO.description}
+          </p>
 
-          <div className="relative px-6 py-14 sm:px-10 lg:px-14 lg:py-20">
-            <div className="animate-fade-up">
-              <h1 className="text-display max-w-3xl text-white">
-                {WARRANTY_HERO.title}
-              </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/70">
-                {WARRANTY_HERO.description}
-              </p>
-
-              <div className="mt-8 flex flex-wrap gap-3">
-                <ButtonLink href="#definitions" variant="accent" size="lg">
-                  Read the terms
-                  <ArrowIcon className="h-4 w-4" />
-                </ButtonLink>
-                <ButtonLink
-                  href={ROUTES.contactUs}
-                  variant="onDark"
-                  size="lg"
-                >
-                  Start a claim
-                </ButtonLink>
+          <dl className="mt-8 grid gap-6 border-t border-ink-200 pt-6 sm:grid-cols-3">
+            {WARRANTY_HERO.facts.map((fact) => (
+              <div key={fact.label}>
+                <dt className="text-sm font-semibold text-ink-950">
+                  {fact.value}
+                </dt>
+                <dd className="mt-1 text-sm leading-relaxed text-ink-500">
+                  {fact.label}
+                </dd>
               </div>
-            </div>
-
-            <dl className="mt-12 grid gap-8 border-t border-white/10 pt-10 sm:grid-cols-3">
-              {WARRANTY_HERO.facts.map((fact) => (
-                <div
-                  key={fact.label}
-                  className="animate-fade-up [animation-delay:120ms]"
-                >
-                  <dt className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-                    {fact.value}
-                  </dt>
-                  <dd className="mt-2 max-w-xs text-sm leading-relaxed text-white/60">
-                    {fact.label}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </div>
+            ))}
+          </dl>
         </div>
-      </div>
-    </section>
+      </Container>
+    </header>
   );
 }

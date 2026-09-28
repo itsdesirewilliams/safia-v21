@@ -106,6 +106,42 @@ describe("global shell", () => {
       expect(html).toContain(`/products/${category}`);
     }
   });
+
+  it("wires the existing Safeway Tyre brand favicons from public/brand", async () => {
+    const response = await fetch(`${BASE_URL}/`);
+    const html = await response.text();
+
+    expect(html).toContain('rel="icon"');
+    expect(html).toContain("/brand/favicon.ico");
+    expect(html).toContain("/brand/favicon-16x16.png");
+    expect(html).toContain("/brand/favicon-32x32.png");
+    expect(html).toContain("/brand/apple-touch-icon.png");
+    expect(html).toContain("/brand/site.webmanifest");
+  });
+
+  it("serves the brand icon files and the manifest", async () => {
+    for (const path of [
+      "/brand/favicon.ico",
+      "/brand/favicon-16x16.png",
+      "/brand/favicon-32x32.png",
+      "/brand/apple-touch-icon.png",
+      "/brand/android-chrome-192x192.png",
+      "/brand/android-chrome-512x512.png",
+    ]) {
+      const res = await fetch(`${BASE_URL}${path}`);
+      expect(res.status, path).toBe(200);
+    }
+
+    const manifest = (await (
+      await fetch(`${BASE_URL}/brand/site.webmanifest`)
+    ).json()) as { name: string; icons: { src: string }[] };
+
+    expect(manifest.name).toBe("Safeway Tyre");
+    expect(manifest.icons.map((icon) => icon.src)).toEqual([
+      "/brand/android-chrome-192x192.png",
+      "/brand/android-chrome-512x512.png",
+    ]);
+  });
 });
 
 describe("Supabase connection", () => {

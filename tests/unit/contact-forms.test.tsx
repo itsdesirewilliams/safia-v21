@@ -5,6 +5,7 @@ import { ContactForms } from "@/components/contact/contact-forms";
 import { FeedbackForm } from "@/components/contact/feedback-form";
 import { QueryForm } from "@/components/contact/query-form";
 import { CATEGORIES } from "@/lib/catalogue/categories";
+import { COUNTRIES } from "@/lib/contact/countries";
 
 const PRODUCT_CATEGORIES = CATEGORIES.filter(
   (category) => category.slug !== "tubes",
@@ -36,6 +37,20 @@ describe("Inquiry form", () => {
     // The full country name must not appear in the selector.
     expect(html).not.toContain(">India (");
     expect(html.match(/name="country"/g)).toHaveLength(1);
+  });
+
+  it("pre-selects the first country and never shows a Country placeholder", () => {
+    // No empty/placeholder option and no visible "Country" text anywhere.
+    expect(html).not.toMatch(/<option value=""[^>]*>/);
+    expect(html).not.toContain(">Country <");
+    expect(html).not.toContain("Country calling code");
+
+    // The first dataset entry is offered (and selected before interaction).
+    expect(html).toContain(`>${COUNTRIES[0].label}</option>`);
+
+    // The national phone side starts empty with a phone-number placeholder.
+    expect(html).toContain('placeholder="Phone number"');
+    expect(html).toMatch(/name="phone"[^>]*value=""/);
   });
 
   it("offers the six product categories as checkboxes", () => {

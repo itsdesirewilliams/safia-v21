@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { COUNTRIES } from "@/lib/contact/countries";
+import { COUNTRIES, isCountryCode } from "@/lib/contact/countries";
 
 import { FieldError, RequiredMark } from "./fields";
 
@@ -22,12 +22,16 @@ export type CountryPhoneFieldProps = {
   required?: boolean;
 };
 
+/** The first country in the list, selected before the visitor chooses. */
+const FIRST_COUNTRY = COUNTRIES[0]?.code ?? "";
+
 /**
  * Country selector + national number as one visually joined control. The left
  * segment lists every supported country as an ISO 3166-1 alpha-3 code with its
  * dialing code (`IND (+91)`) and submits its alpha-2 code; the right segment
- * accepts the national number in digits only. The full international number is
- * assembled server-side from the two.
+ * accepts the national number in digits only. The first country is selected
+ * before the visitor acts, so there is no empty or "Country" entry; the full
+ * international number is assembled server-side from the two.
  */
 export function CountryPhoneField({
   idPrefix,
@@ -37,7 +41,11 @@ export function CountryPhoneField({
   phoneError,
   required,
 }: CountryPhoneFieldProps) {
-  const [country, setCountry] = useState(countryDefault ?? "");
+  const [country, setCountry] = useState(() =>
+    countryDefault && isCountryCode(countryDefault)
+      ? countryDefault
+      : FIRST_COUNTRY,
+  );
   const [phone, setPhone] = useState((phoneDefault ?? "").replace(/\D/g, ""));
 
   const countryId = `${idPrefix}-country`;
@@ -59,14 +67,11 @@ export function CountryPhoneField({
           required={required}
           value={country}
           onChange={(event) => setCountry(event.target.value)}
-          aria-label="Country calling code"
+          aria-label="Dialing code"
           aria-invalid={Boolean(countryError)}
           aria-describedby={describedBy}
           className={SELECT_CLASS}
         >
-          <option value="" disabled>
-            Country
-          </option>
           {COUNTRIES.map((option) => (
             <option key={option.code} value={option.code}>
               {option.label}

@@ -7,13 +7,15 @@ import { WARRANTY_SECTIONS } from "@/lib/warranty";
 export function PolicyToc() {
   return (
     <nav aria-label="On This Page" className="lg:sticky lg:top-28">
-      <p className="text-sm font-semibold text-ink-500">On This Page</p>
-      <ol className="mt-5 space-y-1 border-l border-ink-200">
+      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-500">
+        On This Page
+      </p>
+      <ol className="mt-4 space-y-0.5 border-l border-ink-200">
         {WARRANTY_SECTIONS.map((section) => (
           <li key={section.id}>
             <a
               href={`#${section.id}`}
-              className="group -ml-px flex min-h-11 items-center gap-3 border-l-2 border-transparent py-2 pl-4 text-sm text-ink-600 transition-colors hover:border-accent-500 hover:text-ink-950"
+              className="group -ml-px flex min-h-11 items-center gap-3 border-l-2 border-transparent py-1.5 pl-4 text-sm text-ink-600 transition-colors hover:border-accent-500 hover:text-ink-950"
             >
               <span className="tabular-nums text-ink-400 group-hover:text-accent-600">
                 {section.number}
