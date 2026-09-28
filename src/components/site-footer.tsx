@@ -58,7 +58,11 @@ function SocialIcon({ name }: { name: string }) {
 }
 
 function FooterHeading({ children }: { children: string }) {
-  return <h2 className="text-sm font-semibold text-white/70">{children}</h2>;
+  return (
+    <h2 className="font-sans text-sm font-semibold text-white/70">
+      {children}
+    </h2>
+  );
 }
 
 function FooterLink({

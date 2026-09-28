@@ -22,7 +22,7 @@ export default async function AdminDashboardLayout({
   const profile = await requireMediaManager();
 
   return (
-    <div className="min-h-screen bg-ink-50">
+    <div className="admin-root min-h-screen bg-ink-50">
       <header className="border-b border-ink-200 bg-white">
         <Container className="flex h-16 items-center justify-between gap-4">
           <div className="flex items-center gap-5">

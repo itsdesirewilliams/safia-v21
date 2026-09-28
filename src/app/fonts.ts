@@ -1,20 +1,45 @@
-import { Anek_Devanagari, Inter } from "next/font/google";
+import { Anek_Devanagari } from "next/font/google";
+import localFont from "next/font/local";
 
 /**
  * Safeway Tyre typography system.
  *
- * Inter is the single primary typeface for all Latin UI text: display, h1–h3,
- * body, navigation, buttons, labels, metadata and product information.
+ * Display — Wolling: heroes, page titles, section headings and other
+ * intentional display text. It is a single static weight, so it is never used
+ * for body copy or dense UI.
  *
- * Anek Devanagari is configured for Devanagari/Hindi text and is applied only
- * where Devanagari copy is actually required (`font-devanagari`). It is not
- * preloaded because no Devanagari copy ships yet.
+ * Body/UI — Mona Sans: the official Mona Sans variable webfont (weights
+ * 200–900) for body text, navigation, buttons, forms, labels and product
+ * information.
+ *
+ * Devanagari — Anek Devanagari, applied only where Devanagari copy is required
+ * (`--font-devanagari`). Not preloaded because no Devanagari copy ships yet.
+ *
+ * Both Latin faces are self-hosted through `next/font`, which hashes and
+ * preloads them and emits metric-adjusted fallbacks to limit layout shift.
  */
-export const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
+
+export const wolling = localFont({
+  src: "../../assets/fonts/Wolling.ttf",
+  variable: "--font-wolling",
+  // Wolling ships as one regular cut. Declaring the usable range keeps the
+  // designed letterforms intact instead of letting the browser fake-bold them
+  // for the 700/800 heading weights.
+  weight: "100 900",
+  style: "normal",
   display: "swap",
   fallback: ["ui-sans-serif", "system-ui", "sans-serif"],
+  adjustFontFallback: "Arial",
+});
+
+export const monaSans = localFont({
+  src: "../../assets/fonts/mona-sans/mona-sans-latin-wght-normal.woff2",
+  variable: "--font-mona-sans",
+  weight: "200 900",
+  style: "normal",
+  display: "swap",
+  fallback: ["ui-sans-serif", "system-ui", "sans-serif"],
+  adjustFontFallback: "Arial",
 });
 
 export const anekDevanagari = Anek_Devanagari({

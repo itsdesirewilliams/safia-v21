@@ -45,7 +45,7 @@ export function VideoViewer({ story, label, onClose }: VideoViewerProps) {
         className="relative flex max-h-[92svh] w-full max-w-4xl flex-col overflow-hidden rounded-card border border-white/10 bg-ink-950 shadow-pop"
       >
         <div className="flex items-center justify-between gap-4 border-b border-white/10 px-5 py-4">
-          <h2 id={titleId} className="text-sm font-semibold text-white">
+          <h2 id={titleId} className="font-sans text-sm font-semibold text-white">
             {label}
           </h2>
           <button

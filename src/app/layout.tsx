@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { SITE } from "@/lib/site";
 
-import { anekDevanagari, inter } from "./fonts";
+import { anekDevanagari, monaSans, wolling } from "./fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -35,7 +35,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${anekDevanagari.variable}`}>
+    <html
+      lang="en"
+      className={`${monaSans.variable} ${wolling.variable} ${anekDevanagari.variable}`}
+    >
       <body className="flex min-h-screen flex-col bg-white text-ink-700 antialiased">
         <noscript>
           {/* Without JS, scroll-reveal content must still be visible. */}

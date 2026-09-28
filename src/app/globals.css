@@ -6,8 +6,11 @@
  * surfaces, restrained shadows. Components consume these tokens only.
  * ------------------------------------------------------------------------- */
 @theme {
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-devanagari: var(--font-anek-devanagari), var(--font-inter), sans-serif;
+  --font-sans: var(--font-mona-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-wolling), var(--font-mona-sans), ui-sans-serif,
+    system-ui, sans-serif;
+  --font-devanagari: var(--font-anek-devanagari), var(--font-mona-sans),
+    sans-serif;
 
   /* Neutral scale (cool charcoal → off-white) */
   --color-ink-950: #071018; /* deep */
@@ -130,9 +133,23 @@ body {
   border-radius: 2px;
 }
 
+/* The display face carries the top heading levels; body/UI keeps Mona Sans.
+ * The admin shell redirects the display token back to the UI face. */
+@layer base {
+  h1,
+  h2 {
+    font-family: var(--font-display);
+  }
+}
+
+.admin-root {
+  --font-display: var(--font-sans);
+}
+
 /* Editorial display scale — keeps hero/section headings intentional. */
 @layer components {
   .text-display {
+    font-family: var(--font-display);
     font-size: clamp(2.75rem, 7vw, 5.5rem);
     line-height: 0.98;
     letter-spacing: -0.035em;
@@ -140,6 +157,7 @@ body {
   }
 
   .text-h1 {
+    font-family: var(--font-display);
     font-size: clamp(2.25rem, 5vw, 3.75rem);
     line-height: 1.02;
     letter-spacing: -0.03em;
@@ -147,6 +165,7 @@ body {
   }
 
   .text-h2 {
+    font-family: var(--font-display);
     font-size: clamp(1.875rem, 3.6vw, 3rem);
     line-height: 1.05;
     letter-spacing: -0.025em;
@@ -154,6 +173,7 @@ body {
   }
 
   .text-h3 {
+    font-family: var(--font-display);
     font-size: clamp(1.25rem, 2vw, 1.625rem);
     line-height: 1.15;
     letter-spacing: -0.02em;
