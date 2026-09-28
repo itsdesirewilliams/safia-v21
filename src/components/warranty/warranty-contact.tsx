@@ -1,23 +1,23 @@
 import { WARRANTY_CONTACT } from "@/lib/warranty";
 
-/** The "How to get in touch" block that closes the policy, set as documentation. */
+/** The contact block that closes the documented policy. */
 export function WarrantyContact() {
   return (
     <section
       aria-labelledby="warranty-contact-heading"
-      className="mt-10 border-t border-ink-200 pt-10"
+      className="mt-12 border-t border-ink-200 pt-12"
     >
       <h2
         id="warranty-contact-heading"
-        className="text-xl font-bold tracking-tight text-ink-950 sm:text-2xl"
+        className="text-2xl font-bold tracking-tight text-ink-950"
       >
         {WARRANTY_CONTACT.title}
       </h2>
-      <p className="mt-4 max-w-3xl text-base leading-relaxed text-ink-700">
+      <p className="mt-4 text-base leading-7 text-ink-700">
         {WARRANTY_CONTACT.intro}
       </p>
 
-      <dl className="mt-6 grid max-w-3xl gap-4 sm:grid-cols-2">
+      <dl className="mt-6 grid gap-5 sm:grid-cols-2">
         <div>
           <dt className="text-sm font-semibold text-ink-500">Customer Care</dt>
           <dd className="mt-1 text-sm text-ink-900">{WARRANTY_CONTACT.name}</dd>

@@ -19,11 +19,19 @@ import {
   TextField,
 } from "./fields";
 
+export type QueryFormProps = {
+  /**
+   * Country to pre-select in the phone field, typically detected from the
+   * request. Falls back to the first country when absent.
+   */
+  defaultCountry?: string;
+};
+
 /**
  * The Inquiry form (spec #6). The single implementation used on both the
  * Contact Us page and the homepage, so the two behave identically.
  */
-export function QueryForm() {
+export function QueryForm({ defaultCountry }: QueryFormProps = {}) {
   const [state, formAction, isPending] = useActionState<
     ContactFormState,
     FormData
@@ -49,7 +57,7 @@ export function QueryForm() {
         />
         <CountryPhoneField
           idPrefix="query"
-          countryDefault={values?.country}
+          countryDefault={values?.country ?? defaultCountry}
           phoneDefault={values?.phone}
           countryError={state.errors?.country}
           phoneError={state.errors?.phone}

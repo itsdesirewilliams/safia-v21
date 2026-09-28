@@ -18,12 +18,20 @@ import {
   TextField,
 } from "./fields";
 
+export type FeedbackFormProps = {
+  /**
+   * Country to pre-select in the phone field, typically detected from the
+   * request. Falls back to the first country when absent.
+   */
+  defaultCountry?: string;
+};
+
 /**
  * The Feedback form (spec #6): intentionally simpler than the Inquiry form — no
  * Category. Same shared validation, honeypot, rate limiting and email delivery
  * as the Inquiry form.
  */
-export function FeedbackForm() {
+export function FeedbackForm({ defaultCountry }: FeedbackFormProps = {}) {
   const [state, formAction, isPending] = useActionState<
     ContactFormState,
     FormData
@@ -49,7 +57,7 @@ export function FeedbackForm() {
         />
         <CountryPhoneField
           idPrefix="feedback"
-          countryDefault={values?.country}
+          countryDefault={values?.country ?? defaultCountry}
           phoneDefault={values?.phone}
           countryError={state.errors?.country}
           phoneError={state.errors?.phone}

@@ -1,5 +1,6 @@
 import { GalleryGrid } from "@/components/gallery/gallery-grid";
 import { Container } from "@/components/ui/container";
+import { PageHeader } from "@/components/ui/page-header";
 import { GALLERY_PAGE } from "@/lib/gallery";
 import { listGalleryImages } from "@/lib/media/gallery-server";
 
@@ -23,19 +24,17 @@ export default async function GalleryPage() {
   const images = await listGalleryImages();
 
   return (
-    <section className="bg-white py-20 lg:py-28">
-      <Container>
-        <h1 className="text-h1 max-w-3xl text-balance text-ink-950">
-          {GALLERY_PAGE.title}
-        </h1>
-        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-ink-600">
-          {GALLERY_PAGE.description}
-        </p>
+    <>
+      <PageHeader
+        title={GALLERY_PAGE.title}
+        description={GALLERY_PAGE.description}
+      />
 
-        <div className="mt-14">
+      <section className="bg-white py-14 lg:py-20">
+        <Container>
           <GalleryGrid images={images} />
-        </div>
-      </Container>
-    </section>
+        </Container>
+      </section>
+    </>
   );
 }

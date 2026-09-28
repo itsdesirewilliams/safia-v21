@@ -14,12 +14,17 @@ const TABS = [
 
 type TabId = (typeof TABS)[number]["id"];
 
+export type ContactFormsProps = {
+  /** Country detected from the request, used to pre-select the phone field. */
+  defaultCountry?: string;
+};
+
 /**
  * The two Contact Us forms behind an accessible tab control (spec #6). Both
  * panels stay mounted so each form keeps its state when the visitor switches;
  * the inactive panel is hidden from assistive tech and the tab order.
  */
-export function ContactForms() {
+export function ContactForms({ defaultCountry }: ContactFormsProps = {}) {
   const [active, setActive] = useState<TabId>("query");
   const tabRefs = useRef<Partial<Record<TabId, HTMLButtonElement | null>>>({});
 
@@ -86,7 +91,7 @@ export function ContactForms() {
         hidden={active !== "query"}
         className="mt-8"
       >
-        <QueryForm />
+        <QueryForm defaultCountry={defaultCountry} />
       </div>
 
       <div
@@ -96,7 +101,7 @@ export function ContactForms() {
         hidden={active !== "feedback"}
         className="mt-8"
       >
-        <FeedbackForm />
+        <FeedbackForm defaultCountry={defaultCountry} />
       </div>
     </div>
   );

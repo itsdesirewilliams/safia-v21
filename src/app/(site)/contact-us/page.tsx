@@ -4,6 +4,7 @@ import { ContactHero } from "@/components/contact/contact-hero";
 import { ContactMap } from "@/components/contact/contact-map";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
+import { detectVisitorCountry } from "@/lib/contact/visitor-country-server";
 import { getPublicConfig } from "@/lib/config";
 
 export const metadata = {
@@ -17,8 +18,10 @@ export const metadata = {
  * submission pipeline, plus the WhatsApp alternative and approved contact
  * details. Submissions are emailed only (ADR-0007) — nothing is stored.
  */
-export default function ContactUsPage() {
+export default async function ContactUsPage() {
   const { companyAddress } = getPublicConfig();
+  // Coarse, IP-derived country only; used to pre-select the phone field.
+  const detectedCountry = await detectVisitorCountry();
 
   return (
     <>
@@ -31,7 +34,7 @@ export default function ContactUsPage() {
               <ContactAside companyAddress={companyAddress} />
             </Reveal>
             <Reveal delay={100}>
-              <ContactForms />
+              <ContactForms defaultCountry={detectedCountry ?? undefined} />
             </Reveal>
           </div>
         </Container>

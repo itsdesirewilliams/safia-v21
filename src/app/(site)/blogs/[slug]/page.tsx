@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { PostBody } from "@/components/blog/post-body";
 import { formatPostDate } from "@/components/blog/format";
 import { Container } from "@/components/ui/container";
+import { PageHeader } from "@/components/ui/page-header";
 import { collectMediaIds } from "@/lib/blog/blocks";
 import { getPublishedPostBySlug } from "@/lib/blog/server";
 import { getMediaByIds } from "@/lib/media/server";
@@ -47,17 +48,12 @@ export default async function PostPage({
 
   return (
     <article className="bg-white">
-      <section className="border-b border-ink-200 bg-ink-50">
-        <Container className="py-14 lg:py-20">
-          <h1 className="text-h1 max-w-3xl text-balance text-ink-950">
-            {post.title}
-          </h1>
-          <p className="mt-4 text-sm font-semibold uppercase tracking-[0.16em] text-ink-500">
-            By {post.author}
-            {date && <> · {date}</>}
-          </p>
-        </Container>
-      </section>
+      <PageHeader title={post.title}>
+        <p className="mt-4 text-sm font-semibold uppercase tracking-[0.16em] text-ink-500">
+          By {post.author}
+          {date && <> · {date}</>}
+        </p>
+      </PageHeader>
 
       {post.thumbnail && (
         <Container className="pt-12">

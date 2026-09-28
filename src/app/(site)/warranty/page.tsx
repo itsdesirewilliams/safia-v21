@@ -23,12 +23,12 @@ export default function WarrantyPage() {
     <>
       <WarrantyHero />
 
-      <section className="bg-white py-14 lg:py-20">
+      <section className="bg-white">
         <Container>
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] lg:gap-16">
+          <div className="grid gap-10 py-12 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-16 lg:py-16">
             <PolicyToc />
 
-            <div className="min-w-0">
+            <div className="min-w-0 max-w-3xl">
               {WARRANTY_SECTIONS.map((section) => (
                 <PolicySection key={section.id} section={section} />
               ))}

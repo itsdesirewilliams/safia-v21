@@ -7,26 +7,27 @@ export type PolicySectionProps = {
 };
 
 /**
- * One numbered warranty section, with its optional numbered subsections. Styled
- * as documentation: a plain rule between sections and normal-weight text.
+ * One numbered warranty section followed by its numbered subsections. The
+ * layout mirrors technical documentation: a rule above each primary section and
+ * an indent rail beside each subsection.
  */
 export function PolicySection({ section }: PolicySectionProps) {
   return (
     <section
       id={section.id}
       aria-labelledby={`${section.id}-heading`}
-      className="mt-10 scroll-mt-28 border-t border-ink-200 pt-10 first:mt-0 first:border-t-0 first:pt-0"
+      className="mt-12 scroll-mt-28 border-t border-ink-200 pt-12 first:mt-0 first:border-t-0 first:pt-0"
     >
       <h2
         id={`${section.id}-heading`}
-        className="text-xl font-bold tracking-tight text-ink-950 sm:text-2xl"
+        className="flex items-baseline gap-3 text-2xl font-bold tracking-tight text-ink-950"
       >
-        <span className="mr-3 tabular-nums text-ink-400">{section.number}</span>
-        {section.title}
+        <span className="tabular-nums text-ink-400">{section.number}</span>
+        <span>{section.title}</span>
       </h2>
 
       {section.blocks.length > 0 && (
-        <div className="mt-4 space-y-4">
+        <div className="mt-6 space-y-5">
           {section.blocks.map((block, index) => (
             <PolicyBlock key={index} block={block} />
           ))}
@@ -34,16 +35,19 @@ export function PolicySection({ section }: PolicySectionProps) {
       )}
 
       {section.subsections && section.subsections.length > 0 && (
-        <div className="mt-7 space-y-7">
+        <div className="mt-8 space-y-8">
           {section.subsections.map((subsection) => (
-            <div key={subsection.number}>
-              <h3 className="text-base font-semibold text-ink-900 sm:text-lg">
-                <span className="mr-2.5 tabular-nums text-ink-400">
+            <div
+              key={subsection.number}
+              className="border-l-2 border-ink-200 pl-5 sm:pl-6"
+            >
+              <h3 className="text-lg font-semibold text-ink-900">
+                <span className="mr-2 tabular-nums text-ink-400">
                   {subsection.number}
                 </span>
                 {subsection.title}
               </h3>
-              <div className="mt-3 space-y-4">
+              <div className="mt-4 space-y-4">
                 {subsection.blocks.map((block, index) => (
                   <PolicyBlock key={index} block={block} />
                 ))}

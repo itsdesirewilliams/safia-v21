@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/catalogue/breadcrumbs";
 import { PatternCard } from "@/components/catalogue/pattern-card";
 import { Container } from "@/components/ui/container";
+import { PageHeader } from "@/components/ui/page-header";
 import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { Reveal } from "@/components/ui/reveal";
 import {
@@ -49,22 +50,18 @@ export default async function CategoryPage({
 
   return (
     <div className="bg-white">
-      <section className="border-b border-ink-200 bg-ink-50">
-        <Container className="py-14 lg:py-20">
+      <PageHeader
+        breadcrumb={
           <Breadcrumbs
             items={[
               { label: "Catalogue", href: ROUTES.catalogue },
               { label: category.displayName },
             ]}
           />
-          <h1 className="text-h1 mt-6 max-w-3xl text-balance text-ink-950">
-            {category.displayName}
-          </h1>
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-pretty text-ink-600">
-            {CATEGORY_DESCRIPTIONS[category.slug]}
-          </p>
-        </Container>
-      </section>
+        }
+        title={category.displayName}
+        description={CATEGORY_DESCRIPTIONS[category.slug]}
+      />
 
       <section className="py-16 lg:py-24">
         <Container>

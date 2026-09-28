@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/catalogue/breadcrumbs";
 import { VariantTable } from "@/components/catalogue/variant-table";
 import { Container } from "@/components/ui/container";
+import { PageHeader } from "@/components/ui/page-header";
 import { getCategory } from "@/lib/catalogue/categories";
 import { CATALOGUE, getPattern } from "@/lib/catalogue/dataset";
 import { ROUTES } from "@/lib/routes";
@@ -48,8 +49,8 @@ export default async function PatternPage({
 
   return (
     <div className="bg-white">
-      <section className="border-b border-ink-200 bg-ink-50">
-        <Container className="py-14 lg:py-20">
+      <PageHeader
+        breadcrumb={
           <Breadcrumbs
             items={[
               { label: "Catalogue", href: ROUTES.catalogue },
@@ -60,14 +61,10 @@ export default async function PatternPage({
               { label: pattern.displayName },
             ]}
           />
-          <h1 className="text-h1 mt-6 max-w-3xl text-balance text-ink-950">
-            {pattern.displayName}
-          </h1>
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-pretty text-ink-600">
-            Pattern {pattern.patternCode} · {category.displayName}
-          </p>
-        </Container>
-      </section>
+        }
+        title={pattern.displayName}
+        description={`Pattern ${pattern.patternCode} · ${category.displayName}`}
+      />
 
       <section className="py-16 lg:py-24">
         <Container>
