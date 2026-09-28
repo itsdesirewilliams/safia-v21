@@ -20,7 +20,7 @@ import localFont from "next/font/local";
  */
 
 export const wolling = localFont({
-  src: "../../assets/fonts/Wolling.ttf",
+  src: "./fonts/Wolling.ttf",
   variable: "--font-wolling",
   // Wolling ships as one regular cut. Declaring the usable range keeps the
   // designed letterforms intact instead of letting the browser fake-bold them
@@ -33,7 +33,7 @@ export const wolling = localFont({
 });
 
 export const monaSans = localFont({
-  src: "../../assets/fonts/mona-sans/mona-sans-latin-wght-normal.woff2",
+  src: "./fonts/mona-sans-latin-wght-normal.woff2",
   variable: "--font-mona-sans",
   weight: "200 900",
   style: "normal",
