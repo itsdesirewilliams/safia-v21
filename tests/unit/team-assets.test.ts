@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   matchTeamImage,
+  readTeamImageUrl,
   TEAM_ASSET_ROOT,
   teamImageUrl,
 } from "@/lib/media/team-assets";
@@ -30,6 +31,18 @@ describe("team portrait discovery", () => {
   it("builds a public URL under /assets/team", () => {
     expect(teamImageUrl("desire-williams.webp")).toBe(
       `${TEAM_ASSET_ROOT}/desire-williams.webp`,
+    );
+  });
+
+  it("resolves the supplied portraits for the three team members", () => {
+    expect(readTeamImageUrl("Sandeep Chaudhary")).toBe(
+      "/assets/team/sandeep-chaudhary.webp",
+    );
+    expect(readTeamImageUrl("Desire Williams")).toBe(
+      "/assets/team/desire-williams.webp",
+    );
+    expect(readTeamImageUrl("Shubhika Batra")).toBe(
+      "/assets/team/shubhika-batra.webp",
     );
   });
 });

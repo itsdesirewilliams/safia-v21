@@ -8,6 +8,8 @@ import {
   isCertificate,
   isCertificationLogo,
   labelFromFilename,
+  readCertificates,
+  readCertificationLogos,
 } from "@/lib/media/certification-assets";
 
 describe("supported certification formats", () => {
@@ -62,5 +64,27 @@ describe("certification discovery", () => {
         name: "ISO 14001",
       },
     ]);
+  });
+});
+
+describe("supplied certification assets", () => {
+  it("discovers the six uploaded certification logos", () => {
+    const logos = readCertificationLogos();
+
+    expect(logos).toHaveLength(6);
+    for (const logo of logos) {
+      expect(logo.url.startsWith(`${CERTIFICATION_LOGOS_ROOT}/`)).toBe(true);
+      expect(logo.alt.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("discovers the three uploaded ISO certificate PDFs", () => {
+    const certificates = readCertificates();
+
+    expect(certificates).toHaveLength(3);
+    for (const certificate of certificates) {
+      expect(certificate.url.startsWith(`${CERTIFICATES_ROOT}/`)).toBe(true);
+      expect(certificate.name.length).toBeGreaterThan(0);
+    }
   });
 });

@@ -157,7 +157,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-ink-200/80 bg-white">
-      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:h-[4.5rem] lg:px-8">
+      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-2 px-3 sm:gap-4 sm:px-6 lg:h-[4.5rem] lg:px-8">
         <Link
           href={ROUTES.home}
           className="flex shrink-0 items-center"
@@ -169,7 +169,7 @@ export function SiteHeader() {
             width={180}
             height={42}
             priority
-            className="h-9 w-auto lg:h-10"
+            className="h-6 w-auto sm:h-9 lg:h-10"
           />
         </Link>
 
@@ -256,13 +256,21 @@ export function SiteHeader() {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <Link
             href="/#search"
             aria-label="Search the catalogue"
             className="hidden h-10 w-10 items-center justify-center rounded-full border border-ink-200 text-ink-600 transition-colors hover:border-ink-300 hover:text-ink-950 lg:inline-flex"
           >
             <SearchIcon className="h-5 w-5" />
+          </Link>
+          {/* Mobile: the quotation CTA stays on one line beside the menu icon. */}
+          <Link
+            href={ROUTES.contactUs}
+            onClick={closeMenus}
+            className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-lg bg-brand-600 px-2.5 py-2 text-[11px] font-semibold text-white transition-colors hover:bg-brand-700 sm:text-xs lg:hidden"
+          >
+            Request a Quotation
           </Link>
           <ButtonLink
             href={ROUTES.contactUs}

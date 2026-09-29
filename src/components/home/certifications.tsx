@@ -1,4 +1,4 @@
-import { ArrowIcon } from "@/components/ui/button";
+import { CertificateCarousel } from "@/components/home/certificate-carousel";
 import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import {
   readCertificates,
@@ -34,16 +34,16 @@ export function Certifications() {
           <p className="text-sm font-semibold text-ink-500">
             Certification Marks
           </p>
-          <ul className="mt-5 flex flex-wrap items-center gap-x-8 gap-y-6">
+          <ul className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-5 sm:mt-5 sm:gap-x-8 sm:gap-y-6">
             {logos.map((logo) => (
-              <li key={logo.url}>
+              <li key={logo.url} className="shrink-0">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={logo.url}
                   alt={logo.alt}
                   loading="lazy"
                   decoding="async"
-                  className="h-12 w-auto max-w-[9rem] object-contain"
+                  className="h-10 w-auto max-w-[7.5rem] object-contain sm:h-12 sm:max-w-[9rem]"
                 />
               </li>
             ))}
@@ -53,24 +53,7 @@ export function Certifications() {
 
       {certificates.length > 0 && (
         <div className={logos.length > 0 ? "border-t border-ink-100 pt-8" : ""}>
-          <p className="text-sm font-semibold text-ink-500">Certificates</p>
-          <ul className="mt-3 divide-y divide-ink-100">
-            {certificates.map((certificate) => (
-              <li key={certificate.url}>
-                <a
-                  href={certificate.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center justify-between gap-4 py-3.5 text-sm font-semibold text-ink-950 transition-colors hover:text-brand-600"
-                >
-                  {certificate.name}
-                  <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-ink-200 text-ink-700 transition-colors group-hover:border-brand-600 group-hover:bg-brand-600 group-hover:text-white">
-                    <ArrowIcon className="h-4 w-4" />
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
+          <CertificateCarousel certificates={certificates} />
         </div>
       )}
     </div>
