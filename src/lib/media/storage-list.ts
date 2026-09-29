@@ -15,6 +15,10 @@ export type StorageObjectFile = {
   path: string;
   /** Storage object creation time (ISO 8601), or "" when unavailable. */
   createdAt: string;
+  /** Object size in bytes, when the storage listing reports it. */
+  sizeBytes: number | null;
+  /** Object MIME type, when the storage listing reports it. */
+  mimeType: string | null;
 };
 
 /** How deep to descend into year-month folders created by the uploader. */
@@ -24,6 +28,7 @@ type SupabaseListEntry = {
   name: string;
   id: string | null;
   created_at?: string | null;
+  metadata?: { size?: number | null; mimetype?: string | null } | null;
 };
 
 /**
@@ -57,7 +62,13 @@ export async function listStorageObjects(
       continue;
     }
 
-    files.push({ path, createdAt: entry.created_at ?? "" });
+    files.push({
+      path,
+      createdAt: entry.created_at ?? "",
+      sizeBytes:
+        typeof entry.metadata?.size === "number" ? entry.metadata.size : null,
+      mimeType: entry.metadata?.mimetype ?? null,
+    });
   }
 
   return files;

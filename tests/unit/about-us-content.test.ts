@@ -51,10 +51,10 @@ describe("Business Profile artwork discovery", () => {
 
     for (const slide of slides) {
       expect(resolveSlideSource(slide, 480)).toBe(
-        `/assets/portrait/business-profile/${slide.filename}`,
+        `/assets/business-profile/portrait/${slide.filename}`,
       );
       expect(resolveSlideSource(slide, 1024)).toBe(
-        `/assets/landscape/business-profile/${slide.filename}`,
+        `/assets/business-profile/landscape/${slide.filename}`,
       );
     }
   });

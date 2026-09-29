@@ -9,7 +9,7 @@ import { requireMediaManager } from "@/lib/auth/session";
 import { signOutAction } from "../actions";
 import { AdminNav } from "./admin-nav";
 
-export const metadata = { title: "Media admin" };
+export const metadata = { title: "Admin" };
 
 /**
  * The guarded admin shell. `requireMediaManager` is the authorization
@@ -27,7 +27,7 @@ export default async function AdminDashboardLayout({
         <Container className="flex h-16 items-center justify-between gap-4">
           <div className="flex items-center gap-5">
             <Link
-              href="/admin/media"
+              href="/admin/files"
               className="flex items-center gap-3"
               aria-label="Safeway Tyre admin"
             >

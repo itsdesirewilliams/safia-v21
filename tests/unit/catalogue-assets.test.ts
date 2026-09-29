@@ -15,6 +15,9 @@ describe("catalogue document discovery", () => {
   });
 
   it("resolves the supplied PDF to its public URL, percent-encoded", () => {
+    expect(discoverCataloguePdf(["Safeway-Tyre-Catalogue.pdf"])).toBe(
+      `${CATALOGUE_ASSET_ROOT}/Safeway-Tyre-Catalogue.pdf`,
+    );
     expect(discoverCataloguePdf(["Safeway Tyre Catalogue.pdf"])).toBe(
       `${CATALOGUE_ASSET_ROOT}/Safeway%20Tyre%20Catalogue.pdf`,
     );

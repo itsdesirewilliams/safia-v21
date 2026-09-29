@@ -28,18 +28,38 @@ import { isMediaType, type Media, type MediaType } from "./types";
  * functions here validate and map; they never bypass RLS with the service role.
  */
 
+/** Caption presence filter used by the admin file manager. */
+export type CaptionFilter = "missing" | "captioned" | null;
+
 export type MediaListFilters = {
   bucket?: string | null;
+  /** When set, restrict to these buckets (e.g. Quality First spans two). */
+  buckets?: readonly string[] | null;
   type?: string | null;
   search?: string | null;
-  /** When true, only media with no caption is returned (Gallery caption hygiene). */
-  missingCaption?: boolean;
+  /** Filter by caption presence (Gallery caption hygiene). */
+  caption?: CaptionFilter;
   limit?: number;
 };
 
 /** Whether a Media record carries no usable caption. */
 export function hasMissingCaption(media: Media): boolean {
   return media.caption === null || media.caption.trim() === "";
+}
+
+function matchesCaption(media: Media, caption: CaptionFilter): boolean {
+  if (caption === "missing") {
+    return hasMissingCaption(media);
+  }
+  if (caption === "captioned") {
+    return !hasMissingCaption(media);
+  }
+  return true;
+}
+
+/** Parse the raw `caption` search param into a CaptionFilter. */
+export function parseCaptionFilter(value: unknown): CaptionFilter {
+  return value === "missing" || value === "captioned" ? value : null;
 }
 
 /** List media newest-first with optional bucket/type/search filters. */
@@ -54,7 +74,12 @@ export async function listMedia(
     .order("created_at", { ascending: false })
     .limit(Math.min(Math.max(filters.limit ?? 120, 1), 240));
 
-  if (filters.bucket && isStorageBucketId(filters.bucket)) {
+  if (filters.buckets && filters.buckets.length > 0) {
+    const valid = filters.buckets.filter(isStorageBucketId);
+    if (valid.length > 0) {
+      query = query.in("bucket", valid);
+    }
+  } else if (filters.bucket && isStorageBucketId(filters.bucket)) {
     query = query.eq("bucket", filters.bucket);
   }
 
@@ -84,9 +109,51 @@ export async function listMedia(
   const supabaseUrl = getSupabaseUrl();
   const media = ((data ?? []) as MediaRow[])
     .map((row) => mapMediaRow(row, supabaseUrl))
-    .filter((entry): entry is Media => entry !== null);
+    .filter((entry): entry is Media => entry !== null)
+    .filter((entry) => matchesCaption(entry, filters.caption ?? null));
 
-  return filters.missingCaption ? media.filter(hasMissingCaption) : media;
+  return media;
+}
+
+export type MediaCountFilters = {
+  buckets?: readonly string[] | null;
+  type?: string | null;
+  caption?: CaptionFilter;
+};
+
+/** Count media for a set of filters, without loading the rows. */
+export async function countMedia(
+  filters: MediaCountFilters = {},
+): Promise<number> {
+  const supabase = await createSupabaseServerClient();
+
+  let query = supabase
+    .from("media")
+    .select("id", { count: "exact", head: true });
+
+  if (filters.buckets && filters.buckets.length > 0) {
+    const valid = filters.buckets.filter(isStorageBucketId);
+    if (valid.length > 0) {
+      query = query.in("bucket", valid);
+    }
+  }
+
+  if (filters.type && isMediaType(filters.type)) {
+    query = query.eq("type", filters.type);
+  }
+
+  if (filters.caption === "missing") {
+    query = query.or("caption.is.null,caption.eq.");
+  } else if (filters.caption === "captioned") {
+    query = query.not("caption", "is", null).neq("caption", "");
+  }
+
+  const { count, error } = await query;
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return count ?? 0;
 }
 
 export async function getMediaById(id: string): Promise<Media | null> {
@@ -215,6 +282,48 @@ export async function uploadMedia(input: UploadMediaInput): Promise<UploadResult
   return { ok: true, media };
 }
 
+/**
+ * Create a Media record for an object already present in storage (used by the
+ * Gallery bulk upload, where the browser uploads bytes directly to Supabase to
+ * avoid the server-action body limit). RLS still enforces the role and
+ * `uploaded_by`.
+ */
+export async function createMediaRecord(input: {
+  bucket: StorageBucketId;
+  path: string;
+  type: MediaType;
+  mimeType: string | null;
+  uploadedBy: string;
+  caption?: string | null;
+  alt?: string | null;
+}): Promise<{ ok: true; media: Media } | { ok: false; error: string }> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("media")
+    .insert({
+      bucket: input.bucket,
+      storage_path: input.path,
+      type: input.type,
+      mime_type: input.mimeType,
+      alt: input.alt ?? null,
+      caption: input.caption ?? null,
+      uploaded_by: input.uploadedBy,
+    })
+    .select("*")
+    .single();
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+
+  const media = mapMediaRow(data as MediaRow, getSupabaseUrl());
+  if (!media) {
+    return { ok: false, error: "The saved media record could not be read." };
+  }
+
+  return { ok: true, media };
+}
+
 export async function updateMediaMetadata(
   id: string,
   metadata: MediaMetadataValue,
@@ -234,6 +343,38 @@ export async function updateMediaMetadata(
 
   if (error) {
     return { ok: false, error: `Could not update the media record: ${error.message}` };
+  }
+
+  const media = mapMediaRow(data as MediaRow, getSupabaseUrl());
+  if (!media) {
+    return { ok: false, error: "The updated media record could not be read." };
+  }
+
+  return { ok: true, media };
+}
+
+/**
+ * Update only a Media record's caption (the Gallery caption workflow). Kept
+ * separate from `updateMediaMetadata` so the "save and move on" flow never
+ * risks overwriting alt/pattern/category.
+ */
+export async function updateMediaCaption(
+  id: string,
+  caption: string | null,
+): Promise<{ ok: true; media: Media } | { ok: false; error: string }> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("media")
+    .update({ caption })
+    .eq("id", id)
+    .select("*")
+    .single();
+
+  if (error) {
+    return {
+      ok: false,
+      error: `Could not save the caption: ${error.message}`,
+    };
   }
 
   const media = mapMediaRow(data as MediaRow, getSupabaseUrl());

@@ -33,7 +33,7 @@ export async function signInAction(
     };
   }
 
-  redirect("/admin/media");
+  redirect("/admin/files");
 }
 
 export async function signOutAction(): Promise<void> {

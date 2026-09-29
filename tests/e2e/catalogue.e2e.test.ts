@@ -73,8 +73,8 @@ describe("Catalogue page", () => {
 
     expect(html).toContain("Browse the Catalogue");
     expect(html).toContain("<picture>");
-    expect(html).toContain("/assets/portrait/catalogue/");
-    expect(html).not.toContain("/assets/landscape/catalogue/");
+    expect(html).toContain("/assets/catalogue/portrait/");
+    expect(html).not.toContain("/assets/catalogue/landscape/");
     expect(html).toContain('aria-label="Previous slide"');
     expect(html).toContain('aria-label="Next slide"');
   });
@@ -83,7 +83,7 @@ describe("Catalogue page", () => {
     const html = await get("/catalogue");
 
     expect(html).toContain("/assets/catalogue/");
-    expect(html).toMatch(/Safeway%20Tyre%20Catalogue\.pdf/);
+    expect(html).toMatch(/Safeway-Tyre-Catalogue\.pdf/);
     expect(html).not.toContain("Catalogue Download Coming Soon");
   });
 

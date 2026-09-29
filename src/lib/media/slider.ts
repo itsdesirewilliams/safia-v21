@@ -28,8 +28,24 @@ export const SLIDER_PORTRAIT_MEDIA = `(max-width: ${SLIDER_BREAKPOINT_PX - 1}px)
 /** Ratio of a supplied artwork. */
 export type SliderRatio = "landscape" | "portrait";
 
-/** Public URL path segment for the developer-provided asset folders. */
-export const SLIDER_ASSET_ROOT = "/assets";
+/**
+ * Public URL roots for each collection's supplied artwork (canonical repo
+ * structure). Business Profile ships both ratios; Catalogue has no landscape
+ * folder, so its landscape slot resolves to the same portrait art.
+ */
+export const SLIDER_ASSET_ROOTS: Record<
+  SliderCollection,
+  Record<SliderRatio, string>
+> = {
+  "business-profile": {
+    landscape: "/assets/business-profile/landscape",
+    portrait: "/assets/business-profile/portrait",
+  },
+  catalogue: {
+    landscape: "/assets/catalogue/portrait",
+    portrait: "/assets/catalogue/portrait",
+  },
+};
 
 /** Image extensions discovered in the asset folders. */
 export const SLIDER_IMAGE_EXTENSIONS = [
@@ -66,13 +82,13 @@ const SLIDER_LABELS: Record<SliderCollection, string> = {
   "business-profile": "Business Profile",
 };
 
-/** The public URL for one asset, or `null` when it was not supplied. */
+/** The public URL for one asset, using the collection's canonical root. */
 export function assetUrl(
   collection: SliderCollection,
   ratio: SliderRatio,
   filename: string,
 ): string {
-  return `${SLIDER_ASSET_ROOT}/${ratio}/${collection}/${encodeURIComponent(filename)}`;
+  return `${SLIDER_ASSET_ROOTS[collection][ratio]}/${encodeURIComponent(filename)}`;
 }
 
 /** A slide's pairing across the two ratio folders. */

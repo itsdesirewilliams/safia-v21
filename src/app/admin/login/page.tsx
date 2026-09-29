@@ -18,7 +18,7 @@ export default async function AdminLoginPage({
   const profile = await getCurrentProfile();
 
   if (profile && canManageMedia(profile.role)) {
-    redirect("/admin/media");
+    redirect("/admin/files");
   }
 
   const { error } = await searchParams;

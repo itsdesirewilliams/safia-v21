@@ -5,7 +5,7 @@ import {
   buildPortraitOnlySlides,
   buildSliderSlides,
   isPortraitOnlyCollection,
-  SLIDER_ASSET_ROOT,
+  SLIDER_ASSET_ROOTS,
   SLIDER_IMAGE_EXTENSIONS,
   type SliderCollection,
   type SliderRatio,
@@ -14,9 +14,10 @@ import {
 
 /**
  * Server-only discovery of the developer-provided slider artwork. The folders
- * live under `public/` so the files ship with the deployment and are served at
- * `/assets/{ratio}/{collection}`. Adding a slide is a matter of dropping a
- * matching filename into both ratio folders — no database or admin step.
+ * live under `public/` (the canonical `public/assets/<collection>/<ratio>` or,
+ * for Catalogue, `public/assets/catalogue/portrait`), so the files ship with the
+ * deployment and are served at the matching URL root. Adding a slide is a matter
+ * of dropping a matching filename into the folder — no database or admin step.
  */
 
 const PUBLIC_DIR = join(process.cwd(), "public");
@@ -26,27 +27,27 @@ function isImageFile(filename: string): boolean {
   return SLIDER_IMAGE_EXTENSIONS.some((extension) => lower.endsWith(extension));
 }
 
-/** The repo-relative folder for one ratio of a collection. */
+/** The repo-relative folder for one collection's ratio. */
 export function sliderAssetDirectory(
   collection: SliderCollection,
   ratio: SliderRatio,
 ): string {
-  return `public${SLIDER_ASSET_ROOT}/${ratio}/${collection}`;
+  const segments = SLIDER_ASSET_ROOTS[collection][ratio]
+    .split("/")
+    .filter(Boolean);
+  return ["public", ...segments].join("/");
 }
 
 function listAssetFiles(
   collection: SliderCollection,
   ratio: SliderRatio,
 ): string[] {
-  const directory = join(
-    PUBLIC_DIR,
-    SLIDER_ASSET_ROOT,
-    ratio,
-    collection,
-  );
+  const segments = SLIDER_ASSET_ROOTS[collection][ratio]
+    .split("/")
+    .filter(Boolean);
 
   try {
-    return readdirSync(directory, { withFileTypes: true })
+    return readdirSync(join(PUBLIC_DIR, ...segments), { withFileTypes: true })
       .filter((entry) => entry.isFile() && isImageFile(entry.name))
       .map((entry) => entry.name);
   } catch {

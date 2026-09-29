@@ -24,8 +24,8 @@ import { resolveMediaPublicUrl } from "./url";
  * Server-side Quality First media discovery (spec #3 / Ticket 5, ADR-0006).
  *
  * Two sources feed the page, merged at read time:
- *  - developer-provided assets under `public/assets/testing-videos/stories`
- *    and `public/assets/machine-images` (the primary source for supplied media);
+ *  - developer-provided assets under `public/assets/testing/videos`
+ *    and `public/assets/testing/images` (the primary source for supplied media);
  *  - Supabase Storage objects in the `testing-videos` / `machine-images`
  *    buckets (admin-uploaded media), which are the source of truth for presence.
  * Optional Media metadata (caption, alt, hidden) is mapped onto storage objects

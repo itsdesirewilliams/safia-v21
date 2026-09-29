@@ -223,6 +223,71 @@ describeLive("media layer integrity (live Supabase)", () => {
     expect(error).not.toBeNull();
   });
 
+  it("lets an admin upload a gallery object and create its Media record", async () => {
+    const { client, userId } = await createSignedInUser("admin");
+    const path = `e2e/${crypto.randomUUID()}.png`;
+
+    const upload = await client.storage
+      .from("gallery")
+      .upload(path, pngBytes(), { contentType: "image/png" });
+    expect(upload.error).toBeNull();
+    uploadedObjects.push({ bucket: "gallery", path });
+
+    const record = await client
+      .from("media")
+      .insert({
+        bucket: "gallery",
+        storage_path: path,
+        type: "image",
+        mime_type: "image/png",
+        uploaded_by: userId,
+      })
+      .select("id")
+      .single();
+
+    expect(record.error).toBeNull();
+    if (record.data?.id) {
+      createdMedia.push(record.data.id);
+    }
+  });
+
+  it("lets an admin save a gallery caption (missing → captioned)", async () => {
+    const { client, userId } = await createSignedInUser("admin");
+    const path = `e2e/${crypto.randomUUID()}.png`;
+
+    await client.storage
+      .from("gallery")
+      .upload(path, pngBytes(), { contentType: "image/png" });
+    uploadedObjects.push({ bucket: "gallery", path });
+
+    const created = await client
+      .from("media")
+      .insert({
+        bucket: "gallery",
+        storage_path: path,
+        type: "image",
+        mime_type: "image/png",
+        uploaded_by: userId,
+        caption: null,
+      })
+      .select("id")
+      .single();
+
+    expect(created.error).toBeNull();
+    const id = created.data?.id as string;
+    createdMedia.push(id);
+
+    const updated = await client
+      .from("media")
+      .update({ caption: "A saved caption" })
+      .eq("id", id)
+      .select("caption")
+      .single();
+
+    expect(updated.error).toBeNull();
+    expect(updated.data?.caption).toBe("A saved caption");
+  });
+
   it("lets an admin delete media", async () => {
     const { client } = await createSignedInUser("admin");
     const row = await createMediaRow();

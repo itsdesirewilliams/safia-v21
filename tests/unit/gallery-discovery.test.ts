@@ -9,7 +9,12 @@ import {
 } from "@/lib/media/gallery";
 
 function files(...entries: Array<[string, string]>): GalleryFile[] {
-  return entries.map(([path, createdAt]) => ({ path, createdAt }));
+  return entries.map(([path, createdAt]) => ({
+    path,
+    createdAt,
+    sizeBytes: null,
+    mimeType: null,
+  }));
 }
 
 function metadata(

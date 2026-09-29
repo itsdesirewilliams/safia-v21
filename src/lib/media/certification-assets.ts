@@ -7,7 +7,7 @@ import { naturalCompare } from "@/lib/natural-order";
  * Server-only discovery of the developer-provided certification assets. The
  * folders live under `public/` so the files ship with the deployment:
  *  - `public/assets/certifications/logos` — the certification/logo marks;
- *  - `public/assets/certificates` — the ISO certificate PDFs.
+ *  - `public/assets/certifications/pdfs` — the ISO certificate PDFs.
  * Adding or removing a file is the only step needed to update the homepage
  * section; nothing is fetched, stored or invented.
  */
@@ -18,7 +18,7 @@ const PUBLIC_DIR = join(process.cwd(), "public");
 export const CERTIFICATION_LOGOS_ROOT = "/assets/certifications/logos";
 
 /** Public URL root for the ISO certificate PDFs. */
-export const CERTIFICATES_ROOT = "/assets/certificates";
+export const CERTIFICATES_ROOT = "/assets/certifications/pdfs";
 
 /** Image formats accepted for certification logos. */
 export const CERTIFICATION_LOGO_EXTENSIONS = [
@@ -140,5 +140,5 @@ export function readCertificationLogos(): CertificationLogo[] {
 
 /** The available certificates. */
 export function readCertificates(): Certificate[] {
-  return discoverCertificates(listFiles("assets", "certificates"));
+  return discoverCertificates(listFiles("assets", "certifications", "pdfs"));
 }

@@ -25,30 +25,30 @@ describe("responsive slider art direction", () => {
     const html = render([
       {
         filename: "slide-1.svg",
-        landscape: "/assets/landscape/catalogue/slide-1.svg",
-        portrait: "/assets/portrait/catalogue/slide-1.svg",
+        landscape: "/assets/business-profile/landscape/slide-1.svg",
+        portrait: "/assets/business-profile/portrait/slide-1.svg",
       },
     ]);
 
     expect(html).toContain("<picture>");
     expect(html).toContain(`media="${SLIDER_PORTRAIT_MEDIA}"`);
     expect(html).toMatch(
-      /src[Ss]et="\/assets\/portrait\/catalogue\/slide-1\.svg"/,
+      /src[Ss]et="\/assets\/business-profile\/portrait\/slide-1\.svg"/,
     );
-    expect(html).toContain('src="/assets/landscape/catalogue/slide-1.svg"');
+    expect(html).toContain('src="/assets/business-profile/landscape/slide-1.svg"');
   });
 
   it("falls back to landscape when no portrait asset exists", () => {
     const html = render([
       {
         filename: "slide-1.svg",
-        landscape: "/assets/landscape/catalogue/slide-1.svg",
+        landscape: "/assets/business-profile/landscape/slide-1.svg",
         portrait: null,
       },
     ]);
 
     expect(html).not.toContain("<source");
-    expect(html).toContain('src="/assets/landscape/catalogue/slide-1.svg"');
+    expect(html).toContain('src="/assets/business-profile/landscape/slide-1.svg"');
   });
 
   it("falls back to portrait when no landscape asset exists", () => {
@@ -56,23 +56,23 @@ describe("responsive slider art direction", () => {
       {
         filename: "slide-1.svg",
         landscape: null,
-        portrait: "/assets/portrait/catalogue/slide-1.svg",
+        portrait: "/assets/business-profile/portrait/slide-1.svg",
       },
     ]);
 
     expect(html).toContain("<source");
     expect(html).toMatch(
-      /src[Ss]et="\/assets\/portrait\/catalogue\/slide-1\.svg"/,
+      /src[Ss]et="\/assets\/business-profile\/portrait\/slide-1\.svg"/,
     );
-    expect(html).toContain('src="/assets/portrait/catalogue/slide-1.svg"');
+    expect(html).toContain('src="/assets/business-profile/portrait/slide-1.svg"');
   });
 
   it("never applies object-fit between the ratios", () => {
     const html = render([
       {
         filename: "slide-1.svg",
-        landscape: "/assets/landscape/catalogue/slide-1.svg",
-        portrait: "/assets/portrait/catalogue/slide-1.svg",
+        landscape: "/assets/business-profile/landscape/slide-1.svg",
+        portrait: "/assets/business-profile/portrait/slide-1.svg",
       },
     ]);
 
@@ -85,13 +85,13 @@ describe("responsive slider controls", () => {
   const slides: SliderSlide[] = [
     {
       filename: "slide-1.svg",
-      landscape: "/assets/landscape/catalogue/slide-1.svg",
-      portrait: "/assets/portrait/catalogue/slide-1.svg",
+      landscape: "/assets/business-profile/landscape/slide-1.svg",
+      portrait: "/assets/business-profile/portrait/slide-1.svg",
     },
     {
       filename: "slide-2.svg",
-      landscape: "/assets/landscape/catalogue/slide-2.svg",
-      portrait: "/assets/portrait/catalogue/slide-2.svg",
+      landscape: "/assets/business-profile/landscape/slide-2.svg",
+      portrait: "/assets/business-profile/portrait/slide-2.svg",
     },
   ];
 

@@ -10,6 +10,7 @@ import {
   resolveSlideSource,
   resolveSliderConfig,
   SLIDER_BREAKPOINT_PX,
+  SLIDER_ASSET_ROOTS,
   SLIDER_COLLECTIONS,
   SLIDER_PORTRAIT_MEDIA,
   type SliderSlide,
@@ -37,8 +38,8 @@ describe("art-direction breakpoint", () => {
   it("resolves the viewport's ratio for a fully paired slide", () => {
     const slide: SliderSlide = {
       filename: "slide-1.svg",
-      landscape: "/assets/landscape/catalogue/slide-1.svg",
-      portrait: "/assets/portrait/catalogue/slide-1.svg",
+      landscape: "/assets/business-profile/landscape/slide-1.svg",
+      portrait: "/assets/business-profile/portrait/slide-1.svg",
     };
 
     expect(resolveSlideSource(slide, 480)).toBe(slide.portrait);
@@ -50,7 +51,7 @@ describe("missing-ratio fallback", () => {
   it("uses the available asset when portrait is missing", () => {
     const slide: SliderSlide = {
       filename: "slide-1.svg",
-      landscape: "/assets/landscape/catalogue/slide-1.svg",
+      landscape: "/assets/business-profile/landscape/slide-1.svg",
       portrait: null,
     };
 
@@ -62,7 +63,7 @@ describe("missing-ratio fallback", () => {
     const slide: SliderSlide = {
       filename: "slide-1.svg",
       landscape: null,
-      portrait: "/assets/portrait/catalogue/slide-1.svg",
+      portrait: "/assets/business-profile/portrait/slide-1.svg",
     };
 
     expect(resolveSlideSource(slide, 480)).toBe(slide.portrait);
@@ -82,7 +83,7 @@ describe("missing-ratio fallback", () => {
     ]);
     expect(slides[1]).toEqual({
       filename: "slide-2.svg",
-      landscape: "/assets/landscape/catalogue/slide-2.svg",
+      landscape: "/assets/catalogue/portrait/slide-2.svg",
       portrait: null,
     });
   });
@@ -161,13 +162,16 @@ describe("natural filename ordering", () => {
 });
 
 describe("component configuration", () => {
-  it("serves both collections from their own asset folders", () => {
+  it("serves each collection from its canonical asset folders", () => {
     expect(SLIDER_COLLECTIONS).toEqual(["catalogue", "business-profile"]);
-    expect(assetUrl("catalogue", "landscape", "x.svg")).toBe(
-      "/assets/landscape/catalogue/x.svg",
+    expect(assetUrl("catalogue", "portrait", "x.svg")).toBe(
+      "/assets/catalogue/portrait/x.svg",
+    );
+    expect(assetUrl("business-profile", "landscape", "x.svg")).toBe(
+      "/assets/business-profile/landscape/x.svg",
     );
     expect(assetUrl("business-profile", "portrait", "x.svg")).toBe(
-      "/assets/portrait/business-profile/x.svg",
+      "/assets/business-profile/portrait/x.svg",
     );
   });
 
@@ -207,12 +211,12 @@ describe("portrait-only collections", () => {
       {
         filename: "a.jpg",
         landscape: null,
-        portrait: "/assets/portrait/catalogue/a.jpg",
+        portrait: "/assets/catalogue/portrait/a.jpg",
       },
       {
         filename: "b.jpg",
         landscape: null,
-        portrait: "/assets/portrait/catalogue/b.jpg",
+        portrait: "/assets/catalogue/portrait/b.jpg",
       },
     ]);
   });
@@ -235,7 +239,7 @@ describe("shipped developer assets", () => {
         if (isPortraitOnlyCollection(collection)) {
           expect(slide.landscape).toBeNull();
           expect(slide.portrait).toMatch(
-            new RegExp(`^/assets/portrait/${collection}/`),
+            new RegExp(`^${SLIDER_ASSET_ROOTS[collection].portrait}/`),
           );
         } else {
           // Every supplied asset is represented; a slide shows at least one
@@ -243,12 +247,12 @@ describe("shipped developer assets", () => {
           expect(slide.landscape ?? slide.portrait).not.toBeNull();
           if (slide.landscape) {
             expect(slide.landscape).toMatch(
-              new RegExp(`^/assets/landscape/${collection}/`),
+              new RegExp(`^${SLIDER_ASSET_ROOTS[collection].landscape}/`),
             );
           }
           if (slide.portrait) {
             expect(slide.portrait).toMatch(
-              new RegExp(`^/assets/portrait/${collection}/`),
+              new RegExp(`^${SLIDER_ASSET_ROOTS[collection].portrait}/`),
             );
           }
         }

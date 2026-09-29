@@ -11,20 +11,20 @@ import {
 
 /**
  * Server-only discovery of the developer-provided Quality First media under
- * `public/assets`. Testing videos live in
- * `public/assets/testing-videos/stories/` and machine images in
- * `public/assets/machine-images/`. These assets are merged with any Supabase
- * Storage objects at read time, so a file appears simply by being dropped into
- * the folder — the same formats, ordering and poster pairing apply.
+ * `public/assets`. Testing videos live in `public/assets/testing/videos/` and
+ * machine images in `public/assets/testing/images/`. These assets are merged
+ * with any Supabase Storage objects at read time, so a file appears simply by
+ * being dropped into the folder — the same formats, ordering and poster pairing
+ * apply.
  */
 
 const PUBLIC_DIR = join(process.cwd(), "public");
 
 /** Public URL root for the local testing-video assets. */
-export const LOCAL_STORY_ASSET_ROOT = "/assets/testing-videos";
+export const LOCAL_STORY_ASSET_ROOT = "/assets/testing/videos";
 
 /** Public URL root for the local machine-image assets. */
-export const LOCAL_MACHINE_ASSET_ROOT = "/assets/machine-images";
+export const LOCAL_MACHINE_ASSET_ROOT = "/assets/testing/images";
 
 function listFiles(...segments: string[]): string[] {
   try {
@@ -43,24 +43,28 @@ function encodePath(path: string): string {
 
 /**
  * Local story files, keyed under the `stories/` folder so the shared discovery
- * (which only reads that folder) and its poster pairing work unchanged.
+ * (which only reads that folder) and its poster pairing work unchanged. The
+ * `stories/` prefix is a logical key only; the canonical public folder is
+ * `public/assets/testing/videos`.
  */
 export function readLocalStoryFiles(): StorageFile[] {
-  return listFiles("assets", "testing-videos", "stories")
+  return listFiles("assets", "testing", "videos")
     .filter((name) => isStoryVideo(name) || isStoryPoster(name))
     .map((name) => ({ path: `${STORY_FOLDER}/${name}` }));
 }
 
 /** Local machine-image files, as plain bucket-relative paths. */
 export function readLocalMachineFiles(): StorageFile[] {
-  return listFiles("assets", "machine-images")
+  return listFiles("assets", "testing", "images")
     .filter((name) => isMachineImage(name))
     .map((name) => ({ path: name }));
 }
 
 /** The public URL for a local story path (`stories/<file>`). */
 export function localStoryUrl(path: string): string {
-  return `${LOCAL_STORY_ASSET_ROOT}/${encodePath(path)}`;
+  const prefix = `${STORY_FOLDER}/`;
+  const relative = path.startsWith(prefix) ? path.slice(prefix.length) : path;
+  return `${LOCAL_STORY_ASSET_ROOT}/${encodePath(relative)}`;
 }
 
 /** The public URL for a local machine-image path (`<file>`). */

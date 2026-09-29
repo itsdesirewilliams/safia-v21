@@ -15,7 +15,7 @@ export const metadata = {
 /**
  * The Catalogue page (spec #1 / Ticket #18). The responsive slider is the
  * shared component from Ticket #13, fed by the developer-provided catalogue
- * artwork under `public/assets/portrait/catalogue` — Catalogue ships portrait
+ * artwork under `public/assets/catalogue/portrait` — Catalogue ships portrait
  * artwork only, so it is shown at every size and the download action points
  * straight at the supplied PDF.
  */

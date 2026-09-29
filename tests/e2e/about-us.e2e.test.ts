@@ -102,11 +102,11 @@ describe("About Us page", () => {
     const html = await getAboutHtml();
 
     expect(html).toContain('media="(max-width: 767px)"');
-    expect(html).toMatch(/\/assets\/landscape\/business-profile\//);
-    expect(html).toMatch(/\/assets\/portrait\/business-profile\//);
+    expect(html).toMatch(/\/assets\/business-profile\/landscape\//);
+    expect(html).toMatch(/\/assets\/business-profile\/portrait\//);
     expect(html).not.toContain("object-fit");
 
-    const match = /\/assets\/portrait\/business-profile\/[^"]+/.exec(html);
+    const match = /\/assets\/business-profile\/portrait\/[^"]+/.exec(html);
     expect(match).not.toBeNull();
     const portrait = await fetch(`${BASE_URL}${match?.[0]}`);
     expect(portrait.status).toBe(200);
