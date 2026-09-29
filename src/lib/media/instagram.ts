@@ -25,7 +25,7 @@ export const INSTAGRAM_IMAGE_EXTENSIONS = [
 export const INSTAGRAM_DISPLAY_COUNT = 4;
 
 /** How often one of the displayed images is quietly replaced. */
-export const INSTAGRAM_ROTATE_MS = 300_000;
+export const INSTAGRAM_ROTATE_MS = 7_000;
 
 /** A displayed Instagram image: its public URL and accessible alt text. */
 export type InstagramImage = {

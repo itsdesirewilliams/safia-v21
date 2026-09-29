@@ -96,9 +96,9 @@ describe("folder discovery", () => {
 });
 
 describe("display count and rotation cadence", () => {
-  it("shows four images at a time, five minutes apart", () => {
+  it("shows four images at a time, replacing one every seven seconds", () => {
     expect(INSTAGRAM_DISPLAY_COUNT).toBe(4);
-    expect(INSTAGRAM_ROTATE_MS).toBe(300_000);
+    expect(INSTAGRAM_ROTATE_MS).toBe(7_000);
   });
 });
 

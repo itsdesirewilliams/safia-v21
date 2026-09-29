@@ -7,6 +7,7 @@ import {
   ABOUT_TEAM_MEMBERS,
   type TeamMember,
 } from "@/lib/about-us";
+import { readTeamImageUrl } from "@/lib/media/team-assets";
 
 /**
  * Close-up studio-style portrait placeholder used while real headshots are
@@ -56,8 +57,10 @@ export type AboutTeamProps = {
 /**
  * The Team section — the second of About Us's three fixed sections. Each card
  * is image-first: the name and position sit as an overlay on the bottom-left of
- * the image, with the short quote in the content area below. Adding real
- * portraits is a matter of setting `member.image` in the content module.
+ * the image, with the short quote in the content area below. Portraits are
+ * discovered from `public/assets/team` (by the slug of the member's name) and
+ * used automatically; only when none is present does the neutral placeholder
+ * appear.
  */
 export function AboutTeam({ members = ABOUT_TEAM_MEMBERS }: AboutTeamProps) {
   return (
@@ -80,52 +83,50 @@ export function AboutTeam({ members = ABOUT_TEAM_MEMBERS }: AboutTeamProps) {
           </Reveal>
         ) : (
           <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {members.map((member, index) => (
-              <li key={member.name}>
-                <Reveal delay={(index % 3) * 90} className="h-full">
-                  <article className="flex h-full flex-col overflow-hidden rounded-card border border-ink-200 bg-white shadow-card">
-                    <div className="relative aspect-[4/5] w-full overflow-hidden bg-ink-950">
-                      {member.image ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={member.image}
-                          alt={member.name}
-                          className="absolute inset-0 h-full w-full object-cover"
+            {members.map((member, index) => {
+              const image = member.image ?? readTeamImageUrl(member.name);
+
+              return (
+                <li key={member.name}>
+                  <Reveal delay={(index % 3) * 90} className="h-full">
+                    <article className="flex h-full flex-col overflow-hidden rounded-card border border-ink-200 bg-white shadow-card">
+                      <div className="relative aspect-[4/5] w-full overflow-hidden bg-ink-950">
+                        {image ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={image}
+                            alt={member.name}
+                            className="absolute inset-0 h-full w-full object-cover"
+                          />
+                        ) : (
+                          <PortraitPlaceholder />
+                        )}
+
+                        <span
+                          aria-hidden="true"
+                          className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-ink-950/90 via-ink-950/45 to-transparent"
                         />
-                      ) : (
-                        <PortraitPlaceholder />
-                      )}
-
-                      <span
-                        aria-hidden="true"
-                        className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-ink-950/90 via-ink-950/45 to-transparent"
-                      />
-                      <div className="absolute inset-x-0 bottom-0 p-5">
-                        <h3 className="text-h3 text-white">{member.name}</h3>
-                        <p className="mt-1 text-sm font-semibold text-white/80">
-                          {member.role}
-                        </p>
+                        <div className="absolute inset-x-0 bottom-0 p-5">
+                          <h3 className="text-h3 text-white">{member.name}</h3>
+                          <p className="mt-1 text-sm font-semibold text-white/80">
+                            {member.role}
+                          </p>
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="flex flex-1 flex-col p-6">
-                      {member.bio && (
-                        <p className="text-sm leading-relaxed text-ink-600">
-                          {member.bio}
-                        </p>
-                      )}
-                    </div>
-                  </article>
-                </Reveal>
-              </li>
-            ))}
+                      <div className="flex flex-1 flex-col p-6">
+                        {member.bio && (
+                          <p className="text-sm leading-relaxed text-ink-600">
+                            {member.bio}
+                          </p>
+                        )}
+                      </div>
+                    </article>
+                  </Reveal>
+                </li>
+              );
+            })}
           </ul>
-        )}
-
-        {members.length > 0 && (
-          <p className="mt-8 text-sm text-ink-500">
-            {ABOUT_TEAM.temporaryNote}
-          </p>
         )}
       </Container>
     </section>

@@ -32,8 +32,15 @@ export type MediaListFilters = {
   bucket?: string | null;
   type?: string | null;
   search?: string | null;
+  /** When true, only media with no caption is returned (Gallery caption hygiene). */
+  missingCaption?: boolean;
   limit?: number;
 };
+
+/** Whether a Media record carries no usable caption. */
+export function hasMissingCaption(media: Media): boolean {
+  return media.caption === null || media.caption.trim() === "";
+}
 
 /** List media newest-first with optional bucket/type/search filters. */
 export async function listMedia(
@@ -75,9 +82,11 @@ export async function listMedia(
   }
 
   const supabaseUrl = getSupabaseUrl();
-  return ((data ?? []) as MediaRow[])
+  const media = ((data ?? []) as MediaRow[])
     .map((row) => mapMediaRow(row, supabaseUrl))
-    .filter((media): media is Media => media !== null);
+    .filter((entry): entry is Media => entry !== null);
+
+  return filters.missingCaption ? media.filter(hasMissingCaption) : media;
 }
 
 export async function getMediaById(id: string): Promise<Media | null> {

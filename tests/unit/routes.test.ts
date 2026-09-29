@@ -53,6 +53,7 @@ describe("routing map", () => {
 describe("header navigation", () => {
   it("includes every primary destination", () => {
     expect(PRIMARY_NAV.map((item) => item.label)).toEqual([
+      "Home",
       "About Us",
       "Catalogue",
       "Products",
@@ -66,6 +67,7 @@ describe("header navigation", () => {
   it("links each non-dropdown item to its route", () => {
     const hrefs = PRIMARY_NAV.filter(isNavLink).map((item) => item.href);
     expect(hrefs).toEqual([
+      ROUTES.home,
       ROUTES.aboutUs,
       ROUTES.catalogue,
       ROUTES.contactUs,

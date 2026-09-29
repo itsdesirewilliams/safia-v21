@@ -72,7 +72,7 @@ describe("Quality First page structure", () => {
     const html = await getQualityFirstHtml();
 
     expect(html).toContain("Quality Is a Process, Not a Promise.");
-    expect(html).toContain("Stories from the Testing Floor");
+    expect(html).toContain("From the Testing Floor");
     expect(html).toContain("How Quality Is Built In");
     expect(html).toContain("The Machines Behind the Testing");
 

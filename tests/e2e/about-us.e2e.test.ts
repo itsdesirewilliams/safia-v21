@@ -102,17 +102,13 @@ describe("About Us page", () => {
     const html = await getAboutHtml();
 
     expect(html).toContain('media="(max-width: 767px)"');
-    expect(html).toContain(
-      "/assets/landscape/business-profile/business-profile-1.svg",
-    );
-    expect(html).toContain(
-      "/assets/portrait/business-profile/business-profile-1.svg",
-    );
+    expect(html).toMatch(/\/assets\/landscape\/business-profile\//);
+    expect(html).toMatch(/\/assets\/portrait\/business-profile\//);
     expect(html).not.toContain("object-fit");
 
-    const portrait = await fetch(
-      `${BASE_URL}/assets/portrait/business-profile/business-profile-1.svg`,
-    );
+    const match = /\/assets\/portrait\/business-profile\/[^"]+/.exec(html);
+    expect(match).not.toBeNull();
+    const portrait = await fetch(`${BASE_URL}${match?.[0]}`);
     expect(portrait.status).toBe(200);
     expect(portrait.headers.get("content-type")).toMatch(/^image\//);
   });

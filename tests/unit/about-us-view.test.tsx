@@ -65,12 +65,8 @@ describe("About Us business profile", () => {
     expect(html).toContain('aria-roledescription="carousel"');
     expect(html).toContain('aria-label="Business Profile"');
     expect(html).toContain('media="(max-width: 767px)"');
-    expect(html).toContain(
-      "/assets/landscape/business-profile/business-profile-1.svg",
-    );
-    expect(html).toContain(
-      "/assets/portrait/business-profile/business-profile-1.svg",
-    );
+    expect(html).toMatch(/\/assets\/landscape\/business-profile\//);
+    expect(html).toMatch(/\/assets\/portrait\/business-profile\//);
     expect(html).not.toContain("object-fit");
   });
 });

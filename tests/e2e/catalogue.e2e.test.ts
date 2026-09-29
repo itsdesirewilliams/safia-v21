@@ -68,20 +68,23 @@ async function get(path: string): Promise<string> {
 }
 
 describe("Catalogue page", () => {
-  it("renders the responsive slider from the supplied artwork", async () => {
+  it("renders the responsive slider from the supplied portrait artwork", async () => {
     const html = await get("/catalogue");
 
-    expect(html).toContain("The Safeway Tyre Catalogue");
+    expect(html).toContain("Browse the Catalogue");
     expect(html).toContain("<picture>");
-    expect(html).toContain("/assets/landscape/catalogue/");
     expect(html).toContain("/assets/portrait/catalogue/");
+    expect(html).not.toContain("/assets/landscape/catalogue/");
     expect(html).toContain('aria-label="Previous slide"');
     expect(html).toContain('aria-label="Next slide"');
   });
 
-  it("surfaces the catalogue download region", async () => {
+  it("points the download action at the supplied catalogue PDF", async () => {
     const html = await get("/catalogue");
-    expect(html).toContain("Catalogue Download Coming Soon");
+
+    expect(html).toContain("/assets/catalogue/");
+    expect(html).toMatch(/Safeway%20Tyre%20Catalogue\.pdf/);
+    expect(html).not.toContain("Catalogue Download Coming Soon");
   });
 
   it("links every canonical category", async () => {

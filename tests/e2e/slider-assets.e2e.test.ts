@@ -4,7 +4,7 @@ import { resolve } from "node:path";
 
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import { SLIDER_COLLECTIONS } from "@/lib/media/slider";
+import { SLIDER_COLLECTIONS, isPortraitOnlyCollection } from "@/lib/media/slider";
 import { readSliderSlides } from "@/lib/media/slider-assets";
 
 const PORT = 4313;
@@ -72,9 +72,13 @@ describe("slider assets deploy and serve", () => {
       expect(slides.length).toBeGreaterThan(0);
 
       for (const slide of slides) {
-        for (const source of [slide.landscape, slide.portrait]) {
-          expect(source).not.toBeNull();
+        const sources = isPortraitOnlyCollection(collection)
+          ? [slide.portrait]
+          : [slide.landscape, slide.portrait];
 
+        for (const source of sources.filter(
+          (value): value is string => value !== null,
+        )) {
           const response = await fetch(`${BASE_URL}${source}`);
           expect(response.status).toBe(200);
           expect(response.headers.get("content-type")).toMatch(/^image\//);

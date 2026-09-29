@@ -68,6 +68,11 @@ export function MediaCard({
             Hidden
           </span>
         )}
+        {media.type === "image" && !media.caption?.trim() && (
+          <span className="absolute left-3 top-12 rounded-lg bg-accent-500 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-white">
+            Missing Caption
+          </span>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col p-4">

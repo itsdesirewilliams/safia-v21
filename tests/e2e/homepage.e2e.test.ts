@@ -72,7 +72,8 @@ describe("homepage vertical slice", () => {
     expect(html).toContain("Product Ranges");
     expect(html).toContain("Explore the Official Catalogue");
     expect(html).toContain("Certifications Coming Soon");
-    expect(html).toContain("Trusted by Importers Worldwide");
+    expect(html).toContain("Trusted by");
+    expect(html).toContain("Worldwide");
     expect(html).toContain("Follow Us on Instagram");
     expect(html).toContain("youtube-nocookie.com/embed/4jM2jUcc5Kc");
     expect(html).toContain("Inquiry Form");
@@ -88,14 +89,21 @@ describe("homepage vertical slice", () => {
     expect(html).not.toContain("Explore Quality First");
   });
 
-  it("shows the three sample testimonials, each with a name and country", async () => {
+  it("shows the three sample testimonials, each with a name, country and flag", async () => {
     const html = await (await fetch(`${BASE_URL}/`)).text();
 
     expect(TESTIMONIALS).toHaveLength(3);
     for (const testimonial of TESTIMONIALS) {
       expect(html).toContain(testimonial.author);
       expect(html).toContain(testimonial.location);
+      expect(html).toContain(testimonial.flag);
     }
+  });
+
+  it("keeps the static prefix of the search placeholder visible", async () => {
+    const html = await (await fetch(`${BASE_URL}/`)).text();
+
+    expect(html).toContain("Try searching");
   });
 
   it("shows the six product range cards linking to canonical routes", async () => {

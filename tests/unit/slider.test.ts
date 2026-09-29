@@ -2,7 +2,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   assetUrl,
+  buildPortraitOnlySlides,
   buildSliderSlides,
+  isPortraitOnlyCollection,
   pairSliderAssets,
   ratioForViewport,
   resolveSlideSource,
@@ -94,18 +96,46 @@ describe("filename pairing", () => {
     );
 
     expect(pairs).toEqual([
-      { filename: "a.svg", landscape: true, portrait: true },
-      { filename: "b.svg", landscape: true, portrait: true },
+      {
+        filename: "a.svg",
+        landscapeFilename: "a.svg",
+        portraitFilename: "a.svg",
+      },
+      {
+        filename: "b.svg",
+        landscapeFilename: "b.svg",
+        portraitFilename: "b.svg",
+      },
     ]);
   });
 
-  it("takes the union of both folders", () => {
+  it("pairs exports that share a leading number even when named differently", () => {
+    const pairs = pairSliderAssets(
+      ["01 Cover.jpg", "02 Intro A.jpg"],
+      ["Biz Profile 01.jpg", "Biz Profile 02.jpg"],
+    );
+
+    expect(pairs).toEqual([
+      {
+        filename: "01 Cover.jpg",
+        landscapeFilename: "01 Cover.jpg",
+        portraitFilename: "Biz Profile 01.jpg",
+      },
+      {
+        filename: "02 Intro A.jpg",
+        landscapeFilename: "02 Intro A.jpg",
+        portraitFilename: "Biz Profile 02.jpg",
+      },
+    ]);
+  });
+
+  it("takes the union of both folders, leaving unmatched ratios null", () => {
     const pairs = pairSliderAssets(["a.svg"], ["c.svg", "b.svg"]);
 
     expect(pairs).toEqual([
-      { filename: "a.svg", landscape: true, portrait: false },
-      { filename: "b.svg", landscape: false, portrait: true },
-      { filename: "c.svg", landscape: false, portrait: true },
+      { filename: "a.svg", landscapeFilename: "a.svg", portraitFilename: null },
+      { filename: "b.svg", landscapeFilename: null, portraitFilename: "b.svg" },
+      { filename: "c.svg", landscapeFilename: null, portraitFilename: "c.svg" },
     ]);
   });
 });
@@ -169,21 +199,59 @@ describe("component configuration", () => {
   });
 });
 
+describe("portrait-only collections", () => {
+  it("builds catalogue slides from portrait artwork only", () => {
+    const slides = buildPortraitOnlySlides("catalogue", ["b.jpg", "a.jpg"]);
+
+    expect(slides).toEqual([
+      {
+        filename: "a.jpg",
+        landscape: null,
+        portrait: "/assets/portrait/catalogue/a.jpg",
+      },
+      {
+        filename: "b.jpg",
+        landscape: null,
+        portrait: "/assets/portrait/catalogue/b.jpg",
+      },
+    ]);
+  });
+
+  it("marks Catalogue portrait-only and Business Profile paired", () => {
+    expect(isPortraitOnlyCollection("catalogue")).toBe(true);
+    expect(isPortraitOnlyCollection("business-profile")).toBe(false);
+  });
+});
+
 describe("shipped developer assets", () => {
   it.each([...SLIDER_COLLECTIONS])(
-    "%s ships paired landscape and portrait artwork",
+    "%s ships its supplied artwork",
     (collection) => {
       const slides = readSliderSlides(collection);
 
       expect(slides.length).toBeGreaterThan(0);
 
       for (const slide of slides) {
-        expect(slide.landscape).toBe(
-          assetUrl(collection, "landscape", slide.filename),
-        );
-        expect(slide.portrait).toBe(
-          assetUrl(collection, "portrait", slide.filename),
-        );
+        if (isPortraitOnlyCollection(collection)) {
+          expect(slide.landscape).toBeNull();
+          expect(slide.portrait).toMatch(
+            new RegExp(`^/assets/portrait/${collection}/`),
+          );
+        } else {
+          // Every supplied asset is represented; a slide shows at least one
+          // ratio, and each non-null URL points into that ratio's folder.
+          expect(slide.landscape ?? slide.portrait).not.toBeNull();
+          if (slide.landscape) {
+            expect(slide.landscape).toMatch(
+              new RegExp(`^/assets/landscape/${collection}/`),
+            );
+          }
+          if (slide.portrait) {
+            expect(slide.portrait).toMatch(
+              new RegExp(`^/assets/portrait/${collection}/`),
+            );
+          }
+        }
       }
 
       const filenames = slides.map((slide) => slide.filename);

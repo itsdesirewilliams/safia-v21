@@ -60,6 +60,13 @@ const BY_CODE = new Map<string, CountryOption>(
   COUNTRIES.map((country) => [country.code, country]),
 );
 
+const CODE_BY_NAME = new Map(
+  Object.entries(countries).map(([code, data]) => [
+    data.name.toLowerCase(),
+    code,
+  ]),
+);
+
 /** Look up a country by its ISO alpha-2 code. */
 export function getCountry(code: string): CountryOption | undefined {
   return BY_CODE.get(code);
@@ -68,4 +75,19 @@ export function getCountry(code: string): CountryOption | undefined {
 /** Whether `value` is a supported ISO alpha-2 country code. */
 export function isCountryCode(value: string): boolean {
   return BY_CODE.has(value);
+}
+
+/**
+ * The regional-indicator flag emoji for a country name, or an empty string when
+ * the name is not recognised. Purely presentational; the name is still shown as
+ * supplied when a flag cannot be resolved.
+ */
+export function countryFlag(name: string): string {
+  const code = CODE_BY_NAME.get(name.trim().toLowerCase());
+  if (!code || code.length !== 2) {
+    return "";
+  }
+  return String.fromCodePoint(
+    ...[...code.toUpperCase()].map((char) => 0x1f1e6 + char.charCodeAt(0) - 65),
+  );
 }

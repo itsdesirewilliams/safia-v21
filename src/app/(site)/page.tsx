@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { CategoryVisual } from "@/components/home/category-visual";
+import { Certifications } from "@/components/home/certifications";
 import { HeroVideo } from "@/components/home/hero-video";
 import { InstagramFeed } from "@/components/home/instagram-feed";
 import { SearchBox } from "@/components/home/search-box";
@@ -18,11 +19,10 @@ import {
   getYoutubeVideoId,
 } from "@/lib/config";
 import {
-  CERTIFICATIONS,
+  HERO_PLACEHOLDER_PHRASES,
   HERO_SUGGESTION_POOL,
   HOME_CATEGORY_CARDS,
   TESTIMONIALS,
-  TESTIMONIALS_NOTE,
 } from "@/lib/homepage";
 import { isValidYoutubeVideoId } from "@/lib/media/youtube";
 import { ROUTES } from "@/lib/routes";
@@ -65,7 +65,10 @@ export default function HomePage() {
                 </p>
 
                 <div id="search" className="mt-8 max-w-2xl scroll-mt-28">
-                  <SearchBox suggestions={HERO_SUGGESTION_POOL} />
+                  <SearchBox
+                    suggestions={HERO_SUGGESTION_POOL}
+                    placeholderPhrases={HERO_PLACEHOLDER_PHRASES}
+                  />
                 </div>
 
                 <div className="mt-8 flex flex-wrap gap-3">
@@ -238,30 +241,7 @@ export default function HomePage() {
               </div>
             </Reveal>
             <Reveal delay={100}>
-              {CERTIFICATIONS.length > 0 ? (
-                <ul className="grid gap-4 sm:grid-cols-2">
-                  {CERTIFICATIONS.map((certification) => (
-                    <li
-                      key={certification.name}
-                      className="rounded-card border border-ink-200 bg-white p-6"
-                    >
-                      <p className="text-sm font-semibold text-ink-950">
-                        {certification.name}
-                      </p>
-                      <p className="mt-1 text-sm text-ink-500">
-                        {certification.detail}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <PlaceholderPanel
-                  kind="certification"
-                  label="Certifications Coming Soon"
-                  detail="Our certification marks and documents will be published here soon."
-                  className="h-full"
-                />
-              )}
+              <Certifications />
             </Reveal>
           </div>
         </Container>
@@ -272,34 +252,42 @@ export default function HomePage() {
         <Container>
           <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-16">
             <Reveal>
-              <SectionHeading title="Trusted by Importers Worldwide" />
+              <SectionHeading
+                title={
+                  <>
+                    <span className="lg:block">Trusted by</span>{" "}
+                    <span className="lg:block">Importers</span>{" "}
+                    <span className="lg:block">Worldwide</span>
+                  </>
+                }
+              />
             </Reveal>
             <Reveal delay={100}>
               {TESTIMONIALS.length > 0 ? (
-                <div>
-                  <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                    {TESTIMONIALS.map((testimonial) => (
-                      <li
-                        key={`${testimonial.author}-${testimonial.location}`}
-                        className="rounded-card border border-ink-200 bg-white p-6"
-                      >
-                        <blockquote className="text-base leading-relaxed text-ink-800">
-                          &ldquo;{testimonial.quote}&rdquo;
-                        </blockquote>
-                        <p className="mt-5 text-sm font-semibold text-ink-950">
-                          {testimonial.author}
-                          <span className="font-normal text-ink-500">
-                            {" "}
-                            — {testimonial.location}
-                          </span>
-                        </p>
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="mt-5 text-sm text-ink-500">
-                    {TESTIMONIALS_NOTE}
-                  </p>
-                </div>
+                <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                  {TESTIMONIALS.map((testimonial) => (
+                    <li
+                      key={`${testimonial.author}-${testimonial.location}`}
+                      className="rounded-card border border-ink-200 bg-white p-6"
+                    >
+                      <blockquote className="text-base leading-relaxed text-ink-800">
+                        &ldquo;{testimonial.quote}&rdquo;
+                      </blockquote>
+                      <p className="mt-5 text-sm font-semibold text-ink-950">
+                        {testimonial.author}
+                        <span className="font-normal text-ink-500">
+                          {" "}
+                          — {testimonial.location}
+                          {testimonial.flag && (
+                            <span className="ml-1.5" aria-hidden="true">
+                              {testimonial.flag}
+                            </span>
+                          )}
+                        </span>
+                      </p>
+                    </li>
+                  ))}
+                </ul>
               ) : (
                 <PlaceholderPanel
                   kind="testimonial"

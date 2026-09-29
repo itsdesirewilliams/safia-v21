@@ -46,13 +46,15 @@ const MACHINE_IMAGES: QualityFirstMachineImage[] = [
 ];
 
 describe("Quality First hero", () => {
-  it("leads with the Quality First heading and in-page anchors", () => {
+  it("leads with the Quality First heading and has no calls to action", () => {
     const html = renderToStaticMarkup(<QualityFirstHero />);
 
     expect(html).toContain("Quality Is a Process, Not a Promise.");
-    expect(html).toContain('href="#stories"');
-    expect(html).toContain('href="#machines"');
     expect(html).toContain("<h1");
+    expect(html).not.toContain("<a ");
+    expect(html).not.toContain("<button");
+    expect(html).not.toContain('href="#stories"');
+    expect(html).not.toContain('href="#machines"');
   });
 });
 

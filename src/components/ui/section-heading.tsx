@@ -5,6 +5,8 @@ export type SectionHeadingProps = {
   description?: React.ReactNode;
   tone?: "light" | "dark";
   align?: "left" | "center";
+  /** Heading level to render; defaults to `h2`. */
+  as?: "h1" | "h2";
   className?: string;
 };
 
@@ -14,6 +16,7 @@ export function SectionHeading({
   description,
   tone = "light",
   align = "left",
+  as: Heading = "h2",
   className,
 }: SectionHeadingProps) {
   return (
@@ -24,14 +27,14 @@ export function SectionHeading({
         className,
       )}
     >
-      <h2
+      <Heading
         className={cn(
           "text-h2 max-w-3xl text-balance",
           tone === "light" ? "text-ink-950" : "text-white",
         )}
       >
         {title}
-      </h2>
+      </Heading>
       {description && (
         <p
           className={cn(

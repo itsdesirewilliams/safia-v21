@@ -1,15 +1,17 @@
 import { ArrowIcon, ButtonLink } from "@/components/ui/button";
 import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { getOptionalCatalogueDownloadUrl } from "@/lib/config";
+import { readCataloguePdfUrl } from "@/lib/media/catalogue-assets";
 
 /**
  * The Catalogue page's independent download action (spec #1 / Ticket #18),
- * separate from the slider's slide navigation. It is a real download when
- * Safeway has supplied `NEXT_PUBLIC_CATALOGUE_DOWNLOAD_URL`, and a labelled
- * placeholder otherwise — never an inert or invented link.
+ * separate from the slider's slide navigation. It points directly at the
+ * supplied catalogue PDF in `public/assets/catalogue`; a configured
+ * `NEXT_PUBLIC_CATALOGUE_DOWNLOAD_URL` is used only when no PDF is supplied, and
+ * a labelled placeholder stands in otherwise — never an inert or invented link.
  */
 export function CatalogueDownload() {
-  const url = getOptionalCatalogueDownloadUrl();
+  const url = readCataloguePdfUrl() ?? getOptionalCatalogueDownloadUrl();
 
   if (!url) {
     return (

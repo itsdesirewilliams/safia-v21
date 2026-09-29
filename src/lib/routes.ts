@@ -57,6 +57,7 @@ const PRODUCTS_CHILDREN: readonly NavLink[] = CATEGORIES.map((category) => ({
  * categories; Gallery is reached from the footer (per spec #7 patch).
  */
 export const PRIMARY_NAV: readonly NavItem[] = [
+  { label: "Home", href: ROUTES.home },
   { label: "About Us", href: ROUTES.aboutUs },
   { label: "Catalogue", href: ROUTES.catalogue },
   { label: "Products", children: PRODUCTS_CHILDREN },

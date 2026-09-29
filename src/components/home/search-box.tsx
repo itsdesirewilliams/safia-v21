@@ -6,17 +6,87 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 
 import { MIN_SEARCH_LENGTH, type SearchResult } from "@/lib/catalogue/search";
 import {
+  HERO_PLACEHOLDER_ROTATE_MS,
   HERO_SUGGESTION_ROTATE_MS,
   pickHeroSuggestions,
   type HeroSuggestion,
   type HeroSuggestionPool,
 } from "@/lib/catalogue/suggestions";
 import { ROUTES } from "@/lib/routes";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 
 const DEBOUNCE_MS = 250;
 
+/** Static prefix that stays visible for the whole placeholder animation. */
+const PLACEHOLDER_PREFIX = "Try searching ";
+
+const TYPE_MS = 55;
+const DELETE_MS = 30;
+const MIN_HOLD_MS = 900;
+
 function patternHref(result: SearchResult): string {
   return ROUTES.pattern(result.categorySlug, result.patternSlug);
+}
+
+/**
+ * The animated, dynamic half of the hero placeholder. Only this phrase types
+ * and deletes character by character; the static prefix is rendered separately
+ * and never animates. Each phrase cycles on roughly the `HERO_PLACEHOLDER_ROTATE_MS`
+ * cadence, and reduced-motion users get a static first phrase instead.
+ */
+function useTypewriter(phrases: readonly string[], animate: boolean): string {
+  const [index, setIndex] = useState(0);
+  const [text, setText] = useState("");
+  const [phase, setPhase] = useState<"typing" | "holding" | "deleting">(
+    "typing",
+  );
+
+  const target = phrases.length > 0 ? phrases[index % phrases.length] : "";
+
+  useEffect(() => {
+    if (!animate || phrases.length === 0) {
+      return;
+    }
+
+    const delay =
+      phase === "typing"
+        ? text.length < target.length
+          ? TYPE_MS
+          : 0
+        : phase === "holding"
+          ? Math.max(
+              MIN_HOLD_MS,
+              HERO_PLACEHOLDER_ROTATE_MS - target.length * (TYPE_MS + DELETE_MS),
+            )
+          : text.length > 0
+            ? DELETE_MS
+            : 0;
+
+    const timer = setTimeout(() => {
+      if (phase === "typing") {
+        if (text.length < target.length) {
+          setText(target.slice(0, text.length + 1));
+        } else {
+          setPhase("holding");
+        }
+      } else if (phase === "holding") {
+        setPhase("deleting");
+      } else if (text.length > 0) {
+        setText(target.slice(0, text.length - 1));
+      } else {
+        setIndex((current) => current + 1);
+        setPhase("typing");
+      }
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [animate, phrases, phase, text, target]);
+
+  if (!animate) {
+    return phrases[0] ?? "";
+  }
+
+  return text;
 }
 
 function SuggestionChips({
@@ -52,8 +122,10 @@ function SuggestionChips({
 
 export function SearchBox({
   suggestions = { category: [], size: [], name: [] },
+  placeholderPhrases = [],
 }: {
   suggestions?: HeroSuggestionPool;
+  placeholderPhrases?: readonly string[];
 }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
@@ -62,6 +134,7 @@ export function SearchBox({
   const [loading, setLoading] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [rotation, setRotation] = useState(0);
+  const reduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const listId = useId();
   const inputId = useId();
@@ -70,6 +143,8 @@ export function SearchBox({
     () => pickHeroSuggestions(suggestions, rotation),
     [suggestions, rotation],
   );
+
+  const typedPhrase = useTypewriter(placeholderPhrases, !reduceMotion);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -171,6 +246,7 @@ export function SearchBox({
   const trimmedQuery = query.trim();
   const showEmpty = open && !loading && results.length === 0 && trimmedQuery.length >= MIN_SEARCH_LENGTH;
   const showSuggestions = trimmedQuery.length === 0 && heroSuggestions.length > 0;
+  const showPlaceholder = trimmedQuery.length === 0;
 
   return (
     <div ref={containerRef} className="relative">
@@ -196,7 +272,6 @@ export function SearchBox({
           onChange={(event) => onQueryChange(event.target.value)}
           onFocus={() => results.length > 0 && setOpen(true)}
           onKeyDown={onKeyDown}
-          placeholder="Search by size, pattern code, name or category…"
           role="combobox"
           aria-expanded={open}
           aria-controls={listId}
@@ -205,8 +280,17 @@ export function SearchBox({
             activeIndex >= 0 ? `${listId}-${activeIndex}` : undefined
           }
           autoComplete="off"
-          className="w-full rounded-lg border border-transparent bg-white py-4 pl-14 pr-5 text-base font-medium text-ink-900 shadow-pop outline-none transition placeholder:font-normal placeholder:text-ink-400 focus:ring-4 focus:ring-brand-500/30"
+          className="w-full rounded-lg border border-transparent bg-white py-4 pl-14 pr-5 text-base font-medium text-ink-900 shadow-pop outline-none transition focus:ring-4 focus:ring-brand-500/30"
         />
+        {showPlaceholder && (
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute left-14 right-5 top-1/2 -translate-y-1/2 truncate text-base font-normal text-ink-400"
+          >
+            {PLACEHOLDER_PREFIX}
+            {typedPhrase}
+          </span>
+        )}
       </div>
 
       {showSuggestions && (

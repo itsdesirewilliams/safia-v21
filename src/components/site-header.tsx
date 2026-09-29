@@ -3,12 +3,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { PRIMARY_NAV, ROUTES, type NavItem } from "@/lib/routes";
 import { SITE } from "@/lib/site";
+
+/**
+ * How long the desktop Products dropdown stays open after the pointer leaves
+ * it. The delay gives a visitor time to travel from "Products" into the menu
+ * (and back) without it snapping shut.
+ */
+const PRODUCTS_CLOSE_DELAY_MS = 2500;
 
 function isActive(pathname: string, href: string): boolean {
   if (href === ROUTES.home) {
@@ -66,6 +73,64 @@ export function SiteHeader() {
   const [productsOpen, setProductsOpen] = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
 
+  const productsRef = useRef<HTMLLIElement>(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearProductsClose = useCallback(() => {
+    if (closeTimerRef.current !== null) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  }, []);
+
+  const openProducts = useCallback(() => {
+    clearProductsClose();
+    setProductsOpen(true);
+  }, [clearProductsClose]);
+
+  /**
+   * Keep the desktop dropdown open while the pointer moves from Products into
+   * the menu: the close is deferred rather than immediate, so travelling across
+   * the gap (or back to the trigger) never dismisses it.
+   */
+  const scheduleProductsClose = useCallback(() => {
+    clearProductsClose();
+    closeTimerRef.current = setTimeout(() => {
+      closeTimerRef.current = null;
+      setProductsOpen(false);
+    }, PRODUCTS_CLOSE_DELAY_MS);
+  }, [clearProductsClose]);
+
+  useEffect(() => clearProductsClose, [clearProductsClose]);
+
+  // Clicking elsewhere (or pressing Escape) closes the desktop dropdown.
+  useEffect(() => {
+    if (!productsOpen) {
+      return;
+    }
+    const onPointerDown = (event: PointerEvent) => {
+      if (
+        productsRef.current &&
+        !productsRef.current.contains(event.target as Node)
+      ) {
+        clearProductsClose();
+        setProductsOpen(false);
+      }
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        clearProductsClose();
+        setProductsOpen(false);
+      }
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [productsOpen, clearProductsClose]);
+
   useEffect(() => {
     if (!mobileOpen) {
       return;
@@ -84,6 +149,7 @@ export function SiteHeader() {
   }, [mobileOpen]);
 
   const closeMenus = () => {
+    clearProductsClose();
     setMobileOpen(false);
     setProductsOpen(false);
     setMobileProductsOpen(false);
@@ -103,7 +169,7 @@ export function SiteHeader() {
             width={180}
             height={42}
             priority
-            className="h-8 w-auto lg:h-9"
+            className="h-9 w-auto lg:h-10"
           />
         </Link>
 
@@ -135,15 +201,20 @@ export function SiteHeader() {
               return (
                 <li
                   key={item.label}
+                  ref={productsRef}
                   className="relative"
-                  onMouseEnter={() => setProductsOpen(true)}
-                  onMouseLeave={() => setProductsOpen(false)}
+                  onMouseEnter={openProducts}
+                  onMouseLeave={scheduleProductsClose}
                 >
                   <button
                     type="button"
                     aria-haspopup="true"
                     aria-expanded={productsOpen}
-                    onClick={() => setProductsOpen((open) => !open)}
+                    onClick={() => {
+                      clearProductsClose();
+                      setProductsOpen((open) => !open);
+                    }}
+                    onFocus={openProducts}
                     className={cn(
                       "flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition-colors",
                       active
@@ -244,7 +315,7 @@ export function SiteHeader() {
                 alt={SITE.name}
                 width={180}
                 height={42}
-                className="h-8 w-auto"
+                className="h-9 w-auto"
               />
               <button
                 type="button"

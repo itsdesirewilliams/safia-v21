@@ -1,11 +1,13 @@
 import { describe, expect, it } from "vitest";
 
 import { CATEGORIES } from "@/lib/catalogue/categories";
+import { titleCasePhrase } from "@/lib/catalogue/suggestions";
+import { countryFlag } from "@/lib/contact/countries";
 import {
-  CERTIFICATIONS,
+  HERO_PLACEHOLDER_PHRASES,
+  HERO_SUGGESTION_POOL,
   HOME_CATEGORY_CARDS,
   TESTIMONIALS,
-  TESTIMONIALS_NOTE,
 } from "@/lib/homepage";
 import { ROUTES } from "@/lib/routes";
 
@@ -43,30 +45,70 @@ describe("homepage category cards", () => {
   });
 });
 
-describe("homepage certifications", () => {
-  it("only names supplied marks, each with a local asset path", () => {
-    for (const certification of CERTIFICATIONS) {
-      expect(certification.name.length).toBeGreaterThan(0);
-      expect(
-        certification.logo === null ||
-          certification.logo.startsWith("/certifications/"),
-      ).toBe(true);
-    }
-  });
-});
-
 describe("homepage testimonials", () => {
-  it("ships three temporary sample testimonials, each with quote, author and country", () => {
+  it("ships three temporary sample testimonials, each with quote, author, country and flag", () => {
     expect(TESTIMONIALS).toHaveLength(3);
 
     for (const testimonial of TESTIMONIALS) {
       expect(testimonial.quote.length).toBeGreaterThan(0);
       expect(testimonial.author.length).toBeGreaterThan(0);
       expect(testimonial.location.length).toBeGreaterThan(0);
+      expect(testimonial.flag).toBe(countryFlag(testimonial.location));
+      expect(testimonial.flag.length).toBeGreaterThan(0);
+    }
+  });
+});
+
+describe("homepage placeholder phrases", () => {
+  it("draws every phrase from the real dataset suggestion pool", () => {
+    const real = new Set([
+      ...HERO_SUGGESTION_POOL.category.map((item) => item.label),
+      ...HERO_SUGGESTION_POOL.size.map((item) => item.label),
+      ...HERO_SUGGESTION_POOL.name.map((item) => titleCasePhrase(item.label)),
+    ]);
+
+    expect(HERO_PLACEHOLDER_PHRASES.length).toBeGreaterThan(0);
+    for (const phrase of HERO_PLACEHOLDER_PHRASES) {
+      expect(real.has(phrase)).toBe(true);
     }
   });
 
-  it("labels the samples as placeholders", () => {
-    expect(TESTIMONIALS_NOTE.toLowerCase()).toContain("placeholder");
+  it("represents a category, a real size and a functional name", () => {
+    const hasCategory = HERO_PLACEHOLDER_PHRASES.some((phrase) =>
+      HERO_SUGGESTION_POOL.category.some((item) => item.label === phrase),
+    );
+    const hasSize = HERO_PLACEHOLDER_PHRASES.some((phrase) =>
+      HERO_SUGGESTION_POOL.size.some((item) => item.label === phrase),
+    );
+    const hasName = HERO_PLACEHOLDER_PHRASES.some((phrase) =>
+      HERO_SUGGESTION_POOL.name.some(
+        (item) => titleCasePhrase(item.label) === phrase,
+      ),
+    );
+
+    expect(hasCategory).toBe(true);
+    expect(hasSize).toBe(true);
+    expect(hasName).toBe(true);
+  });
+});
+
+describe("titleCasePhrase", () => {
+  it("title-cases words but leaves numeric/code tokens intact", () => {
+    expect(titleCasePhrase("BIAS TRACTOR TYRES")).toBe("Bias Tractor Tyres");
+    expect(titleCasePhrase("DRIVE WHEEL TYRES (R2)")).toBe(
+      "Drive Wheel Tyres (R2)",
+    );
+    expect(titleCasePhrase("MULTIPURPOSE TYRES (MPT-01)")).toBe(
+      "Multipurpose Tyres (MPT-01)",
+    );
+  });
+});
+
+describe("countryFlag", () => {
+  it("resolves a flag emoji by country name and degrades safely", () => {
+    expect(countryFlag("Brazil")).toBe("🇧🇷");
+    expect(countryFlag("United Arab Emirates")).toBe("🇦🇪");
+    expect(countryFlag("Czechia")).toBe("🇨🇿");
+    expect(countryFlag("Not A Country")).toBe("");
   });
 });

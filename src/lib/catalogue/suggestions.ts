@@ -33,6 +33,29 @@ export const HERO_SUGGESTION_PER_KIND = 1;
 /** Rotation cadence for the suggestions, in milliseconds (three per two minutes). */
 export const HERO_SUGGESTION_ROTATE_MS = 40_000;
 
+/** Cadence at which the hero search placeholder cycles to the next phrase. */
+export const HERO_PLACEHOLDER_ROTATE_MS = 5_000;
+
+/**
+ * Title-case a dataset value for display in the hero placeholder. Words that
+ * carry a number (size-like or code-like tokens such as `R1`, `MPT-01`) are
+ * left exactly as supplied so the model code is never mangled; every other word
+ * gets a leading capital and a lowercase remainder. This is display-only — the
+ * underlying search term is always the untouched dataset value.
+ */
+export function titleCasePhrase(value: string): string {
+  return value
+    .split(/\s+/)
+    .filter((word) => word.length > 0)
+    .map((word) => {
+      if (/\d/.test(word)) {
+        return word;
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    })
+    .join(" ");
+}
+
 function seededShuffle<T>(items: readonly T[], seed: number): T[] {
   const shuffled = [...items];
   let state = (seed * 2654435761 + 1) % 2147483647;

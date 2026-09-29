@@ -16,6 +16,8 @@ export const SITE = {
     secondary: "+91 90416 62182",
   },
   whatsappUrl: "https://wa.me/+919915762182",
+  /** Approved Safeway Tyre Instagram profile. */
+  instagramUrl: "https://www.instagram.com/safewaytyre/",
   /** The two published Safeway Tyre locations. */
   addresses: [
     {

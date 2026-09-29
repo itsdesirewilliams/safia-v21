@@ -9,6 +9,8 @@ import type {
   HeroSuggestion,
   HeroSuggestionPool,
 } from "@/lib/catalogue/suggestions";
+import { titleCasePhrase } from "@/lib/catalogue/suggestions";
+import { countryFlag } from "@/lib/contact/countries";
 import { ROUTES } from "@/lib/routes";
 
 /**
@@ -38,30 +40,19 @@ export const HOME_CATEGORY_CARDS: readonly HomeCategoryCard[] =
     }),
   );
 
-export type Certification = {
-  name: string;
-  detail: string;
-  /** Local asset path, or `null` when no asset was supplied. */
-  logo: string | null;
-};
-
-/**
- * Certification marks for the homepage. None have been supplied yet, so this
- * is empty and the section renders a labelled placeholder. Add entries here
- * only when Safeway supplies the marks; never invent certification names.
- */
-export const CERTIFICATIONS: readonly Certification[] = [];
-
 export type Testimonial = {
   quote: string;
   author: string;
   location: string;
+  /** Regional-indicator flag for `location`, or "" when unresolved. */
+  flag: string;
 };
 
 /**
  * Temporary sample testimonials for the homepage. These are clearly fictional
- * placeholders shown until real customer stories are supplied; replace the
- * entries here when Safeway provides approved testimonials. No photos are used.
+ * entries shown until real customer stories are supplied; replace the entries
+ * here when Safeway provides approved testimonials. No photos are used — each
+ * entry shows the person, their country and that country's flag.
  */
 export const TESTIMONIALS: readonly Testimonial[] = [
   {
@@ -69,24 +60,23 @@ export const TESTIMONIALS: readonly Testimonial[] = [
       "The samples matched the catalogue specifications exactly and the shipment reached us on schedule.",
     author: "Juan Carlos",
     location: "Brazil",
+    flag: countryFlag("Brazil"),
   },
   {
     quote:
       "Clear sizes, quick answers and a straightforward ordering process from start to finish.",
     author: "Aisha Rahman",
     location: "United Arab Emirates",
+    flag: countryFlag("United Arab Emirates"),
   },
   {
     quote:
       "A dependable partner for our agricultural range — the pattern data is easy to work with.",
     author: "Milan Novak",
-    location: "Czech Republic",
+    location: "Czechia",
+    flag: countryFlag("Czechia"),
   },
 ];
-
-/** Makes the placeholder nature of the sample testimonials explicit. */
-export const TESTIMONIALS_NOTE =
-  "Sample testimonials shown as placeholders until customer stories are supplied.";
 
 const HERO_SIZE_SUGGESTION_LIMIT = 24;
 
@@ -151,3 +141,36 @@ function buildHeroSuggestionPool(): HeroSuggestionPool {
 
 export const HERO_SUGGESTION_POOL: HeroSuggestionPool =
   buildHeroSuggestionPool();
+
+/**
+ * The rotating phrases for the hero search placeholder's typewriter, drawn from
+ * the same real dataset values as the suggestion pool. Interleaved
+ * category → size → functional-name so each cycle shows all three kinds, and
+ * Title-Cased for display (the underlying search terms are unchanged).
+ */
+function buildPlaceholderPhrases(pool: HeroSuggestionPool): string[] {
+  const groups = [pool.category, pool.size, pool.name].map((bucket) =>
+    bucket.map((item) =>
+      item.kind === "name" ? titleCasePhrase(item.label) : item.label,
+    ),
+  );
+
+  const phrases: string[] = [];
+  const seen = new Set<string>();
+  const longest = groups.reduce((max, group) => Math.max(max, group.length), 0);
+
+  for (let index = 0; index < longest; index += 1) {
+    for (const group of groups) {
+      const label = group[index];
+      if (label && !seen.has(label)) {
+        seen.add(label);
+        phrases.push(label);
+      }
+    }
+  }
+
+  return phrases;
+}
+
+export const HERO_PLACEHOLDER_PHRASES: readonly string[] =
+  buildPlaceholderPhrases(HERO_SUGGESTION_POOL);

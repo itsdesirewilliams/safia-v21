@@ -2,7 +2,9 @@ import { readdirSync } from "node:fs";
 import { join } from "node:path";
 
 import {
+  buildPortraitOnlySlides,
   buildSliderSlides,
+  isPortraitOnlyCollection,
   SLIDER_ASSET_ROOT,
   SLIDER_IMAGE_EXTENSIONS,
   type SliderCollection,
@@ -54,9 +56,16 @@ function listAssetFiles(
 
 /** Every slide for a collection, naturally ordered and ratio-paired. */
 export function readSliderSlides(collection: SliderCollection): SliderSlide[] {
+  const portrait = listAssetFiles(collection, "portrait");
+
+  // Catalogue ships portrait artwork only; it is never paired with landscape.
+  if (isPortraitOnlyCollection(collection)) {
+    return buildPortraitOnlySlides(collection, portrait);
+  }
+
   return buildSliderSlides(
     collection,
     listAssetFiles(collection, "landscape"),
-    listAssetFiles(collection, "portrait"),
+    portrait,
   );
 }

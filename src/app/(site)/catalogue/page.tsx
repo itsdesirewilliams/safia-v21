@@ -1,6 +1,5 @@
 import { CategoryCard } from "@/components/catalogue/category-card";
 import { CatalogueDownload } from "@/components/catalogue/catalogue-download";
-import { CatalogueHero } from "@/components/catalogue/catalogue-hero";
 import { ResponsiveSlider } from "@/components/media/responsive-slider";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
@@ -16,23 +15,23 @@ export const metadata = {
 /**
  * The Catalogue page (spec #1 / Ticket #18). The responsive slider is the
  * shared component from Ticket #13, fed by the developer-provided catalogue
- * artwork under `public/assets/{landscape,portrait}/catalogue`; its download
- * action appears when `NEXT_PUBLIC_CATALOGUE_DOWNLOAD_URL` is configured.
+ * artwork under `public/assets/portrait/catalogue` — Catalogue ships portrait
+ * artwork only, so it is shown at every size and the download action points
+ * straight at the supplied PDF.
  */
 export default function CataloguePage() {
   return (
     <>
-      <CatalogueHero />
-
       <section id="catalogue" className="scroll-mt-28 bg-white py-20 lg:py-28">
         <Container>
           <Reveal>
             <SectionHeading
+              as="h1"
               title="Browse the Catalogue"
               description="Page through the full Safeway Tyre catalogue."
             />
           </Reveal>
-          <div className="mx-auto mt-12 max-w-5xl">
+          <div className="mx-auto mt-12 max-w-xl">
             <ResponsiveSlider collection="catalogue" showDownload={false} />
             <CatalogueDownload />
           </div>

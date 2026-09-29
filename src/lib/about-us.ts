@@ -4,8 +4,8 @@
  * About Us is a static page with three fixed sections: the company bio, the
  * Team section, and the Business Profile slider. Everything here ships via
  * code — there is no admin surface and no database content model. The bio uses
- * only already-approved facts about the company. The Team profiles below are
- * temporary placeholders until Safeway supplies real portraits and quotations.
+ * only already-approved facts about the company. Team portraits are discovered
+ * from the supplied `public/assets/team` folder.
  */
 
 export const ABOUT_BIO = {
@@ -28,9 +28,6 @@ export type TeamMember = {
 export const ABOUT_TEAM = {
   title: "Meet the Team",
   description: "A few members of the Safeway Tyre team.",
-  /** Makes the placeholder nature of the current profiles explicit. */
-  temporaryNote:
-    "Team portraits and quotations are temporary placeholders pending supplied content.",
   empty: {
     label: "Team Profiles Coming Soon",
     detail: "We are preparing team-member profiles. Please check back soon.",
@@ -38,17 +35,18 @@ export const ABOUT_TEAM = {
 } as const;
 
 /**
- * Temporary team profiles. Portraits and quotations are placeholders until
- * Safeway supplies the real content, and are marked as such in the Team section.
+ * The team profiles. Portraits are discovered from `public/assets/team` by the
+ * slug of each member's name (see `lib/media/team-assets`); until a supplied
+ * portrait is present the card falls back to a neutral placeholder.
  */
 export const ABOUT_TEAM_MEMBERS: readonly TeamMember[] = [
   {
-    name: "Sandeep Chaudhry",
+    name: "Sandeep Chaudhary",
     role: "Director, Safeway Tyre",
     bio: "We lead Safeway Tyre with a focus on consistent quality across every range we make. Our work is built around long-term relationships with the partners we serve. We are always looking at better ways to manufacture, test and deliver.",
   },
   {
-    name: "Desiree Williams",
+    name: "Desire Williams",
     role: "Lead Marketing Executive, Safeway Tyre",
     bio: "Telling the Safeway Tyre story is about showing the care behind every tyre. We work closely with our international partners to understand what each market needs. Our aim is to make sure every customer feels supported from first contact onward.",
   },

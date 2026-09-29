@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/container";
 import { fieldClass, fieldLabelClass } from "@/components/ui/form";
 import { canDeleteMedia, canManageAdminOnlyMedia } from "@/lib/auth/roles";
 import { getCurrentProfile, requireMediaManager } from "@/lib/auth/session";
-import { listMedia } from "@/lib/media/server";
+import { listMedia, hasMissingCaption } from "@/lib/media/server";
 import type { Media } from "@/lib/media/types";
 import { MEDIA_TYPES } from "@/lib/media/types";
 import {
@@ -23,6 +23,7 @@ type MediaPageSearchParams = {
   q?: string;
   bucket?: string;
   type?: string;
+  caption?: string;
 };
 
 export default async function AdminMediaPage({
@@ -42,6 +43,8 @@ export default async function AdminMediaPage({
   const query = typeof params.q === "string" ? params.q : "";
   const bucket = typeof params.bucket === "string" ? params.bucket : "";
   const type = typeof params.type === "string" ? params.type : "";
+  const caption = typeof params.caption === "string" ? params.caption : "";
+  const missingCaptionOnly = caption === "missing";
 
   let media: Media[] = [];
   let loadError: string | null = null;
@@ -51,11 +54,16 @@ export default async function AdminMediaPage({
       bucket: bucket || null,
       type: type || null,
       search: query || null,
+      missingCaption: missingCaptionOnly,
     });
   } catch (error) {
     loadError =
       error instanceof Error ? error.message : "Could not load the media library.";
   }
+
+  const missingCaptionCount = media.filter(
+    (item) => item.type === "image" && hasMissingCaption(item),
+  ).length;
 
   return (
     <Container className="py-10">
@@ -135,6 +143,17 @@ export default async function AdminMediaPage({
           </select>
         </div>
 
+        <label className="flex min-h-[2.75rem] items-center gap-2 text-sm font-medium text-ink-700">
+          <input
+            type="checkbox"
+            name="caption"
+            value="missing"
+            defaultChecked={missingCaptionOnly}
+            className="h-4 w-4 rounded border-ink-300 text-brand-600 focus:ring-brand-500/40"
+          />
+          Missing Caption only
+        </label>
+
         <button type="submit" className={buttonStyles("dark", "md")}>
           Apply
         </button>
@@ -150,6 +169,26 @@ export default async function AdminMediaPage({
         >
           {loadError}
         </p>
+      )}
+
+      {missingCaptionCount > 0 && (
+        <div
+          role="status"
+          className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-accent-500/40 bg-accent-500/10 px-4 py-3 text-sm text-ink-800"
+        >
+          <span className="font-semibold text-accent-700">
+            Missing Caption: {missingCaptionCount}{" "}
+            {missingCaptionCount === 1 ? "image needs" : "images need"} a caption
+          </span>
+          {!missingCaptionOnly && (
+            <Link
+              href="/admin/media?caption=missing"
+              className="font-semibold text-brand-600 hover:underline"
+            >
+              Show only missing captions
+            </Link>
+          )}
+        </div>
       )}
 
       <p className="mt-6 text-sm text-ink-500">

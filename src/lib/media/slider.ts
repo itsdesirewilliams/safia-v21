@@ -42,9 +42,10 @@ export const SLIDER_IMAGE_EXTENSIONS = [
 ] as const;
 
 /**
- * A single slide: one filename paired across the landscape and portrait
- * folders. Either URL may be `null` when that ratio was not supplied — the
- * slide is still rendered from the other ratio, never dropped or cropped.
+ * A single slide. `filename` is the stable slide identifier (the landscape
+ * filename when one exists, else the portrait). Either URL may be `null` when
+ * that ratio was not supplied — the slide is still rendered from the other
+ * ratio, never dropped or cropped.
  */
 export type SliderSlide = {
   filename: string;
@@ -74,26 +75,86 @@ export function assetUrl(
   return `${SLIDER_ASSET_ROOT}/${ratio}/${collection}/${encodeURIComponent(filename)}`;
 }
 
+/** A slide's pairing across the two ratio folders. */
+export type SliderPair = {
+  /** Stable slide identifier: the landscape filename when present, else portrait. */
+  filename: string;
+  /** Landscape filename, or `null` when that ratio was not supplied. */
+  landscapeFilename: string | null;
+  /** Portrait filename, or `null` when that ratio was not supplied. */
+  portraitFilename: string | null;
+};
+
+/** The filename without its final extension. */
+function stemOf(filename: string): string {
+  const dot = filename.lastIndexOf(".");
+  return dot > 0 ? filename.slice(0, dot) : filename;
+}
+
 /**
- * Pair landscape and portrait filenames into slides. The union of both folders
- * is ordered naturally; a filename present in only one folder still produces a
+ * The key used to pair a filename across the two ratio folders. A run of digits
+ * (`01 Cover` ↔ `Biz Profile 01`) is the key, so the landscape and portrait
+ * exports of the same page pair even when their full names differ; a filename
+ * with no digits pairs on its stem.
+ */
+export function sliderPairKey(filename: string): string {
+  const digits = /\d+/.exec(stemOf(filename));
+  return digits ? String(Number(digits[0])) : stemOf(filename).toLowerCase();
+}
+
+function groupByPairKey(files: readonly string[]): Map<string, string[]> {
+  const groups = new Map<string, string[]>();
+
+  for (const filename of [...files].sort(naturalCompare)) {
+    const key = sliderPairKey(filename);
+    const group = groups.get(key);
+    if (group) {
+      group.push(filename);
+    } else {
+      groups.set(key, [filename]);
+    }
+  }
+
+  return groups;
+}
+
+/**
+ * Pair landscape and portrait filenames into slides. Filenames that share a
+ * pairing key are matched index by index (so an extra landscape export yields a
+ * landscape-only slide rather than dropping it); the union of both folders is
+ * ordered naturally. A filename present in only one folder still produces a
  * slide, with the missing ratio left `null`.
  */
 export function pairSliderAssets(
   landscapeFiles: readonly string[],
   portraitFiles: readonly string[],
-): { filename: string; landscape: boolean; portrait: boolean }[] {
-  const landscapeSet = new Set(landscapeFiles);
-  const portraitSet = new Set(portraitFiles);
-  const filenames = [...new Set([...landscapeFiles, ...portraitFiles])].sort(
+): SliderPair[] {
+  const landscape = groupByPairKey(landscapeFiles);
+  const portrait = groupByPairKey(portraitFiles);
+  const keys = [...new Set([...landscape.keys(), ...portrait.keys()])].sort(
     naturalCompare,
   );
 
-  return filenames.map((filename) => ({
-    filename,
-    landscape: landscapeSet.has(filename),
-    portrait: portraitSet.has(filename),
-  }));
+  const pairs: SliderPair[] = [];
+
+  for (const key of keys) {
+    const landscapeGroup = landscape.get(key) ?? [];
+    const portraitGroup = portrait.get(key) ?? [];
+    const count = Math.max(landscapeGroup.length, portraitGroup.length);
+
+    for (let index = 0; index < count; index += 1) {
+      const landscapeFilename = landscapeGroup[index] ?? null;
+      const portraitFilename = portraitGroup[index] ?? null;
+
+      pairs.push({
+        filename: landscapeFilename ?? portraitFilename ?? key,
+        landscapeFilename,
+        portraitFilename,
+      });
+    }
+  }
+
+  return pairs;
 }
 
 /** Resolve paired filenames into slides carrying their public asset URLs. */
@@ -104,12 +165,43 @@ export function buildSliderSlides(
 ): SliderSlide[] {
   return pairSliderAssets(landscapeFiles, portraitFiles).map((pair) => ({
     filename: pair.filename,
-    landscape: pair.landscape
-      ? assetUrl(collection, "landscape", pair.filename)
+    landscape: pair.landscapeFilename
+      ? assetUrl(collection, "landscape", pair.landscapeFilename)
       : null,
-    portrait: pair.portrait
-      ? assetUrl(collection, "portrait", pair.filename)
+    portrait: pair.portraitFilename
+      ? assetUrl(collection, "portrait", pair.portraitFilename)
       : null,
+  }));
+}
+
+/**
+ * Collections that ship portrait artwork only. The Catalogue has no landscape
+ * counterparts, so it uses its portrait images at every size rather than
+ * art-directing between two ratios.
+ */
+export const PORTRAIT_ONLY_COLLECTIONS: readonly SliderCollection[] = [
+  "catalogue",
+];
+
+export function isPortraitOnlyCollection(
+  collection: SliderCollection,
+): boolean {
+  return PORTRAIT_ONLY_COLLECTIONS.includes(collection);
+}
+
+/**
+ * Build slides from portrait artwork alone, leaving the landscape side `null`
+ * so the shared view renders the portrait image at every viewport. Ordering
+ * stays natural.
+ */
+export function buildPortraitOnlySlides(
+  collection: SliderCollection,
+  portraitFiles: readonly string[],
+): SliderSlide[] {
+  return [...new Set(portraitFiles)].sort(naturalCompare).map((filename) => ({
+    filename,
+    landscape: null,
+    portrait: assetUrl(collection, "portrait", filename),
   }));
 }
 

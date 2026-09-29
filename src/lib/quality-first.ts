@@ -18,9 +18,9 @@ export const QUALITY_FIRST_HERO = {
 } as const;
 
 export const QUALITY_FIRST_STORY_SECTION = {
-  title: "Stories from the Testing Floor",
+  title: "From the Testing Floor",
   description:
-    "Short videos from Safeway Tyre's testing process. Select a story to watch it.",
+    "Take a look inside our testing floor and see the process every Safeway Tyre goes through before it reaches the road.",
 } as const;
 
 export const QUALITY_FIRST_MACHINE_SECTION = {

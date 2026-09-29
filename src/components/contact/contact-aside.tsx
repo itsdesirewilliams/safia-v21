@@ -22,6 +22,10 @@ function DetailRow({
 
 /** Approved contact information and the WhatsApp alternative, shown beside the forms. */
 export function ContactAside({ companyAddress }: ContactAsideProps) {
+  const factory = SITE.addresses.find(
+    (location) => location.label === "Factory",
+  );
+
   return (
     <div className="space-y-8">
       <div className="relative overflow-hidden rounded-card bg-ink-950 p-7 text-white sm:p-8">
@@ -93,7 +97,17 @@ export function ContactAside({ companyAddress }: ContactAsideProps) {
         </DetailRow>
 
         {companyAddress && (
-          <DetailRow label="Office">{companyAddress}</DetailRow>
+          <DetailRow label="Corporate Office">{companyAddress}</DetailRow>
+        )}
+
+        {factory && (
+          <DetailRow label="Factory">
+            {factory.lines.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </DetailRow>
         )}
       </dl>
     </div>
