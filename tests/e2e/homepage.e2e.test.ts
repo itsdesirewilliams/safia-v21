@@ -86,6 +86,10 @@ describe("homepage vertical slice", () => {
     expect(html).toContain("Inquiry Form");
     expect(html).toContain("Find Us on the Map");
     expect(html).toContain("Director@safewaytyre.com");
+    expect(html).toContain("marketing@safewaytyre.com");
+    expect(html).toContain("marketing01@safewaytyre.com");
+    expect(html).toContain("+91 90416 62182");
+    expect(html).toContain("+91 80543 62182");
   });
 
   it("invites a factory tour without a Quality First CTA", async () => {

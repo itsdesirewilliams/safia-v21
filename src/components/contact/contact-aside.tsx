@@ -1,5 +1,5 @@
 import { ArrowIcon } from "@/components/ui/button";
-import { SITE } from "@/lib/site";
+import { MARKETING_EMAILS, MARKETING_PHONES, SITE, telHref } from "@/lib/site";
 
 export type ContactAsideProps = {
   companyAddress: string | null;
@@ -57,35 +57,45 @@ export function ContactAside({ companyAddress }: ContactAsideProps) {
 
       <dl className="space-y-5">
         <DetailRow label="Email">
-          <a
-            href={`mailto:${SITE.emails.director}`}
-            className="font-semibold text-brand-600 hover:underline"
-          >
-            {SITE.emails.director}
-          </a>
-          <br />
-          <a
-            href={`mailto:${SITE.emails.marketing}`}
-            className="font-semibold text-brand-600 hover:underline"
-          >
-            {SITE.emails.marketing}
-          </a>
+          {MARKETING_EMAILS.map((email) => (
+            <span key={email} className="block break-all">
+              <a
+                href={`mailto:${email}`}
+                className="font-semibold text-brand-600 hover:underline"
+              >
+                {email}
+              </a>
+            </span>
+          ))}
+          <span className="block break-all">
+            <a
+              href={`mailto:${SITE.emails.director}`}
+              className="font-semibold text-brand-600 hover:underline"
+            >
+              {SITE.emails.director}
+            </a>
+          </span>
         </DetailRow>
 
         <DetailRow label="Phone">
-          <a
-            href={`tel:${SITE.phone.primary.replace(/\s/g, "")}`}
-            className="font-semibold text-ink-900 hover:text-brand-600"
-          >
-            {SITE.phone.primary}
-          </a>
-          <br />
-          <a
-            href={`tel:${SITE.phone.secondary.replace(/\s/g, "")}`}
-            className="font-semibold text-ink-900 hover:text-brand-600"
-          >
-            {SITE.phone.secondary}
-          </a>
+          {MARKETING_PHONES.map((phone) => (
+            <span key={phone} className="block whitespace-nowrap">
+              <a
+                href={telHref(phone)}
+                className="font-semibold text-ink-900 hover:text-brand-600"
+              >
+                {phone}
+              </a>
+            </span>
+          ))}
+          <span className="block whitespace-nowrap">
+            <a
+              href={telHref(SITE.phone.primary)}
+              className="font-semibold text-ink-900 hover:text-brand-600"
+            >
+              {SITE.phone.primary}
+            </a>
+          </span>
         </DetailRow>
 
         <DetailRow label="Opening hours">

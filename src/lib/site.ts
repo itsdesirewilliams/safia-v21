@@ -9,11 +9,17 @@ export const SITE = {
      * casing wherever the address is shown.
      */
     director: "Director@safewaytyre.com",
+    /** Existing marketing address; also an inquiry-form recipient. */
     marketing: "marketing01@safewaytyre.com",
+    /** Additional marketing address shown as a public contact. */
+    marketingGeneral: "marketing@safewaytyre.com",
   },
   phone: {
+    /** Primary / WhatsApp business line (unchanged). */
     primary: "+91 99157 62182",
+    /** Marketing contact lines. */
     secondary: "+91 90416 62182",
+    tertiary: "+91 80543 62182",
   },
   whatsappUrl: "https://wa.me/+919915762182",
   /** Approved Safeway Tyre Instagram profile. */
@@ -39,3 +45,23 @@ export const SITE = {
     closed: "Sunday",
   },
 } as const;
+
+/**
+ * The marketing contact details shown across the public site (footer, homepage
+ * and Contact Us), in display order. Single source of truth so the same
+ * addresses and numbers are formatted identically everywhere.
+ */
+export const MARKETING_EMAILS: readonly string[] = [
+  SITE.emails.marketingGeneral,
+  SITE.emails.marketing,
+];
+
+export const MARKETING_PHONES: readonly string[] = [
+  SITE.phone.secondary,
+  SITE.phone.tertiary,
+];
+
+/** Format a phone number for a `tel:` link (strip spaces). */
+export function telHref(phone: string): string {
+  return `tel:${phone.replace(/\s/g, "")}`;
+}

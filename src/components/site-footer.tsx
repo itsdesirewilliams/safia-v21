@@ -5,7 +5,7 @@ import { ArrowIcon } from "@/components/ui/button";
 import { CATEGORIES } from "@/lib/catalogue/categories";
 import { getPublicConfig } from "@/lib/config";
 import { FOOTER_NAV, ROUTES } from "@/lib/routes";
-import { SITE } from "@/lib/site";
+import { MARKETING_EMAILS, MARKETING_PHONES, SITE, telHref } from "@/lib/site";
 
 function SocialIcon({ name }: { name: string }) {
   const common = {
@@ -195,30 +195,26 @@ export function SiteFooter() {
             <div className="lg:col-span-3">
               <FooterHeading>Contact</FooterHeading>
               <ul className="mt-5 space-y-3 text-sm text-white/65">
-                <li>
-                  <a
-                    href={`mailto:${SITE.emails.director}`}
-                    className="transition-colors hover:text-white"
-                  >
-                    {SITE.emails.director}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={`mailto:${SITE.emails.marketing}`}
-                    className="transition-colors hover:text-white"
-                  >
-                    {SITE.emails.marketing}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={`tel:${SITE.phone.primary.replace(/\s/g, "")}`}
-                    className="transition-colors hover:text-white"
-                  >
-                    {SITE.phone.primary}
-                  </a>
-                </li>
+                {MARKETING_EMAILS.map((email) => (
+                  <li key={email}>
+                    <a
+                      href={`mailto:${email}`}
+                      className="break-all transition-colors hover:text-white"
+                    >
+                      {email}
+                    </a>
+                  </li>
+                ))}
+                {MARKETING_PHONES.map((phone) => (
+                  <li key={phone}>
+                    <a
+                      href={telHref(phone)}
+                      className="whitespace-nowrap transition-colors hover:text-white"
+                    >
+                      {phone}
+                    </a>
+                  </li>
+                ))}
               </ul>
               <p className="mt-6 text-sm text-white/50">
                 {SITE.openingHours.days}

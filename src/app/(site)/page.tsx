@@ -26,7 +26,7 @@ import {
 } from "@/lib/homepage";
 import { isValidYoutubeVideoId } from "@/lib/media/youtube";
 import { ROUTES } from "@/lib/routes";
-import { SITE } from "@/lib/site";
+import { MARKETING_EMAILS, MARKETING_PHONES, SITE, telHref } from "@/lib/site";
 
 export const metadata = {
   title: `${SITE.name} | ${SITE.tagline}`,
@@ -322,13 +322,32 @@ export default function HomePage() {
                 <dl className="mt-10 space-y-5 text-sm">
                   <div className="border-t border-ink-200 pt-5">
                     <dt className="text-sm font-semibold text-ink-500">Email</dt>
-                    <dd className="mt-2">
-                      <a
-                        href={`mailto:${SITE.emails.director}`}
-                        className="font-semibold text-brand-600 hover:underline"
-                      >
-                        {SITE.emails.director}
-                      </a>
+                    <dd className="mt-2 space-y-1">
+                      {MARKETING_EMAILS.map((email) => (
+                        <span key={email} className="block break-all">
+                          <a
+                            href={`mailto:${email}`}
+                            className="font-semibold text-brand-600 hover:underline"
+                          >
+                            {email}
+                          </a>
+                        </span>
+                      ))}
+                    </dd>
+                  </div>
+                  <div className="border-t border-ink-200 pt-5">
+                    <dt className="text-sm font-semibold text-ink-500">Phone</dt>
+                    <dd className="mt-2 space-y-1">
+                      {MARKETING_PHONES.map((phone) => (
+                        <span key={phone} className="block whitespace-nowrap">
+                          <a
+                            href={telHref(phone)}
+                            className="font-semibold text-brand-600 hover:underline"
+                          >
+                            {phone}
+                          </a>
+                        </span>
+                      ))}
                     </dd>
                   </div>
                   <div className="border-t border-ink-200 pt-5">

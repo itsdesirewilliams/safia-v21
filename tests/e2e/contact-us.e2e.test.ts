@@ -121,7 +121,10 @@ describe("Contact Us page", () => {
 
     expect(html).toContain("Director@safewaytyre.com");
     expect(html).toContain("marketing01@safewaytyre.com");
+    expect(html).toContain("marketing@safewaytyre.com");
     expect(html).toContain(SITE.phone.primary);
+    expect(html).toContain("+91 90416 62182");
+    expect(html).toContain("+91 80543 62182");
     expect(html).toContain(SITE.whatsappUrl);
   });
 
