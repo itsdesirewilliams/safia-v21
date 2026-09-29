@@ -53,15 +53,26 @@ export function getSupabaseUrl(): string {
 
 /** Public Supabase connection (browser and server, anon key). */
 export function getSupabaseEnv(): SupabaseEnv {
-  const env = readRequired([
-    "NEXT_PUBLIC_SUPABASE_URL",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY",
-  ]);
+  // Read these with *static* member access so Next.js inlines them into the
+  // browser bundle. A dynamic `process.env[name]` lookup (as `readRequired`
+  // uses) is not replaced at build time, which left the client-side Supabase
+  // connection undefined in the browser and broke the Gallery bulk upload.
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  return {
-    url: env.NEXT_PUBLIC_SUPABASE_URL,
-    anonKey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-  };
+  if (url && url.trim() !== "" && anonKey && anonKey.trim() !== "") {
+    return { url, anonKey };
+  }
+
+  const missing: string[] = [];
+  if (!url || url.trim() === "") {
+    missing.push("NEXT_PUBLIC_SUPABASE_URL");
+  }
+  if (!anonKey || anonKey.trim() === "") {
+    missing.push("NEXT_PUBLIC_SUPABASE_ANON_KEY");
+  }
+
+  throw new ConfigError(missing);
 }
 
 export type SupabaseAdminEnv = {

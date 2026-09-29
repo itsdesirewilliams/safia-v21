@@ -288,6 +288,61 @@ describeLive("media layer integrity (live Supabase)", () => {
     expect(updated.data?.caption).toBe("A saved caption");
   });
 
+  it("processes a multi-file gallery batch with mixed formats (bulk-upload contract)", async () => {
+    const { client, userId } = await createSignedInUser("admin");
+
+    const formats = [
+      { ext: "png", mime: "image/png" },
+      { ext: "jpg", mime: "image/jpeg" },
+      { ext: "webp", mime: "image/webp" },
+      { ext: "png", mime: "image/png" },
+      { ext: "jpeg", mime: "image/jpeg" },
+    ];
+
+    const ids: string[] = [];
+
+    for (const format of formats) {
+      const path = `e2e/${crypto.randomUUID()}.${format.ext}`;
+
+      const upload = await client.storage
+        .from("gallery")
+        .upload(path, pngBytes(), { contentType: format.mime });
+      expect(upload.error).toBeNull();
+      uploadedObjects.push({ bucket: "gallery", path });
+
+      const record = await client
+        .from("media")
+        .insert({
+          bucket: "gallery",
+          storage_path: path,
+          type: "image",
+          mime_type: format.mime,
+          uploaded_by: userId,
+          caption: null,
+        })
+        .select("id")
+        .single();
+
+      expect(record.error).toBeNull();
+      if (record.data?.id) {
+        createdMedia.push(record.data.id);
+        ids.push(record.data.id);
+      }
+    }
+
+    expect(ids).toHaveLength(formats.length);
+
+    // Every batch item is created with a null caption, so it surfaces under the
+    // Missing Caption workflow.
+    const { data, error } = await anon
+      .from("media")
+      .select("id")
+      .in("id", ids)
+      .is("caption", null);
+    expect(error).toBeNull();
+    expect(data).toHaveLength(formats.length);
+  });
+
   it("lets an admin delete media", async () => {
     const { client } = await createSignedInUser("admin");
     const row = await createMediaRow();

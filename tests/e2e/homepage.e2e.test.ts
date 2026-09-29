@@ -71,7 +71,9 @@ describe("homepage vertical slice", () => {
     expect(html).toContain("Take a Tour of Our Industry");
     expect(html).toContain("Product Ranges");
     expect(html).toContain("Explore the Official Catalogue");
-    expect(html).toContain("Certifications Coming Soon");
+    expect(html).toContain("/assets/certifications/logos/");
+    expect(html).toContain('aria-label="Next certificate"');
+    expect(html).toContain("/assets/certifications/pdfs/");
     expect(html).toContain("Trusted by");
     expect(html).toContain("Worldwide");
     expect(html).toContain("Follow Us on Instagram");

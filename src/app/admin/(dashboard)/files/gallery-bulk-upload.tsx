@@ -72,7 +72,23 @@ export function GalleryBulkUpload() {
     }
 
     setRunning(true);
-    const supabase = createSupabaseBrowserClient();
+    let supabase: ReturnType<typeof createSupabaseBrowserClient>;
+    try {
+      supabase = createSupabaseBrowserClient();
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Could not start the upload.";
+      setItems((previous) =>
+        previous.map((item) =>
+          item.status === "done"
+            ? item
+            : { ...item, status: "failed", error: message },
+        ),
+      );
+      setRunning(false);
+      return;
+    }
+
     const outcomes = new Map<
       string,
       { ok: boolean; error?: string; entry?: GalleryBatchEntry }
@@ -186,8 +202,18 @@ export function GalleryBulkUpload() {
     }
 
     if (entries.length > 0) {
-      const recordResult = await createGalleryRecordsAction(entries);
-      failures.push(...recordResult.failures);
+      try {
+        const recordResult = await createGalleryRecordsAction(entries);
+        failures.push(...recordResult.failures);
+      } catch (error) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Could not save the media records.";
+        for (const entry of entries) {
+          failures.push({ name: entry.name, error: message });
+        }
+      }
     }
 
     const failedNames = new Set(failures.map((failure) => failure.name));
