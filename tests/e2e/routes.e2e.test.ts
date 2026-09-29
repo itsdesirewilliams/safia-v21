@@ -6,7 +6,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { PRIMARY_NAV, SMOKE_ROUTES } from "@/lib/routes";
 
-const PORT = 4311;
+const PORT = 4321;
 const BASE_URL = `http://127.0.0.1:${PORT}`;
 
 function loadDotEnvLocal(): Record<string, string> {

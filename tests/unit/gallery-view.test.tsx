@@ -44,14 +44,19 @@ describe("gallery grid", () => {
     expect(html).toContain("Gallery Coming Soon");
   });
 
-  it("renders a regular responsive grid, not a masonry layout", () => {
+  it("renders a Masonry layout with a sizer and natural-ratio items", () => {
     const html = renderToStaticMarkup(<GalleryGrid images={IMAGES} />);
 
-    expect(html).toContain("grid-cols-2");
-    expect(html).toContain("sm:grid-cols-3");
-    expect(html).toContain("lg:grid-cols-4");
-    expect(html).not.toContain("columns-");
-    expect(html).not.toContain("break-inside-avoid");
+    expect(html).toContain("data-gallery-sizer");
+    expect(html.match(/data-gallery-item/g)).toHaveLength(2);
+    expect(html).toContain("w-1/2");
+    expect(html).toContain("sm:w-1/3");
+    expect(html).toContain("lg:w-1/4");
+    // Natural aspect ratio: full width, auto height — never cropped or squared.
+    expect(html).toContain("h-auto w-full");
+    expect(html).not.toContain("object-cover");
+    expect(html).not.toContain("aspect-square");
+    expect(html).not.toContain("grid-cols-2");
   });
 
   it("renders one openable tile per image with its alt and caption", () => {

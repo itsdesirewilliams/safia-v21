@@ -13,12 +13,12 @@ export const metadata = {
 };
 
 /**
- * The Gallery page (spec #7 / Ticket #21): a public, regular responsive image
- * grid (not masonry) with a fullscreen viewer. Images are discovered from the
- * `gallery` bucket at read time (ADR-0006 principle); an optional Media record
- * supplies each image's caption and alt, defaulting to "Safeway Tyre". No
- * filtering, search or tagging; media management reuses the Admin-only Media
- * admin.
+ * The Gallery page (spec #7 / Ticket #21): a public, cascading Masonry layout
+ * (official `masonry-layout` library) with a fullscreen viewer. Images are
+ * discovered from the `gallery` bucket at read time (ADR-0006 principle); an
+ * optional Media record supplies each image's caption and alt, defaulting to
+ * "Safeway Tyre". No filtering, search or tagging; media management reuses the
+ * Admin-only Media admin.
  */
 export default async function GalleryPage() {
   const images = await listGalleryImages();

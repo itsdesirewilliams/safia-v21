@@ -161,14 +161,18 @@ describe("Gallery page", () => {
     expect(html.match(/<h1/g)).toHaveLength(1);
   });
 
-  it("renders a regular responsive grid, not a masonry layout", async () => {
+  it("renders a cascading Masonry layout with natural-ratio images", async () => {
     const html = await getGalleryHtml();
 
-    expect(html).toContain("grid-cols-2");
-    expect(html).toContain("sm:grid-cols-3");
-    expect(html).toContain("lg:grid-cols-4");
-    expect(html).not.toContain("columns-");
-    expect(html).not.toContain("break-inside-avoid");
+    expect(html).toContain("data-gallery-sizer");
+    expect(html).toContain("data-gallery-item");
+    expect(html).toContain("w-1/2");
+    expect(html).toContain("sm:w-1/3");
+    expect(html).toContain("lg:w-1/4");
+    // Images keep their natural aspect ratio (no crop, no square thumbnails).
+    expect(html).toContain("h-auto w-full");
+    expect(html).not.toContain("object-cover");
+    expect(html).not.toContain("aspect-square");
   });
 
   it("discovers the seeded images newest first", async () => {
