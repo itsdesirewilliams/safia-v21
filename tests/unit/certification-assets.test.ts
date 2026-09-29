@@ -5,7 +5,7 @@ import {
   CERTIFICATION_LOGOS_ROOT,
   discoverCertificates,
   discoverCertificationLogos,
-  isCertificate,
+  isCertificateImage,
   isCertificationLogo,
   labelFromFilename,
   readCertificates,
@@ -13,15 +13,23 @@ import {
 } from "@/lib/media/certification-assets";
 
 describe("supported certification formats", () => {
-  it("accepts web image formats as logos and only PDFs as certificates", () => {
+  it("accepts image formats as logos and as certificate previews", () => {
     for (const filename of ["logo.png", "logo.svg", "logo.webp", "logo.JPG"]) {
       expect(isCertificationLogo(filename)).toBe(true);
     }
     expect(isCertificationLogo("logo.pdf")).toBe(false);
 
-    expect(isCertificate("ISO-9001.pdf")).toBe(true);
-    expect(isCertificate("ISO-9001.PDF")).toBe(true);
-    expect(isCertificate("ISO-9001.png")).toBe(false);
+    for (const filename of [
+      "cert.webp",
+      "cert.jpg",
+      "cert.jpeg",
+      "cert.png",
+      "cert.WEBP",
+    ]) {
+      expect(isCertificateImage(filename)).toBe(true);
+    }
+    // The source PDFs are archive files only — never certificate previews.
+    expect(isCertificateImage("cert.pdf")).toBe(false);
   });
 });
 
@@ -54,13 +62,13 @@ describe("certification discovery", () => {
     );
   });
 
-  it("derives a clickable certificate name from the filename", () => {
-    const certificates = discoverCertificates(["ISO-14001.pdf", "notes.txt"]);
+  it("derives a display name from the certificate image filename", () => {
+    const certificates = discoverCertificates(["ISO-14001.webp", "notes.pdf"]);
 
     expect(certificates).toEqual([
       {
-        filename: "ISO-14001.pdf",
-        url: `${CERTIFICATES_ROOT}/ISO-14001.pdf`,
+        filename: "ISO-14001.webp",
+        url: `${CERTIFICATES_ROOT}/ISO-14001.webp`,
         name: "ISO 14001",
       },
     ]);
@@ -78,12 +86,13 @@ describe("supplied certification assets", () => {
     }
   });
 
-  it("discovers the three uploaded ISO certificate PDFs", () => {
+  it("discovers the three uploaded ISO certificate images (never the PDFs)", () => {
     const certificates = readCertificates();
 
     expect(certificates).toHaveLength(3);
     for (const certificate of certificates) {
       expect(certificate.url.startsWith(`${CERTIFICATES_ROOT}/`)).toBe(true);
+      expect(certificate.url.toLowerCase().endsWith(".pdf")).toBe(false);
       expect(certificate.name.length).toBeGreaterThan(0);
     }
   });

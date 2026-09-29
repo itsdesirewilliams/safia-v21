@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-import { ArrowIcon } from "@/components/ui/button";
 import type { Certificate } from "@/lib/media/certification-assets";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
 
@@ -29,11 +28,14 @@ function Chevron({ direction }: { direction: "left" | "right" }) {
 }
 
 /**
- * The homepage certificate carousel: one certificate is rendered visually at a
- * time using the browser's built-in PDF viewer (the supplied PDFs are shown
- * as-is, never rasterised or replaced). It advances automatically and loops
- * continuously, with manual previous/next controls, and each slide keeps a
- * direct link to the original PDF.
+ * The homepage certificate slider. It shows one supplied certificate **image**
+ * at a time (the rendered webp/jpg versions — the source PDFs are never
+ * rendered, embedded or linked here). Each certificate keeps its natural
+ * portrait aspect ratio (`block h-auto w-full`, never cropped or stretched),
+ * scales to the available width on mobile, and sits at a comfortable readable
+ * size on desktop. It advances automatically and loops continuously
+ * (1 → 2 → 3 → 1), with previous/next controls and a smooth cross-fade that is
+ * disabled under `prefers-reduced-motion`.
  */
 export function CertificateCarousel({
   certificates,
@@ -103,35 +105,30 @@ export function CertificateCarousel({
         )}
       </div>
 
-      <div className="mt-3 overflow-hidden rounded-lg border border-ink-200 bg-ink-100">
-        {/* A4 portrait, matching the supplied documents so nothing is cropped. */}
-        <div className="mx-auto aspect-[1/1.414] w-full max-w-lg">
-          <iframe
+      <div className="mx-auto mt-3 w-full max-w-sm sm:max-w-md lg:max-w-lg">
+        <div className="overflow-hidden rounded-lg border border-ink-200 bg-ink-50">
+          {/*
+            Natural aspect ratio: the image sets its own height, so the complete
+            portrait certificate is always visible — never cropped or stretched.
+          */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             key={current.url}
-            src={`${current.url}#toolbar=0&navpanes=0&view=Fit`}
-            title={`${current.name} (PDF)`}
-            loading="lazy"
-            className="h-full w-full animate-fade-in motion-reduce:animate-none"
+            src={current.url}
+            alt={current.name}
+            loading={index === 0 ? "eager" : "lazy"}
+            decoding="async"
+            draggable={false}
+            className="block h-auto w-full animate-fade-in motion-reduce:animate-none"
           />
         </div>
-      </div>
 
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-        <span
-          className="min-w-0 truncate text-sm font-semibold text-ink-950"
+        <p
+          className="mt-3 truncate text-center text-sm font-semibold text-ink-950"
           title={current.name}
         >
           {current.name}
-        </span>
-        <a
-          href={current.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-brand-600 hover:underline"
-        >
-          Open PDF
-          <ArrowIcon className="h-4 w-4" />
-        </a>
+        </p>
       </div>
     </div>
   );

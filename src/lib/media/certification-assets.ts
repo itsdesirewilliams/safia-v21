@@ -7,7 +7,9 @@ import { naturalCompare } from "@/lib/natural-order";
  * Server-only discovery of the developer-provided certification assets. The
  * folders live under `public/` so the files ship with the deployment:
  *  - `public/assets/certifications/logos` — the certification/logo marks;
- *  - `public/assets/certifications/pdfs` — the ISO certificate PDFs.
+ *  - `public/assets/certifications/pdfs` — the ISO certificate **images** (the
+ *    rendered `webp`/`jpg`/`png` versions), with the source PDFs kept alongside
+ *    as archive files that the homepage never renders or links.
  * Adding or removing a file is the only step needed to update the homepage
  * section; nothing is fetched, stored or invented.
  */
@@ -30,8 +32,14 @@ export const CERTIFICATION_LOGO_EXTENSIONS = [
   ".avif",
 ] as const;
 
-/** Document formats accepted for certificates. */
-export const CERTIFICATE_EXTENSIONS = [".pdf"] as const;
+/** Image formats accepted for the certificate previews. */
+export const CERTIFICATE_IMAGE_EXTENSIONS = [
+  ".webp",
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".avif",
+] as const;
 
 export type CertificationLogo = {
   filename: string;
@@ -43,7 +51,7 @@ export type CertificationLogo = {
 
 export type Certificate = {
   filename: string;
-  /** Public URL of the PDF. */
+  /** Public URL of the certificate image. */
   url: string;
   /** Display name derived from the filename. */
   name: string;
@@ -67,9 +75,9 @@ export function isCertificationLogo(filename: string): boolean {
   return hasExtension(filename, CERTIFICATION_LOGO_EXTENSIONS);
 }
 
-/** Whether a filename is a supported certificate document. */
-export function isCertificate(filename: string): boolean {
-  return hasExtension(filename, CERTIFICATE_EXTENSIONS);
+/** Whether a filename is a supported certificate image. */
+export function isCertificateImage(filename: string): boolean {
+  return hasExtension(filename, CERTIFICATE_IMAGE_EXTENSIONS);
 }
 
 function stripExtensions(filename: string): string {
@@ -117,12 +125,12 @@ export function discoverCertificationLogos(
     }));
 }
 
-/** Map certificate filenames to clickable items, naturally ordered. */
+/** Map certificate image filenames to display items, naturally ordered. */
 export function discoverCertificates(
   filenames: readonly string[],
 ): Certificate[] {
   return filenames
-    .filter(isCertificate)
+    .filter(isCertificateImage)
     .sort(naturalCompare)
     .map((filename) => ({
       filename,
@@ -138,7 +146,7 @@ export function readCertificationLogos(): CertificationLogo[] {
   );
 }
 
-/** The available certificates. */
+/** The available certificate images (the source PDFs are ignored). */
 export function readCertificates(): Certificate[] {
   return discoverCertificates(listFiles("assets", "certifications", "pdfs"));
 }

@@ -73,7 +73,12 @@ describe("homepage vertical slice", () => {
     expect(html).toContain("Explore the Official Catalogue");
     expect(html).toContain("/assets/certifications/logos/");
     expect(html).toContain('aria-label="Next certificate"');
-    expect(html).toContain("/assets/certifications/pdfs/");
+    // The slider renders the certificate image, never a PDF viewer/embed.
+    expect(html).toMatch(
+      /\/assets\/certifications\/pdfs\/[^"]+\.(webp|jpg|jpeg|png)/,
+    );
+    expect(html).not.toContain("view=Fit");
+    expect(html).not.toContain("Open PDF");
     expect(html).toContain("Trusted by");
     expect(html).toContain("Worldwide");
     expect(html).toContain("Follow Us on Instagram");
