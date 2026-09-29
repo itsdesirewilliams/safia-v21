@@ -4,24 +4,12 @@ import {
   altFromFilename,
   discoverInstagramImages,
   INSTAGRAM_ASSET_ROOT,
-  INSTAGRAM_DISPLAY_COUNT,
-  INSTAGRAM_ROTATE_MS,
+  INSTAGRAM_CAROUSEL_INTERVAL_MS,
   instagramImageUrl,
   isInstagramImage,
-  nextInstagramDisplay,
-  type InstagramImage,
 } from "@/lib/media/instagram";
 import { readInstagramImages } from "@/lib/media/instagram-assets";
 import { naturalCompare } from "@/lib/natural-order";
-
-function images(count: number): InstagramImage[] {
-  return Array.from({ length: count }, (_, index) => ({
-    url: `/assets/instagram/image-${index + 1}.jpg`,
-    alt: `image ${index + 1}`,
-  }));
-}
-
-const urls = (items: InstagramImage[]) => items.map((item) => item.url);
 
 describe("supported image formats", () => {
   it("accepts the web image formats the folder ships", () => {
@@ -74,7 +62,7 @@ describe("folder discovery", () => {
       "slide-1.webp",
     ]);
 
-    expect(urls(discovered)).toEqual([
+    expect(discovered.map((image) => image.url)).toEqual([
       instagramImageUrl("slide-1.webp"),
       instagramImageUrl("slide-2.jpg"),
       instagramImageUrl("slide-10.jpg"),
@@ -95,71 +83,9 @@ describe("folder discovery", () => {
   });
 });
 
-describe("display count and rotation cadence", () => {
-  it("shows four images at a time, replacing one every seven seconds", () => {
-    expect(INSTAGRAM_DISPLAY_COUNT).toBe(4);
-    expect(INSTAGRAM_ROTATE_MS).toBe(7_000);
-  });
-});
-
-describe("the displayed selection", () => {
-  it("starts with the first four images in natural order", () => {
-    expect(urls(nextInstagramDisplay(images(10), [], 0))).toEqual(
-      urls(images(10).slice(0, 4)),
-    );
-  });
-
-  it("shows only the available images when fewer than four exist", () => {
-    expect(nextInstagramDisplay(images(2), [], 0)).toHaveLength(2);
-    expect(nextInstagramDisplay(images(3), [], 5)).toHaveLength(3);
-  });
-
-  it("returns nothing when there are no images", () => {
-    expect(nextInstagramDisplay([], [], 3)).toEqual([]);
-  });
-
-  it("falls back to the initial selection without a known current set", () => {
-    expect(urls(nextInstagramDisplay(images(10), [], 3))).toEqual(
-      urls(images(10).slice(0, 4)),
-    );
-  });
-
-  it("replaces exactly one image in place, keeping the other three where they are", () => {
-    const all = images(10);
-    let current = nextInstagramDisplay(all, [], 0);
-
-    for (let step = 1; step <= 12; step += 1) {
-      const next = nextInstagramDisplay(all, current, step);
-
-      expect(next).toHaveLength(INSTAGRAM_DISPLAY_COUNT);
-      expect(new Set(urls(next)).size).toBe(INSTAGRAM_DISPLAY_COUNT);
-
-      const changed = next.filter(
-        (image, index) => image.url !== current[index].url,
-      );
-      expect(changed).toHaveLength(1);
-
-      current = next;
-    }
-  });
-
-  it("never runs out of images to rotate in", () => {
-    const all = images(5);
-    let current = nextInstagramDisplay(all, [], 0);
-
-    for (let step = 1; step <= 25; step += 1) {
-      const next = nextInstagramDisplay(all, current, step);
-      expect(new Set(urls(next)).size).toBe(INSTAGRAM_DISPLAY_COUNT);
-      current = next;
-    }
-  });
-
-  it("stays static when there is no spare image to rotate in", () => {
-    const all = images(INSTAGRAM_DISPLAY_COUNT);
-
-    expect(urls(nextInstagramDisplay(all, [], 0))).toEqual(urls(all));
-    expect(urls(nextInstagramDisplay(all, all, 1))).toEqual(urls(all));
-    expect(urls(nextInstagramDisplay(all, all, 7))).toEqual(urls(all));
+describe("carousel cadence", () => {
+  it("advances every five seconds", () => {
+    expect(INSTAGRAM_CAROUSEL_INTERVAL_MS).toBe(5_000);
   });
 });
 
@@ -167,7 +93,7 @@ describe("shipped developer assets", () => {
   it("discovers the local instagram images in natural order", () => {
     const discovered = readInstagramImages();
 
-    expect(discovered.length).toBeGreaterThanOrEqual(INSTAGRAM_DISPLAY_COUNT);
+    expect(discovered.length).toBeGreaterThan(1);
 
     for (const image of discovered) {
       expect(image.url.startsWith(`${INSTAGRAM_ASSET_ROOT}/`)).toBe(true);

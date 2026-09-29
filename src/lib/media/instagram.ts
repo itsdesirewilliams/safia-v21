@@ -5,9 +5,9 @@ import { naturalCompare } from "@/lib/natural-order";
  *
  * The Instagram section is a static media system: images live in
  * `public/assets/instagram` and are discovered at read time. This module is
- * deliberately free of Node built-ins so the client rotation component can
- * import its constants and the `nextInstagramDisplay` window logic; filesystem
- * access lives in `instagram-assets.ts` (server-only).
+ * deliberately free of Node built-ins so the client carousel component can
+ * import its constants; filesystem access lives in `instagram-assets.ts`
+ * (server-only).
  */
 
 /** Public URL path segment for the developer-provided Instagram folder. */
@@ -21,11 +21,8 @@ export const INSTAGRAM_IMAGE_EXTENSIONS = [
   ".png",
 ] as const;
 
-/** How many images are shown at once. */
-export const INSTAGRAM_DISPLAY_COUNT = 4;
-
-/** How often one of the displayed images is quietly replaced. */
-export const INSTAGRAM_ROTATE_MS = 7_000;
+/** How often the Instagram carousel advances to the next image. */
+export const INSTAGRAM_CAROUSEL_INTERVAL_MS = 5_000;
 
 /** A displayed Instagram image: its public URL and accessible alt text. */
 export type InstagramImage = {
@@ -86,49 +83,4 @@ export function discoverInstagramImages(
   }
 
   return images;
-}
-
-/**
- * The images to display after a rotation.
- *
- * On the first step the first `count` images are shown. Each later step
- * replaces exactly one slot — cycling through the slots in turn — with the next
- * unused image from the natural-order pool. The other slots keep their position
- * and value, so the visitor sees one photo quietly change rather than the grid
- * reshuffling. With no spare image (pool empty or no larger than the display
- * count) the selection is static, and an unknown/absent `current` falls back to
- * the initial selection.
- */
-export function nextInstagramDisplay(
-  images: readonly InstagramImage[],
-  current: readonly InstagramImage[],
-  step: number,
-): InstagramImage[] {
-  const count = Math.min(INSTAGRAM_DISPLAY_COUNT, images.length);
-
-  if (count === 0) {
-    return [];
-  }
-
-  if (images.length <= count || step <= 0 || current.length !== count) {
-    return images.slice(0, count);
-  }
-
-  const slot = (step - 1) % count;
-  const retained = new Set(
-    current
-      .filter((_, index) => index !== slot)
-      .map((image) => image.url),
-  );
-
-  let incoming = current[slot];
-  for (let offset = 0; offset < images.length; offset += 1) {
-    const candidate = images[(count + step - 1 + offset) % images.length];
-    if (!retained.has(candidate.url) && candidate.url !== current[slot].url) {
-      incoming = candidate;
-      break;
-    }
-  }
-
-  return current.map((image, index) => (index === slot ? incoming : image));
 }

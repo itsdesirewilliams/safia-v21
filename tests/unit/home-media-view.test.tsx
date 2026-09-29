@@ -4,10 +4,7 @@ import { describe, expect, it } from "vitest";
 import { HeroVideo } from "@/components/home/hero-video";
 import { InstagramStrip } from "@/components/home/instagram-strip";
 import { YouTubeTour } from "@/components/home/youtube-tour";
-import {
-  INSTAGRAM_DISPLAY_COUNT,
-  type InstagramImage,
-} from "@/lib/media/instagram";
+import type { InstagramImage } from "@/lib/media/instagram";
 
 function images(count: number): InstagramImage[] {
   return Array.from({ length: count }, (_, index) => ({
@@ -16,19 +13,22 @@ function images(count: number): InstagramImage[] {
   }));
 }
 
-describe("Instagram strip", () => {
-  it("shows four images at a time", () => {
+describe("Instagram carousel", () => {
+  it("renders the full set (doubled for a seamless loop) as Instagram links", () => {
     const html = renderToStaticMarkup(<InstagramStrip images={images(10)} />);
 
-    expect(html.match(/<img /g)).toHaveLength(INSTAGRAM_DISPLAY_COUNT);
-    expect(html.match(/alt="image [0-9]+"/g)).toHaveLength(
-      INSTAGRAM_DISPLAY_COUNT,
-    );
+    // The set is rendered twice so the carousel can wrap without a jump.
+    expect(html.match(/<img /g)).toHaveLength(20);
+    expect(html).toContain("https://www.instagram.com/safewaytyre/");
+    expect(html).toContain("snap-x");
+    expect(html).toContain("aspect-[4/5]");
+    expect(html).toContain('aria-label="Next Instagram image"');
+    expect(html).toContain('aria-label="Previous Instagram image"');
   });
 
-  it("shows the available images when fewer than four exist", () => {
-    const html = renderToStaticMarkup(<InstagramStrip images={images(2)} />);
-    expect(html.match(/<img /g)).toHaveLength(2);
+  it("renders nothing when no images are supplied", () => {
+    const html = renderToStaticMarkup(<InstagramStrip images={images(0)} />);
+    expect(html).toBe("");
   });
 });
 

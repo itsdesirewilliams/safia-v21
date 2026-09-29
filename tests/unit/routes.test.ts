@@ -59,7 +59,7 @@ describe("header navigation", () => {
       "Products",
       "Contact Us",
       "Quality First",
-      "Warranty",
+      "Gallery",
       "Blogs",
     ]);
   });
@@ -72,9 +72,16 @@ describe("header navigation", () => {
       ROUTES.catalogue,
       ROUTES.contactUs,
       ROUTES.qualityFirst,
-      ROUTES.warranty,
+      ROUTES.gallery,
       ROUTES.blogs,
     ]);
+  });
+
+  it("keeps Warranty out of the header but available in the footer", () => {
+    expect(PRIMARY_NAV.map((item) => item.label)).not.toContain("Warranty");
+    expect(
+      FOOTER_NAV.some((link) => link.href === ROUTES.warranty),
+    ).toBe(true);
   });
 
   it("lists all seven categories in the Products dropdown", () => {

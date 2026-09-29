@@ -231,16 +231,8 @@ export default function HomePage() {
               description="Safeway Tyre products are backed by recognised quality and compliance marks."
             />
           </Reveal>
-          <div className="mt-14 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="mt-14">
             <Reveal>
-              <div className="h-full rounded-card bg-ink-950 p-8 sm:p-10">
-                <p className="text-lg leading-relaxed text-white/75">
-                  From freight and agriculture to industry and off-road, every
-                  Safeway range is built on the same manufacturing discipline.
-                </p>
-              </div>
-            </Reveal>
-            <Reveal delay={100}>
               <Certifications />
             </Reveal>
           </div>

@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ArrowIcon } from "@/components/ui/button";
 import type { Certificate } from "@/lib/media/certification-assets";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
+
+/** How long each certificate stays on screen before the carousel advances. */
+const CERTIFICATE_INTERVAL_MS = 6_000;
 
 function Chevron({ direction }: { direction: "left" | "right" }) {
   return (
@@ -25,10 +29,11 @@ function Chevron({ direction }: { direction: "left" | "right" }) {
 }
 
 /**
- * The homepage certificate viewer: one certificate at a time with simple
- * previous/next controls. Each slide links to the actual PDF so the visitor can
- * open the document; the displayed name is derived from the supplied filename,
- * never invented.
+ * The homepage certificate carousel: one certificate is rendered visually at a
+ * time using the browser's built-in PDF viewer (the supplied PDFs are shown
+ * as-is, never rasterised or replaced). It advances automatically and loops
+ * continuously, with manual previous/next controls, and each slide keeps a
+ * direct link to the original PDF.
  */
 export function CertificateCarousel({
   certificates,
@@ -36,7 +41,20 @@ export function CertificateCarousel({
   certificates: readonly Certificate[];
 }) {
   const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const reduceMotion = useReducedMotion();
   const count = certificates.length;
+
+  useEffect(() => {
+    if (count <= 1 || reduceMotion || paused) {
+      return;
+    }
+    const timer = setInterval(
+      () => setIndex((value) => (value + 1) % count),
+      CERTIFICATE_INTERVAL_MS,
+    );
+    return () => clearInterval(timer);
+  }, [count, reduceMotion, paused]);
 
   if (count === 0) {
     return null;
@@ -49,7 +67,12 @@ export function CertificateCarousel({
   }
 
   return (
-    <div>
+    <div
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={() => setPaused(false)}
+    >
       <div className="flex items-center justify-between gap-3">
         <p className="text-sm font-semibold text-ink-500">Certificates</p>
         {count > 1 && (
@@ -80,47 +103,36 @@ export function CertificateCarousel({
         )}
       </div>
 
-      <a
-        href={current.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="group mt-3 flex items-center justify-between gap-4 rounded-lg border border-ink-200 bg-white px-4 py-3.5 transition-colors hover:border-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2"
-      >
-        <span className="flex min-w-0 items-center gap-3">
-          <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-ink-950 text-white">
-            <svg
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              className="h-5 w-5"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M14.25 3.75H7.5A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h9a1.5 1.5 0 0 0 1.5-1.5V7.5l-3.75-3.75Z"
-              />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M14.25 3.75V7.5H18" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 13.5h7.5M8.25 16.5h4.5" />
-            </svg>
-          </span>
-          <span className="min-w-0">
-            <span
-              className="block truncate text-sm font-semibold text-ink-950"
-              title={current.name}
-            >
-              {current.name}
-            </span>
-            <span className="block text-xs text-ink-500">
-              PDF · opens in a new tab
-            </span>
-          </span>
+      <div className="mt-3 overflow-hidden rounded-lg border border-ink-200 bg-ink-100">
+        {/* A4 portrait, matching the supplied documents so nothing is cropped. */}
+        <div className="mx-auto aspect-[1/1.414] w-full max-w-lg">
+          <iframe
+            key={current.url}
+            src={`${current.url}#toolbar=0&navpanes=0&view=Fit`}
+            title={`${current.name} (PDF)`}
+            loading="lazy"
+            className="h-full w-full animate-fade-in motion-reduce:animate-none"
+          />
+        </div>
+      </div>
+
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+        <span
+          className="min-w-0 truncate text-sm font-semibold text-ink-950"
+          title={current.name}
+        >
+          {current.name}
         </span>
-        <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-ink-200 text-ink-700 transition-colors group-hover:border-brand-600 group-hover:bg-brand-600 group-hover:text-white">
+        <a
+          href={current.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-brand-600 hover:underline"
+        >
+          Open PDF
           <ArrowIcon className="h-4 w-4" />
-        </span>
-      </a>
+        </a>
+      </div>
     </div>
   );
 }

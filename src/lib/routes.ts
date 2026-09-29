@@ -63,7 +63,7 @@ export const PRIMARY_NAV: readonly NavItem[] = [
   { label: "Products", children: PRODUCTS_CHILDREN },
   { label: "Contact Us", href: ROUTES.contactUs },
   { label: "Quality First", href: ROUTES.qualityFirst },
-  { label: "Warranty", href: ROUTES.warranty },
+  { label: "Gallery", href: ROUTES.gallery },
   { label: "Blogs", href: ROUTES.blogs },
 ];
 

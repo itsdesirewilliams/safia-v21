@@ -264,22 +264,13 @@ export function SiteHeader() {
           >
             <SearchIcon className="h-5 w-5" />
           </Link>
-          {/* Mobile: the quotation CTA stays on one line beside the menu icon. */}
           <Link
             href={ROUTES.contactUs}
             onClick={closeMenus}
-            className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-lg bg-brand-600 px-2.5 py-2 text-[11px] font-semibold text-white transition-colors hover:bg-brand-700 sm:text-xs lg:hidden"
+            className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-lg bg-brand-600 px-2.5 py-2 text-[11px] font-semibold text-white transition-colors hover:bg-brand-700 sm:px-4 sm:text-sm"
           >
             Request a Quotation
           </Link>
-          <ButtonLink
-            href={ROUTES.contactUs}
-            size="sm"
-            shape="rounded-rectangle"
-            className="hidden lg:inline-flex"
-          >
-            Request a Quotation
-          </ButtonLink>
           <button
             type="button"
             className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink-200 text-ink-800 transition-colors hover:bg-ink-50 lg:hidden"

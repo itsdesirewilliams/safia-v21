@@ -132,7 +132,8 @@ describe("homepage vertical slice", () => {
 
     expect(html).toContain("google.com/maps?q=");
     expect(html).toContain("aspect-[4/5]");
-    expect(html).toContain("lg:grid-cols-4");
+    expect(html).toContain("snap-x");
+    expect(html).toContain("instagram.com/safewaytyre/");
     expect(html).not.toContain("Instagram feed not connected");
   });
 
