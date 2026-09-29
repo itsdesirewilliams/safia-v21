@@ -118,6 +118,28 @@ export function isMachineImage(path: string): boolean {
   return isExtensionIn(path, MACHINE_IMAGE_EXTENSIONS);
 }
 
+/**
+ * A human-readable label derived from a media path, used as the story title when
+ * no caption has been supplied — for example developer-dropped videos that ship
+ * without Media metadata. `stories/Plunger Testing Machine.mp4` becomes
+ * "Plunger Testing Machine" and `stories/tubeTest.mp4` becomes "Tube Test".
+ */
+export function titleFromMediaPath(path: string): string {
+  const name = path.split("/").pop() ?? path;
+  const withoutExtension = name.replace(/\.[^.]+$/, "");
+  const spaced = withoutExtension
+    .replace(/[_-]+/g, " ")
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (spaced === "") {
+    return name;
+  }
+
+  return spaced.charAt(0).toUpperCase() + spaced.slice(1);
+}
+
 function normalizeFolder(folder: string): string {
   return folder.endsWith("/") ? folder : `${folder}/`;
 }

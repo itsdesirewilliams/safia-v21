@@ -4,11 +4,7 @@ import { describe, expect, it } from "vitest";
 import { QualityFirstHero } from "@/components/quality-first/quality-first-hero";
 import { StoryRail } from "@/components/quality-first/story-rail";
 import { TestingExplanation } from "@/components/quality-first/testing-explanation";
-import { TestingImageStrip } from "@/components/quality-first/testing-image-strip";
-import type {
-  QualityFirstMachineImage,
-  QualityFirstStory,
-} from "@/lib/media/quality-first";
+import type { QualityFirstStory } from "@/lib/media/quality-first";
 
 const STORIES: QualityFirstStory[] = [
   {
@@ -25,21 +21,6 @@ const STORIES: QualityFirstStory[] = [
     url: "https://example.supabase.co/storage/v1/object/public/testing-videos/stories/story-2.webm",
     posterUrl: null,
     title: null,
-    alt: null,
-    caption: null,
-  },
-];
-
-const MACHINE_IMAGES: QualityFirstMachineImage[] = [
-  {
-    path: "2026-09/machine-1.jpg",
-    url: "https://example.supabase.co/storage/v1/object/public/machine-images/2026-09/machine-1.jpg",
-    alt: "A tyre on a tensile testing rig",
-    caption: "Tensile rig",
-  },
-  {
-    path: "2026-09/machine-2.jpg",
-    url: "https://example.supabase.co/storage/v1/object/public/machine-images/2026-09/machine-2.jpg",
     alt: null,
     caption: null,
   },
@@ -66,38 +47,20 @@ describe("story rail", () => {
     expect(html).not.toContain("Scroll stories left");
   });
 
-  it("renders one playable card per story with a poster fallback", () => {
+  it("renders one playable card per story as a natural-ratio video", () => {
     const html = renderToStaticMarkup(<StoryRail stories={STORIES} />);
 
     expect(html.match(/aria-label="Play /g)).toHaveLength(2);
+    expect(html.match(/<video /g)).toHaveLength(2);
     expect(html).toContain("Endurance test");
     expect(html).toContain("Testing story 2");
     expect(html).toContain('aria-label="Scroll stories left"');
     expect(html).toContain('aria-label="Scroll stories right"');
     expect(html).toContain("snap-x");
-  });
-});
-
-describe("testing image strip", () => {
-  it("renders nothing when there are no images", () => {
-    expect(renderToStaticMarkup(<TestingImageStrip images={[]} />)).toBe("");
-  });
-
-  it("renders a horizontal story strip of natural-ratio, clickable images", () => {
-    const html = renderToStaticMarkup(
-      <TestingImageStrip images={MACHINE_IMAGES} />,
-    );
-
-    expect(html.match(/<img /g)).toHaveLength(2);
-    expect(html.match(/<button /g)).toHaveLength(2);
-    expect(html).toContain("snap-x");
+    // The card shows the video at its natural aspect ratio, never cropped.
     expect(html).toContain("h-auto w-full");
-    expect(html).toContain(
-      'aria-label="Open image 1 of 2: A tyre on a tensile testing rig"',
-    );
     expect(html).not.toContain("object-cover");
-    expect(html).not.toContain("columns-");
-    expect(html).not.toContain('role="dialog"');
+    expect(html).not.toContain("aspect-[9/16]");
   });
 });
 

@@ -7,6 +7,7 @@ import {
   isMachineImage,
   isStoryPoster,
   isStoryVideo,
+  titleFromMediaPath,
   type QualityFirstMetadata,
   type StorageFile,
 } from "@/lib/media/quality-first";
@@ -142,6 +143,38 @@ describe("story posters", () => {
         files("stories/clip-1.mp4", "2026-09/clip-1.jpg"),
       ),
     ).toBeNull();
+  });
+});
+
+describe("story titles", () => {
+  it("uses a supplied caption and leaves the title null otherwise", () => {
+    const stories = discoverStories({
+      files: files("stories/Plunger Testing Machine.mp4", "stories/tubeTest.mp4"),
+      metadata: metadata({
+        path: "stories/Plunger Testing Machine.mp4",
+        caption: "Plunger test",
+      }),
+    });
+
+    const withCaption = stories.find(
+      (story) => story.path === "stories/Plunger Testing Machine.mp4",
+    );
+    const withoutCaption = stories.find(
+      (story) => story.path === "stories/tubeTest.mp4",
+    );
+
+    expect(withCaption?.title).toBe("Plunger test");
+    expect(withoutCaption?.title).toBeNull();
+  });
+
+  it("humanises paths when no caption exists", () => {
+    expect(titleFromMediaPath("stories/Plunger Testing Machine.mp4")).toBe(
+      "Plunger Testing Machine",
+    );
+    expect(titleFromMediaPath("stories/tubeTest.mp4")).toBe("Tube Test");
+    expect(titleFromMediaPath("stories/oscillating_disk.mp4")).toBe(
+      "Oscillating disk",
+    );
   });
 });
 

@@ -6,6 +6,7 @@ import {
   discoverStories,
   MACHINE_BUCKET,
   STORY_BUCKET,
+  titleFromMediaPath,
   type QualityFirstMachineImage,
   type QualityFirstMetadata,
   type QualityFirstStory,
@@ -128,7 +129,7 @@ export async function listQualityFirstStories(): Promise<QualityFirstStory[]> {
         : null;
 
   return discoverStories({ files, metadata })
-    .map((story) => {
+    .map((story): QualityFirstStory | null => {
       const url = resolve(story.path);
       if (!url) {
         return null;
@@ -137,7 +138,7 @@ export async function listQualityFirstStories(): Promise<QualityFirstStory[]> {
         path: story.path,
         url,
         posterUrl: story.posterPath ? resolve(story.posterPath) : null,
-        title: story.title,
+        title: story.title ?? titleFromMediaPath(story.path),
         alt: story.alt,
         caption: story.caption,
       };

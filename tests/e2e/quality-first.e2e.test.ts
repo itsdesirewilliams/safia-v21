@@ -68,21 +68,25 @@ async function getQualityFirstHtml(): Promise<string> {
 }
 
 describe("Quality First page structure", () => {
-  it("renders the hero, video section and explanation in order without the legacy machine section", async () => {
+  it("renders the hero, the testing-floor video section and the explanation in order, with no image content", async () => {
     const html = await getQualityFirstHtml();
 
     expect(html).toContain("Quality Is a Process, Not a Promise.");
     expect(html).toContain("From the Testing Floor");
     expect(html).toContain("How Quality Is Built In");
 
-    // The old bottom machine-masonry section is fully removed.
+    // No testing or machine image content anywhere on the page.
+    expect(html).not.toContain("The Machines Behind the Testing");
     expect(html).not.toContain("Machine Images Coming Soon");
+    expect(html).not.toContain('id="testing-images"');
+    expect(html).not.toContain('id="machines"');
     expect(html).not.toContain("break-inside-avoid");
 
+    const heroIndex = html.indexOf("Quality Is a Process, Not a Promise.");
     const storiesIndex = html.indexOf('id="stories"');
     const explanationIndex = html.indexOf("How Quality Is Built In");
 
-    expect(storiesIndex).toBeGreaterThan(-1);
+    expect(storiesIndex).toBeGreaterThan(heroIndex);
     expect(explanationIndex).toBeGreaterThan(storiesIndex);
   });
 
@@ -96,13 +100,17 @@ describe("Quality First page structure", () => {
     expect(html).toContain('href="/warranty"');
   });
 
-  it("renders the testing videos (story rail or labelled empty state)", async () => {
+  it("renders the stored testing videos as natural-ratio, playable cards", async () => {
     const html = await getQualityFirstHtml();
 
-    const hasRail = html.includes('aria-label="Play ');
-    const hasEmptyState = html.includes("Testing Videos Coming Soon");
-
-    expect(hasRail || hasEmptyState).toBe(true);
+    expect(html).toContain('aria-label="Play ');
+    expect(html).toContain("/assets/testing/videos/");
+    expect(html).toContain("<video");
+    expect(html).toContain("h-auto w-full");
+    expect(html).not.toContain("object-cover");
+    // Labels come from the supplied filenames when no caption is set.
+    expect(html).toContain("Plunger Testing Machine");
+    expect(html).toContain("Tube Test");
   });
 
   it("does not open a video dialog before a story is selected", async () => {

@@ -69,23 +69,23 @@ A user role limited to creating, editing, and publishing Posts and uploading med
 ## Quality First
 
 **Quality First**:
-The page at `/quality-first` describing Safeway's testing and quality-control process, in three ordered sections: the story rail, the testing explanation, and the machine images. Story and machine media is discovered from Supabase Storage; no database record is required for media to display.
+The page at `/quality-first` describing Safeway's testing and quality-control process: a hero, the story rail, the testing explanation, and a closing call to action. It carries no testing or machine image content. Story videos are discovered from `public/assets/testing/videos` and Supabase Storage; no database record is required for a video to display.
 _Avoid_: quality page, QC page
 
 **Story**:
-A single testing video shown as a portrait, story-style card. Discovered from storage; displaying it does not require a database record.
+A single testing video shown as a story-style card sized to its natural aspect ratio (never cropped or distorted). Discovered from storage or the local asset folder; displaying it does not require a database record.
 _Avoid_: video, reel, clip
 
 **Story rail**:
-The horizontal, left-to-right sequence of story cards at the top of the Quality First page.
+The horizontal, left-to-right sequence of story cards inside the "From the Testing Floor" section of the Quality First page.
 _Avoid_: video rail, video grid, carousel
 
 **Machine image**:
-An image of a testing machine, shown in a masonry layout at the end of the Quality First page. Discovered from the dedicated `machine-images` bucket.
+An image of a testing machine, stored in the dedicated `machine-images` bucket. It is no longer presented on the Quality First page.
 _Avoid_: machine photo, facility image
 
 **Testing explanation**:
-The developer-owned text section between the story rail and the machine images, describing the testing process. Authored in code; it has no admin surface.
+The developer-owned text section between the story rail and the closing call to action, describing the testing process. Authored in code; it has no admin surface.
 _Avoid_: QC copy, process description
 
 ## About Us

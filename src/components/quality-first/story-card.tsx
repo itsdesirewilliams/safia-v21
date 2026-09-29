@@ -1,8 +1,5 @@
 "use client";
 
-import Image from "next/image";
-import { useState } from "react";
-
 import type { QualityFirstStory } from "@/lib/media/quality-first";
 
 export type StoryCardProps = {
@@ -12,40 +9,36 @@ export type StoryCardProps = {
 };
 
 /**
- * A single portrait story card. Shows the companion poster when one exists and
- * falls back to a branded placeholder when it is missing or fails to load.
+ * A single card in the testing-floor video strip. The card shows the video
+ * itself, sized to its natural aspect ratio (`block h-auto w-full`) so portrait
+ * and landscape footage both display without cropping or distortion. A play
+ * affordance sits over it and selecting the card opens the accessible video
+ * viewer.
  */
 export function StoryCard({ story, label, onOpen }: StoryCardProps) {
-  const [posterFailed, setPosterFailed] = useState(false);
-  const showPoster = Boolean(story.posterUrl) && !posterFailed;
-
   return (
     <button
       type="button"
       onClick={onOpen}
-      className="group flex w-40 flex-col text-left focus-visible:outline-none sm:w-48 lg:w-52"
+      className="group flex w-40 flex-col text-left focus-visible:outline-none sm:w-48 lg:w-56"
       aria-label={`Play ${label}`}
     >
-      <span className="relative block aspect-[9/16] overflow-hidden rounded-lg border border-ink-200 bg-ink-950 shadow-card transition-transform duration-300 ease-out group-hover:-translate-y-1 group-focus-visible:ring-2 group-focus-visible:ring-brand-600 group-focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0">
-        {showPoster ? (
-          <Image
-            src={story.posterUrl as string}
-            alt=""
-            fill
-            sizes="(max-width: 640px) 10rem, 13rem"
-            className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04] motion-reduce:transition-none"
-            onError={() => setPosterFailed(true)}
-          />
-        ) : (
-          <span
-            aria-hidden="true"
-            className="absolute inset-0 [background:radial-gradient(110%_90%_at_75%_0%,rgba(11,99,246,0.45),transparent_60%),radial-gradient(80%_80%_at_0%_110%,rgba(255,106,0,0.22),transparent_55%)]"
-          />
-        )}
+      <span className="relative block overflow-hidden rounded-lg border border-ink-200 bg-ink-950 shadow-card transition-transform duration-300 ease-out group-hover:-translate-y-1 group-focus-visible:ring-2 group-focus-visible:ring-brand-600 group-focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0">
+        {/* Natural aspect ratio: the video sets its own height, never cropped. */}
+        <video
+          src={story.url}
+          poster={story.posterUrl ?? undefined}
+          muted
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+          tabIndex={-1}
+          className="pointer-events-none block h-auto w-full"
+        />
 
         <span
           aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-t from-ink-950/70 via-transparent to-ink-950/20"
+          className="absolute inset-0 bg-gradient-to-t from-ink-950/55 via-transparent to-transparent"
         />
 
         <span

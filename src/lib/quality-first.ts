@@ -3,9 +3,8 @@ import { ROUTES, type NavLink } from "@/lib/routes";
 /**
  * Developer-owned Quality First page copy (spec #3 / Ticket 5).
  *
- * The page structure is fixed (hero → story rail → testing explanation →
- * machine images → CTA) and this text ships with the code; it has no admin
- * surface. It deliberately avoids specific testing standards, machine names,
+ * The page structure is fixed (hero → story rail → testing explanation → CTA)
+ * and this text ships with the code; it has no admin surface. It deliberately avoids specific testing standards, machine names,
  * certifications, laboratory capabilities or production figures, none of which
  * have been supplied. The explanatory section carries a labelled note saying so
  * rather than inventing them.
@@ -21,12 +20,6 @@ export const QUALITY_FIRST_STORY_SECTION = {
   title: "From the Testing Floor",
   description:
     "Take a look inside our testing floor and see the process every Safeway Tyre goes through before it reaches the road.",
-} as const;
-
-export const QUALITY_FIRST_MACHINE_SECTION = {
-  title: "The Machines Behind the Testing",
-  description:
-    "Images of the equipment used across Safeway Tyre's testing and quality-control process.",
 } as const;
 
 export type ExplanationBlock = {
@@ -50,7 +43,7 @@ export const QUALITY_FIRST_EXPLANATION = {
       heading: "See the Testing Floor",
       body: [
         "The story rail above collects short videos from Safeway Tyre's testing process. Select any card to watch it in full.",
-        "The machine images below show the equipment involved. Both sets of media are added directly, so the record grows as more footage and photography is supplied.",
+        "The footage is added directly, so the record grows as more videos are supplied.",
       ],
     },
   ] satisfies readonly ExplanationBlock[],
