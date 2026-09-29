@@ -1,10 +1,10 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-import { MachineMasonry } from "@/components/quality-first/machine-masonry";
 import { QualityFirstHero } from "@/components/quality-first/quality-first-hero";
 import { StoryRail } from "@/components/quality-first/story-rail";
 import { TestingExplanation } from "@/components/quality-first/testing-explanation";
+import { TestingImageStrip } from "@/components/quality-first/testing-image-strip";
 import type {
   QualityFirstMachineImage,
   QualityFirstStory,
@@ -78,26 +78,26 @@ describe("story rail", () => {
   });
 });
 
-describe("machine masonry", () => {
-  it("shows a labelled empty state when there are no images", () => {
-    const html = renderToStaticMarkup(<MachineMasonry images={[]} />);
-
-    expect(html).toContain("Machine Images Coming Soon");
+describe("testing image strip", () => {
+  it("renders nothing when there are no images", () => {
+    expect(renderToStaticMarkup(<TestingImageStrip images={[]} />)).toBe("");
   });
 
-  it("renders a masonry column layout with natural-ratio images and captions", () => {
+  it("renders a horizontal story strip of natural-ratio, clickable images", () => {
     const html = renderToStaticMarkup(
-      <MachineMasonry images={MACHINE_IMAGES} />,
+      <TestingImageStrip images={MACHINE_IMAGES} />,
     );
 
-    expect(html).toContain("columns-1");
-    expect(html).toContain("sm:columns-2");
-    expect(html).toContain("lg:columns-3");
-    expect(html).toContain("break-inside-avoid");
     expect(html.match(/<img /g)).toHaveLength(2);
-    expect(html).toContain("A tyre on a tensile testing rig");
-    expect(html).toContain("Tensile rig");
+    expect(html.match(/<button /g)).toHaveLength(2);
+    expect(html).toContain("snap-x");
+    expect(html).toContain("h-auto w-full");
+    expect(html).toContain(
+      'aria-label="Open image 1 of 2: A tyre on a tensile testing rig"',
+    );
     expect(html).not.toContain("object-cover");
+    expect(html).not.toContain("columns-");
+    expect(html).not.toContain('role="dialog"');
   });
 });
 

@@ -82,8 +82,4 @@ export const QUALITY_FIRST_EMPTY_STATES = {
     label: "Testing Videos Coming Soon",
     detail: "Footage from Safeway Tyre's testing floor will appear here soon.",
   },
-  machines: {
-    label: "Machine Images Coming Soon",
-    detail: "Photographs of the equipment behind our testing will appear here soon.",
-  },
 } as const;

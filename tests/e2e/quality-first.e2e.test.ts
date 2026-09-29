@@ -68,21 +68,22 @@ async function getQualityFirstHtml(): Promise<string> {
 }
 
 describe("Quality First page structure", () => {
-  it("renders the hero and the three fixed sections in order", async () => {
+  it("renders the hero, video section and explanation in order without the legacy machine section", async () => {
     const html = await getQualityFirstHtml();
 
     expect(html).toContain("Quality Is a Process, Not a Promise.");
     expect(html).toContain("From the Testing Floor");
     expect(html).toContain("How Quality Is Built In");
-    expect(html).toContain("The Machines Behind the Testing");
+
+    // The old bottom machine-masonry section is fully removed.
+    expect(html).not.toContain("Machine Images Coming Soon");
+    expect(html).not.toContain("break-inside-avoid");
 
     const storiesIndex = html.indexOf('id="stories"');
     const explanationIndex = html.indexOf("How Quality Is Built In");
-    const machinesIndex = html.indexOf('id="machines"');
 
     expect(storiesIndex).toBeGreaterThan(-1);
     expect(explanationIndex).toBeGreaterThan(storiesIndex);
-    expect(machinesIndex).toBeGreaterThan(explanationIndex);
   });
 
   it("uses a single semantic h1 and developer-owned internal links", async () => {
@@ -95,11 +96,13 @@ describe("Quality First page structure", () => {
     expect(html).toContain('href="/warranty"');
   });
 
-  it("renders labelled empty states when no media has been supplied", async () => {
+  it("renders the testing videos (story rail or labelled empty state)", async () => {
     const html = await getQualityFirstHtml();
 
-    expect(html).toContain("Testing Videos Coming Soon");
-    expect(html).toContain("Machine Images Coming Soon");
+    const hasRail = html.includes('aria-label="Play ');
+    const hasEmptyState = html.includes("Testing Videos Coming Soon");
+
+    expect(hasRail || hasEmptyState).toBe(true);
   });
 
   it("does not open a video dialog before a story is selected", async () => {

@@ -1,8 +1,8 @@
-import { MachineMasonry } from "@/components/quality-first/machine-masonry";
 import { QualityFirstCta } from "@/components/quality-first/quality-first-cta";
 import { QualityFirstHero } from "@/components/quality-first/quality-first-hero";
 import { StoryRail } from "@/components/quality-first/story-rail";
 import { TestingExplanation } from "@/components/quality-first/testing-explanation";
+import { TestingImageStrip } from "@/components/quality-first/testing-image-strip";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -20,15 +20,15 @@ export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Quality First",
   description:
-    "Safeway Tyre's testing and quality-control process: testing story videos, an explanation of the process, and the machines behind it.",
+    "Safeway Tyre's testing and quality-control process: testing-floor images and story videos, an explanation of the process, and the machines behind it.",
 };
 
 /**
- * The Quality First page (spec #3 / Ticket 5): a fixed three-section structure
- * — story rail, developer-owned testing explanation, machine images — wrapped
- * in a hero and a closing CTA. Story videos and machine images are discovered
- * from Supabase Storage at read time (ADR-0006); no database record is required
- * for media to appear.
+ * The Quality First page (spec #3 / Ticket 5): a hero, a story-style strip of
+ * the testing/machine images, the testing video rail, a developer-owned testing
+ * explanation, and a closing CTA. Images and videos are discovered at read time
+ * (ADR-0006); the image strip is simply omitted when no images are supplied, so
+ * the page never shows an empty section.
  */
 export default async function QualityFirstPage() {
   const [stories, machineImages] = await Promise.all([
@@ -40,10 +40,26 @@ export default async function QualityFirstPage() {
     <>
       <QualityFirstHero />
 
-      <section
-        id="stories"
-        className="scroll-mt-28 bg-white py-20 lg:py-28"
-      >
+      {machineImages.length > 0 && (
+        <section
+          id="testing-images"
+          className="scroll-mt-28 bg-white py-20 lg:py-28"
+        >
+          <Container>
+            <Reveal>
+              <SectionHeading
+                title={QUALITY_FIRST_MACHINE_SECTION.title}
+                description={QUALITY_FIRST_MACHINE_SECTION.description}
+              />
+            </Reveal>
+            <div className="mt-12">
+              <TestingImageStrip images={machineImages} />
+            </div>
+          </Container>
+        </section>
+      )}
+
+      <section id="stories" className="scroll-mt-28 bg-white py-20 lg:py-28">
         <Container>
           <Reveal>
             <SectionHeading
@@ -60,23 +76,6 @@ export default async function QualityFirstPage() {
       <section className="bg-ink-50 py-20 lg:py-28">
         <Container>
           <TestingExplanation />
-        </Container>
-      </section>
-
-      <section
-        id="machines"
-        className="scroll-mt-28 bg-white py-20 lg:py-28"
-      >
-        <Container>
-          <Reveal>
-            <SectionHeading
-              title={QUALITY_FIRST_MACHINE_SECTION.title}
-              description={QUALITY_FIRST_MACHINE_SECTION.description}
-            />
-          </Reveal>
-          <div className="mt-12">
-            <MachineMasonry images={machineImages} />
-          </div>
         </Container>
       </section>
 
