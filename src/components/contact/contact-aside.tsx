@@ -1,5 +1,5 @@
 import { ArrowIcon } from "@/components/ui/button";
-import { MARKETING_EMAILS, MARKETING_PHONES, SITE, telHref } from "@/lib/site";
+import { MARKETING_PHONES, PUBLIC_CONTACT_EMAILS, SITE, telHref } from "@/lib/site";
 
 export type ContactAsideProps = {
   companyAddress: string | null;
@@ -57,7 +57,7 @@ export function ContactAside({ companyAddress }: ContactAsideProps) {
 
       <dl className="space-y-5">
         <DetailRow label="Email">
-          {MARKETING_EMAILS.map((email) => (
+          {PUBLIC_CONTACT_EMAILS.map((email) => (
             <span key={email} className="block break-all">
               <a
                 href={`mailto:${email}`}
@@ -67,14 +67,6 @@ export function ContactAside({ companyAddress }: ContactAsideProps) {
               </a>
             </span>
           ))}
-          <span className="block break-all">
-            <a
-              href={`mailto:${SITE.emails.director}`}
-              className="font-semibold text-brand-600 hover:underline"
-            >
-              {SITE.emails.director}
-            </a>
-          </span>
         </DetailRow>
 
         <DetailRow label="Phone">

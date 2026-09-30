@@ -1,12 +1,26 @@
 import { describe, expect, it } from "vitest";
 
-import { MARKETING_EMAILS, MARKETING_PHONES, SITE, telHref } from "@/lib/site";
+import {
+  MARKETING_EMAILS,
+  MARKETING_PHONES,
+  PUBLIC_CONTACT_EMAILS,
+  SITE,
+  telHref,
+} from "@/lib/site";
 
 describe("public marketing contact details", () => {
   it("lists both marketing emails in display order", () => {
     expect(MARKETING_EMAILS).toEqual([
       "marketing@safewaytyre.com",
       "marketing01@safewaytyre.com",
+    ]);
+  });
+
+  it("includes the Director address in the full public contact list", () => {
+    expect(PUBLIC_CONTACT_EMAILS).toEqual([
+      "marketing@safewaytyre.com",
+      "marketing01@safewaytyre.com",
+      "Director@safewaytyre.com",
     ]);
   });
 

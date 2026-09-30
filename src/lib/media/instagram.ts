@@ -21,9 +21,6 @@ export const INSTAGRAM_IMAGE_EXTENSIONS = [
   ".png",
 ] as const;
 
-/** How often the Instagram carousel advances to the next image. */
-export const INSTAGRAM_CAROUSEL_INTERVAL_MS = 5_000;
-
 /** A displayed Instagram image: its public URL and accessible alt text. */
 export type InstagramImage = {
   url: string;

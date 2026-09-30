@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { SITE } from "@/lib/site";
 
-import { anekDevanagari, monaSans, wolling } from "./fonts";
+import { anekDevanagari, monaSans } from "./fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -37,7 +37,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${monaSans.variable} ${wolling.variable} ${anekDevanagari.variable}`}
+      className={`${monaSans.variable} ${anekDevanagari.variable}`}
     >
       <body className="flex min-h-screen flex-col bg-white text-ink-700 antialiased">
         <noscript>

@@ -56,6 +56,18 @@ export const MARKETING_EMAILS: readonly string[] = [
   SITE.emails.marketing,
 ];
 
+/**
+ * The full public contact email list in display order — both marketing
+ * addresses plus the Director address. Used wherever the site presents its
+ * contact addresses (footer, homepage and Contact Us). The Director address is
+ * also shown on its own (for example the footer CTA); including it in this list
+ * too is intentional, not redundant.
+ */
+export const PUBLIC_CONTACT_EMAILS: readonly string[] = [
+  ...MARKETING_EMAILS,
+  SITE.emails.director,
+];
+
 export const MARKETING_PHONES: readonly string[] = [
   SITE.phone.secondary,
   SITE.phone.tertiary,

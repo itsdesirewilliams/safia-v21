@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { CategoryVisual } from "@/components/home/category-visual";
@@ -24,9 +25,11 @@ import {
   HOME_CATEGORY_CARDS,
   TESTIMONIALS,
 } from "@/lib/homepage";
+import { readExploreCatalogueImage } from "@/lib/media/catalogue-visual-assets";
+import { readProductRangeImages } from "@/lib/media/product-range-assets";
 import { isValidYoutubeVideoId } from "@/lib/media/youtube";
 import { ROUTES } from "@/lib/routes";
-import { MARKETING_EMAILS, MARKETING_PHONES, SITE, telHref } from "@/lib/site";
+import { MARKETING_PHONES, PUBLIC_CONTACT_EMAILS, SITE, telHref } from "@/lib/site";
 
 export const metadata = {
   title: `${SITE.name} | ${SITE.tagline}`,
@@ -41,6 +44,8 @@ export default function HomePage() {
     : DEFAULT_YOUTUBE_VIDEO_ID;
   const { companyAddress } = getPublicConfig();
   const heroVideoUrl = getHeroVideoUrl();
+  const productRangeImages = readProductRangeImages();
+  const exploreCatalogueImage = readExploreCatalogueImage();
 
   return (
     <>
@@ -144,7 +149,10 @@ export default function HomePage() {
                     href={ROUTES.category(card.slug)}
                     className="group flex h-full flex-col rounded-card border border-ink-200 bg-white p-3 transition duration-300 hover:border-ink-300 hover:shadow-card"
                   >
-                    <CategoryVisual label={card.displayName} />
+                    <CategoryVisual
+                      label={card.displayName}
+                      image={productRangeImages[card.slug]}
+                    />
                     <div className="flex flex-1 flex-col px-2 pb-2 pt-5">
                       <div className="flex items-start justify-between gap-4">
                         <h3 className="text-h3 text-ink-950">
@@ -194,27 +202,36 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <div
-                  aria-hidden="true"
-                  className="relative hidden h-72 lg:block"
-                >
-                  <div className="absolute left-6 top-4 h-64 w-52 -rotate-6 rounded-lg border border-white/10 bg-white/[0.06]" />
-                  <div className="absolute left-24 top-8 h-64 w-56 rotate-3 rounded-lg border border-white/15 bg-white/[0.09] p-5">
-                    <div className="h-3 w-24 rounded-full bg-accent-500/80" />
-                    <div className="mt-5 space-y-3">
-                      <div className="h-2.5 w-full rounded-full bg-white/20" />
-                      <div className="h-2.5 w-4/5 rounded-full bg-white/15" />
-                      <div className="h-2.5 w-3/5 rounded-full bg-white/10" />
+                <div className="relative hidden h-72 lg:block">
+                  {exploreCatalogueImage ? (
+                    <Image
+                      src={exploreCatalogueImage}
+                      alt="Safeway Tyre catalogue covers"
+                      fill
+                      sizes="(max-width: 1024px) 0px, 50vw"
+                      className="object-contain drop-shadow-[0_25px_45px_rgba(0,0,0,0.45)]"
+                    />
+                  ) : (
+                    <div aria-hidden="true" className="absolute inset-0">
+                      <div className="absolute left-6 top-4 h-64 w-52 -rotate-6 rounded-lg border border-white/10 bg-white/[0.06]" />
+                      <div className="absolute left-24 top-8 h-64 w-56 rotate-3 rounded-lg border border-white/15 bg-white/[0.09] p-5">
+                        <div className="h-3 w-24 rounded-full bg-accent-500/80" />
+                        <div className="mt-5 space-y-3">
+                          <div className="h-2.5 w-full rounded-full bg-white/20" />
+                          <div className="h-2.5 w-4/5 rounded-full bg-white/15" />
+                          <div className="h-2.5 w-3/5 rounded-full bg-white/10" />
+                        </div>
+                        <div className="mt-8 grid grid-cols-3 gap-2">
+                          {Array.from({ length: 6 }).map((_, index) => (
+                            <div
+                              key={index}
+                              className="h-14 rounded-lg bg-white/[0.07]"
+                            />
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                    <div className="mt-8 grid grid-cols-3 gap-2">
-                      {Array.from({ length: 6 }).map((_, index) => (
-                        <div
-                          key={index}
-                          className="h-14 rounded-lg bg-white/[0.07]"
-                        />
-                      ))}
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -323,7 +340,7 @@ export default function HomePage() {
                   <div className="border-t border-ink-200 pt-5">
                     <dt className="text-sm font-semibold text-ink-500">Email</dt>
                     <dd className="mt-2 space-y-1">
-                      {MARKETING_EMAILS.map((email) => (
+                      {PUBLIC_CONTACT_EMAILS.map((email) => (
                         <span key={email} className="block break-all">
                           <a
                             href={`mailto:${email}`}

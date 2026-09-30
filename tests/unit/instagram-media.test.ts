@@ -4,7 +4,6 @@ import {
   altFromFilename,
   discoverInstagramImages,
   INSTAGRAM_ASSET_ROOT,
-  INSTAGRAM_CAROUSEL_INTERVAL_MS,
   instagramImageUrl,
   isInstagramImage,
 } from "@/lib/media/instagram";
@@ -80,12 +79,6 @@ describe("folder discovery", () => {
   it("returns an empty list when no supported images exist", () => {
     expect(discoverInstagramImages(["a.svg", "b.gif"])).toEqual([]);
     expect(discoverInstagramImages([])).toEqual([]);
-  });
-});
-
-describe("carousel cadence", () => {
-  it("advances every five seconds", () => {
-    expect(INSTAGRAM_CAROUSEL_INTERVAL_MS).toBe(5_000);
   });
 });
 

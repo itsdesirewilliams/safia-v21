@@ -5,7 +5,12 @@ import { ArrowIcon } from "@/components/ui/button";
 import { CATEGORIES } from "@/lib/catalogue/categories";
 import { getPublicConfig } from "@/lib/config";
 import { FOOTER_NAV, ROUTES } from "@/lib/routes";
-import { MARKETING_EMAILS, MARKETING_PHONES, SITE, telHref } from "@/lib/site";
+import {
+  MARKETING_PHONES,
+  PUBLIC_CONTACT_EMAILS,
+  SITE,
+  telHref,
+} from "@/lib/site";
 
 function SocialIcon({ name }: { name: string }) {
   const common = {
@@ -195,7 +200,7 @@ export function SiteFooter() {
             <div className="lg:col-span-3">
               <FooterHeading>Contact</FooterHeading>
               <ul className="mt-5 space-y-3 text-sm text-white/65">
-                {MARKETING_EMAILS.map((email) => (
+                {PUBLIC_CONTACT_EMAILS.map((email) => (
                   <li key={email}>
                     <a
                       href={`mailto:${email}`}

@@ -24,7 +24,7 @@ export default async function AdminLoginPage({
   const { error } = await searchParams;
 
   return (
-    <div className="admin-root flex min-h-[calc(100vh-4rem)] items-center justify-center bg-ink-50 px-4 py-16 sm:px-6">
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-ink-50 px-4 py-16 sm:px-6">
       <div className="w-full max-w-md">
         <Link
           href={ROUTES.home}

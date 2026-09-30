@@ -14,16 +14,18 @@ function images(count: number): InstagramImage[] {
 }
 
 describe("Instagram carousel", () => {
-  it("renders the full set (doubled for a seamless loop) as Instagram links", () => {
+  it("renders the full set (doubled for a seamless continuous loop) as Instagram links", () => {
     const html = renderToStaticMarkup(<InstagramStrip images={images(10)} />);
 
-    // The set is rendered twice so the carousel can wrap without a jump.
+    // The set is rendered twice so the continuous loop wraps without a jump.
     expect(html.match(/<img /g)).toHaveLength(20);
     expect(html).toContain("https://www.instagram.com/safewaytyre/");
-    expect(html).toContain("snap-x");
+    expect(html).toContain("animate-marquee");
+    expect(html).toContain("w-max");
     expect(html).toContain("aspect-[4/5]");
-    expect(html).toContain('aria-label="Next Instagram image"');
-    expect(html).toContain('aria-label="Previous Instagram image"');
+    // The continuous loop needs no manual controls.
+    expect(html).not.toContain('aria-label="Next Instagram image"');
+    expect(html).not.toContain('aria-label="Previous Instagram image"');
   });
 
   it("renders nothing when no images are supplied", () => {

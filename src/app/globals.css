@@ -7,8 +7,6 @@
  * ------------------------------------------------------------------------- */
 @theme {
   --font-sans: var(--font-mona-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-wolling), var(--font-mona-sans), ui-sans-serif,
-    system-ui, sans-serif;
   --font-devanagari: var(--font-anek-devanagari), var(--font-mona-sans),
     sans-serif;
 
@@ -51,7 +49,8 @@
   --animate-scale-in: scale-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-slide-in-right: slide-in-right 0.35s cubic-bezier(0.22, 1, 0.36, 1)
     both;
-  --animate-marquee: marquee 40s linear infinite;
+  /* Continuous, seamless leftward loop for the Instagram carousel. */
+  --animate-marquee: marquee 60s linear infinite;
 }
 
 @keyframes slide-in-right {
@@ -133,23 +132,21 @@ body {
   border-radius: 2px;
 }
 
-/* The display face carries the top heading levels; body/UI keeps Mona Sans.
- * The admin shell redirects the display token back to the UI face. */
+/* Mona Sans carries every heading level; the display scale below only sets
+ * larger sizes and heavier weights of the same face. */
 @layer base {
   h1,
-  h2 {
-    font-family: var(--font-display);
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-sans);
   }
-}
-
-.admin-root {
-  --font-display: var(--font-sans);
 }
 
 /* Editorial display scale — keeps hero/section headings intentional. */
 @layer components {
   .text-display {
-    font-family: var(--font-display);
+    font-family: var(--font-sans);
     font-size: clamp(2.75rem, 7vw, 5.5rem);
     line-height: 0.98;
     letter-spacing: -0.035em;
@@ -157,7 +154,7 @@ body {
   }
 
   .text-h1 {
-    font-family: var(--font-display);
+    font-family: var(--font-sans);
     font-size: clamp(2.25rem, 5vw, 3.75rem);
     line-height: 1.02;
     letter-spacing: -0.03em;
@@ -165,7 +162,7 @@ body {
   }
 
   .text-h2 {
-    font-family: var(--font-display);
+    font-family: var(--font-sans);
     font-size: clamp(1.875rem, 3.6vw, 3rem);
     line-height: 1.05;
     letter-spacing: -0.025em;
@@ -173,7 +170,7 @@ body {
   }
 
   .text-h3 {
-    font-family: var(--font-display);
+    font-family: var(--font-sans);
     font-size: clamp(1.25rem, 2vw, 1.625rem);
     line-height: 1.15;
     letter-spacing: -0.02em;
