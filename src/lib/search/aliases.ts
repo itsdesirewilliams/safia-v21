@@ -32,6 +32,8 @@ export const CATEGORY_ALIASES: readonly CategoryAlias[] = [
       "3 wheeler",
       "tuk tuk",
       "tuktuk",
+      // Partial input: customers often type just "tuk" for a three-wheeler.
+      "tuk",
       "auto rickshaw",
       "autorickshaw",
       "auto",

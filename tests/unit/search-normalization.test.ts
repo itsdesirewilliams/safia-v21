@@ -78,6 +78,8 @@ describe("category aliases", () => {
     ["tuk tuk", "three-wheeler"],
     ["tuk-tuk", "three-wheeler"],
     ["tuktuk", "three-wheeler"],
+    ["tuk", "three-wheeler"],
+    ["auto", "three-wheeler"],
     ["auto rickshaw", "three-wheeler"],
     ["autorickshaw", "three-wheeler"],
     ["bajaj", "three-wheeler"],
@@ -111,6 +113,13 @@ describe("category aliases", () => {
     expect(categories("antibody")).not.toContain("three-wheeler");
   });
 
+  it("resolves partial input as full category intent", () => {
+    const result = normalizeSearchQuery("tuk");
+    expect(result.matchState).toBe("ALIAS_MATCH");
+    expect(result.categoryCandidates).toEqual(["three-wheeler"]);
+    expect(result.matchTerms).toEqual(["three-wheeler"]);
+  });
+
   it("strips alias digits so they cannot corrupt size parsing", () => {
     const result = normalizeSearchQuery("3 wheeler 750 16");
     expect(result.categoryCandidates).toContain("three-wheeler");
@@ -140,6 +149,12 @@ describe("mixed customer text", () => {
     const otr = normalizeSearchQuery("otr 23.5 25");
     expect(otr.categoryCandidates).toContain("otr");
     expect(otr.sizeCandidates).toContain("23.5-25");
+  });
+
+  it("combines the partial 'tuk' alias with a size", () => {
+    const result = normalizeSearchQuery("tuk 750 16");
+    expect(result.categoryCandidates).toContain("three-wheeler");
+    expect(result.sizeCandidates).toContain("7.50-16");
   });
 
   it("is case- and whitespace-insensitive", () => {
