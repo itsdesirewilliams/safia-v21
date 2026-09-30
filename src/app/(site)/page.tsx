@@ -59,7 +59,7 @@ export default function HomePage() {
           <div className="relative overflow-hidden rounded-lg bg-ink-950">
             <div
               aria-hidden="true"
-              className="absolute inset-0 [background:radial-gradient(120%_110%_at_88%_0%,rgba(11,99,246,0.28),transparent_58%),radial-gradient(90%_90%_at_0%_100%,rgba(255,106,0,0.16),transparent_55%)]"
+              className="absolute inset-0 [background:radial-gradient(120%_110%_at_88%_0%,var(--theme-glow-primary),transparent_58%),radial-gradient(90%_90%_at_0%_100%,var(--theme-glow-accent),transparent_55%)]"
             />
 
             <div className="relative grid gap-10 px-6 py-12 sm:px-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-14 lg:px-14 lg:py-16">
@@ -185,7 +185,7 @@ export default function HomePage() {
             <div className="relative rounded-card bg-ink-950 px-6 py-14 sm:px-12 lg:px-16 lg:py-20">
               <div
                 aria-hidden="true"
-                className="absolute inset-0 rounded-card [background:radial-gradient(110%_120%_at_90%_0%,rgba(11,99,246,0.4),transparent_58%),radial-gradient(70%_70%_at_0%_110%,rgba(255,106,0,0.18),transparent_55%)]"
+                className="absolute inset-0 rounded-card [background:radial-gradient(110%_120%_at_90%_0%,var(--theme-glow-primary),transparent_58%),radial-gradient(70%_70%_at_0%_110%,var(--theme-glow-accent),transparent_55%)]"
               />
               <div className="relative z-0 grid gap-10 lg:grid-cols-2 lg:items-center">
                 <div className="lg:max-w-lg">

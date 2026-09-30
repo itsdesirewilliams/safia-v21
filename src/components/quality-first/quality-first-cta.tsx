@@ -13,7 +13,7 @@ export function QualityFirstCta() {
           <div className="relative overflow-hidden rounded-lg bg-ink-950 px-6 py-14 sm:px-12 lg:px-16 lg:py-20">
             <div
               aria-hidden="true"
-              className="absolute inset-0 [background:radial-gradient(110%_120%_at_90%_0%,rgba(11,99,246,0.4),transparent_58%),radial-gradient(70%_70%_at_0%_110%,rgba(255,106,0,0.18),transparent_55%)]"
+              className="absolute inset-0 [background:radial-gradient(110%_120%_at_90%_0%,var(--theme-glow-primary),transparent_58%),radial-gradient(70%_70%_at_0%_110%,var(--theme-glow-accent),transparent_55%)]"
             />
             <div className="relative max-w-3xl">
               <SectionHeading

@@ -42,7 +42,7 @@ export default async function AdminDashboardLayout({
                 Admin
               </span>
             </Link>
-            <AdminNav />
+            <AdminNav isAdmin={profile.role === "admin"} />
           </div>
 
           <div className="flex items-center gap-3">

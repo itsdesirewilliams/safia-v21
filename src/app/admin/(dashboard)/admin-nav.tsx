@@ -8,15 +8,16 @@ import { cn } from "@/lib/cn";
 const LINKS = [
   { href: "/admin/files", label: "Files" },
   { href: "/admin/posts", label: "Posts" },
+  { href: "/admin/settings", label: "Settings", adminOnly: true },
 ] as const;
 
 /** Admin top-level navigation with a path-aware current item. */
-export function AdminNav() {
+export function AdminNav({ isAdmin = false }: { isAdmin?: boolean }) {
   const pathname = usePathname();
 
   return (
     <nav aria-label="Admin" className="hidden items-center gap-1 sm:flex">
-      {LINKS.map((link) => {
+      {LINKS.filter((link) => !("adminOnly" in link) || !link.adminOnly || isAdmin).map((link) => {
         const current =
           pathname === link.href || pathname.startsWith(`${link.href}/`);
         return (

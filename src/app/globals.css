@@ -35,6 +35,23 @@
   --color-accent-500: #ff6a00;
   --color-accent-100: #ffe6d1;
 
+  /* Semantic theme tokens (Theme 1 values). Themes override these below; the
+   * brand/accent/ink utilities above are the stable names components consume. */
+  --color-primary: #0b63f6;
+  --color-primary-hover: #0847c9;
+  --color-primary-dark: #0847c9;
+  --color-primary-deep: #071018;
+  --color-primary-light: #3b82f6;
+  --color-primary-soft: #dbe7ff;
+  --color-accent: #ff6a00;
+  --color-accent-hover: #e85d00;
+  --color-accent-soft: #ffe6d1;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f7f8fa;
+  --color-border: #e8ecf0;
+  --color-text: #111820;
+  --color-text-muted: #4d5966;
+
   /* Functional */
   --color-success-600: #16a34a;
 
@@ -104,6 +121,57 @@
 
 :root {
   color-scheme: light;
+  /* Gradient glow tokens (Theme 1). Themes override these below. */
+  --theme-glow-primary: rgba(11, 99, 246, 0.4);
+  --theme-glow-accent: rgba(255, 106, 0, 0.18);
+}
+
+/* ---------------------------------------------------------------------------
+ * Theme 2 — Safeway Green (#00703D). A tonal green palette: deep green
+ * surfaces, a green primary, a brighter green accent and green-tinted
+ * neutrals. Overriding the tokens here retints the whole public site (every
+ * `brand-*`, `accent-*` and `ink-*` utility) without touching components.
+ * Theme 1 ("classic") is the default in `@theme` above and is left untouched.
+ * ------------------------------------------------------------------------- */
+[data-theme="safeway-green"] {
+  --color-primary: #00703d;
+  --color-primary-hover: #005c32;
+  --color-primary-dark: #004726;
+  --color-primary-deep: #04281a;
+  --color-primary-light: #1e9c68;
+  --color-primary-soft: #e6f3ec;
+  --color-accent: #12a150;
+  --color-accent-hover: #0e7f3f;
+  --color-accent-soft: #dcf3e4;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f4f9f6;
+  --color-border: #dce8e0;
+  --color-text: #0a2016;
+  --color-text-muted: #4c6156;
+
+  --color-brand-100: var(--color-primary-soft);
+  --color-brand-500: var(--color-primary-light);
+  --color-brand-600: var(--color-primary);
+  --color-brand-700: var(--color-primary-hover);
+  --color-accent-100: var(--color-accent-soft);
+  --color-accent-500: var(--color-accent);
+  --color-accent-600: var(--color-accent-hover);
+  --color-accent-700: #0b6b37;
+
+  --color-ink-50: #f5f9f7;
+  --color-ink-100: #edf4ef;
+  --color-ink-200: #dce8e0;
+  --color-ink-300: #b9cbbf;
+  --color-ink-400: #8fa79a;
+  --color-ink-500: #64796d;
+  --color-ink-600: #4c6156;
+  --color-ink-700: #2e4237;
+  --color-ink-800: #1c3025;
+  --color-ink-900: #0a2016;
+  --color-ink-950: #05271a;
+
+  --theme-glow-primary: rgba(0, 112, 61, 0.42);
+  --theme-glow-accent: rgba(18, 161, 80, 0.22);
 }
 
 html {

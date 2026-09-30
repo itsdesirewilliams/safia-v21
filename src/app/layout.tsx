@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { SITE } from "@/lib/site";
+import { getActiveTheme } from "@/lib/theme/persistence";
 
 import { anekDevanagari, monaSans } from "./fonts";
 import "./globals.css";
@@ -31,12 +32,15 @@ export const metadata: Metadata = {
   manifest: "/brand/site.webmanifest",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const theme = await getActiveTheme();
+
   return (
     <html
       lang="en"
+      data-theme={theme}
       className={`${monaSans.variable} ${anekDevanagari.variable}`}
     >
       <body className="flex min-h-screen flex-col bg-white text-ink-700 antialiased">
