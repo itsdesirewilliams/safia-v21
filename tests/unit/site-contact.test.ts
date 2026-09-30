@@ -16,11 +16,11 @@ describe("public marketing contact details", () => {
     ]);
   });
 
-  it("includes the Director address in the full public contact list", () => {
+  it("lists the Director address first in the full public contact list", () => {
     expect(PUBLIC_CONTACT_EMAILS).toEqual([
+      "Director@safewaytyre.com",
       "marketing@safewaytyre.com",
       "marketing01@safewaytyre.com",
-      "Director@safewaytyre.com",
     ]);
   });
 

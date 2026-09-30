@@ -88,6 +88,10 @@ describe("homepage vertical slice", () => {
     expect(html).toContain("Director@safewaytyre.com");
     expect(html).toContain("marketing@safewaytyre.com");
     expect(html).toContain("marketing01@safewaytyre.com");
+    // The Director address is always listed first, ahead of any marketing address.
+    expect(html.indexOf("Director@safewaytyre.com")).toBeLessThan(
+      html.indexOf("marketing@safewaytyre.com"),
+    );
     expect(html).toContain("+91 90416 62182");
     expect(html).toContain("+91 80543 62182");
   });

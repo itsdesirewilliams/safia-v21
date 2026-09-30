@@ -199,7 +199,7 @@ export function SiteFooter() {
 
             <div className="lg:col-span-3">
               <FooterHeading>Contact</FooterHeading>
-              <ul className="mt-5 space-y-3 text-sm text-white/65">
+              <ul className="mt-5 space-y-1.5 text-sm text-white/65">
                 {PUBLIC_CONTACT_EMAILS.map((email) => (
                   <li key={email}>
                     <a
@@ -210,6 +210,8 @@ export function SiteFooter() {
                     </a>
                   </li>
                 ))}
+              </ul>
+              <ul className="mt-4 space-y-1.5 text-sm text-white/65">
                 {MARKETING_PHONES.map((phone) => (
                   <li key={phone}>
                     <a
