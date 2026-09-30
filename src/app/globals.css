@@ -121,9 +121,6 @@
 
 :root {
   color-scheme: light;
-  /* Gradient glow tokens (Theme 1). Themes override these below. */
-  --theme-glow-primary: rgba(11, 99, 246, 0.4);
-  --theme-glow-accent: rgba(255, 106, 0, 0.18);
 }
 
 /* ---------------------------------------------------------------------------
@@ -169,9 +166,6 @@
   --color-ink-800: #1c3025;
   --color-ink-900: #0a2016;
   --color-ink-950: #05271a;
-
-  --theme-glow-primary: rgba(0, 112, 61, 0.42);
-  --theme-glow-accent: rgba(18, 161, 80, 0.22);
 }
 
 html {

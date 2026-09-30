@@ -31,7 +31,7 @@ export function ContactAside({ companyAddress }: ContactAsideProps) {
       <div className="relative overflow-hidden rounded-card bg-ink-950 p-7 text-white sm:p-8">
         <div
           aria-hidden="true"
-          className="absolute inset-0 [background:radial-gradient(120%_120%_at_100%_0%,var(--theme-glow-accent),transparent_58%),radial-gradient(80%_80%_at_0%_110%,var(--theme-glow-primary),transparent_55%)]"
+          className="absolute inset-0 [background:radial-gradient(120%_120%_at_100%_0%,color-mix(in_srgb,var(--color-accent)_28%,transparent),transparent_58%),radial-gradient(80%_80%_at_0%_110%,color-mix(in_srgb,var(--color-primary)_30%,transparent),transparent_55%)]"
         />
         <div className="relative">
           <p className="text-sm font-semibold text-accent-500">

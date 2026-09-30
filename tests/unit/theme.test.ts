@@ -80,12 +80,12 @@ describe("themed gradients", () => {
     "src/components/quality-first/quality-first-cta.tsx",
   ];
 
-  it("uses the theme glow tokens instead of literal blue/orange rgba", () => {
+  it("uses theme-token color-mix instead of literal blue/orange rgba", () => {
     for (const file of files) {
       const source = readFileSync(join(process.cwd(), file), "utf8");
       expect(source).not.toContain("rgba(11,99,246");
       expect(source).not.toContain("rgba(255,106,0");
-      expect(source).toContain("var(--theme-glow-");
+      expect(source).toContain("color-mix(in_srgb,var(--color-primary)");
     }
   });
 });

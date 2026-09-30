@@ -78,7 +78,7 @@ export function YouTubeTour({ id, title }: YouTubeTourProps) {
         <>
           <div
             aria-hidden="true"
-            className="absolute inset-0 [background:radial-gradient(110%_90%_at_75%_0%,var(--theme-glow-primary),transparent_60%),radial-gradient(80%_80%_at_0%_110%,var(--theme-glow-accent),transparent_55%)]"
+            className="absolute inset-0 [background:radial-gradient(110%_90%_at_75%_0%,color-mix(in_srgb,var(--color-primary)_35%,transparent),transparent_60%),radial-gradient(80%_80%_at_0%_110%,color-mix(in_srgb,var(--color-accent)_16%,transparent),transparent_55%)]"
           />
           <noscript dangerouslySetInnerHTML={{ __html: fallback }} />
         </>

@@ -45,7 +45,7 @@ export function CategoryVisual({
         <>
           <div
             aria-hidden="true"
-            className="absolute inset-0 [background:radial-gradient(120%_120%_at_85%_0%,var(--theme-glow-primary),transparent_55%),radial-gradient(80%_80%_at_0%_110%,var(--theme-glow-accent),transparent_55%)]"
+            className="absolute inset-0 [background:radial-gradient(120%_120%_at_85%_0%,color-mix(in_srgb,var(--color-primary)_38%,transparent),transparent_55%),radial-gradient(80%_80%_at_0%_110%,color-mix(in_srgb,var(--color-accent)_16%,transparent),transparent_55%)]"
           />
           <svg
             aria-hidden="true"
