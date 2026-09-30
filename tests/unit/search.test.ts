@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import {
   MAX_SEARCH_LENGTH,
-  normalizeSearchQuery,
+  sanitizeQuery,
   searchPatterns,
   type SearchClient,
 } from "@/lib/catalogue/search";
@@ -23,22 +23,20 @@ function fakeClient(
   return { rpc: vi.fn().mockResolvedValue({ data, error }) };
 }
 
-describe("normalizeSearchQuery", () => {
-  it("trims and collapses whitespace", () => {
-    expect(normalizeSearchQuery("  6.00-16  ")).toBe("6.00-16");
-    expect(normalizeSearchQuery("TR  1042")).toBe("TR 1042");
+describe("sanitizeQuery", () => {
+  it("trims, lower-cases and collapses whitespace", () => {
+    expect(sanitizeQuery("  6.00-16  ")).toBe("6.00-16");
+    expect(sanitizeQuery("TR  1042")).toBe("tr 1042");
   });
 
   it("treats missing input as empty", () => {
-    expect(normalizeSearchQuery(null)).toBe("");
-    expect(normalizeSearchQuery(undefined)).toBe("");
-    expect(normalizeSearchQuery("   ")).toBe("");
+    expect(sanitizeQuery(null)).toBe("");
+    expect(sanitizeQuery(undefined)).toBe("");
+    expect(sanitizeQuery("   ")).toBe("");
   });
 
   it("caps the query length", () => {
-    expect(normalizeSearchQuery("x".repeat(200))).toHaveLength(
-      MAX_SEARCH_LENGTH,
-    );
+    expect(sanitizeQuery("x".repeat(200))).toHaveLength(MAX_SEARCH_LENGTH);
   });
 });
 
@@ -56,6 +54,32 @@ describe("searchPatterns", () => {
         sizes: ["6.00-16", "6.50-16", "7.50-16"],
       },
     ]);
+  });
+
+  it("searches with the canonical size for a messy size input", async () => {
+    const client = fakeClient([AGRICULTURE_ROW]);
+    await searchPatterns(client, "750-16");
+
+    expect(client.rpc).toHaveBeenCalledWith("search_patterns", {
+      search: "7.50-16",
+    });
+  });
+
+  it("searches by category slug when the query is a category alias", async () => {
+    const client = fakeClient([AGRICULTURE_ROW]);
+    await searchPatterns(client, "tractor");
+
+    expect(client.rpc).toHaveBeenCalledWith("search_patterns", {
+      search: "agriculture",
+    });
+  });
+
+  it("never queries the database for an unconfirmable size", async () => {
+    const client = fakeClient([AGRICULTURE_ROW]);
+    const results = await searchPatterns(client, "789-43");
+
+    expect(results).toEqual([]);
+    expect(client.rpc).not.toHaveBeenCalled();
   });
 
   it("never yields a Variant: every result carries a pattern slug", async () => {
@@ -86,6 +110,16 @@ describe("searchPatterns", () => {
       "TR-1042",
     );
     expect(results).toEqual([]);
+  });
+
+  it("ranks inferred-category results first", async () => {
+    const client = fakeClient([
+      { ...AGRICULTURE_ROW, category_slug: "truck-bus", pattern_slug: "t" },
+      AGRICULTURE_ROW,
+    ]);
+    const results = await searchPatterns(client, "tractor 750 16");
+
+    expect(results[0].categorySlug).toBe("agriculture");
   });
 
   it("ignores malformed payloads", async () => {

@@ -52,3 +52,34 @@ export function patternSizes(pattern: NormalizedPattern): string[] {
   }
   return sizes;
 }
+
+let cachedSizeDictionary: ReadonlyMap<string, string> | null = null;
+
+/**
+ * Every canonical Variant size in the catalogue, keyed by its lower-cased form
+ * so lookups are case-insensitive, with the value the exact size as stored
+ * (e.g. `11l-15` → `11L-15`). This is the authority the search-normalization
+ * layer confirms its candidates against: normalization proposes, the dataset
+ * disposes.
+ */
+export function catalogueSizeDictionary(): ReadonlyMap<string, string> {
+  if (cachedSizeDictionary) {
+    return cachedSizeDictionary;
+  }
+
+  const sizes = new Map<string, string>();
+  for (const pattern of CATALOGUE.patterns) {
+    for (const variant of pattern.variants) {
+      const size = variant.public.size;
+      if (size) {
+        const key = size.toLowerCase();
+        if (!sizes.has(key)) {
+          sizes.set(key, size);
+        }
+      }
+    }
+  }
+
+  cachedSizeDictionary = sizes;
+  return sizes;
+}

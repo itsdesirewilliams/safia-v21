@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import {
   MIN_SEARCH_LENGTH,
-  normalizeSearchQuery,
+  sanitizeQuery,
   searchPatterns,
 } from "@/lib/catalogue/search";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -10,14 +10,12 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 export const dynamic = "force-dynamic";
 
 /**
- * Live product-search endpoint for the homepage dropdown (spec #8). The query
- * runs server-side in Postgres; hits resolve to Patterns. There is no separate
- * search-results route.
+ * Live product-search endpoint for the homepage dropdown (spec #8). The raw
+ * customer query is normalized by the search pipeline and matched server-side in
+ * Postgres; hits resolve to Patterns. There is no separate search-results route.
  */
 export async function GET(request: Request) {
-  const query = normalizeSearchQuery(
-    new URL(request.url).searchParams.get("q"),
-  );
+  const query = sanitizeQuery(new URL(request.url).searchParams.get("q"));
 
   if (query.length < MIN_SEARCH_LENGTH) {
     return NextResponse.json({ results: [] });
