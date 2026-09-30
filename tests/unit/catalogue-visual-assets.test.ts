@@ -1,39 +1,29 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  discoverExploreCatalogueImage,
-  EXPLORE_CATALOGUE_ASSET_ROOT,
-  isExploreCatalogueImage,
-  readExploreCatalogueImage,
+  CATALOGUE_HEADER_ASSET,
+  CATALOGUE_HEADER_HEIGHT,
+  CATALOGUE_HEADER_WIDTH,
+  readCatalogueHeaderImage,
 } from "@/lib/media/catalogue-visual-assets";
 
-describe("explore catalogue image formats", () => {
-  it("accepts web images and ignores everything else", () => {
-    for (const filename of ["a.webp", "a.jpg", "a.jpeg", "a.png", "a.avif"]) {
-      expect(isExploreCatalogueImage(filename)).toBe(true);
-    }
-    for (const filename of ["a.svg", "a.pdf", "a.mp4", "README"]) {
-      expect(isExploreCatalogueImage(filename)).toBe(false);
-    }
-  });
-});
-
-describe("explore catalogue image discovery", () => {
-  it("returns the first supported image, naturally ordered", () => {
-    expect(
-      discoverExploreCatalogueImage(["cover-10.png", "cover-2.png", "notes.pdf"]),
-    ).toBe(`${EXPLORE_CATALOGUE_ASSET_ROOT}/cover-2.png`);
+describe("catalogue-header graphic", () => {
+  it("points at the fixed supplied asset, never the media system", () => {
+    expect(CATALOGUE_HEADER_ASSET).toBe("/assets/catalogue-header.png");
+    expect(CATALOGUE_HEADER_ASSET.startsWith("/assets/")).toBe(true);
+    expect(CATALOGUE_HEADER_ASSET).not.toContain("supabase");
   });
 
-  it("returns null when nothing supported is supplied", () => {
-    expect(discoverExploreCatalogueImage(["notes.pdf"])).toBeNull();
-    expect(discoverExploreCatalogueImage([])).toBeNull();
+  it("exposes the graphic's natural pixel size", () => {
+    expect(CATALOGUE_HEADER_WIDTH).toBeGreaterThan(0);
+    expect(CATALOGUE_HEADER_HEIGHT).toBeGreaterThan(0);
   });
 
-  it("reads the repository folder, or null while it is empty", () => {
-    const image = readExploreCatalogueImage();
-    expect(
-      image === null || image.startsWith(`${EXPLORE_CATALOGUE_ASSET_ROOT}/`),
-    ).toBe(true);
+  it("resolves to the asset URL when the supplied file is present", () => {
+    // The graphic ships with the repo, so it resolves; if it were removed the
+    // loader degrades to `null` and the placeholder remains.
+    const image = readCatalogueHeaderImage();
+    expect(image === null || image === CATALOGUE_HEADER_ASSET).toBe(true);
+    expect(image).toBe(CATALOGUE_HEADER_ASSET);
   });
 });

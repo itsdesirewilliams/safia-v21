@@ -25,7 +25,11 @@ import {
   HOME_CATEGORY_CARDS,
   TESTIMONIALS,
 } from "@/lib/homepage";
-import { readExploreCatalogueImage } from "@/lib/media/catalogue-visual-assets";
+import {
+  CATALOGUE_HEADER_HEIGHT,
+  CATALOGUE_HEADER_WIDTH,
+  readCatalogueHeaderImage,
+} from "@/lib/media/catalogue-visual-assets";
 import { readProductRangeImages } from "@/lib/media/product-range-assets";
 import { isValidYoutubeVideoId } from "@/lib/media/youtube";
 import { ROUTES } from "@/lib/routes";
@@ -45,7 +49,7 @@ export default function HomePage() {
   const { companyAddress } = getPublicConfig();
   const heroVideoUrl = getHeroVideoUrl();
   const productRangeImages = readProductRangeImages();
-  const exploreCatalogueImage = readExploreCatalogueImage();
+  const catalogueHeaderImage = readCatalogueHeaderImage();
 
   return (
     <>
@@ -178,13 +182,13 @@ export default function HomePage() {
       <section className="bg-white py-20 lg:py-28">
         <Container>
           <Reveal>
-            <div className="relative overflow-hidden rounded-card bg-ink-950 px-6 py-14 sm:px-12 lg:px-16 lg:py-20">
+            <div className="relative rounded-card bg-ink-950 px-6 py-14 sm:px-12 lg:px-16 lg:py-20">
               <div
                 aria-hidden="true"
-                className="absolute inset-0 [background:radial-gradient(110%_120%_at_90%_0%,rgba(11,99,246,0.4),transparent_58%),radial-gradient(70%_70%_at_0%_110%,rgba(255,106,0,0.18),transparent_55%)]"
+                className="absolute inset-0 rounded-card [background:radial-gradient(110%_120%_at_90%_0%,rgba(11,99,246,0.4),transparent_58%),radial-gradient(70%_70%_at_0%_110%,rgba(255,106,0,0.18),transparent_55%)]"
               />
-              <div className="relative grid gap-14 lg:grid-cols-2 lg:items-center">
-                <div>
+              <div className="relative z-0 grid gap-10 lg:grid-cols-2 lg:items-center">
+                <div className="lg:max-w-lg">
                   <SectionHeading
                     tone="dark"
                     title="Explore the Official Catalogue"
@@ -202,16 +206,8 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <div className="relative hidden h-72 lg:block">
-                  {exploreCatalogueImage ? (
-                    <Image
-                      src={exploreCatalogueImage}
-                      alt="Safeway Tyre catalogue covers"
-                      fill
-                      sizes="(max-width: 1024px) 0px, 50vw"
-                      className="object-contain drop-shadow-[0_25px_45px_rgba(0,0,0,0.45)]"
-                    />
-                  ) : (
+                {!catalogueHeaderImage && (
+                  <div className="relative hidden h-72 lg:block">
                     <div aria-hidden="true" className="absolute inset-0">
                       <div className="absolute left-6 top-4 h-64 w-52 -rotate-6 rounded-lg border border-white/10 bg-white/[0.06]" />
                       <div className="absolute left-24 top-8 h-64 w-56 rotate-3 rounded-lg border border-white/15 bg-white/[0.09] p-5">
@@ -231,9 +227,35 @@ export default function HomePage() {
                         </div>
                       </div>
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
+
+              {catalogueHeaderImage && (
+                <>
+                  {/* Mobile / tablet: below the button, inside the card. */}
+                  <div className="relative mt-10 lg:hidden">
+                    <Image
+                      src={catalogueHeaderImage}
+                      alt=""
+                      width={CATALOGUE_HEADER_WIDTH}
+                      height={CATALOGUE_HEADER_HEIGHT}
+                      sizes="(max-width: 640px) 280px, 340px"
+                      className="mx-auto h-auto w-full max-w-[280px] drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)] sm:max-w-[340px]"
+                    />
+                  </div>
+
+                  {/* Desktop: floats over the card, extending slightly beyond. */}
+                  <Image
+                    src={catalogueHeaderImage}
+                    alt=""
+                    width={CATALOGUE_HEADER_WIDTH}
+                    height={CATALOGUE_HEADER_HEIGHT}
+                    sizes="(min-width: 1024px) 440px, 100vw"
+                    className="pointer-events-none absolute -right-3 top-1/2 z-10 hidden h-auto w-[40%] max-w-[440px] -translate-y-1/2 drop-shadow-[0_30px_50px_rgba(0,0,0,0.5)] lg:block"
+                  />
+                </>
+              )}
             </div>
           </Reveal>
         </Container>
