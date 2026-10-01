@@ -26,6 +26,25 @@ export const monaSans = localFont({
   adjustFontFallback: "Arial",
 });
 
+/**
+ * Mona Sans Condensed, used only for Pattern Codes.
+ *
+ * The shipped base face above carries the weight axis only; this is the full
+ * Mona Sans variable (weight + width, 75–125). A width of 75 is Mona Sans
+ * Condensed; the `.pattern-code-font` utility pins it there. It is not
+ * preloaded: it downloads only on the product pages that render a Pattern Code.
+ */
+export const monaSansCondensed = localFont({
+  src: "./fonts/mona-sans-condensed-latin.woff2",
+  variable: "--font-mona-sans-condensed",
+  weight: "200 900",
+  style: "normal",
+  display: "swap",
+  preload: false,
+  fallback: ["ui-sans-serif", "system-ui", "sans-serif"],
+  adjustFontFallback: "Arial",
+});
+
 export const anekDevanagari = Anek_Devanagari({
   subsets: ["devanagari"],
   variable: "--font-anek-devanagari",

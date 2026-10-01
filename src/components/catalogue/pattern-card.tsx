@@ -38,9 +38,9 @@ export function PatternCard({
         className="h-24 w-24 shrink-0 sm:h-28 sm:w-28"
       />
 
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex min-w-0 flex-1 flex-col justify-center">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="min-w-0 flex-1 truncate text-lg font-bold tracking-tight text-ink-950 sm:text-xl">
+          <h3 className="pattern-code-font min-w-0 flex-1 truncate text-lg font-extrabold tracking-tight text-ink-950 sm:text-xl">
             {pattern.patternCode}
           </h3>
           <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-ink-200 text-ink-700 transition-colors duration-200 group-hover:border-brand-600 group-hover:bg-brand-600 group-hover:text-white">

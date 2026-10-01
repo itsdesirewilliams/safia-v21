@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { SITE } from "@/lib/site";
 import { getActiveTheme } from "@/lib/theme/persistence";
 
-import { anekDevanagari, monaSans } from "./fonts";
+import { anekDevanagari, monaSans, monaSansCondensed } from "./fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -41,7 +41,7 @@ export default async function RootLayout({
     <html
       lang="en"
       data-theme={theme}
-      className={`${monaSans.variable} ${anekDevanagari.variable}`}
+      className={`${monaSans.variable} ${monaSansCondensed.variable} ${anekDevanagari.variable}`}
     >
       <body className="flex min-h-screen flex-col bg-white text-ink-700 antialiased">
         <noscript>

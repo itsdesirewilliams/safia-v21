@@ -297,4 +297,14 @@ body {
     font-weight: 600;
     text-transform: uppercase;
   }
+
+  /* Pattern Code face: Mona Sans Condensed (the variable width axis pinned to
+   * 75). Scoped to Pattern Code text only — never sizes, functional/category
+   * names, headings, body copy, navigation or buttons. Pair with a heavy
+   * weight utility (e.g. font-extrabold) on the element. */
+  .pattern-code-font {
+    font-family: var(--font-mona-sans-condensed), ui-sans-serif, system-ui,
+      sans-serif;
+    font-variation-settings: "wdth" 75;
+  }
 }
