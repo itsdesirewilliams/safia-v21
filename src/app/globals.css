@@ -68,6 +68,14 @@
     both;
   /* Continuous, seamless leftward loop for the Instagram carousel. */
   --animate-marquee: marquee 60s linear infinite;
+
+  /* Premium motion layer. */
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-page-in: fade-in 0.35s ease-out both;
+  --animate-fade-fast: fade-in 0.2s ease both;
+  --animate-pop-in: pop-in 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-pop-out: pop-out 0.16s ease both;
+  --animate-fade-out: fade-out 0.18s ease both;
 }
 
 @keyframes slide-in-right {
@@ -110,6 +118,37 @@
   }
 }
 
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pop-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -137,9 +176,10 @@
   --color-primary-deep: #04281a;
   --color-primary-light: #1e9c68;
   --color-primary-soft: #e6f3ec;
-  --color-accent: #12a150;
-  --color-accent-hover: #0e7f3f;
-  --color-accent-soft: #dcf3e4;
+  /* Orange stays the brand accent (secondary to the green primary). */
+  --color-accent: #ff6a00;
+  --color-accent-hover: #e85d00;
+  --color-accent-soft: #ffe6d1;
   --color-surface: #ffffff;
   --color-surface-muted: #f4f9f6;
   --color-border: #dce8e0;
@@ -153,7 +193,7 @@
   --color-accent-100: var(--color-accent-soft);
   --color-accent-500: var(--color-accent);
   --color-accent-600: var(--color-accent-hover);
-  --color-accent-700: #0b6b37;
+  --color-accent-700: #c94e00;
 
   --color-ink-50: #f5f9f7;
   --color-ink-100: #edf4ef;
@@ -173,9 +213,20 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Reduced motion is mandatory: neutralise entrance transforms, decorative
+ * animations and transitions so content is immediately visible and usable. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

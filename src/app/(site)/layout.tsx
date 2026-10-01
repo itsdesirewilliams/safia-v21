@@ -1,5 +1,6 @@
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { PageTransition } from "@/components/ui/page-transition";
 
 /** The public site chrome. Admin routes deliberately sit outside this group. */
 export default function SiteLayout({
@@ -8,7 +9,9 @@ export default function SiteLayout({
   return (
     <>
       <SiteHeader />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1">
+        <PageTransition>{children}</PageTransition>
+      </main>
       <SiteFooter />
     </>
   );

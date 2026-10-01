@@ -4,7 +4,9 @@ import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { useModalDialog } from "@/components/media/use-modal-dialog";
+import { cn } from "@/lib/cn";
 import type { QualityFirstStory } from "@/lib/media/quality-first";
+import { useExitAnimation } from "@/lib/use-exit-animation";
 
 export type VideoViewerProps = {
   story: QualityFirstStory;
@@ -24,16 +26,21 @@ export function VideoViewer({ story, label, onClose }: VideoViewerProps) {
   const closeRef = useRef<HTMLButtonElement>(null);
   const [failed, setFailed] = useState(false);
 
-  useModalDialog({ dialogRef, initialFocusRef: closeRef, onClose });
+  const { closing, requestClose } = useExitAnimation(onClose);
+
+  useModalDialog({ dialogRef, initialFocusRef: closeRef, onClose: requestClose });
 
   const titleId = `story-viewer-title-${story.path.replace(/[^a-z0-9]+/gi, "-")}`;
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-ink-950/85 p-4 backdrop-blur-sm"
+      className={cn(
+        "fixed inset-0 z-50 flex items-center justify-center bg-ink-950/85 p-4 backdrop-blur-sm",
+        closing ? "animate-fade-out" : "animate-fade-fast",
+      )}
       onClick={(event) => {
         if (event.target === event.currentTarget) {
-          onClose();
+          requestClose();
         }
       }}
     >
@@ -42,7 +49,10 @@ export function VideoViewer({ story, label, onClose }: VideoViewerProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="relative flex max-h-[92svh] w-full max-w-4xl flex-col overflow-hidden rounded-card border border-white/10 bg-ink-950 shadow-pop"
+        className={cn(
+          "relative flex max-h-[92svh] w-full max-w-4xl flex-col overflow-hidden rounded-card border border-white/10 bg-ink-950 shadow-pop",
+          closing ? "animate-pop-out" : "animate-pop-in",
+        )}
       >
         <div className="flex items-center justify-between gap-4 border-b border-white/10 px-5 py-4">
           <h2 id={titleId} className="font-sans text-sm font-semibold text-white">
@@ -51,7 +61,7 @@ export function VideoViewer({ story, label, onClose }: VideoViewerProps) {
           <button
             ref={closeRef}
             type="button"
-            onClick={onClose}
+            onClick={requestClose}
             aria-label="Close video"
             className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white transition-colors hover:border-white/40 hover:bg-white/10"
           >

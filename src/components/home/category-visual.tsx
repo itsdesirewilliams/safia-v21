@@ -34,7 +34,7 @@ export function CategoryVisual({
             alt={label}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none"
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03] motion-reduce:transition-none"
           />
           <div
             aria-hidden="true"
@@ -51,7 +51,7 @@ export function CategoryVisual({
             aria-hidden="true"
             viewBox="0 0 240 240"
             fill="none"
-            className="absolute -right-12 -top-12 h-56 w-56 text-white/[0.07] transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none"
+            className="absolute -right-12 -top-12 h-56 w-56 text-white/[0.07] transition-transform duration-500 ease-out group-hover:scale-[1.03] motion-reduce:transition-none"
           >
             <g stroke="currentColor" strokeWidth="2">
               <circle cx="120" cy="120" r="46" />

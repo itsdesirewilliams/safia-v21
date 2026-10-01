@@ -13,7 +13,7 @@ export function PostCard({ post }: { post: PostSummaryWithThumbnail }) {
   return (
     <Link
       href={ROUTES.post(post.slug)}
-      className="group flex h-full flex-col overflow-hidden rounded-card border border-ink-200 bg-white transition duration-300 hover:border-ink-300 hover:shadow-card"
+      className="group flex h-full flex-col overflow-hidden rounded-card border border-ink-200 bg-white transition duration-300 hover:-translate-y-1 hover:border-ink-300 hover:shadow-card motion-reduce:hover:translate-y-0"
     >
       <div className="relative aspect-[16/9] overflow-hidden bg-ink-100">
         {post.thumbnail ? (

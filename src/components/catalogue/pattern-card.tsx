@@ -16,7 +16,7 @@ export function PatternCard({ pattern }: { pattern: NormalizedPattern }) {
   return (
     <Link
       href={ROUTES.pattern(pattern.categorySlug, pattern.slug)}
-      className="group flex h-full flex-col rounded-card border border-ink-200 bg-white p-6 transition duration-300 hover:border-ink-300 hover:shadow-card"
+      className="group flex h-full flex-col rounded-card border border-ink-200 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-ink-300 hover:shadow-card motion-reduce:hover:translate-y-0"
     >
       <div className="flex items-center justify-between gap-4">
         <span className="rounded-lg border border-ink-200 bg-ink-50 px-3 py-1 text-xs font-semibold tracking-wide text-ink-600">

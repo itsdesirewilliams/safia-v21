@@ -4,8 +4,10 @@ import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { useModalDialog } from "@/components/media/use-modal-dialog";
+import { cn } from "@/lib/cn";
 import { wrapIndex } from "@/lib/gallery";
 import type { GalleryImage } from "@/lib/media/gallery";
+import { useExitAnimation } from "@/lib/use-exit-animation";
 
 const SWIPE_THRESHOLD_PX = 40;
 
@@ -54,10 +56,12 @@ export function GalleryViewer({
 
   const image = images[index];
 
+  const { closing, requestClose } = useExitAnimation(onClose);
+
   useModalDialog({
     dialogRef,
     initialFocusRef: closeRef,
-    onClose,
+    onClose: requestClose,
     onKeyDown: (event) => {
       if (event.key === "ArrowRight") {
         event.preventDefault();
@@ -99,10 +103,13 @@ export function GalleryViewer({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-ink-950/90 p-4 backdrop-blur-sm"
+      className={cn(
+        "fixed inset-0 z-50 flex items-center justify-center bg-ink-950/90 p-4 backdrop-blur-sm",
+        closing ? "animate-fade-out" : "animate-fade-fast",
+      )}
       onClick={(event) => {
         if (event.target === event.currentTarget) {
-          onClose();
+          requestClose();
         }
       }}
     >
@@ -111,7 +118,10 @@ export function GalleryViewer({
         role="dialog"
         aria-modal="true"
         aria-label={`Gallery image ${index + 1} of ${count}`}
-        className="relative flex h-full max-h-[92svh] w-full max-w-5xl flex-col"
+        className={cn(
+          "relative flex h-full max-h-[92svh] w-full max-w-5xl flex-col",
+          closing ? "animate-pop-out" : "animate-pop-in",
+        )}
       >
         <div className="flex items-center justify-between gap-4 pb-4">
           <p className="text-sm font-medium tabular-nums text-white/70">
@@ -120,7 +130,7 @@ export function GalleryViewer({
           <button
             ref={closeRef}
             type="button"
-            onClick={onClose}
+            onClick={requestClose}
             aria-label="Close viewer"
             className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white transition-colors hover:border-white/40 hover:bg-white/10"
           >

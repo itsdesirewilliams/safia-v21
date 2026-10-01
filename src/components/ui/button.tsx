@@ -14,7 +14,7 @@ export type ButtonSize = "sm" | "md" | "lg";
 export type ButtonShape = "pill" | "rounded-rectangle";
 
 const BASE =
-  "inline-flex items-center justify-center gap-2 font-semibold transition-[background-color,border-color,color,transform] duration-200 ease-out disabled:cursor-not-allowed disabled:opacity-60 active:scale-[0.98]";
+  "inline-flex items-center justify-center gap-2 font-semibold transition-[background-color,border-color,color,transform,box-shadow] duration-200 ease-out hover:-translate-y-px active:translate-y-0 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60";
 
 const SHAPES: Record<ButtonShape, string> = {
   pill: "rounded-full",
@@ -22,9 +22,9 @@ const SHAPES: Record<ButtonShape, string> = {
 };
 
 const VARIANTS: Record<ButtonVariant, string> = {
-  primary: "bg-brand-600 text-white hover:bg-brand-700",
-  accent: "bg-accent-500 text-white hover:bg-accent-600",
-  dark: "bg-ink-950 text-white hover:bg-ink-800",
+  primary: "bg-brand-600 text-white hover:bg-brand-700 hover:shadow-card",
+  accent: "bg-accent-500 text-white hover:bg-accent-600 hover:shadow-card",
+  dark: "bg-ink-950 text-white hover:bg-ink-800 hover:shadow-card",
   outline:
     "border border-ink-200 bg-white text-ink-900 hover:border-ink-300 hover:bg-ink-50",
   onDark:

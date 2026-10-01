@@ -14,7 +14,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
   return (
     <Link
       href={ROUTES.category(category.slug)}
-      className="group flex h-full flex-col rounded-card border border-ink-200 bg-white p-6 transition duration-300 hover:border-ink-300 hover:shadow-card"
+      className="group flex h-full flex-col rounded-card border border-ink-200 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-ink-300 hover:shadow-card motion-reduce:hover:translate-y-0"
     >
       <div className="flex items-start justify-between gap-4">
         <h3 className="text-h3 text-ink-950">{category.displayName}</h3>

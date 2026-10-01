@@ -69,6 +69,19 @@ describe("theme tokens in globals.css", () => {
     expect(greenBlock).toContain("--color-accent-500: var(--color-accent)");
     expect(greenBlock).toContain("--color-ink-950:");
   });
+
+  it("keeps orange as the Safeway Green accent", () => {
+    const greenBlock = css.slice(css.indexOf('[data-theme="safeway-green"]'));
+    expect(greenBlock).toContain("--color-accent: #ff6a00");
+    expect(greenBlock).toContain("--color-primary: #00703d");
+  });
+
+  it("ships a reduced-motion reset and motion tokens", () => {
+    expect(css).toContain("prefers-reduced-motion: reduce");
+    expect(css).toContain("animation-duration: 0.01ms");
+    expect(css).toContain("--ease-premium");
+    expect(css).toContain("--animate-page-in");
+  });
 });
 
 describe("themed gradients", () => {

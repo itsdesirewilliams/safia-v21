@@ -63,24 +63,27 @@ export default function HomePage() {
             />
 
             <div className="relative grid gap-10 px-6 py-12 sm:px-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-14 lg:px-14 lg:py-16">
-              <div className="animate-fade-up">
-                <h1 className="text-h1 text-white">
+              <div>
+                <h1 className="text-h1 animate-fade-up text-white">
                   Tires That Keep the World Moving
                 </h1>
-                <p className="mt-5 max-w-xl text-base leading-relaxed text-white/70 sm:text-lg">
+                <p className="mt-5 max-w-xl animate-fade-up text-base leading-relaxed text-white/70 [animation-delay:80ms] sm:text-lg">
                   {SITE.name} manufactures and exports durable tyres for
                   international markets. Search the catalogue by size, pattern
                   code, name or category.
                 </p>
 
-                <div id="search" className="mt-8 max-w-2xl scroll-mt-28">
+                <div
+                  id="search"
+                  className="mt-8 max-w-2xl animate-fade-up scroll-mt-28 [animation-delay:160ms]"
+                >
                   <SearchBox
                     suggestions={HERO_SUGGESTION_POOL}
                     placeholderPhrases={HERO_PLACEHOLDER_PHRASES}
                   />
                 </div>
 
-                <div className="mt-8 flex flex-wrap gap-3">
+                <div className="mt-8 flex animate-fade-up flex-wrap gap-3 [animation-delay:240ms]">
                   <ButtonLink
                     href={ROUTES.contactUs}
                     variant="accent"
@@ -101,7 +104,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="animate-fade-up [animation-delay:160ms]">
+              <div className="animate-fade-up [animation-delay:320ms]">
                 <HeroVideo
                   src={heroVideoUrl}
                   poster="/media/hero-poster.svg"
@@ -151,7 +154,7 @@ export default function HomePage() {
                 <Reveal delay={(index % 3) * 90} className="h-full">
                   <Link
                     href={ROUTES.category(card.slug)}
-                    className="group flex h-full flex-col rounded-card border border-ink-200 bg-white p-3 transition duration-300 hover:border-ink-300 hover:shadow-card"
+                    className="group flex h-full flex-col rounded-card border border-ink-200 bg-white p-3 transition duration-300 hover:-translate-y-1 hover:border-ink-300 hover:shadow-card motion-reduce:hover:translate-y-0"
                   >
                     <CategoryVisual
                       label={card.displayName}
@@ -299,7 +302,7 @@ export default function HomePage() {
                   {TESTIMONIALS.map((testimonial) => (
                     <li
                       key={`${testimonial.author}-${testimonial.location}`}
-                      className="rounded-card border border-ink-200 bg-white p-6"
+                      className="rounded-card border border-ink-200 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-ink-300 hover:shadow-card motion-reduce:hover:translate-y-0"
                     >
                       <blockquote className="text-base leading-relaxed text-ink-800">
                         &ldquo;{testimonial.quote}&rdquo;
