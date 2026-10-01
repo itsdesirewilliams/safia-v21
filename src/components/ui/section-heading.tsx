@@ -1,3 +1,4 @@
+import { AccentLine } from "@/components/motion/accent-line";
 import { cn } from "@/lib/cn";
 
 export type SectionHeadingProps = {
@@ -8,6 +9,8 @@ export type SectionHeadingProps = {
   /** Heading level to render; defaults to `h2`. */
   as?: "h1" | "h2";
   className?: string;
+  /** Show the small orange accent rule above the heading. */
+  accentLine?: boolean;
 };
 
 /** The recurring heading → description block. */
@@ -18,6 +21,7 @@ export function SectionHeading({
   align = "left",
   as: Heading = "h2",
   className,
+  accentLine = false,
 }: SectionHeadingProps) {
   return (
     <div
@@ -27,6 +31,7 @@ export function SectionHeading({
         className,
       )}
     >
+      {accentLine && <AccentLine className="mb-5" />}
       <Heading
         className={cn(
           "text-h2 max-w-3xl text-balance",

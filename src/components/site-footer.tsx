@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { AccentLine } from "@/components/motion/accent-line";
 import { ArrowIcon } from "@/components/ui/button";
+import { Reveal } from "@/components/ui/reveal";
 import { CATEGORIES } from "@/lib/catalogue/categories";
 import { getPublicConfig } from "@/lib/config";
 import { FOOTER_NAV, ROUTES } from "@/lib/routes";
@@ -104,13 +106,16 @@ export function SiteFooter() {
         <div className="px-6 py-14 sm:px-10 sm:py-16 lg:px-14 lg:py-20">
           <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-xl">
-              <h2 className="text-h2 text-white">
-                Sourcing Tyres?
-                <br />
-                Start the Conversation.
-              </h2>
+              <Reveal variant="mask">
+                <AccentLine className="mb-6" />
+                <h2 className="text-h2 text-white">
+                  Sourcing Tyres?
+                  <br />
+                  Start the Conversation.
+                </h2>
+              </Reveal>
             </div>
-            <div className="shrink-0">
+            <Reveal variant="mask" delay={140} className="shrink-0">
               <a
                 href={`mailto:${SITE.emails.director}`}
                 className="group inline-flex items-center gap-4"
@@ -123,7 +128,7 @@ export function SiteFooter() {
                 </span>
               </a>
               <p className="mt-3 text-sm text-white/50">{SITE.legalName}</p>
-            </div>
+            </Reveal>
           </div>
 
           <div className="mt-14 grid gap-10 border-t border-white/10 pt-12 sm:grid-cols-2 lg:grid-cols-12">

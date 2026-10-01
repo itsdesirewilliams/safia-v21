@@ -1,63 +1,83 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
 
 import { cn } from "@/lib/cn";
+import { MOTION, MOTION_OK } from "@/lib/motion/config";
+import { gsap } from "@/lib/motion/gsap";
+
+export type RevealVariant = "up" | "fade" | "mask" | "scale";
 
 export type RevealProps = {
   children: React.ReactNode;
   className?: string;
-  /** Stagger delay in milliseconds. */
+  /** Stagger/lead delay in milliseconds. */
   delay?: number;
+  variant?: RevealVariant;
 };
 
 /**
- * Reveals its children with a fade-up when they scroll into view.
+ * Reveal — the workhorse for composing an element into the viewport with GSAP +
+ * ScrollTrigger. Not a plain fade: each variant pairs opacity with a movement
+ * idea (up = rise, mask = clip-path wipe, scale = settle, fade = opacity only).
  *
- * Progressive enhancement: without JavaScript the `<noscript>` rule in the
- * root layout makes `.reveal` content visible, and `prefers-reduced-motion`
- * users see it (via CSS) immediately without any observer.
+ * Content is rendered in its final state and only animated from a `from` state
+ * once motion is allowed, so it is never hidden by CSS: reduced-motion users and
+ * no-JS visitors see everything immediately. ScrollTriggers are created inside
+ * `gsap.matchMedia` and reverted on unmount (no leaks, no scroll listeners).
  */
-export function Reveal({ children, className, delay = 0 }: RevealProps) {
+export function Reveal({
+  children,
+  className,
+  delay = 0,
+  variant = "up",
+}: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [shown, setShown] = useState(false);
 
-  useEffect(() => {
-    const element = ref.current;
-    if (!element) {
-      return;
-    }
+  useGSAP(
+    () => {
+      const el = ref.current;
+      if (!el) {
+        return;
+      }
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return;
-    }
+      const mm = gsap.matchMedia();
+      mm.add(MOTION_OK, () => {
+        const from =
+          variant === "fade"
+            ? { opacity: 0 }
+            : variant === "mask"
+              ? {
+                  opacity: 0,
+                  y: MOTION.distance.sm,
+                  clipPath: "inset(0% 0% 100% 0%)",
+                }
+              : variant === "scale"
+                ? { opacity: 0, scale: 0.97 }
+                : { opacity: 0, y: MOTION.distance.md };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) {
-          setShown(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
-    );
+        gsap.fromTo(el, from, {
+          opacity: 1,
+          x: 0,
+          y: 0,
+          scale: 1,
+          clipPath: "inset(0% 0% 0% 0%)",
+          duration: MOTION.duration.reveal,
+          ease: MOTION.ease.premium,
+          delay: delay / 1000,
+          clearProps: "clipPath,transform",
+          scrollTrigger: { trigger: el, start: "top 88%", once: true },
+        });
+      });
 
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, []);
+      return () => mm.revert();
+    },
+    { scope: ref, dependencies: [variant, delay] },
+  );
 
   return (
-    <div
-      ref={ref}
-      style={delay ? { transitionDelay: `${delay}ms` } : undefined}
-      className={cn(
-        "reveal transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none",
-        shown
-          ? "translate-y-0 opacity-100"
-          : "translate-y-6 opacity-0 motion-reduce:translate-y-0 motion-reduce:opacity-100",
-        className,
-      )}
-    >
+    <div ref={ref} className={cn(className)}>
       {children}
     </div>
   );

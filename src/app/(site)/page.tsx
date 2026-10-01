@@ -7,6 +7,9 @@ import { HeroVideo } from "@/components/home/hero-video";
 import { InstagramFeed } from "@/components/home/instagram-feed";
 import { SearchBox } from "@/components/home/search-box";
 import { YouTubeTour } from "@/components/home/youtube-tour";
+import { ParallaxMedia } from "@/components/motion/parallax-media";
+import { RevealImage } from "@/components/motion/reveal-image";
+import { RevealText } from "@/components/motion/reveal-text";
 import { QueryForm } from "@/components/contact/query-form";
 import { ArrowIcon, ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -64,53 +67,63 @@ export default function HomePage() {
 
             <div className="relative grid gap-10 px-6 py-12 sm:px-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-14 lg:px-14 lg:py-16">
               <div>
-                <h1 className="text-h1 animate-fade-up text-white">
-                  Tires That Keep the World Moving
-                </h1>
-                <p className="mt-5 max-w-xl animate-fade-up text-base leading-relaxed text-white/70 [animation-delay:80ms] sm:text-lg">
-                  {SITE.name} manufactures and exports durable tyres for
-                  international markets. Search the catalogue by size, pattern
-                  code, name or category.
-                </p>
-
-                <div
-                  id="search"
-                  className="mt-8 max-w-2xl animate-fade-up scroll-mt-28 [animation-delay:160ms]"
-                >
-                  <SearchBox
-                    suggestions={HERO_SUGGESTION_POOL}
-                    placeholderPhrases={HERO_PLACEHOLDER_PHRASES}
-                  />
-                </div>
-
-                <div className="mt-8 flex animate-fade-up flex-wrap gap-3 [animation-delay:240ms]">
-                  <ButtonLink
-                    href={ROUTES.contactUs}
-                    variant="accent"
-                    size="lg"
-                    shape="rounded-rectangle"
-                  >
-                    Request a Quotation
-                    <ArrowIcon className="h-4 w-4" />
-                  </ButtonLink>
-                  <ButtonLink
-                    href={ROUTES.catalogue}
-                    variant="onDark"
-                    size="lg"
-                    shape="rounded-rectangle"
-                  >
-                    Explore the Catalogue
-                  </ButtonLink>
-                </div>
-              </div>
-
-              <div className="animate-fade-up [animation-delay:320ms]">
-                <HeroVideo
-                  src={heroVideoUrl}
-                  poster="/media/hero-poster.svg"
-                  label={`${SITE.name} factory and manufacturing`}
+                <RevealText
+                  as="h1"
+                  text="Tires That Keep the World Moving"
+                  className="text-h1 text-white"
+                  delay={120}
                 />
+                <Reveal variant="mask" delay={280} className="mt-5">
+                  <p className="max-w-xl text-base leading-relaxed text-white/70 sm:text-lg">
+                    {SITE.name} manufactures and exports durable tyres for
+                    international markets. Search the catalogue by size, pattern
+                    code, name or category.
+                  </p>
+                </Reveal>
+
+                <Reveal variant="mask" delay={400} className="mt-8 max-w-2xl">
+                  <div id="search" className="scroll-mt-28">
+                    <SearchBox
+                      suggestions={HERO_SUGGESTION_POOL}
+                      placeholderPhrases={HERO_PLACEHOLDER_PHRASES}
+                    />
+                  </div>
+                </Reveal>
+
+                <Reveal variant="mask" delay={520} className="mt-8">
+                  <div className="flex flex-wrap gap-3">
+                    <ButtonLink
+                      href={ROUTES.contactUs}
+                      variant="accent"
+                      size="lg"
+                      shape="rounded-rectangle"
+                    >
+                      Request a Quotation
+                      <ArrowIcon className="h-4 w-4" />
+                    </ButtonLink>
+                    <ButtonLink
+                      href={ROUTES.catalogue}
+                      variant="onDark"
+                      size="lg"
+                      shape="rounded-rectangle"
+                    >
+                      Explore the Catalogue
+                    </ButtonLink>
+                  </div>
+                </Reveal>
               </div>
+
+              <RevealImage delay={60}>
+                <ParallaxMedia>
+                  <div data-reveal-media>
+                    <HeroVideo
+                      src={heroVideoUrl}
+                      poster="/media/hero-poster.svg"
+                      label={`${SITE.name} factory and manufacturing`}
+                    />
+                  </div>
+                </ParallaxMedia>
+              </RevealImage>
             </div>
           </div>
         </div>
@@ -121,8 +134,9 @@ export default function HomePage() {
         <Container>
           <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-16">
             <div>
-              <Reveal>
+              <Reveal variant="mask">
                 <SectionHeading
+                  accentLine
                   title="Take a Tour of Our Industry"
                   description="Step inside our factory online — a short sneak peek at how Safeway Tyre makes its tyres."
                 />
@@ -141,8 +155,9 @@ export default function HomePage() {
       {/* Product ranges */}
       <section className="bg-ink-50 py-20 lg:py-28">
         <Container>
-          <Reveal>
+          <Reveal variant="mask">
             <SectionHeading
+              accentLine
               title="Product Ranges"
               description="Six ranges covering transport, agriculture and industry."
             />
@@ -156,10 +171,14 @@ export default function HomePage() {
                     href={ROUTES.category(card.slug)}
                     className="group flex h-full flex-col rounded-card border border-ink-200 bg-white p-3 transition duration-300 hover:-translate-y-1 hover:border-ink-300 hover:shadow-card motion-reduce:hover:translate-y-0"
                   >
-                    <CategoryVisual
-                      label={card.displayName}
-                      image={productRangeImages[card.slug]}
-                    />
+                    <RevealImage>
+                      <div data-reveal-media>
+                        <CategoryVisual
+                          label={card.displayName}
+                          image={productRangeImages[card.slug]}
+                        />
+                      </div>
+                    </RevealImage>
                     <div className="flex flex-1 flex-col px-2 pb-2 pt-5">
                       <div className="flex items-start justify-between gap-4">
                         <h3 className="text-h3 text-ink-950">
@@ -193,6 +212,7 @@ export default function HomePage() {
               <div className="relative z-0 grid gap-10 lg:grid-cols-2 lg:items-center">
                 <div className="lg:max-w-lg">
                   <SectionHeading
+                    accentLine
                     tone="dark"
                     title="Explore the Official Catalogue"
                     description="Browse the full Safeway Tyre catalogue of patterns and sizes."
@@ -238,25 +258,33 @@ export default function HomePage() {
                 <>
                   {/* Mobile / tablet: below the button, inside the card. */}
                   <div className="relative mt-10 lg:hidden">
-                    <Image
-                      src={catalogueHeaderImage}
-                      alt=""
-                      width={CATALOGUE_HEADER_WIDTH}
-                      height={CATALOGUE_HEADER_HEIGHT}
-                      sizes="(max-width: 640px) 280px, 340px"
-                      className="mx-auto h-auto w-full max-w-[280px] drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)] sm:max-w-[340px]"
-                    />
+                    <RevealImage>
+                      <div data-reveal-media>
+                        <Image
+                          src={catalogueHeaderImage}
+                          alt=""
+                          width={CATALOGUE_HEADER_WIDTH}
+                          height={CATALOGUE_HEADER_HEIGHT}
+                          sizes="(max-width: 640px) 280px, 340px"
+                          className="mx-auto h-auto w-full max-w-[280px] drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)] sm:max-w-[340px]"
+                        />
+                      </div>
+                    </RevealImage>
                   </div>
 
                   {/* Desktop: floats over the card, extending slightly beyond. */}
-                  <Image
-                    src={catalogueHeaderImage}
-                    alt=""
-                    width={CATALOGUE_HEADER_WIDTH}
-                    height={CATALOGUE_HEADER_HEIGHT}
-                    sizes="(min-width: 1024px) 440px, 100vw"
-                    className="pointer-events-none absolute -right-3 top-1/2 z-10 hidden h-auto w-[40%] max-w-[440px] -translate-y-1/2 drop-shadow-[0_30px_50px_rgba(0,0,0,0.5)] lg:block"
-                  />
+                  <RevealImage className="pointer-events-none absolute -right-3 top-1/2 z-10 hidden w-[40%] max-w-[440px] -translate-y-1/2 lg:block">
+                    <div data-reveal-media>
+                      <Image
+                        src={catalogueHeaderImage}
+                        alt=""
+                        width={CATALOGUE_HEADER_WIDTH}
+                        height={CATALOGUE_HEADER_HEIGHT}
+                        sizes="(min-width: 1024px) 440px, 100vw"
+                        className="block h-auto w-full drop-shadow-[0_30px_50px_rgba(0,0,0,0.5)]"
+                      />
+                    </div>
+                  </RevealImage>
                 </>
               )}
             </div>
@@ -267,8 +295,9 @@ export default function HomePage() {
       {/* Quality & certifications */}
       <section className="bg-white pb-20 lg:pb-28">
         <Container>
-          <Reveal>
+          <Reveal variant="mask">
             <SectionHeading
+              accentLine
               title="Quality & Certifications"
               description="Safeway Tyre products are backed by recognised quality and compliance marks."
             />
@@ -287,6 +316,7 @@ export default function HomePage() {
           <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-16">
             <Reveal>
               <SectionHeading
+                accentLine
                 title={
                   <>
                     <span className="lg:block">Trusted by</span>{" "}
@@ -296,40 +326,44 @@ export default function HomePage() {
                 }
               />
             </Reveal>
-            <Reveal delay={100}>
-              {TESTIMONIALS.length > 0 ? (
-                <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                  {TESTIMONIALS.map((testimonial) => (
-                    <li
-                      key={`${testimonial.author}-${testimonial.location}`}
-                      className="rounded-card border border-ink-200 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-ink-300 hover:shadow-card motion-reduce:hover:translate-y-0"
-                    >
-                      <blockquote className="text-base leading-relaxed text-ink-800">
-                        &ldquo;{testimonial.quote}&rdquo;
-                      </blockquote>
-                      <p className="mt-5 text-sm font-semibold text-ink-950">
-                        {testimonial.author}
-                        <span className="font-normal text-ink-500">
-                          {" "}
-                          — {testimonial.location}
-                          {testimonial.flag && (
-                            <span className="ml-1.5" aria-hidden="true">
-                              {testimonial.flag}
-                            </span>
-                          )}
-                        </span>
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
+            {TESTIMONIALS.length > 0 ? (
+              <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {TESTIMONIALS.map((testimonial, index) => (
+                  <li
+                    key={`${testimonial.author}-${testimonial.location}`}
+                    className="h-full"
+                  >
+                    <Reveal delay={(index % 3) * 90} className="h-full">
+                      <div className="flex h-full flex-col rounded-card border border-ink-200 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-ink-300 hover:shadow-card motion-reduce:hover:translate-y-0">
+                        <blockquote className="text-base leading-relaxed text-ink-800">
+                          &ldquo;{testimonial.quote}&rdquo;
+                        </blockquote>
+                        <p className="mt-5 text-sm font-semibold text-ink-950">
+                          {testimonial.author}
+                          <span className="font-normal text-ink-500">
+                            {" "}
+                            — {testimonial.location}
+                            {testimonial.flag && (
+                              <span className="ml-1.5" aria-hidden="true">
+                                {testimonial.flag}
+                              </span>
+                            )}
+                          </span>
+                        </p>
+                      </div>
+                    </Reveal>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <Reveal delay={100}>
                 <PlaceholderPanel
                   kind="testimonial"
                   label="Testimonials Coming Soon"
                   detail="Customer testimonials will be published here soon."
                 />
-              )}
-            </Reveal>
+              </Reveal>
+            )}
           </div>
         </Container>
       </section>
@@ -337,8 +371,9 @@ export default function HomePage() {
       {/* Instagram */}
       <section className="bg-white py-20 lg:py-28">
         <Container>
-          <Reveal>
+          <Reveal variant="mask">
             <SectionHeading
+              accentLine
               title="Follow Us on Instagram"
               description="A look at the latest from Safeway Tyre."
             />
@@ -354,8 +389,9 @@ export default function HomePage() {
         <Container>
           <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
             <div>
-              <Reveal>
+              <Reveal variant="mask">
                 <SectionHeading
+                  accentLine
                   title="Inquiry Form"
                   description="Tell us the sizes and patterns you need and our team will respond with a quotation."
                 />
@@ -422,8 +458,9 @@ export default function HomePage() {
       {/* Map */}
       <section className="bg-white py-20 lg:py-28">
         <Container>
-          <Reveal>
+          <Reveal variant="mask">
             <SectionHeading
+              accentLine
               title="Find Us on the Map"
               description="Safeway Tyre's corporate office in Ludhiana, India."
             />
