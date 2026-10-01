@@ -15,21 +15,34 @@ if (!AGRICULTURE || !MOTORCYCLE || !MANY_SIZES) {
 }
 
 describe("Pattern card", () => {
-  it("leads with the Pattern Code and keeps the functional name as the eyebrow", () => {
+  it("leads with the Pattern Code as its only heading", () => {
     const html = renderToStaticMarkup(<PatternCard pattern={AGRICULTURE} />);
 
-    expect(html).toContain("TR-1042");
-    expect(html).toContain("BIAS TRACTOR TYRES");
-    // The heading is the code, never the category or a size.
     expect(html).toMatch(/<h3[^>]*>TR-1042<\/h3>/);
-    expect(html).not.toMatch(/<h3[^>]*>Agriculture Tyres<\/h3>/);
   });
 
-  it("falls back to the category name in the eyebrow when there is no functional name", () => {
-    const html = renderToStaticMarkup(<PatternCard pattern={MOTORCYCLE} />);
+  it("renders no eyebrow, category or functional name", () => {
+    const agriculture = renderToStaticMarkup(
+      <PatternCard pattern={AGRICULTURE} />,
+    );
+    expect(agriculture).not.toContain("BIAS TRACTOR TYRES");
+    expect(agriculture).not.toContain("Agriculture Tyres");
+    // The old eyebrow class is gone.
+    expect(agriculture).not.toContain("text-eyebrow");
 
-    expect(html).toContain("Motorcycle Tyres");
-    expect(html).toMatch(/<h3[^>]*>SFM-101<\/h3>/);
+    const motorcycle = renderToStaticMarkup(
+      <PatternCard pattern={MOTORCYCLE} />,
+    );
+    expect(motorcycle).not.toContain("Motorcycle Tyres");
+    expect(motorcycle).toMatch(/<h3[^>]*>SFM-101<\/h3>/);
+  });
+
+  it("places the sizes directly beneath the Pattern Code", () => {
+    const html = renderToStaticMarkup(<PatternCard pattern={AGRICULTURE} />);
+    const codeIndex = html.indexOf("TR-1042");
+    const sizeIndex = html.indexOf("6.00-16");
+    expect(codeIndex).toBeGreaterThan(-1);
+    expect(sizeIndex).toBeGreaterThan(codeIndex);
   });
 
   it("links to the Pattern detail route, identified by the Pattern slug", () => {

@@ -107,12 +107,13 @@ describe("Catalogue page", () => {
 });
 
 describe("Category listing", () => {
-  it("lists the patterns in a category with their display name and code", async () => {
+  it("lists the patterns in a category with the Pattern Code as the card heading", async () => {
     const html = await get("/products/agriculture");
 
     expect(html).toContain("Agriculture Tyres");
-    expect(html).toContain("BIAS TRACTOR TYRES");
     expect(html).toContain("TR-1042");
+    // The card carries no eyebrow: no functional/category name on the card.
+    expect(html).not.toContain("BIAS TRACTOR TYRES");
     expect(html).toContain(
       'href="/products/agriculture/bias-tractor-tyres-tr-1042"',
     );
