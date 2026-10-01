@@ -169,6 +169,15 @@ describe("admin routes are protected server-side", () => {
     expect(response.headers.get("location") ?? "").toContain("/admin/login");
   });
 
+  it("redirects signed-out visitors from the Pattern Image uploader", async () => {
+    const response = await fetch(`${BASE_URL}/admin/pattern-images`, {
+      redirect: "manual",
+    });
+
+    expect([302, 303, 307, 308]).toContain(response.status);
+    expect(response.headers.get("location") ?? "").toContain("/admin/login");
+  });
+
   it("redirects the legacy /admin/media route to the login screen too", async () => {
     const response = await fetch(`${BASE_URL}/admin/media`, {
       redirect: "manual",

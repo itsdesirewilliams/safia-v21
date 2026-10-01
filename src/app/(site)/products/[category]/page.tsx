@@ -7,16 +7,19 @@ import { PageHeader } from "@/components/ui/page-header";
 import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { Reveal } from "@/components/ui/reveal";
 import {
-  CATEGORIES,
   CATEGORY_DESCRIPTIONS,
   getCategory,
 } from "@/lib/catalogue/categories";
 import { listPatternsByCategory } from "@/lib/catalogue/dataset";
+import { normalizePatternCode } from "@/lib/media/pattern-image-batch";
+import { listPatternImageUrls } from "@/lib/media/pattern-images-server";
 import { ROUTES } from "@/lib/routes";
 
-export function generateStaticParams() {
-  return CATEGORIES.map((category) => ({ category: category.slug }));
-}
+/**
+ * Pattern images live in the Media layer and are associated by Pattern Code at
+ * read time, so newly uploaded images appear without a rebuild.
+ */
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -47,10 +50,12 @@ export default async function CategoryPage({
   }
 
   const patterns = listPatternsByCategory(category.slug);
+  const images = await listPatternImageUrls();
 
   return (
     <div className="bg-white">
       <PageHeader
+        containerSize="listing"
         breadcrumb={
           <Breadcrumbs
             items={[
@@ -64,7 +69,7 @@ export default async function CategoryPage({
       />
 
       <section className="py-16 lg:py-24">
-        <Container>
+        <Container size="listing">
           {patterns.length === 0 ? (
             <PlaceholderPanel
               kind="media"
@@ -72,11 +77,17 @@ export default async function CategoryPage({
               detail="This range is coming soon. Contact us for current availability or specific sizes."
             />
           ) : (
-            <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {patterns.map((pattern, index) => (
                 <li key={pattern.slug}>
                   <Reveal delay={(index % 3) * 90} className="h-full">
-                    <PatternCard pattern={pattern} />
+                    <PatternCard
+                      pattern={pattern}
+                      imageUrl={
+                        images.get(normalizePatternCode(pattern.patternCode)) ??
+                        null
+                      }
+                    />
                   </Reveal>
                 </li>
               ))}

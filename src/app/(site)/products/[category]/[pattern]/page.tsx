@@ -1,19 +1,21 @@
 import { notFound } from "next/navigation";
 
 import { Breadcrumbs } from "@/components/catalogue/breadcrumbs";
+import { PatternImage } from "@/components/catalogue/pattern-image";
 import { VariantTable } from "@/components/catalogue/variant-table";
 import { Container } from "@/components/ui/container";
 import { PageHeader } from "@/components/ui/page-header";
 import { getCategory } from "@/lib/catalogue/categories";
-import { CATALOGUE, getPattern } from "@/lib/catalogue/dataset";
+import { getPattern } from "@/lib/catalogue/dataset";
+import { patternEyebrow } from "@/lib/catalogue/pattern-label";
+import { getPatternImageUrl } from "@/lib/media/pattern-images-server";
 import { ROUTES } from "@/lib/routes";
 
-export function generateStaticParams() {
-  return CATALOGUE.patterns.map((pattern) => ({
-    category: pattern.categorySlug,
-    pattern: pattern.slug,
-  }));
-}
+/**
+ * Pattern images are read from the Media layer at request time, so an uploaded
+ * image appears immediately without a rebuild.
+ */
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -23,7 +25,7 @@ export async function generateMetadata({
   const { category, pattern } = await params;
   const found = getPattern(category, pattern);
   return {
-    title: found ? found.displayName : "Pattern",
+    title: found ? `${found.patternCode} — ${found.displayName}` : "Pattern",
     description: found
       ? `Safeway Tyre ${found.displayName} (${found.patternCode}) — the sizes and configurations available for this pattern.`
       : undefined,
@@ -32,7 +34,10 @@ export async function generateMetadata({
 
 /**
  * Pattern detail (spec #1 / Ticket #18): the Pattern's Variants as a
- * specification table. There are no Variant routes.
+ * specification table. There are no Variant routes. The header identifies the
+ * exact Pattern selected (Products → Category → Pattern) and the information
+ * block above the table carries the Pattern image, its code and its functional
+ * or Category name.
  */
 export default async function PatternPage({
   params,
@@ -47,6 +52,9 @@ export default async function PatternPage({
     notFound();
   }
 
+  const eyebrow = patternEyebrow(pattern.displayName, category.displayName);
+  const imageUrl = await getPatternImageUrl(pattern.patternCode);
+
   return (
     <div className="bg-white">
       <PageHeader
@@ -58,7 +66,7 @@ export default async function PatternPage({
                 label: category.displayName,
                 href: ROUTES.category(category.slug),
               },
-              { label: pattern.displayName },
+              { label: pattern.patternCode },
             ]}
           />
         }
@@ -68,10 +76,20 @@ export default async function PatternPage({
 
       <section className="py-16 lg:py-24">
         <Container>
-          <h2 className="text-h2 text-ink-950">Specifications</h2>
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-600">
-            Every size and configuration available for this pattern.
-          </p>
+          <div className="flex items-center gap-5 sm:gap-6">
+            <PatternImage
+              src={imageUrl}
+              alt={`${pattern.patternCode} — ${eyebrow}`}
+              className="h-28 w-28 shrink-0 sm:h-32 sm:w-32"
+            />
+            <div className="min-w-0">
+              <h2 className="text-2xl font-bold tracking-tight text-ink-950 sm:text-3xl">
+                {pattern.patternCode}
+              </h2>
+              <p className="mt-1.5 text-sm text-ink-600">{eyebrow}</p>
+            </div>
+          </div>
+
           <div className="mt-8">
             <VariantTable variants={pattern.variants} />
           </div>

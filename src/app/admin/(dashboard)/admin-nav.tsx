@@ -7,6 +7,7 @@ import { cn } from "@/lib/cn";
 
 const LINKS = [
   { href: "/admin/files", label: "Files" },
+  { href: "/admin/pattern-images", label: "Pattern Images", adminOnly: true },
   { href: "/admin/posts", label: "Posts" },
   { href: "/admin/settings", label: "Settings", adminOnly: true },
 ] as const;

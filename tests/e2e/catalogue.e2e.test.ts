@@ -132,14 +132,18 @@ describe("Category listing", () => {
 });
 
 describe("Pattern detail", () => {
-  it("renders the Variant specification table with public fields only", async () => {
+  it("identifies the exact pattern and renders the specification table", async () => {
     const html = await get(
       "/products/agriculture/bias-tractor-tyres-tr-1042",
     );
 
     expect(html).toContain("BIAS TRACTOR TYRES");
     expect(html).toContain("TR-1042");
-    expect(html).toContain("Specifications");
+    // The trade-taxonomy crumb identifies the selected pattern by its code.
+    expect(html).toContain('href="/products/agriculture"');
+    // No generic "Specifications" heading survives above the table.
+    expect(html).not.toContain("Specifications Table");
+    expect(html).not.toContain("Every size and configuration available");
 
     for (const header of ["Size", "Ply rating", "TT/TL", "Application"]) {
       expect(html).toContain(header);
@@ -147,6 +151,16 @@ describe("Pattern detail", () => {
 
     expect(html).toContain("6.00-16");
     expect(html).toContain("Tractor Front");
+  });
+
+  it("renders the pattern information block with a safe image fallback", async () => {
+    const html = await get(
+      "/products/motorcycle/motorcycle-tyres-sfm-101",
+    );
+
+    expect(html).toContain("SFM-101");
+    // No image has been uploaded for this pattern in the test environment.
+    expect(html).toContain("Pattern image coming soon");
   });
 
   it("exposes no pricing or weight anywhere", async () => {

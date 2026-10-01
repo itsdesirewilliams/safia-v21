@@ -296,6 +296,9 @@ export async function createMediaRecord(input: {
   uploadedBy: string;
   caption?: string | null;
   alt?: string | null;
+  /** Optional Pattern/Category association (product-page media). */
+  patternCode?: string | null;
+  categorySlug?: string | null;
 }): Promise<{ ok: true; media: Media } | { ok: false; error: string }> {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
@@ -307,6 +310,8 @@ export async function createMediaRecord(input: {
       mime_type: input.mimeType,
       alt: input.alt ?? null,
       caption: input.caption ?? null,
+      pattern_code: input.patternCode ?? null,
+      category_slug: input.categorySlug ?? null,
       uploaded_by: input.uploadedBy,
     })
     .select("*")
@@ -322,6 +327,62 @@ export async function createMediaRecord(input: {
   }
 
   return { ok: true, media };
+}
+
+/**
+ * Point an existing Media record at a newly-uploaded object, then remove the
+ * object it replaces. Used by the Pattern Image "Replace" action so replacing
+ * an image updates the association in place and never creates a duplicate
+ * Media record.
+ */
+export async function replaceMediaObject(input: {
+  id: string;
+  path: string;
+  mimeType: string | null;
+}): Promise<{ ok: true; media: Media } | { ok: false; error: string }> {
+  const existing = await getMediaById(input.id);
+  if (!existing) {
+    return { ok: false, error: "That image no longer exists." };
+  }
+
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("media")
+    .update({ storage_path: input.path, mime_type: input.mimeType })
+    .eq("id", input.id)
+    .select("*")
+    .single();
+
+  if (error) {
+    return { ok: false, error: `Could not replace the image: ${error.message}` };
+  }
+
+  const media = mapMediaRow(data as MediaRow, getSupabaseUrl());
+  if (!media) {
+    return { ok: false, error: "The updated media record could not be read." };
+  }
+
+  if (existing.path !== input.path) {
+    await supabase.storage.from(existing.bucket).remove([existing.path]);
+  }
+
+  return { ok: true, media };
+}
+
+/**
+ * Remove a single storage object without touching any Media record. Used to
+ * clear an orphan left by a bulk upload whose record could not be created.
+ */
+export async function removeStorageObject(
+  bucket: StorageBucketId,
+  path: string,
+): Promise<void> {
+  try {
+    const supabase = await createSupabaseServerClient();
+    await supabase.storage.from(bucket).remove([path]);
+  } catch {
+    // Best-effort: an orphan is preferable to failing the whole batch.
+  }
 }
 
 export async function updateMediaMetadata(

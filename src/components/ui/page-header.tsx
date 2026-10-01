@@ -10,6 +10,8 @@ export type PageHeaderProps = {
   actions?: ReactNode;
   children?: ReactNode;
   className?: string;
+  /** Match the header measure to a page's content container. */
+  containerSize?: "default" | "wide" | "narrow" | "listing";
 };
 
 /**
@@ -25,10 +27,11 @@ export function PageHeader({
   actions,
   children,
   className,
+  containerSize = "default",
 }: PageHeaderProps) {
   return (
     <header className={cn("border-b border-ink-200 bg-ink-50", className)}>
-      <Container className="py-12 lg:py-16">
+      <Container size={containerSize} className="py-12 lg:py-16">
         {breadcrumb && <div className="mb-6">{breadcrumb}</div>}
         <h1 className="max-w-3xl text-balance text-3xl font-bold tracking-tight text-ink-950 sm:text-4xl">
           {title}
