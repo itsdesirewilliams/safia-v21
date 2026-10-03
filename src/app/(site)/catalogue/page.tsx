@@ -5,12 +5,21 @@ import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { CATALOGUE } from "@/lib/catalogue/dataset";
+import { getDictionary, getLocale } from "@/lib/i18n/server";
+import { languageAlternates, localizedHref } from "@/lib/i18n/url";
+import { ROUTES } from "@/lib/routes";
 
-export const metadata = {
-  title: "Catalogue",
-  description:
-    "Browse the Safeway Tyre catalogue: the catalogue viewer and every product range, from motorcycle and truck & bus to agriculture, OTR and forklift tyres.",
-};
+export async function generateMetadata() {
+  const dict = await getDictionary();
+  return {
+    title: dict.catalogue.title,
+    description: dict.catalogue.description,
+    alternates: {
+      canonical: "/catalogue",
+      languages: languageAlternates("/catalogue"),
+    },
+  };
+}
 
 /**
  * The Catalogue page (spec #1 / Ticket #18). The responsive slider is the
@@ -19,7 +28,8 @@ export const metadata = {
  * artwork only, so it is shown at every size and the download action points
  * straight at the supplied PDF.
  */
-export default function CataloguePage() {
+export default async function CataloguePage() {
+  const [dict, locale] = await Promise.all([getDictionary(), getLocale()]);
   return (
     <>
       <section id="catalogue" className="scroll-mt-28 bg-white py-20 lg:py-28">
@@ -27,8 +37,8 @@ export default function CataloguePage() {
           <Reveal>
             <SectionHeading
               as="h1"
-              title="Browse the Catalogue"
-              description="Page through the full Safeway Tyre catalogue."
+              title={dict.catalogue.browseTitle}
+              description={dict.catalogue.description}
             />
           </Reveal>
           <div className="mx-auto mt-12 max-w-xl">
@@ -51,7 +61,11 @@ export default function CataloguePage() {
             {CATALOGUE.categories.map((category, index) => (
               <li key={category.slug}>
                 <Reveal delay={(index % 3) * 90} className="h-full">
-                  <CategoryCard category={category} />
+                  <CategoryCard
+                    category={category}
+                    name={dict.categories[category.slug]}
+                    href={localizedHref(locale, ROUTES.category(category.slug))}
+                  />
                 </Reveal>
               </li>
             ))}

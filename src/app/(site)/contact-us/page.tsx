@@ -5,12 +5,20 @@ import { ContactMap } from "@/components/contact/contact-map";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { detectVisitorCountry } from "@/lib/contact/visitor-country-server";
+import { getDictionary } from "@/lib/i18n/server";
+import { languageAlternates } from "@/lib/i18n/url";
 
-export const metadata = {
-  title: "Contact Us",
-  description:
-    "Contact Safeway Tyre — send a product enquiry or feedback, or chat with us directly on WhatsApp.",
-};
+export async function generateMetadata() {
+  const dict = await getDictionary();
+  return {
+    title: dict.contact.title,
+    description: dict.contact.description,
+    alternates: {
+      canonical: "/contact-us",
+      languages: languageAlternates("/contact-us"),
+    },
+  };
+}
 
 /**
  * Contact Us (spec #6): a Query form and a Feedback form over one shared

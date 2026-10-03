@@ -1,16 +1,23 @@
 import { GalleryGrid } from "@/components/gallery/gallery-grid";
 import { Container } from "@/components/ui/container";
 import { PageHeader } from "@/components/ui/page-header";
-import { GALLERY_PAGE } from "@/lib/gallery";
+import { getDictionary } from "@/lib/i18n/server";
+import { languageAlternates } from "@/lib/i18n/url";
 import { listGalleryImages } from "@/lib/media/gallery-server";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "Gallery",
-  description:
-    "A gallery of Safeway Tyre imagery — the ranges we make and the places they run. Select any image to view it larger.",
-};
+export async function generateMetadata() {
+  const dict = await getDictionary();
+  return {
+    title: dict.gallery.title,
+    description: dict.gallery.description,
+    alternates: {
+      canonical: "/gallery",
+      languages: languageAlternates("/gallery"),
+    },
+  };
+}
 
 /**
  * The Gallery page (spec #7 / Ticket #21): a public, cascading Masonry layout
@@ -21,14 +28,14 @@ export const metadata = {
  * Admin-only Media admin.
  */
 export default async function GalleryPage() {
-  const images = await listGalleryImages();
+  const [images, dict] = await Promise.all([
+    listGalleryImages(),
+    getDictionary(),
+  ]);
 
   return (
     <>
-      <PageHeader
-        title={GALLERY_PAGE.title}
-        description={GALLERY_PAGE.description}
-      />
+      <PageHeader title={dict.gallery.title} description={dict.gallery.description} />
 
       <section className="bg-white py-14 lg:py-20">
         <Container>

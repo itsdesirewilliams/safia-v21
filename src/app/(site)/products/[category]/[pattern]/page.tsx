@@ -8,6 +8,8 @@ import { PageHeader } from "@/components/ui/page-header";
 import { getCategory } from "@/lib/catalogue/categories";
 import { getPattern } from "@/lib/catalogue/dataset";
 import { patternEyebrow } from "@/lib/catalogue/pattern-label";
+import { getDictionary, getLocale } from "@/lib/i18n/server";
+import { languageAlternates, localizedHref } from "@/lib/i18n/url";
 import { getPatternImageUrl } from "@/lib/media/pattern-images-server";
 import { ROUTES } from "@/lib/routes";
 
@@ -28,6 +30,17 @@ export async function generateMetadata({
     title: found ? `${found.patternCode} — ${found.displayName}` : "Pattern",
     description: found
       ? `Safeway Tyre ${found.displayName} (${found.patternCode}) — the sizes and configurations available for this pattern.`
+      : undefined,
+    alternates: found
+      ? {
+          canonical: localizedHref(
+            await getLocale(),
+            ROUTES.pattern(found.categorySlug, found.slug),
+          ),
+          languages: languageAlternates(
+            ROUTES.pattern(found.categorySlug, found.slug),
+          ),
+        }
       : undefined,
   };
 }
@@ -53,7 +66,12 @@ export default async function PatternPage({
   }
 
   const eyebrow = patternEyebrow(pattern.displayName, category.displayName);
-  const imageUrl = await getPatternImageUrl(pattern.patternCode);
+  const [imageUrl, dict, locale] = await Promise.all([
+    getPatternImageUrl(pattern.patternCode),
+    getDictionary(),
+    getLocale(),
+  ]);
+  const categoryName = dict.categories[category.slug];
 
   return (
     <div className="bg-white">
@@ -61,17 +79,20 @@ export default async function PatternPage({
         breadcrumb={
           <Breadcrumbs
             items={[
-              { label: "Catalogue", href: ROUTES.catalogue },
               {
-                label: category.displayName,
-                href: ROUTES.category(category.slug),
+                label: dict.breadcrumbs.catalogue,
+                href: localizedHref(locale, ROUTES.catalogue),
+              },
+              {
+                label: categoryName,
+                href: localizedHref(locale, ROUTES.category(category.slug)),
               },
               { label: pattern.patternCode },
             ]}
           />
         }
         title={pattern.displayName}
-        description={`Pattern ${pattern.patternCode} · ${category.displayName}`}
+        description={`Pattern ${pattern.patternCode} · ${categoryName}`}
       />
 
       <section className="py-16 lg:py-24">
@@ -91,7 +112,22 @@ export default async function PatternPage({
           </div>
 
           <div className="mt-8">
-            <VariantTable variants={pattern.variants} />
+            <VariantTable
+              variants={pattern.variants}
+              labels={
+                locale === "en"
+                  ? undefined
+                  : {
+                      size: dict.spec.size,
+                      plyRating: dict.spec.plyRating,
+                      ttTl: dict.spec.ttTl,
+                      application: dict.spec.application,
+                      rimWidthInch: dict.spec.rimWidth,
+                      tread: dict.spec.tread,
+                      tyreType: dict.spec.tyreType,
+                    }
+              }
+            />
           </div>
         </Container>
       </section>

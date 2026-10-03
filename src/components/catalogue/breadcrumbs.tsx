@@ -1,14 +1,17 @@
 import Link from "next/link";
 
+import { getDictionary } from "@/lib/i18n/server";
+
 export type Crumb = {
   label: string;
   href?: string;
 };
 
 /** A small breadcrumb trail used by the catalogue pages. */
-export function Breadcrumbs({ items }: { items: readonly Crumb[] }) {
+export async function Breadcrumbs({ items }: { items: readonly Crumb[] }) {
+  const dict = await getDictionary();
   return (
-    <nav aria-label="Breadcrumb" className="text-sm text-ink-500">
+    <nav aria-label={dict.breadcrumbs.label} className="text-sm text-ink-500">
       <ol className="flex flex-wrap items-center gap-2">
         {items.map((item, index) => (
           <li key={`${item.label}-${index}`} className="flex items-center gap-2">

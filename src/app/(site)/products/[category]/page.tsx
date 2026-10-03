@@ -11,6 +11,8 @@ import {
   getCategory,
 } from "@/lib/catalogue/categories";
 import { listPatternsByCategory } from "@/lib/catalogue/dataset";
+import { getDictionary, getLocale } from "@/lib/i18n/server";
+import { languageAlternates, localizedHref } from "@/lib/i18n/url";
 import { normalizePatternCode } from "@/lib/media/pattern-image-batch";
 import { listPatternImageUrls } from "@/lib/media/pattern-images-server";
 import { ROUTES } from "@/lib/routes";
@@ -28,10 +30,21 @@ export async function generateMetadata({
 }) {
   const { category: slug } = await params;
   const category = getCategory(slug);
+  const dict = await getDictionary();
+  const name = category ? dict.categories[category.slug] : undefined;
   return {
-    title: category ? category.displayName : "Category",
-    description: category
-      ? `Safeway Tyre ${category.displayName}: every pattern in the range, with the sizes available.`
+    title: name ?? "Category",
+    description: name
+      ? `Safeway Tyre ${name}: every pattern in the range, with the sizes available.`
+      : undefined,
+    alternates: category
+      ? {
+          canonical: localizedHref(
+            (await getLocale()),
+            ROUTES.category(category.slug),
+          ),
+          languages: languageAlternates(ROUTES.category(category.slug)),
+        }
       : undefined,
   };
 }
@@ -50,7 +63,11 @@ export default async function CategoryPage({
   }
 
   const patterns = listPatternsByCategory(category.slug);
-  const images = await listPatternImageUrls();
+  const [images, dict, locale] = await Promise.all([
+    listPatternImageUrls(),
+    getDictionary(),
+    getLocale(),
+  ]);
 
   return (
     <div className="bg-white">
@@ -59,12 +76,15 @@ export default async function CategoryPage({
         breadcrumb={
           <Breadcrumbs
             items={[
-              { label: "Catalogue", href: ROUTES.catalogue },
-              { label: category.displayName },
+              {
+                label: dict.breadcrumbs.catalogue,
+                href: localizedHref(locale, ROUTES.catalogue),
+              },
+              { label: dict.categories[category.slug] },
             ]}
           />
         }
-        title={category.displayName}
+        title={dict.categories[category.slug]}
         description={CATEGORY_DESCRIPTIONS[category.slug]}
       />
 
@@ -83,6 +103,7 @@ export default async function CategoryPage({
                   <Reveal delay={(index % 3) * 90} className="h-full">
                     <PatternCard
                       pattern={pattern}
+                      locale={locale}
                       imageUrl={
                         images.get(normalizePatternCode(pattern.patternCode)) ??
                         null

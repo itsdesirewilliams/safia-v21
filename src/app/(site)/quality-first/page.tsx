@@ -5,16 +5,24 @@ import { TestingExplanation } from "@/components/quality-first/testing-explanati
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { getDictionary } from "@/lib/i18n/server";
+import { languageAlternates } from "@/lib/i18n/url";
 import { listQualityFirstStories } from "@/lib/media/quality-first-server";
 import { QUALITY_FIRST_STORY_SECTION } from "@/lib/quality-first";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "Quality First",
-  description:
-    "Safeway Tyre's testing and quality-control process: testing-floor videos and an explanation of the process behind every pattern we make.",
-};
+export async function generateMetadata() {
+  const dict = await getDictionary();
+  return {
+    title: dict.qualityFirst.title,
+    description: dict.qualityFirst.description,
+    alternates: {
+      canonical: "/quality-first",
+      languages: languageAlternates("/quality-first"),
+    },
+  };
+}
 
 /**
  * The Quality First page (spec #3 / Ticket 5): a hero, the "From the Testing

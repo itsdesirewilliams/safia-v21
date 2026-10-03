@@ -5,10 +5,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { LanguageSelector } from "@/components/i18n/language-selector";
 import { ButtonLink } from "@/components/ui/button";
+import { CATEGORIES } from "@/lib/catalogue/categories";
 import { cn } from "@/lib/cn";
-import { PRIMARY_NAV, ROUTES, type NavItem } from "@/lib/routes";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
+import type { Locale } from "@/lib/i18n/config";
+import { localizedHref } from "@/lib/i18n/url";
+import { ROUTES } from "@/lib/routes";
 import { SITE } from "@/lib/site";
+
+type LocalizedNavItem =
+  | { key: string; label: string; href: string }
+  | { key: string; label: string; children: { label: string; href: string }[] };
 
 /**
  * How long the desktop Products dropdown stays open after the pointer leaves
@@ -24,7 +33,10 @@ function isActive(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-function isDropdownActive(pathname: string, item: NavItem): boolean {
+function isDropdownActive(
+  pathname: string,
+  item: LocalizedNavItem,
+): boolean {
   return (
     "children" in item &&
     item.children.some((child) => isActive(pathname, child.href))
@@ -67,11 +79,59 @@ function SearchIcon({ className }: { className?: string }) {
   );
 }
 
-export function SiteHeader() {
+export function SiteHeader({
+  locale,
+  dict,
+}: {
+  locale: Locale;
+  dict: Dictionary;
+}) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
+
+  const nav: LocalizedNavItem[] = [
+    { key: "home", label: dict.nav.home, href: localizedHref(locale, ROUTES.home) },
+    {
+      key: "about",
+      label: dict.nav.aboutUs,
+      href: localizedHref(locale, ROUTES.aboutUs),
+    },
+    {
+      key: "catalogue",
+      label: dict.nav.catalogue,
+      href: localizedHref(locale, ROUTES.catalogue),
+    },
+    {
+      key: "products",
+      label: dict.nav.products,
+      children: CATEGORIES.map((category) => ({
+        label: dict.categories[category.slug],
+        href: localizedHref(locale, ROUTES.category(category.slug)),
+      })),
+    },
+    {
+      key: "contact",
+      label: dict.nav.contactUs,
+      href: localizedHref(locale, ROUTES.contactUs),
+    },
+    {
+      key: "quality",
+      label: dict.nav.qualityFirst,
+      href: localizedHref(locale, ROUTES.qualityFirst),
+    },
+    {
+      key: "gallery",
+      label: dict.nav.gallery,
+      href: localizedHref(locale, ROUTES.gallery),
+    },
+    {
+      key: "blogs",
+      label: dict.nav.blogs,
+      href: localizedHref(locale, ROUTES.blogs),
+    },
+  ];
 
   const productsRef = useRef<HTMLLIElement>(null);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -173,9 +233,9 @@ export function SiteHeader() {
           />
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center lg:flex">
+        <nav aria-label={dict.header.primaryNav} className="hidden items-center lg:flex">
           <ul className="flex items-center gap-1">
-            {PRIMARY_NAV.map((item) => {
+            {nav.map((item) => {
               if (!("children" in item)) {
                 const active = isActive(pathname, item.href);
                 return (
@@ -234,7 +294,7 @@ export function SiteHeader() {
                     )}
                   >
                     <p className="px-3 pb-2 pt-2 text-sm font-semibold text-ink-400">
-                      Product Ranges
+                      {dict.nav.productRanges}
                     </p>
                     <ul className="grid grid-cols-2 gap-0.5">
                       {item.children.map((child) => (
@@ -258,25 +318,26 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-1.5 sm:gap-2">
           <Link
-            href="/#search"
-            aria-label="Search the catalogue"
+            href={localizedHref(locale, "/#search")}
+            aria-label={dict.header.searchAria}
             className="hidden h-10 w-10 items-center justify-center rounded-full border border-ink-200 text-ink-600 transition-colors hover:border-ink-300 hover:text-ink-950 lg:inline-flex"
           >
             <SearchIcon className="h-5 w-5" />
           </Link>
+          <LanguageSelector locale={locale} label={dict.language.label} />
           <Link
-            href={ROUTES.contactUs}
+            href={localizedHref(locale, ROUTES.contactUs)}
             onClick={closeMenus}
             className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-lg bg-brand-600 px-2.5 py-2 text-[11px] font-semibold text-white transition-colors hover:bg-brand-700 sm:px-4 sm:text-sm"
           >
-            Request a Quotation
+            {dict.common.requestQuotation}
           </Link>
           <button
             type="button"
             className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink-200 text-ink-800 transition-colors hover:bg-ink-50 lg:hidden"
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav"
-            aria-label="Open navigation menu"
+            aria-label={dict.header.openMenu}
             onClick={() => setMobileOpen(true)}
           >
             <svg
@@ -303,7 +364,7 @@ export function SiteHeader() {
         >
           <button
             type="button"
-            aria-label="Close navigation menu"
+            aria-label={dict.header.closeMenu}
             onClick={() => setMobileOpen(false)}
             className="fixed inset-0 z-40 animate-fade-in bg-ink-950/50 backdrop-blur-sm"
           />
@@ -319,7 +380,7 @@ export function SiteHeader() {
               <button
                 type="button"
                 onClick={() => setMobileOpen(false)}
-                aria-label="Close navigation menu"
+                aria-label={dict.header.closeMenu}
                 className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink-200 text-ink-800 transition-colors hover:bg-ink-50"
               >
                 <svg
@@ -336,11 +397,11 @@ export function SiteHeader() {
             </div>
 
             <nav
-              aria-label="Mobile"
+              aria-label={dict.header.mobileNav}
               className="flex-1 overflow-y-auto px-3 py-4"
             >
               <ul className="space-y-0.5">
-                {PRIMARY_NAV.map((item) => {
+                {nav.map((item) => {
                   if (!("children" in item)) {
                     const active = isActive(pathname, item.href);
                     return (
@@ -395,14 +456,20 @@ export function SiteHeader() {
             </nav>
 
             <div className="shrink-0 space-y-3 border-t border-ink-100 p-5">
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-400">
+                  {dict.language.label}
+                </span>
+                <LanguageSelector locale={locale} label={dict.language.label} />
+              </div>
               <ButtonLink
-                href={ROUTES.contactUs}
+                href={localizedHref(locale, ROUTES.contactUs)}
                 size="lg"
                 shape="rounded-rectangle"
                 className="w-full"
                 onClick={closeMenus}
               >
-                Request a Quotation
+                {dict.common.requestQuotation}
               </ButtonLink>
               <a
                 href={`mailto:${SITE.emails.director}`}

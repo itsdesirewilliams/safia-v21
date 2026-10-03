@@ -5,7 +5,10 @@ import { AccentLine } from "@/components/motion/accent-line";
 import { ArrowIcon } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
 import { CATEGORIES } from "@/lib/catalogue/categories";
-import { FOOTER_NAV, ROUTES } from "@/lib/routes";
+import type { Locale } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
+import { localizedHref } from "@/lib/i18n/url";
+import { ROUTES } from "@/lib/routes";
 import {
   MARKETING_PHONES,
   PUBLIC_CONTACT_EMAILS,
@@ -91,10 +94,26 @@ function FooterLink({
   );
 }
 
-export function SiteFooter() {
+export function SiteFooter({
+  locale,
+  dict,
+}: {
+  locale: Locale;
+  dict: Dictionary;
+}) {
   const year = new Date().getFullYear();
 
   const socials = [...SOCIAL_LINKS, { name: "WhatsApp", url: SITE.whatsappUrl }];
+
+  const footerNav = [
+    { label: dict.nav.aboutUs, path: ROUTES.aboutUs },
+    { label: dict.nav.catalogue, path: ROUTES.catalogue },
+    { label: dict.nav.qualityFirst, path: ROUTES.qualityFirst },
+    { label: dict.nav.gallery, path: ROUTES.gallery },
+    { label: dict.nav.blogs, path: ROUTES.blogs },
+    { label: dict.nav.warranty, path: ROUTES.warranty },
+    { label: dict.nav.contactUs, path: ROUTES.contactUs },
+  ];
 
   return (
     <footer className="bg-ink-50 px-4 pb-8 pt-4 sm:px-6 lg:px-8">
@@ -105,9 +124,9 @@ export function SiteFooter() {
               <Reveal variant="mask">
                 <AccentLine className="mb-6" />
                 <h2 className="text-h2 text-white">
-                  Sourcing Tyres?
+                  {dict.footer.ctaTitle}
                   <br />
-                  Start the Conversation.
+                  {dict.footer.ctaSubtitle}
                 </h2>
               </Reveal>
             </div>
@@ -166,32 +185,35 @@ export function SiteFooter() {
                   >
                     <SocialIcon name={link.name} />
                     <span className="sr-only">
-                      {`${SITE.name} on ${link.name}`}
+                      {`${dict.footer.socialAria} ${link.name}`}
                     </span>
                   </a>
                 ))}
               </div>
             </div>
 
-            <nav aria-label="Products" className="lg:col-span-3">
-              <FooterHeading>Products</FooterHeading>
+            <nav aria-label={dict.footer.products} className="lg:col-span-3">
+              <FooterHeading>{dict.footer.products}</FooterHeading>
               <ul className="mt-5 space-y-3">
                 {CATEGORIES.map((category) => (
                   <FooterLink
                     key={category.slug}
-                    href={ROUTES.category(category.slug)}
+                    href={localizedHref(locale, ROUTES.category(category.slug))}
                   >
-                    {category.displayName}
+                    {dict.categories[category.slug]}
                   </FooterLink>
                 ))}
               </ul>
             </nav>
 
-            <nav aria-label="Company" className="lg:col-span-2">
-              <FooterHeading>Company</FooterHeading>
+            <nav aria-label={dict.footer.company} className="lg:col-span-2">
+              <FooterHeading>{dict.footer.company}</FooterHeading>
               <ul className="mt-5 space-y-3">
-                {FOOTER_NAV.map((item) => (
-                  <FooterLink key={item.href} href={item.href}>
+                {footerNav.map((item) => (
+                  <FooterLink
+                    key={item.path}
+                    href={localizedHref(locale, item.path)}
+                  >
                     {item.label}
                   </FooterLink>
                 ))}
@@ -199,7 +221,7 @@ export function SiteFooter() {
             </nav>
 
             <div className="lg:col-span-3">
-              <FooterHeading>Contact</FooterHeading>
+              <FooterHeading>{dict.footer.contact}</FooterHeading>
               <ul className="mt-5 space-y-1.5 text-sm text-white/65">
                 {PUBLIC_CONTACT_EMAILS.map((email) => (
                   <li key={email}>
@@ -234,20 +256,20 @@ export function SiteFooter() {
 
           <div className="mt-12 flex flex-col gap-4 border-t border-white/10 pt-8 text-xs text-white/45 sm:flex-row sm:items-center sm:justify-between">
             <p>
-              © {year} {SITE.legalName}. All rights reserved.
+              © {year} {SITE.legalName}. {dict.footer.rights}
             </p>
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
               <Link
-                href={ROUTES.contactUs}
+                href={localizedHref(locale, ROUTES.contactUs)}
                 className="transition-colors hover:text-white"
               >
-                Contact Us
+                {dict.nav.contactUs}
               </Link>
               <Link
-                href={ROUTES.catalogue}
+                href={localizedHref(locale, ROUTES.catalogue)}
                 className="transition-colors hover:text-white"
               >
-                Catalogue
+                {dict.nav.catalogue}
               </Link>
               <a
                 href={SITE.whatsappUrl}
@@ -255,7 +277,7 @@ export function SiteFooter() {
                 rel="noopener noreferrer"
                 className="transition-colors hover:text-white"
               >
-                WhatsApp
+                {dict.common.whatsapp}
               </a>
             </div>
           </div>

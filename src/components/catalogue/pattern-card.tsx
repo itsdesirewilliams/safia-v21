@@ -4,6 +4,8 @@ import { PatternImage } from "@/components/catalogue/pattern-image";
 import { ArrowIcon } from "@/components/ui/button";
 import { patternSizes } from "@/lib/catalogue/dataset";
 import type { NormalizedPattern } from "@/lib/catalogue/normalize";
+import type { Locale } from "@/lib/i18n/config";
+import { localizedHref } from "@/lib/i18n/url";
 import { ROUTES } from "@/lib/routes";
 
 const SIZE_PREVIEW = 4;
@@ -19,9 +21,11 @@ const SIZE_PREVIEW = 4;
 export function PatternCard({
   pattern,
   imageUrl = null,
+  locale = "en",
 }: {
   pattern: NormalizedPattern;
   imageUrl?: string | null;
+  locale?: Locale;
 }) {
   const sizes = patternSizes(pattern);
   const preview = sizes.slice(0, SIZE_PREVIEW);
@@ -29,7 +33,10 @@ export function PatternCard({
 
   return (
     <Link
-      href={ROUTES.pattern(pattern.categorySlug, pattern.slug)}
+      href={localizedHref(
+        locale,
+        ROUTES.pattern(pattern.categorySlug, pattern.slug),
+      )}
       className="group flex h-full items-stretch gap-4 rounded-card border border-ink-200 bg-white p-5 transition duration-300 hover:-translate-y-1 hover:border-ink-300 hover:shadow-card motion-reduce:hover:translate-y-0"
     >
       <PatternImage

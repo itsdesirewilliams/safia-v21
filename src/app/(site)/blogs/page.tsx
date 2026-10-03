@@ -5,14 +5,19 @@ import { PageHeader } from "@/components/ui/page-header";
 import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { Reveal } from "@/components/ui/reveal";
 import { listPublishedPosts } from "@/lib/blog/server";
+import { getDictionary } from "@/lib/i18n/server";
+import { languageAlternates } from "@/lib/i18n/url";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "Blog",
-  description:
-    "News, product notes and updates from Safeway Tyre — patterns, ranges and the work behind them.",
-};
+export async function generateMetadata() {
+  const dict = await getDictionary();
+  return {
+    title: dict.blog.title,
+    description: dict.blog.description,
+    alternates: { canonical: "/blogs", languages: languageAlternates("/blogs") },
+  };
+}
 
 /**
  * The blog listing (spec #2 / Ticket 9): published posts only, newest first,
@@ -25,14 +30,14 @@ export default async function BlogsPage({
 }) {
   const params = await searchParams;
   const requested = Number.parseInt(params.page ?? "1", 10);
-  const { posts, page, pageCount } = await listPublishedPosts(requested);
+  const [{ posts, page, pageCount }, dict] = await Promise.all([
+    listPublishedPosts(requested),
+    getDictionary(),
+  ]);
 
   return (
     <>
-      <PageHeader
-        title="News & Updates"
-        description="Product notes, range updates and stories from Safeway Tyre."
-      />
+      <PageHeader title={dict.blog.title} description={dict.blog.description} />
 
       <section className="bg-white py-16 lg:py-24">
         <Container>

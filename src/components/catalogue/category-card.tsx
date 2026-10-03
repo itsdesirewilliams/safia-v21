@@ -7,17 +7,21 @@ import { ROUTES } from "@/lib/routes";
 
 export type CategoryCardProps = {
   category: NormalizedCategory;
+  /** Localized display name; falls back to the canonical one. */
+  name?: string;
+  /** Locale-aware href; falls back to the canonical route. */
+  href?: string;
 };
 
 /** A category range card for the Catalogue page. Tubes is shown, deferred. */
-export function CategoryCard({ category }: CategoryCardProps) {
+export function CategoryCard({ category, name, href }: CategoryCardProps) {
   return (
     <Link
-      href={ROUTES.category(category.slug)}
+      href={href ?? ROUTES.category(category.slug)}
       className="group flex h-full flex-col rounded-card border border-ink-200 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-ink-300 hover:shadow-card motion-reduce:hover:translate-y-0"
     >
       <div className="flex items-start justify-between gap-4">
-        <h3 className="text-h3 text-ink-950">{category.displayName}</h3>
+        <h3 className="text-h3 text-ink-950">{name ?? category.displayName}</h3>
         <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-ink-200 text-ink-700 transition-colors duration-200 group-hover:border-brand-600 group-hover:bg-brand-600 group-hover:text-white">
           <ArrowIcon className="h-4 w-4" />
         </span>

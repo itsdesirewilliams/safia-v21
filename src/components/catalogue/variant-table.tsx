@@ -69,8 +69,14 @@ const COLUMNS: readonly VariantColumn[] = [
  */
 export function VariantTable({
   variants,
+  labels,
 }: {
   variants: readonly NormalizedVariant[];
+  /**
+   * Localized column labels keyed by column key. When omitted (English), the
+   * compact mobile abbreviations are used.
+   */
+  labels?: Partial<Record<string, string>>;
 }) {
   const columns = COLUMNS.filter(
     (column) =>
@@ -92,8 +98,14 @@ export function VariantTable({
                 scope="col"
                 className="px-2 py-2.5 text-[10px] font-semibold uppercase tracking-wide text-ink-500 sm:px-4 sm:py-3 sm:text-xs sm:tracking-[0.14em]"
               >
-                <span className="sm:hidden">{column.shortLabel}</span>
-                <span className="hidden sm:inline">{column.label}</span>
+                {labels ? (
+                  labels[column.key] ?? column.label
+                ) : (
+                  <>
+                    <span className="sm:hidden">{column.shortLabel}</span>
+                    <span className="hidden sm:inline">{column.label}</span>
+                  </>
+                )}
               </th>
             ))}
           </tr>

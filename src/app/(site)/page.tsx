@@ -33,6 +33,8 @@ import {
   CATALOGUE_HEADER_WIDTH,
   readCatalogueHeaderImage,
 } from "@/lib/media/catalogue-visual-assets";
+import { getDictionary, getLocale } from "@/lib/i18n/server";
+import { languageAlternates, localizedHref } from "@/lib/i18n/url";
 import { readProductRangeImages } from "@/lib/media/product-range-assets";
 import { isValidYoutubeVideoId } from "@/lib/media/youtube";
 import { ROUTES } from "@/lib/routes";
@@ -46,13 +48,17 @@ import {
   telHref,
 } from "@/lib/site";
 
-export const metadata = {
-  title: `${SITE.name} | ${SITE.tagline}`,
-  description:
-    "Search Safeway Tyre's catalogue by size, pattern code or category, explore our product ranges, and send an enquiry.",
-};
+export async function generateMetadata() {
+  const dict = await getDictionary();
+  return {
+    title: dict.meta.homeTitle,
+    description: dict.meta.homeDescription,
+    alternates: { canonical: "/", languages: languageAlternates("/") },
+  };
+}
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [dict, locale] = await Promise.all([getDictionary(), getLocale()]);
   const configuredYoutubeId = getYoutubeVideoId();
   const youtubeId = isValidYoutubeVideoId(configuredYoutubeId)
     ? configuredYoutubeId
@@ -76,15 +82,13 @@ export default function HomePage() {
               <div>
                 <RevealText
                   as="h1"
-                  text="Tires That Keep the World Moving"
+                  text={dict.home.heroTitle}
                   className="text-h1 text-white"
                   delay={120}
                 />
                 <Reveal variant="mask" delay={280} className="mt-5">
                   <p className="max-w-xl text-base leading-relaxed text-white/70 sm:text-lg">
-                    {SITE.name} manufactures and exports durable tyres for
-                    international markets. Search the catalogue by size, pattern
-                    code, name or category.
+                    {dict.home.heroSubtitle}
                   </p>
                 </Reveal>
 
@@ -100,21 +104,21 @@ export default function HomePage() {
                 <Reveal variant="mask" delay={520} className="mt-8">
                   <div className="flex flex-wrap gap-3">
                     <ButtonLink
-                      href={ROUTES.contactUs}
+                      href={localizedHref(locale, ROUTES.contactUs)}
                       variant="accent"
                       size="lg"
                       shape="rounded-rectangle"
                     >
-                      Request a Quotation
+                      {dict.common.requestQuotation}
                       <ArrowIcon className="h-4 w-4" />
                     </ButtonLink>
                     <ButtonLink
-                      href={ROUTES.catalogue}
+                      href={localizedHref(locale, ROUTES.catalogue)}
                       variant="onDark"
                       size="lg"
                       shape="rounded-rectangle"
                     >
-                      Explore the Catalogue
+                      {dict.common.exploreCatalogue}
                     </ButtonLink>
                   </div>
                 </Reveal>
@@ -144,8 +148,8 @@ export default function HomePage() {
               <Reveal variant="mask">
                 <SectionHeading
                   accentLine
-                  title="Take a Tour of Our Industry"
-                  description="Step inside our factory online — a short sneak peek at how Safeway Tyre makes its tyres."
+                  title={dict.home.tourHeading}
+                  description={dict.home.tourDescription}
                 />
               </Reveal>
             </div>
@@ -165,8 +169,8 @@ export default function HomePage() {
           <Reveal variant="mask">
             <SectionHeading
               accentLine
-              title="Product Ranges"
-              description="Six ranges covering transport, agriculture and industry."
+              title={dict.home.rangesHeading}
+              description={dict.home.rangesDescription}
             />
           </Reveal>
 
@@ -175,7 +179,7 @@ export default function HomePage() {
               <li key={card.slug}>
                 <Reveal delay={(index % 3) * 90} className="h-full">
                   <Link
-                    href={ROUTES.category(card.slug)}
+                    href={localizedHref(locale, ROUTES.category(card.slug))}
                     className="group flex h-full flex-col rounded-card border border-ink-200 bg-white p-3 transition duration-300 hover:-translate-y-1 hover:border-ink-300 hover:shadow-card motion-reduce:hover:translate-y-0"
                   >
                     <RevealImage>
@@ -189,7 +193,7 @@ export default function HomePage() {
                     <div className="flex flex-1 flex-col px-2 pb-2 pt-5">
                       <div className="flex items-start justify-between gap-4">
                         <h3 className="text-h3 text-ink-950">
-                          {card.displayName}
+                          {dict.categories[card.slug]}
                         </h3>
                         <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-ink-200 text-ink-700 transition-colors duration-200 group-hover:border-brand-600 group-hover:bg-brand-600 group-hover:text-white">
                           <ArrowIcon className="h-4 w-4" />
@@ -221,16 +225,16 @@ export default function HomePage() {
                   <SectionHeading
                     accentLine
                     tone="dark"
-                    title="Explore the Official Catalogue"
-                    description="Browse the full Safeway Tyre catalogue of patterns and sizes."
+                    title={dict.home.catalogueHeading}
+                    description={dict.home.catalogueDescription}
                   />
                   <div className="mt-8">
                     <ButtonLink
-                      href={ROUTES.catalogue}
+                      href={localizedHref(locale, ROUTES.catalogue)}
                       variant="accent"
                       size="lg"
                     >
-                      Open the Catalogue
+                      {dict.common.openCatalogue}
                       <ArrowIcon className="h-4 w-4" />
                     </ButtonLink>
                   </div>
@@ -305,8 +309,8 @@ export default function HomePage() {
           <Reveal variant="mask">
             <SectionHeading
               accentLine
-              title="Quality & Certifications"
-              description="Safeway Tyre products are backed by recognised quality and compliance marks."
+              title={dict.home.qualityHeading}
+              description={dict.home.qualityDescription}
             />
           </Reveal>
           <div className="mt-14">
@@ -324,13 +328,7 @@ export default function HomePage() {
             <Reveal>
               <SectionHeading
                 accentLine
-                title={
-                  <>
-                    <span className="lg:block">Trusted by</span>{" "}
-                    <span className="lg:block">Importers</span>{" "}
-                    <span className="lg:block">Worldwide</span>
-                  </>
-                }
+                title={dict.home.testimonialsHeading}
               />
             </Reveal>
             {TESTIMONIALS.length > 0 ? (
@@ -379,8 +377,8 @@ export default function HomePage() {
           <Reveal variant="mask">
             <SectionHeading
               accentLine
-              title="Follow Us on Instagram"
-              description="A look at the latest from Safeway Tyre."
+              title={dict.home.instagramHeading}
+              description={dict.home.instagramDescription}
             />
           </Reveal>
           <div className="mt-14">
@@ -397,14 +395,16 @@ export default function HomePage() {
               <Reveal variant="mask">
                 <SectionHeading
                   accentLine
-                  title="Inquiry Form"
-                  description="Tell us the sizes and patterns you need and our team will respond with a quotation."
+                  title={dict.home.inquiryHeading}
+                  description={dict.home.inquiryDescription}
                 />
               </Reveal>
               <Reveal delay={80}>
                 <dl className="mt-10 space-y-5 text-sm">
                   <div className="border-t border-ink-200 pt-5">
-                    <dt className="text-sm font-semibold text-ink-500">Email</dt>
+                    <dt className="text-sm font-semibold text-ink-500">
+                      {dict.common.email}
+                    </dt>
                     <dd className="mt-2 space-y-1">
                       {PUBLIC_CONTACT_EMAILS.map((email) => (
                         <span key={email} className="block break-all">
@@ -419,7 +419,9 @@ export default function HomePage() {
                     </dd>
                   </div>
                   <div className="border-t border-ink-200 pt-5">
-                    <dt className="text-sm font-semibold text-ink-500">Phone</dt>
+                    <dt className="text-sm font-semibold text-ink-500">
+                      {dict.common.phone}
+                    </dt>
                     <dd className="mt-2 space-y-1">
                       {MARKETING_PHONES.map((phone) => (
                         <span key={phone} className="block whitespace-nowrap">
@@ -435,7 +437,7 @@ export default function HomePage() {
                   </div>
                   <div className="border-t border-ink-200 pt-5">
                     <dt className="text-sm font-semibold text-ink-500">
-                      WhatsApp
+                      {dict.common.whatsapp}
                     </dt>
                     <dd className="mt-2">
                       <a
@@ -466,8 +468,8 @@ export default function HomePage() {
           <Reveal variant="mask">
             <SectionHeading
               accentLine
-              title="Find Us on the Map"
-              description="Safeway Tyre's corporate office in Ludhiana, India."
+              title={dict.home.mapHeading}
+              description={dict.home.mapDescription}
             />
           </Reveal>
           <div className="mt-14">
@@ -490,7 +492,7 @@ export default function HomePage() {
                   rel="noopener noreferrer"
                   className="group inline-flex items-center gap-2 text-sm font-semibold text-brand-600 hover:underline"
                 >
-                  Open in Google Maps
+                  {dict.common.openInGoogleMaps}
                   <ArrowIcon className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none" />
                 </a>
               </div>

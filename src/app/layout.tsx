@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { localeDir } from "@/lib/i18n/config";
+import { getLocale } from "@/lib/i18n/server";
 import { SITE } from "@/lib/site";
 import { getActiveTheme } from "@/lib/theme/persistence";
 
@@ -35,11 +37,12 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const theme = await getActiveTheme();
+  const [theme, locale] = await Promise.all([getActiveTheme(), getLocale()]);
 
   return (
     <html
-      lang="en"
+      lang={locale}
+      dir={localeDir(locale)}
       data-theme={theme}
       className={`${monaSans.variable} ${monaSansCondensed.variable} ${anekDevanagari.variable}`}
     >

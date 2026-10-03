@@ -1,12 +1,21 @@
 import { AboutBio } from "@/components/about-us/about-bio";
 import { AboutBusinessProfile } from "@/components/about-us/about-business-profile";
 import { AboutTeam } from "@/components/about-us/about-team";
+import { getDictionary } from "@/lib/i18n/server";
+import { languageAlternates } from "@/lib/i18n/url";
 
-export const metadata = {
-  title: "About Us",
-  description:
-    "Safeway Tyre is the tyre brand of DEE RON Automotives LLP, a family-run manufacturer headquartered in Punjab, India, exporting durable tyres worldwide.",
-};
+export async function generateMetadata() {
+  const dict = await getDictionary();
+  return {
+    title: dict.nav.aboutUs,
+    description:
+      "Safeway Tyre is the tyre brand of DEE RON Automotives LLP, a family-run manufacturer headquartered in Punjab, India, exporting durable tyres worldwide.",
+    alternates: {
+      canonical: "/about-us",
+      languages: languageAlternates("/about-us"),
+    },
+  };
+}
 
 /**
  * The About Us page (spec #4 / Ticket #20): a developer-owned, static page with
