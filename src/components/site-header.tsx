@@ -126,11 +126,8 @@ export function SiteHeader({
       label: dict.nav.gallery,
       href: localizedHref(locale, ROUTES.gallery),
     },
-    {
-      key: "blogs",
-      label: dict.nav.blogs,
-      href: localizedHref(locale, ROUTES.blogs),
-    },
+    // Blogs is intentionally not in the header navigation; it stays prominent
+    // in the footer (see SiteFooter).
   ];
 
   const productsRef = useRef<HTMLLIElement>(null);
