@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { canManageMedia } from "@/lib/auth/roles";
+import { canAccessAdmin } from "@/lib/auth/roles";
 import { getCurrentProfile } from "@/lib/auth/session";
 import { ROUTES } from "@/lib/routes";
 
@@ -17,8 +17,8 @@ export default async function AdminLoginPage({
 }) {
   const profile = await getCurrentProfile();
 
-  if (profile && canManageMedia(profile.role)) {
-    redirect("/admin/files");
+  if (profile && canAccessAdmin(profile.role)) {
+    redirect("/admin");
   }
 
   const { error } = await searchParams;
@@ -43,11 +43,11 @@ export default async function AdminLoginPage({
         <div className="mt-8 rounded-card border border-ink-200 bg-white p-8 shadow-card">
           <p className="text-eyebrow text-brand-600">Safeway Tyre Admin</p>
           <h1 className="mt-3 text-2xl font-bold tracking-tight text-ink-950">
-            Sign in to manage media
+            Sign in to the admin
           </h1>
           <p className="mt-2 text-sm leading-relaxed text-ink-600">
-            Use the admin account created for you. Access is limited to admins
-            and editors.
+            Use the admin account created for you. Access is limited to admins,
+            operators and copywriters.
           </p>
 
           {error === "forbidden" && (
@@ -55,8 +55,8 @@ export default async function AdminLoginPage({
               className="mt-5 rounded-lg border border-accent-500/30 bg-accent-100 px-4 py-3 text-sm text-accent-700"
               role="alert"
             >
-              That account does not have media access. Ask an administrator to
-              assign a role.
+              That account does not have access. Ask an administrator to assign
+              a role.
             </p>
           )}
 

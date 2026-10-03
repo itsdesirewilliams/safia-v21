@@ -1,16 +1,26 @@
 import { cache } from "react";
 import { redirect } from "next/navigation";
 
-import { canDeleteMedia, canManageMedia, parseRole, type Role } from "./roles";
+import {
+  canAccessAdmin,
+  canManageMedia,
+  canManagePosts,
+  canManageSettings,
+  canManageUsers,
+  parseRole,
+  type Role,
+} from "./roles";
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 /**
- * Server-side session + authorization helpers for the admin (Ticket 4).
+ * Server-side session + authorization helpers for the admin.
  *
  * Authorization is always resolved from `public.profiles.role` on the server —
  * never from client input and never from JWT claims. These helpers are the
- * security boundary; the admin UI hides controls only as a convenience.
+ * security boundary; the admin UI hides navigation only as a convenience, so a
+ * copywriter cannot reach a media endpoint by typing its URL, and an operator
+ * cannot reach user management.
  */
 
 export type SessionProfile = {
@@ -20,6 +30,7 @@ export type SessionProfile = {
 };
 
 export const ADMIN_LOGIN_PATH = "/admin/login";
+export const ADMIN_HOME_PATH = "/admin";
 
 /** The signed-in user's profile with its role, or null when signed out. */
 export const getCurrentProfile = cache(
@@ -47,10 +58,26 @@ export const getCurrentProfile = cache(
   },
 );
 
-/**
- * Require an admin or editor. Redirects to the login screen when signed out or
- * lacking a role.
- */
+function forbidden(): never {
+  redirect(`${ADMIN_LOGIN_PATH}?error=forbidden`);
+}
+
+/** Require any signed-in admin user (one of the three roles). */
+export async function requireUser(): Promise<SessionProfile> {
+  const profile = await getCurrentProfile();
+
+  if (!profile) {
+    redirect(ADMIN_LOGIN_PATH);
+  }
+
+  if (!canAccessAdmin(profile.role)) {
+    forbidden();
+  }
+
+  return profile;
+}
+
+/** Require admin or operator (full media management). */
 export async function requireMediaManager(): Promise<SessionProfile> {
   const profile = await getCurrentProfile();
 
@@ -59,13 +86,43 @@ export async function requireMediaManager(): Promise<SessionProfile> {
   }
 
   if (!canManageMedia(profile.role)) {
-    redirect(`${ADMIN_LOGIN_PATH}?error=forbidden`);
+    forbidden();
   }
 
   return profile;
 }
 
-/** Require a full admin (deletion and other privileged operations). */
+/** Require any role with blog access (admin, operator or copywriter). */
+export async function requirePostsAccess(): Promise<SessionProfile> {
+  const profile = await getCurrentProfile();
+
+  if (!profile) {
+    redirect(ADMIN_LOGIN_PATH);
+  }
+
+  if (!canManagePosts(profile.role)) {
+    forbidden();
+  }
+
+  return profile;
+}
+
+/** Require admin or operator (theme + site settings). */
+export async function requireSettingsAccess(): Promise<SessionProfile> {
+  const profile = await getCurrentProfile();
+
+  if (!profile) {
+    redirect(ADMIN_LOGIN_PATH);
+  }
+
+  if (!canManageSettings(profile.role)) {
+    forbidden();
+  }
+
+  return profile;
+}
+
+/** Require a full admin (user management and other privileged operations). */
 export async function requireAdmin(): Promise<SessionProfile> {
   const profile = await getCurrentProfile();
 
@@ -73,8 +130,8 @@ export async function requireAdmin(): Promise<SessionProfile> {
     redirect(ADMIN_LOGIN_PATH);
   }
 
-  if (!canDeleteMedia(profile.role)) {
-    redirect(`${ADMIN_LOGIN_PATH}?error=forbidden`);
+  if (!canManageUsers(profile.role)) {
+    forbidden();
   }
 
   return profile;

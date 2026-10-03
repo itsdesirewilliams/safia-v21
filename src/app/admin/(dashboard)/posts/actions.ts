@@ -3,7 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { requireAdmin, requireMediaManager } from "@/lib/auth/session";
+import { canDeletePosts } from "@/lib/auth/roles";
+import { requirePostsAccess } from "@/lib/auth/session";
 import type { PostActionState } from "@/lib/blog/action-state";
 import { parsePostStatus, validatePostInput } from "@/lib/blog/post";
 import {
@@ -12,6 +13,8 @@ import {
   setPostStatus,
   updatePost,
 } from "@/lib/blog/server";
+import { uploadMedia } from "@/lib/media/server";
+import { buildStoragePath, validateUpload } from "@/lib/media/upload";
 
 /**
  * Admin Post server actions (spec #2 / Ticket 9).
@@ -34,7 +37,7 @@ export async function savePostAction(
   _previous: PostActionState,
   formData: FormData,
 ): Promise<PostActionState> {
-  const profile = await requireMediaManager();
+  const profile = await requirePostsAccess();
 
   const postId = readField(formData, "postId");
 
@@ -78,7 +81,7 @@ export async function setPostStatusAction(
   _previous: PostActionState,
   formData: FormData,
 ): Promise<PostActionState> {
-  await requireMediaManager();
+  await requirePostsAccess();
 
   const postId = readField(formData, "postId");
   const status = parsePostStatus(readField(formData, "status"));
@@ -103,12 +106,19 @@ export async function setPostStatusAction(
   };
 }
 
-/** Delete a Post (Admin-only via RLS). */
+/** Delete a Post (admin/operator only, enforced here and in RLS). */
 export async function deletePostAction(
   _previous: PostActionState,
   formData: FormData,
 ): Promise<PostActionState> {
-  await requireAdmin();
+  const profile = await requirePostsAccess();
+
+  if (!canDeletePosts(profile.role)) {
+    return {
+      status: "error",
+      message: "Only admins and operators can delete posts.",
+    };
+  }
 
   const postId = readField(formData, "postId");
   if (!postId) {
@@ -123,4 +133,64 @@ export async function deletePostAction(
   revalidatePath(POSTS_PATH);
   revalidatePath("/blogs");
   redirect(POSTS_PATH);
+}
+
+/**
+ * Upload an image for use in a post. Available to every post role (including
+ * copywriter) and restricted to the `blog-images` bucket, which is the only
+ * bucket a copywriter may write to (enforced again in RLS).
+ */
+export async function uploadBlogImageAction(
+  _previous: PostActionState,
+  formData: FormData,
+): Promise<PostActionState> {
+  const profile = await requirePostsAccess();
+
+  const fileEntry = formData.get("file");
+  if (!(fileEntry instanceof File) || fileEntry.size === 0) {
+    return { status: "error", message: "Choose an image to upload." };
+  }
+
+  const validation = validateUpload({
+    fileName: fileEntry.name,
+    mimeType: fileEntry.type,
+    sizeBytes: fileEntry.size,
+  });
+  if (!validation.ok) {
+    return { status: "error", message: validation.error };
+  }
+  if (validation.type !== "image") {
+    return { status: "error", message: "Only images can be added to posts." };
+  }
+
+  const id = crypto.randomUUID();
+  const path = buildStoragePath({
+    safeName: validation.safeName,
+    id,
+    createdAt: new Date(),
+    scope: "blog",
+  });
+
+  const result = await uploadMedia({
+    bucket: "blog-images",
+    path,
+    type: "image",
+    mimeType: fileEntry.type || null,
+    file: fileEntry,
+    metadata: {
+      alt: null,
+      caption: null,
+      patternCode: null,
+      categorySlug: null,
+    },
+    uploadedBy: profile.id,
+  });
+
+  if (!result.ok) {
+    return { status: "error", message: result.error };
+  }
+
+  revalidatePath(POSTS_PATH);
+  revalidatePath("/admin/media");
+  return { status: "success", message: "Image uploaded to the blog library." };
 }

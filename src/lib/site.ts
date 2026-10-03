@@ -21,7 +21,8 @@ export const SITE = {
     secondary: "+91 90416 62182",
     tertiary: "+91 80543 62182",
   },
-  whatsappUrl: "https://wa.me/+919915762182",
+  /** Canonical WhatsApp deep link (E.164 digits, no leading `+`). */
+  whatsappUrl: "https://wa.me/919915762182",
   /** Approved Safeway Tyre Instagram profile. */
   instagramUrl: "https://www.instagram.com/safewaytyre/",
   /** The two published Safeway Tyre locations. */
@@ -77,3 +78,44 @@ export const MARKETING_PHONES: readonly string[] = [
 export function telHref(phone: string): string {
   return `tel:${phone.replace(/\s/g, "")}`;
 }
+
+/**
+ * Safeway Tyre's official social profiles, as developer-owned fixed content.
+ *
+ * These used to be read from `NEXT_PUBLIC_SOCIAL_*` env vars, which are inlined
+ * at build time and were absent in production — leaving the footer icons
+ * decorative. Fixed company content belongs in code (CONTEXT.md), so the
+ * canonical URLs live here and always render working links.
+ */
+export type OfficialSocialLink = {
+  name: "Instagram" | "Facebook" | "LinkedIn" | "X" | "Pinterest";
+  url: string;
+};
+
+export const SOCIAL_LINKS: readonly OfficialSocialLink[] = [
+  { name: "Instagram", url: "https://www.instagram.com/safewaytyre/" },
+  {
+    name: "Facebook",
+    url: "https://www.facebook.com/profile.php?id=61578894803518",
+  },
+  { name: "LinkedIn", url: "https://www.linkedin.com/company/safeway-tyre/" },
+  { name: "X", url: "https://x.com/safewaytyre" },
+  { name: "Pinterest", url: "https://in.pinterest.com/safewaytyreindia/" },
+];
+
+/** The corporate office, as a single-line address for maps and forms. */
+export const CORPORATE_OFFICE_ADDRESS = SITE.addresses[0].lines.join(" ");
+
+/**
+ * A key-free Google Maps embed for the corporate office. The public
+ * `output=embed` endpoint needs no client-side API key, so the map always
+ * renders without a paid key or a build-time secret.
+ */
+export const CORPORATE_OFFICE_MAP_EMBED_URL = `https://www.google.com/maps?q=${encodeURIComponent(
+  CORPORATE_OFFICE_ADDRESS,
+)}&z=15&output=embed`;
+
+/** A link that opens the corporate office in Google Maps. */
+export const CORPORATE_OFFICE_MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  CORPORATE_OFFICE_ADDRESS,
+)}`;

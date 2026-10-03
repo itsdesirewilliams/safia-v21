@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { canManageAdminOnlyMedia } from "@/lib/auth/roles";
-import { requireAdmin, requireMediaManager } from "@/lib/auth/session";
+import { requireMediaManager } from "@/lib/auth/session";
 import type { MediaActionState } from "@/lib/media/action-state";
 import { findFileCategory } from "@/lib/media/categories";
 import {
@@ -41,7 +41,7 @@ import {
  * No action trusts a client-supplied role.
  */
 
-const FILES_PATH = "/admin/files";
+const FILES_PATH = "/admin/media";
 const CAPTIONS_PATH = "/admin/files/captions";
 
 function readField(formData: FormData, name: string): string | null {
@@ -139,7 +139,7 @@ export async function uploadMediaAction(
 export async function createGalleryRecordsAction(
   entries: GalleryBatchEntry[],
 ): Promise<GalleryBatchResult> {
-  const profile = await requireAdmin();
+  const profile = await requireMediaManager();
 
   const list = Array.isArray(entries)
     ? entries.slice(0, GALLERY_BATCH_MAX)
@@ -242,7 +242,7 @@ export async function deleteMediaAction(
   _previous: MediaActionState,
   formData: FormData,
 ): Promise<MediaActionState> {
-  await requireAdmin();
+  await requireMediaManager();
 
   const mediaId = readField(formData, "mediaId");
   if (!mediaId) {
@@ -269,7 +269,7 @@ export async function setMediaHiddenAction(
   _previous: MediaActionState,
   formData: FormData,
 ): Promise<MediaActionState> {
-  await requireAdmin();
+  await requireMediaManager();
 
   const mediaId = readField(formData, "mediaId");
   if (!mediaId) {

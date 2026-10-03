@@ -34,7 +34,8 @@ describe("public marketing contact details", () => {
   it("keeps the Director address and the inquiry-form recipient unchanged", () => {
     expect(SITE.emails.director).toBe("Director@safewaytyre.com");
     expect(SITE.emails.marketing).toBe("marketing01@safewaytyre.com");
-    expect(SITE.whatsappUrl).toBe("https://wa.me/+919915762182");
+    // Canonical E.164 digits with no leading `+` (WhatsApp's link format).
+    expect(SITE.whatsappUrl).toBe("https://wa.me/919915762182");
   });
 
   it("builds tel: links without spaces", () => {

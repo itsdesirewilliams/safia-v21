@@ -1,20 +1,11 @@
-"use client";
-
-import { usePathname } from "next/navigation";
-
 /**
- * A lightweight page-enter transition. The wrapper is keyed by pathname, so each
- * navigation remounts it and replays a short CSS fade. There is no routing
- * library and no exit phase — content is never blocked, and reduced-motion users
- * see it instantly (animations are neutralised globally). Existing page
- * behaviour is untouched.
+ * A pass-through wrapper between the shell and the page content.
+ *
+ * The previous version applied a CSS keyframe fade that started the whole page
+ * at `opacity: 0` on every navigation. That could leave content invisible if the
+ * animation did not run, so the fade was removed: content is now painted
+ * immediately. Route-level motion is not worth risking first paint.
  */
 export function PageTransition({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-
-  return (
-    <div key={pathname} className="animate-page-in">
-      {children}
-    </div>
-  );
+  return <>{children}</>;
 }

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { CATEGORIES } from "@/lib/catalogue/categories";
 import { titleCasePhrase } from "@/lib/catalogue/suggestions";
-import { countryFlag } from "@/lib/contact/countries";
+import { countryCode, countryFlag } from "@/lib/contact/countries";
 import {
   HERO_PLACEHOLDER_PHRASES,
   HERO_SUGGESTION_POOL,
@@ -46,15 +46,15 @@ describe("homepage category cards", () => {
 });
 
 describe("homepage testimonials", () => {
-  it("ships three temporary sample testimonials, each with quote, author, country and flag", () => {
+  it("ships three temporary sample testimonials, each with a resolved country code", () => {
     expect(TESTIMONIALS).toHaveLength(3);
 
     for (const testimonial of TESTIMONIALS) {
       expect(testimonial.quote.length).toBeGreaterThan(0);
       expect(testimonial.author.length).toBeGreaterThan(0);
       expect(testimonial.location.length).toBeGreaterThan(0);
-      expect(testimonial.flag).toBe(countryFlag(testimonial.location));
-      expect(testimonial.flag.length).toBeGreaterThan(0);
+      expect(testimonial.countryCode).toBe(countryCode(testimonial.location));
+      expect(testimonial.countryCode).toMatch(/^[A-Z]{2}$/);
     }
   });
 });
@@ -110,5 +110,15 @@ describe("countryFlag", () => {
     expect(countryFlag("United Arab Emirates")).toBe("🇦🇪");
     expect(countryFlag("Czechia")).toBe("🇨🇿");
     expect(countryFlag("Not A Country")).toBe("");
+  });
+});
+
+describe("countryCode", () => {
+  it("resolves an ISO alpha-2 code deterministically by country name", () => {
+    expect(countryCode("Brazil")).toBe("BR");
+    expect(countryCode("United Arab Emirates")).toBe("AE");
+    expect(countryCode("Czechia")).toBe("CZ");
+    expect(countryCode("  india ")).toBe("IN");
+    expect(countryCode("Not A Country")).toBeNull();
   });
 });

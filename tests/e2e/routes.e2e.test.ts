@@ -187,6 +187,18 @@ describe("admin routes are protected server-side", () => {
     expect(response.headers.get("location") ?? "").toContain("/admin/login");
   });
 
+  it("protects the user management and appearance modules", async () => {
+    for (const path of ["/admin/users", "/admin/appearance", "/admin/gallery"]) {
+      const response = await fetch(`${BASE_URL}${path}`, {
+        redirect: "manual",
+      });
+      expect([302, 303, 307, 308], path).toContain(response.status);
+      expect(response.headers.get("location") ?? "", path).toContain(
+        "/admin/login",
+      );
+    }
+  });
+
   it("redirects signed-out visitors from the admin root", async () => {
     const response = await fetch(`${BASE_URL}/admin`, { redirect: "manual" });
     expect([302, 303, 307, 308]).toContain(response.status);
@@ -205,6 +217,6 @@ describe("admin routes are protected server-side", () => {
     const response = await fetch(`${BASE_URL}/admin/login`);
     expect(response.status).toBe(200);
     const html = await response.text();
-    expect(html).toContain("Sign in to manage media");
+    expect(html).toContain("Sign in to the admin");
   });
 });

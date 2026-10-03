@@ -1,14 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useGSAP } from "@gsap/react";
 
 import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { cn } from "@/lib/cn";
 import { GALLERY_EMPTY_STATE } from "@/lib/gallery";
 import type { GalleryImage } from "@/lib/media/gallery";
-import { MOTION, MOTION_OK } from "@/lib/motion/config";
-import { gsap, ScrollTrigger } from "@/lib/motion/gsap";
 
 import { GalleryViewer } from "./gallery-viewer";
 
@@ -86,8 +83,6 @@ export function GalleryGrid({ images }: GalleryGridProps) {
       // container width changes (Masonry already listens to window resize).
       const relayout = () => {
         instance.layout();
-        // Images change height as they arrive, so keep scroll triggers aligned.
-        ScrollTrigger.refresh();
       };
       window.addEventListener("load", relayout);
       const observer =
@@ -110,39 +105,6 @@ export function GalleryGrid({ images }: GalleryGridProps) {
       masonryRef.current = null;
     };
   }, [images.length]);
-
-  // Reveal each image as it enters the viewport. Masonry owns the item
-  // transform, so we animate opacity/y on the *inner* media span only.
-  useGSAP(
-    () => {
-      const els = gsap.utils.toArray<HTMLElement>("[data-gallery-reveal]");
-      if (els.length === 0) {
-        return;
-      }
-
-      const mm = gsap.matchMedia();
-      mm.add(MOTION_OK, () => {
-        gsap.set(els, { opacity: 0, y: 18 });
-        ScrollTrigger.batch(els, {
-          start: "top 95%",
-          once: true,
-          onEnter: (batch) =>
-            gsap.to(batch, {
-              opacity: 1,
-              y: 0,
-              duration: MOTION.duration.reveal,
-              ease: MOTION.ease.premium,
-              stagger: MOTION.stagger.tight,
-              overwrite: true,
-            }),
-        });
-        ScrollTrigger.refresh();
-      });
-
-      return () => mm.revert();
-    },
-    { dependencies: [images.length] },
-  );
 
   if (images.length === 0) {
     return (

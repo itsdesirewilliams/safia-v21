@@ -111,7 +111,7 @@ export function CaptionEditor({
               </Link>
             )}
             <Link
-              href={`/admin/files?category=${category}`}
+              href={`/admin/media?category=${category}`}
               className={buttonStyles("outline", "md")}
             >
               Back to Files

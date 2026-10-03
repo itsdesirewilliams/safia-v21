@@ -5,12 +5,12 @@ import { AccentLine } from "@/components/motion/accent-line";
 import { ArrowIcon } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
 import { CATEGORIES } from "@/lib/catalogue/categories";
-import { getPublicConfig } from "@/lib/config";
 import { FOOTER_NAV, ROUTES } from "@/lib/routes";
 import {
   MARKETING_PHONES,
   PUBLIC_CONTACT_EMAILS,
   SITE,
+  SOCIAL_LINKS,
   telHref,
 } from "@/lib/site";
 
@@ -92,13 +92,9 @@ function FooterLink({
 }
 
 export function SiteFooter() {
-  const { socialLinks } = getPublicConfig();
   const year = new Date().getFullYear();
 
-  const socials = [
-    ...socialLinks,
-    { name: "WhatsApp", url: SITE.whatsappUrl },
-  ];
+  const socials = [...SOCIAL_LINKS, { name: "WhatsApp", url: SITE.whatsappUrl }];
 
   return (
     <footer className="bg-ink-50 px-4 pb-8 pt-4 sm:px-6 lg:px-8">

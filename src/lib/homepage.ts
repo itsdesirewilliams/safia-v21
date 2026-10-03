@@ -10,7 +10,7 @@ import type {
   HeroSuggestionPool,
 } from "@/lib/catalogue/suggestions";
 import { titleCasePhrase } from "@/lib/catalogue/suggestions";
-import { countryFlag } from "@/lib/contact/countries";
+import { countryCode } from "@/lib/contact/countries";
 import { ROUTES } from "@/lib/routes";
 
 /**
@@ -44,8 +44,8 @@ export type Testimonial = {
   quote: string;
   author: string;
   location: string;
-  /** Regional-indicator flag for `location`, or "" when unresolved. */
-  flag: string;
+  /** ISO 3166-1 alpha-2 code for `location`, or null when unresolved. */
+  countryCode: string | null;
 };
 
 /**
@@ -60,21 +60,21 @@ export const TESTIMONIALS: readonly Testimonial[] = [
       "The samples matched the catalogue specifications exactly and the shipment reached us on schedule.",
     author: "Juan Carlos",
     location: "Brazil",
-    flag: countryFlag("Brazil"),
+    countryCode: countryCode("Brazil"),
   },
   {
     quote:
       "Clear sizes, quick answers and a straightforward ordering process from start to finish.",
     author: "Aisha Rahman",
     location: "United Arab Emirates",
-    flag: countryFlag("United Arab Emirates"),
+    countryCode: countryCode("United Arab Emirates"),
   },
   {
     quote:
       "A dependable partner for our agricultural range — the pattern data is easy to work with.",
     author: "Milan Novak",
     location: "Czechia",
-    flag: countryFlag("Czechia"),
+    countryCode: countryCode("Czechia"),
   },
 ];
 

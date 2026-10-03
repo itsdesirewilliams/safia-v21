@@ -76,7 +76,7 @@ async function createMediaRow(): Promise<{ id: string }> {
 }
 
 async function createSignedInUser(
-  role: "admin" | "editor" | null,
+  role: "admin" | "operator" | "copywriter" | null,
 ): Promise<{ client: SupabaseClient; userId: string }> {
   const email = `e2e-${role ?? "none"}-${Date.now()}-${Math.floor(
     Math.random() * 1_000_000,
@@ -182,8 +182,8 @@ describeLive("media layer integrity (live Supabase)", () => {
     expect(error).not.toBeNull();
   });
 
-  it("lets an editor upload but not delete", async () => {
-    const { client, userId } = await createSignedInUser("editor");
+  it("lets an operator upload and delete media", async () => {
+    const { client, userId } = await createSignedInUser("operator");
 
     const insert = await client
       .from("media")
@@ -200,27 +200,60 @@ describeLive("media layer integrity (live Supabase)", () => {
     const mediaId = insert.data?.id as string;
     createdMedia.push(mediaId);
 
-    await client.from("media").delete().eq("id", mediaId);
-
-    const { data } = await admin
+    const deleted = await client
       .from("media")
-      .select("id")
+      .delete()
       .eq("id", mediaId)
-      .maybeSingle();
-    expect(data?.id).toBe(mediaId);
+      .select("id");
+    expect(deleted.error).toBeNull();
+    expect(deleted.data?.length).toBe(1);
   });
 
-  it("refuses an editor writing a Media record to the restricted gallery bucket", async () => {
-    const { client, userId } = await createSignedInUser("editor");
+  it("lets a copywriter write to blog-images but not to gallery", async () => {
+    const { client, userId } = await createSignedInUser("copywriter");
 
-    const { error } = await client.from("media").insert({
+    const allowed = await client
+      .from("media")
+      .insert({
+        bucket: "blog-images",
+        storage_path: `e2e/${crypto.randomUUID()}.png`,
+        type: "image",
+        uploaded_by: userId,
+      })
+      .select("id")
+      .single();
+    expect(allowed.error).toBeNull();
+    if (allowed.data?.id) {
+      createdMedia.push(allowed.data.id);
+    }
+
+    const refused = await client.from("media").insert({
       bucket: "gallery",
       storage_path: `e2e/${crypto.randomUUID()}.png`,
       type: "image",
       uploaded_by: userId,
     });
+    expect(refused.error).not.toBeNull();
+  });
 
-    expect(error).not.toBeNull();
+  it("lets an operator manage the restricted gallery bucket", async () => {
+    const { client, userId } = await createSignedInUser("operator");
+
+    const created = await client
+      .from("media")
+      .insert({
+        bucket: "gallery",
+        storage_path: `e2e/${crypto.randomUUID()}.png`,
+        type: "image",
+        uploaded_by: userId,
+      })
+      .select("id")
+      .single();
+
+    expect(created.error).toBeNull();
+    if (created.data?.id) {
+      createdMedia.push(created.data.id);
+    }
   });
 
   it("lets an admin upload a gallery object and create its Media record", async () => {
@@ -364,8 +397,8 @@ describeLive("media layer integrity (live Supabase)", () => {
     expect(data).toBeNull();
   });
 
-  it("lets an editor upload a storage object", async () => {
-    const { client, userId } = await createSignedInUser("editor");
+  it("lets an operator upload a storage object", async () => {
+    const { client, userId } = await createSignedInUser("operator");
     const path = `e2e/${crypto.randomUUID()}.png`;
 
     const upload = await client.storage
@@ -392,15 +425,21 @@ describeLive("media layer integrity (live Supabase)", () => {
     }
   });
 
-  it("refuses an editor uploading a storage object to the restricted gallery bucket", async () => {
-    const { client } = await createSignedInUser("editor");
-    const path = `e2e/${crypto.randomUUID()}.png`;
+  it("lets a copywriter upload to blog-images storage but not to gallery", async () => {
+    const { client } = await createSignedInUser("copywriter");
 
-    const { error } = await client.storage
+    const allowedPath = `e2e/${crypto.randomUUID()}.png`;
+    const allowed = await client.storage
+      .from("blog-images")
+      .upload(allowedPath, pngBytes(), { contentType: "image/png" });
+    expect(allowed.error).toBeNull();
+    uploadedObjects.push({ bucket: "blog-images", path: allowedPath });
+
+    const refusedPath = `e2e/${crypto.randomUUID()}.png`;
+    const refused = await client.storage
       .from("gallery")
-      .upload(path, pngBytes(), { contentType: "image/png" });
-
-    expect(error).not.toBeNull();
+      .upload(refusedPath, pngBytes(), { contentType: "image/png" });
+    expect(refused.error).not.toBeNull();
   });
 
   it("refuses anonymous storage uploads", async () => {

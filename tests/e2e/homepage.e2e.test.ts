@@ -104,15 +104,18 @@ describe("homepage vertical slice", () => {
     expect(html).not.toContain("Explore Quality First");
   });
 
-  it("shows the three sample testimonials, each with a name, country and flag", async () => {
+  it("shows the three sample testimonials, each with a name, country and SVG flag", async () => {
     const html = await (await fetch(`${BASE_URL}/`)).text();
 
     expect(TESTIMONIALS).toHaveLength(3);
     for (const testimonial of TESTIMONIALS) {
       expect(html).toContain(testimonial.author);
       expect(html).toContain(testimonial.location);
-      expect(html).toContain(testimonial.flag);
+      // Deterministic SVG flag, keyed by ISO code (never an emoji).
+      expect(html).toContain(`data-country-flag="${testimonial.countryCode}"`);
     }
+    // No regional-indicator emoji flag should be present in the markup.
+    expect(html).not.toMatch(/[\u{1F1E6}-\u{1F1FF}]{2}/u);
   });
 
   it("keeps the static prefix of the search placeholder visible", async () => {

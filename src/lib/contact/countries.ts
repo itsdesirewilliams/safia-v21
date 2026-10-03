@@ -78,16 +78,25 @@ export function isCountryCode(value: string): boolean {
 }
 
 /**
+ * The ISO 3166-1 alpha-2 code for a country name, or `null` when unrecognised.
+ * This is the deterministic key used to render an SVG flag — never an emoji.
+ */
+export function countryCode(name: string): string | null {
+  const code = CODE_BY_NAME.get(name.trim().toLowerCase());
+  return code && code.length === 2 ? code.toUpperCase() : null;
+}
+
+/**
  * The regional-indicator flag emoji for a country name, or an empty string when
- * the name is not recognised. Purely presentational; the name is still shown as
- * supplied when a flag cannot be resolved.
+ * the name is not recognised. Retained for non-visual uses only; the public UI
+ * renders a deterministic SVG flag (see `CountryFlag`) rather than this emoji.
  */
 export function countryFlag(name: string): string {
-  const code = CODE_BY_NAME.get(name.trim().toLowerCase());
-  if (!code || code.length !== 2) {
+  const code = countryCode(name);
+  if (!code) {
     return "";
   }
   return String.fromCodePoint(
-    ...[...code.toUpperCase()].map((char) => 0x1f1e6 + char.charCodeAt(0) - 65),
+    ...[...code].map((char) => 0x1f1e6 + char.charCodeAt(0) - 65),
   );
 }

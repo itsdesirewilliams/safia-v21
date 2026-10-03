@@ -1,69 +1,123 @@
-import Image from "next/image";
-import Link from "next/link";
-
+import { AdminShell, type AdminNavSection } from "@/components/admin/admin-shell";
 import { buttonStyles } from "@/components/ui/button";
-import { Container } from "@/components/ui/container";
-import { roleLabel } from "@/lib/auth/roles";
-import { requireMediaManager } from "@/lib/auth/session";
+import {
+  canManageMedia,
+  canManagePosts,
+  canManageSettings,
+  canManageUsers,
+  roleLabel,
+} from "@/lib/auth/roles";
+import { requireUser } from "@/lib/auth/session";
 
 import { signOutAction } from "../actions";
-import { AdminNav } from "./admin-nav";
 
 export const metadata = { title: "Admin" };
 
 /**
- * The guarded admin shell. `requireMediaManager` is the authorization
- * boundary: signed-out users are redirected to login, and signed-in users
- * without an admin/editor role are refused before any admin data renders.
+ * The guarded admin shell.
+ *
+ * `requireUser` is the authorization boundary: signed-out users are redirected
+ * to login, and users with no role are refused. The sidebar is filtered by role
+ * for the operator/copywriter experience, but every module re-checks the role
+ * server-side, so hiding a link is never the security control.
  */
 export default async function AdminDashboardLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const profile = await requireMediaManager();
+  const profile = await requireUser();
+  const role = profile.role;
+
+  const isAdmin = canManageUsers(role);
+  const canMedia = canManageMedia(role);
+  const canPosts = canManagePosts(role);
+  const canSettings = canManageSettings(role);
+
+  const sections: AdminNavSection[] = [
+    {
+      title: "Overview",
+      items: [{ label: "Dashboard", href: "/admin", icon: "dashboard" }],
+    },
+  ];
+
+  const content = [];
+  if (canPosts) {
+    content.push({ label: "Posts", href: "/admin/posts", icon: "posts" });
+  }
+  if (canMedia) {
+    content.push({ label: "Media", href: "/admin/media", icon: "media" });
+    content.push({ label: "Gallery", href: "/admin/gallery", icon: "gallery" });
+  }
+  if (content.length > 0) {
+    sections.push({ title: "Content", items: content });
+  }
+
+  if (canMedia) {
+    sections.push({
+      title: "Products",
+      items: [
+        {
+          label: "Pattern Images",
+          href: "/admin/pattern-images",
+          icon: "pattern",
+        },
+        {
+          label: "Product Media",
+          href: "/admin/product-images",
+          icon: "media",
+        },
+      ],
+    });
+    sections.push({
+      title: "Quality",
+      items: [
+        {
+          label: "Quality First",
+          href: "/admin/quality-first",
+          icon: "quality",
+        },
+      ],
+    });
+  }
+
+  if (canSettings) {
+    sections.push({
+      title: "Appearance",
+      items: [
+        {
+          label: "Theme & Settings",
+          href: "/admin/appearance",
+          icon: "appearance",
+        },
+      ],
+    });
+  }
+
+  if (isAdmin) {
+    sections.push({
+      title: "Users",
+      items: [
+        { label: "Users & Access", href: "/admin/users", icon: "users" },
+      ],
+    });
+  }
 
   return (
-    <div className="min-h-screen bg-ink-50">
-      <header className="border-b border-ink-200 bg-white">
-        <Container className="flex h-16 items-center justify-between gap-4">
-          <div className="flex items-center gap-5">
-            <Link
-              href="/admin/files"
-              className="flex items-center gap-3"
-              aria-label="Safeway Tyre admin"
-            >
-              <Image
-                src="/brand/safeway-logo-black.png"
-                alt="Safeway Tyre"
-                width={180}
-                height={42}
-                className="h-8 w-auto"
-              />
-              <span className="hidden border-l border-ink-200 pl-3 text-sm font-semibold text-ink-950 sm:inline">
-                Admin
-              </span>
-            </Link>
-            <AdminNav isAdmin={profile.role === "admin"} />
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="hidden text-right sm:block">
-              <p className="text-xs font-medium text-ink-900">
-                {profile.email ?? "Signed in"}
-              </p>
-              <p className="text-[11px] uppercase tracking-[0.14em] text-ink-500">
-                {profile.role ? roleLabel(profile.role) : "No role"}
-              </p>
-            </div>
-            <form action={signOutAction}>
-              <button type="submit" className={buttonStyles("outline", "sm")}>
-                Sign out
-              </button>
-            </form>
-          </div>
-        </Container>
-      </header>
-
-      <main>{children}</main>
-    </div>
+    <AdminShell
+      sections={sections}
+      email={profile.email}
+      roleLabel={role ? roleLabel(role) : "No role"}
+      signOut={
+        <form action={signOutAction}>
+          <button
+            type="submit"
+            className={buttonStyles("onDark", "sm", "w-full")}
+          >
+            Sign out
+          </button>
+        </form>
+      }
+    >
+      {children}
+    </AdminShell>
   );
 }

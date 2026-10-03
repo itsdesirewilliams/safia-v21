@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { requireAdmin } from "@/lib/auth/session";
+import { requireMediaManager } from "@/lib/auth/session";
 import { findPatternsByCode } from "@/lib/catalogue/pattern-directory";
 import {
   isSafePatternImagePath,
@@ -36,7 +36,7 @@ import { validateUpload } from "@/lib/media/upload";
 export async function commitPatternImagesAction(
   entries: PatternImageBatchEntry[],
 ): Promise<PatternImageBatchResult> {
-  const profile = await requireAdmin();
+  const profile = await requireMediaManager();
 
   const list = Array.isArray(entries)
     ? entries.slice(0, PATTERN_IMAGE_BATCH_MAX)

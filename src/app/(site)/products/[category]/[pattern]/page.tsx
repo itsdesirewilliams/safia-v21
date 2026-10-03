@@ -83,7 +83,7 @@ export default async function PatternPage({
               className="h-28 w-28 shrink-0 sm:h-32 sm:w-32"
             />
             <div className="min-w-0">
-              <h2 className="pattern-code-font text-2xl font-extrabold tracking-tight text-ink-950 sm:text-3xl">
+              <h2 className="pattern-code-font text-2xl font-semibold tracking-tight text-ink-950 sm:text-3xl">
                 {pattern.patternCode}
               </h2>
               <p className="mt-1.5 text-sm text-ink-600">{eyebrow}</p>

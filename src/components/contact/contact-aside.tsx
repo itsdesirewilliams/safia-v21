@@ -1,9 +1,11 @@
 import { ArrowIcon } from "@/components/ui/button";
-import { MARKETING_PHONES, PUBLIC_CONTACT_EMAILS, SITE, telHref } from "@/lib/site";
-
-export type ContactAsideProps = {
-  companyAddress: string | null;
-};
+import {
+  CORPORATE_OFFICE_ADDRESS,
+  MARKETING_PHONES,
+  PUBLIC_CONTACT_EMAILS,
+  SITE,
+  telHref,
+} from "@/lib/site";
 
 function DetailRow({
   label,
@@ -21,7 +23,7 @@ function DetailRow({
 }
 
 /** Approved contact information and the WhatsApp alternative, shown beside the forms. */
-export function ContactAside({ companyAddress }: ContactAsideProps) {
+export function ContactAside() {
   const factory = SITE.addresses.find(
     (location) => location.label === "Factory",
   );
@@ -98,9 +100,9 @@ export function ContactAside({ companyAddress }: ContactAsideProps) {
           Closed {SITE.openingHours.closed}
         </DetailRow>
 
-        {companyAddress && (
-          <DetailRow label="Corporate Office">{companyAddress}</DetailRow>
-        )}
+        <DetailRow label="Corporate Office">
+          {CORPORATE_OFFICE_ADDRESS}
+        </DetailRow>
 
         {factory && (
           <DetailRow label="Factory">

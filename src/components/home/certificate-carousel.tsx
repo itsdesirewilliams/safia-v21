@@ -119,7 +119,7 @@ export function CertificateCarousel({
             loading={index === 0 ? "eager" : "lazy"}
             decoding="async"
             draggable={false}
-            className="block h-auto w-full animate-fade-in motion-reduce:animate-none"
+            className="block h-auto w-full"
           />
         </div>
 

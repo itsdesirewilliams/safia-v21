@@ -13,13 +13,13 @@ import { RevealText } from "@/components/motion/reveal-text";
 import { QueryForm } from "@/components/contact/query-form";
 import { ArrowIcon, ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { CountryFlag } from "@/components/ui/country-flag";
 import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import {
   DEFAULT_YOUTUBE_VIDEO_ID,
   getHeroVideoUrl,
-  getPublicConfig,
   getYoutubeVideoId,
 } from "@/lib/config";
 import {
@@ -36,7 +36,15 @@ import {
 import { readProductRangeImages } from "@/lib/media/product-range-assets";
 import { isValidYoutubeVideoId } from "@/lib/media/youtube";
 import { ROUTES } from "@/lib/routes";
-import { MARKETING_PHONES, PUBLIC_CONTACT_EMAILS, SITE, telHref } from "@/lib/site";
+import {
+  CORPORATE_OFFICE_ADDRESS,
+  CORPORATE_OFFICE_MAP_EMBED_URL,
+  CORPORATE_OFFICE_MAPS_LINK,
+  MARKETING_PHONES,
+  PUBLIC_CONTACT_EMAILS,
+  SITE,
+  telHref,
+} from "@/lib/site";
 
 export const metadata = {
   title: `${SITE.name} | ${SITE.tagline}`,
@@ -49,7 +57,6 @@ export default function HomePage() {
   const youtubeId = isValidYoutubeVideoId(configuredYoutubeId)
     ? configuredYoutubeId
     : DEFAULT_YOUTUBE_VIDEO_ID;
-  const { companyAddress } = getPublicConfig();
   const heroVideoUrl = getHeroVideoUrl();
   const productRangeImages = readProductRangeImages();
   const catalogueHeaderImage = readCatalogueHeaderImage();
@@ -340,14 +347,12 @@ export default function HomePage() {
                         </blockquote>
                         <p className="mt-5 text-sm font-semibold text-ink-950">
                           {testimonial.author}
-                          <span className="font-normal text-ink-500">
-                            {" "}
-                            — {testimonial.location}
-                            {testimonial.flag && (
-                              <span className="ml-1.5" aria-hidden="true">
-                                {testimonial.flag}
-                              </span>
-                            )}
+                          <span className="inline-flex flex-wrap items-center gap-x-1.5 font-normal text-ink-500">
+                            <span>— {testimonial.location}</span>
+                            <CountryFlag
+                              code={testimonial.countryCode}
+                              country={testimonial.location}
+                            />
                           </span>
                         </p>
                       </div>
@@ -466,25 +471,30 @@ export default function HomePage() {
             />
           </Reveal>
           <div className="mt-14">
-            {companyAddress ? (
-              <div className="h-96 overflow-hidden rounded-card border border-ink-200 shadow-card">
-                <iframe
-                  className="h-full w-full"
-                  src={`https://www.google.com/maps?q=${encodeURIComponent(
-                    companyAddress,
-                  )}&output=embed`}
-                  title="Safeway Tyre location"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
-              </div>
-            ) : (
-              <PlaceholderPanel
-                kind="location"
-                label="Map Coming Soon"
-                detail="Our location map is not available right now. Contact us and we will help you find us."
+            <div className="overflow-hidden rounded-card border border-ink-200 bg-white shadow-card">
+              <iframe
+                className="block h-80 w-full sm:h-96"
+                src={CORPORATE_OFFICE_MAP_EMBED_URL}
+                title={`Map of ${CORPORATE_OFFICE_ADDRESS}`}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
               />
-            )}
+              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-ink-200 px-5 py-4">
+                <p className="text-sm text-ink-600">
+                  {CORPORATE_OFFICE_ADDRESS}
+                </p>
+                <a
+                  href={CORPORATE_OFFICE_MAPS_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-2 text-sm font-semibold text-brand-600 hover:underline"
+                >
+                  Open in Google Maps
+                  <ArrowIcon className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none" />
+                </a>
+              </div>
+            </div>
           </div>
         </Container>
       </section>

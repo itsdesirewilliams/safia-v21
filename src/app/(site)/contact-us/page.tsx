@@ -5,7 +5,6 @@ import { ContactMap } from "@/components/contact/contact-map";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { detectVisitorCountry } from "@/lib/contact/visitor-country-server";
-import { getPublicConfig } from "@/lib/config";
 
 export const metadata = {
   title: "Contact Us",
@@ -19,7 +18,6 @@ export const metadata = {
  * details. Submissions are emailed only (ADR-0007) — nothing is stored.
  */
 export default async function ContactUsPage() {
-  const { companyAddress } = getPublicConfig();
   // Coarse, IP-derived country only; used to pre-select the phone field.
   const detectedCountry = await detectVisitorCountry();
 
@@ -31,7 +29,7 @@ export default async function ContactUsPage() {
         <Container>
           <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
             <Reveal>
-              <ContactAside companyAddress={companyAddress} />
+              <ContactAside />
             </Reveal>
             <Reveal delay={100}>
               <ContactForms defaultCountry={detectedCountry ?? undefined} />
@@ -40,7 +38,7 @@ export default async function ContactUsPage() {
         </Container>
       </section>
 
-      <ContactMap companyAddress={companyAddress} />
+      <ContactMap />
     </>
   );
 }

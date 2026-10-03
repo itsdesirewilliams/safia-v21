@@ -1,28 +1,31 @@
-import { Container } from "@/components/ui/container";
-import { requireMediaManager } from "@/lib/auth/session";
+import { AdminPageHeader } from "@/components/admin/page-header";
+import { requirePostsAccess } from "@/lib/auth/session";
 import { toMediaOptions } from "@/lib/blog/media-options";
 import { listMedia } from "@/lib/media/server";
 
 import { PostEditor } from "../post-editor";
 
 export const metadata = { title: "New post" };
+export const dynamic = "force-dynamic";
 
 export default async function NewPostPage() {
-  await requireMediaManager();
+  await requirePostsAccess();
 
   const images = await listMedia({ type: "image", limit: 240 });
   const mediaOptions = toMediaOptions(images);
 
   return (
-    <Container className="py-10">
-      <p className="text-eyebrow text-brand-600">Blog CMS</p>
-      <h1 className="mt-3 text-3xl font-bold tracking-tight text-ink-950">
-        New post
-      </h1>
-      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-600">
-        A new post starts as a Draft. Save it, then publish it from the post
-        screen when it is ready.
-      </p>
+    <div>
+      <AdminPageHeader
+        eyebrow="Blog"
+        title="New post"
+        description="A new post starts as a draft. Save it, then publish it when it is ready."
+        breadcrumbs={[
+          { label: "Dashboard", href: "/admin" },
+          { label: "Posts", href: "/admin/posts" },
+          { label: "New" },
+        ]}
+      />
 
       <PostEditor
         mode="create"
@@ -36,6 +39,6 @@ export default async function NewPostPage() {
           body: [],
         }}
       />
-    </Container>
+    </div>
   );
 }

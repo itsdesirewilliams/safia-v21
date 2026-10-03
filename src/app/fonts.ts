@@ -30,9 +30,10 @@ export const monaSans = localFont({
  * Mona Sans Condensed, used only for Pattern Codes.
  *
  * The shipped base face above carries the weight axis only; this is the full
- * Mona Sans variable (weight + width, 75–125). A width of 75 is Mona Sans
- * Condensed; the `.pattern-code-font` utility pins it there. It is not
- * preloaded: it downloads only on the product pages that render a Pattern Code.
+ * Mona Sans variable (weight + width, 75–125). The `.pattern-code-font` utility
+ * pins the width axis to 87.5 — condensed, but with more breathing room than the
+ * fully condensed 75. It is not preloaded: it downloads only on the product
+ * pages that render a Pattern Code.
  */
 export const monaSansCondensed = localFont({
   src: "./fonts/mona-sans-condensed-latin.woff2",

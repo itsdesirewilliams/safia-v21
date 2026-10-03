@@ -61,10 +61,13 @@ A shared media asset (image, video, or PDF) stored in Supabase Storage, referenc
 _Avoid_: asset, file (unless naming a specific type)
 
 **Admin**:
-A user role with full access: users, media, products, and all content.
+A user role with full access: user management, media, products, posts, themes and all content.
 
-**Editor**:
-A user role limited to creating, editing, and publishing Posts and uploading media.
+**Operator**:
+A user role with everything an Admin has except user management: media, products, posts, themes and settings.
+
+**Copywriter**:
+A user role limited to the blog: creating, editing, publishing Posts and uploading blog imagery only.
 
 ## Quality First
 
