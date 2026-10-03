@@ -93,31 +93,12 @@ export function getSupabaseAdminEnv(): SupabaseAdminEnv {
   };
 }
 
-export type EmailTransportEnv = {
-  host: string;
-  port: number;
-  user: string;
-  password: string;
-  from: string;
-};
-
-/** Contact form email transport (provider deferred — ADR-0007). */
-export function getEmailTransportEnv(): EmailTransportEnv {
-  const env = readRequired([
-    "EMAIL_TRANSPORT_HOST",
-    "EMAIL_TRANSPORT_PORT",
-    "EMAIL_TRANSPORT_USER",
-    "EMAIL_TRANSPORT_PASSWORD",
-    "EMAIL_TRANSPORT_FROM",
-  ]);
-
-  return {
-    host: env.EMAIL_TRANSPORT_HOST,
-    port: Number(env.EMAIL_TRANSPORT_PORT),
-    user: env.EMAIL_TRANSPORT_USER,
-    password: env.EMAIL_TRANSPORT_PASSWORD,
-    from: env.EMAIL_TRANSPORT_FROM,
-  };
+/**
+ * The Resend API key used by the contact-form email transport (ADR-0007).
+ * Server-only; never read in a Client Component.
+ */
+export function getResendApiKey(): string {
+  return readRequired(["RESEND_API_KEY"]).RESEND_API_KEY;
 }
 
 /**

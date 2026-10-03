@@ -1,15 +1,18 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 import { getCategory } from "@/lib/catalogue/categories";
-import { getEmailTransportEnv } from "@/lib/config";
+import { getResendApiKey } from "@/lib/config";
 import { getCountry } from "@/lib/contact/countries";
 import { SITE } from "@/lib/site";
 
 /**
  * Email delivery contract for Contact Us submissions (spec #6 / ADR-0007).
+ *
  * Submissions are emailed — never stored — to both fixed Safeway addresses.
- * The transport is injectable so the contract can be tested without sending
- * real mail; the default transport is SMTP over the configured credentials.
+ * Delivery uses Resend's server-side SDK with the verified `safewaytyre.com`
+ * sender. The transport is injectable so the contract can be tested without
+ * sending real mail. The `RESEND_API_KEY` is server-only and never reaches the
+ * browser, logs or API responses.
  */
 
 export type ContactSubmission = {
@@ -21,6 +24,8 @@ export type ContactSubmission = {
   /** Canonical category slugs; rendered as display names in the email. */
   categories?: readonly string[];
   message: string;
+  /** Optional visitor email, used as Reply-To when present. */
+  email?: string;
 };
 
 export type EmailMessage = {
@@ -28,6 +33,8 @@ export type EmailMessage = {
   from: string;
   subject: string;
   text: string;
+  /** Set from the visitor's email when the form supplies one. */
+  replyTo?: string;
 };
 
 export interface EmailTransport {
@@ -39,6 +46,12 @@ export const CONTACT_RECIPIENTS: readonly string[] = [
   SITE.emails.director,
   SITE.emails.marketing,
 ];
+
+/**
+ * The verified sender for contact emails. `safewaytyre.com` is the domain
+ * verified in Resend; change this only alongside the Resend domain.
+ */
+export const CONTACT_FROM = "Safeway Tyre Website <website@safewaytyre.com>";
 
 /**
  * Strip CR/LF and control characters from a value before it is used in a mail
@@ -53,10 +66,7 @@ export function sanitizeHeaderValue(value: string): string {
     .trim();
 }
 
-export function buildContactEmail(
-  submission: ContactSubmission,
-  from: string,
-): EmailMessage {
+export function buildContactEmail(submission: ContactSubmission): EmailMessage {
   const label = submission.formType === "query" ? "Inquiry" : "Feedback";
   // Relay the full country name and canonical category names, not internal codes.
   const country = getCountry(submission.country)?.name ?? submission.country;
@@ -69,6 +79,7 @@ export function buildContactEmail(
     `Name: ${submission.name}`,
     `Country: ${country}`,
     `Phone: ${submission.phone}`,
+    ...(submission.email ? [`Email: ${submission.email}`] : []),
     ...(categories.length > 0
       ? [`Categories: ${categories.join(", ")}`]
       : []),
@@ -79,34 +90,37 @@ export function buildContactEmail(
 
   return {
     to: [...CONTACT_RECIPIENTS],
-    from,
+    from: CONTACT_FROM,
     subject: `Safeway Tyre — ${label} from ${sanitizeHeaderValue(submission.name)}`,
     text: lines.join("\n"),
+    ...(submission.email ? { replyTo: submission.email } : {}),
   };
 }
 
-function createSmtpTransport(): EmailTransport {
-  const { host, port, user, password } = getEmailTransportEnv();
-
-  const transporter = nodemailer.createTransport({
-    host,
-    port,
-    secure: port === 465,
-    auth: { user, pass: password },
-  });
+function createResendTransport(): EmailTransport {
+  const resend = new Resend(getResendApiKey());
 
   return {
     async sendMail(message) {
-      await transporter.sendMail(message);
+      const { error } = await resend.emails.send({
+        from: message.from,
+        to: message.to,
+        subject: message.subject,
+        text: message.text,
+        ...(message.replyTo ? { replyTo: message.replyTo } : {}),
+      });
+
+      if (error) {
+        throw new Error(`Resend rejected the email: ${error.message}`);
+      }
     },
   };
 }
 
 export async function sendContactEmail(
   submission: ContactSubmission,
-  deps: { transport?: EmailTransport; from?: string } = {},
+  deps: { transport?: EmailTransport } = {},
 ): Promise<void> {
-  const from = deps.from ?? getEmailTransportEnv().from;
-  const transport = deps.transport ?? createSmtpTransport();
-  await transport.sendMail(buildContactEmail(submission, from));
+  const transport = deps.transport ?? createResendTransport();
+  await transport.sendMail(buildContactEmail(submission));
 }

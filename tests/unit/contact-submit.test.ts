@@ -115,7 +115,7 @@ describe("processContactSubmission — protections", () => {
   });
 
   it("reports a graceful message when email is not configured", async () => {
-    const send = vi.fn().mockRejectedValue(new ConfigError(["EMAIL_TRANSPORT_HOST"]));
+    const send = vi.fn().mockRejectedValue(new ConfigError(["RESEND_API_KEY"]));
     const result = await processContactSubmission(
       "query",
       QUERY,

@@ -36,6 +36,8 @@ type ContactMessages = {
 const MESSAGES: Record<ContactFormKind, ContactMessages> = {
   query: {
     success: "Thank you — your enquiry has been sent to Safeway Tyre.",
+    // Shown only while the email transport is unconfigured (RESEND_API_KEY
+    // missing). Once Resend is configured this branch never triggers.
     unavailable:
       "Online enquiries are temporarily unavailable. Please reach us on WhatsApp or by email.",
     failure:
