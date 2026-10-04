@@ -10,6 +10,8 @@ export type CategoryCheckboxesProps = {
   defaultSelected?: readonly string[];
   error?: string;
   required?: boolean;
+  /** Called when a selection changes, so stale errors can be cleared. */
+  onValueChange?: () => void;
 };
 
 /**
@@ -23,6 +25,7 @@ export function CategoryCheckboxes({
   defaultSelected = [],
   error,
   required,
+  onValueChange,
 }: CategoryCheckboxesProps) {
   const fieldId = `${idPrefix}-category`;
   const errorId = error ? `${fieldId}-error` : undefined;
@@ -44,6 +47,7 @@ export function CategoryCheckboxes({
               name="category"
               value={category.slug}
               defaultChecked={selected.has(category.slug)}
+              onChange={onValueChange}
               className="h-4 w-4 shrink-0 rounded border-ink-300 text-brand-600 focus:ring-2 focus:ring-brand-500/40"
             />
             <span>{category.displayName}</span>

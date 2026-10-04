@@ -20,6 +20,8 @@ export type CountryPhoneFieldProps = {
   countryError?: string;
   phoneError?: string;
   required?: boolean;
+  /** Called when the country or number changes, so stale errors can be cleared. */
+  onValueChange?: () => void;
 };
 
 /** The first country in the list, selected before the visitor chooses. */
@@ -40,6 +42,7 @@ export function CountryPhoneField({
   countryError,
   phoneError,
   required,
+  onValueChange,
 }: CountryPhoneFieldProps) {
   const [country, setCountry] = useState(() =>
     countryDefault && isCountryCode(countryDefault)
@@ -66,7 +69,10 @@ export function CountryPhoneField({
           name="country"
           required={required}
           value={country}
-          onChange={(event) => setCountry(event.target.value)}
+          onChange={(event) => {
+            setCountry(event.target.value);
+            onValueChange?.();
+          }}
           aria-label="Dialing code"
           aria-invalid={Boolean(countryError)}
           aria-describedby={describedBy}
@@ -87,9 +93,10 @@ export function CountryPhoneField({
           autoComplete="tel-national"
           required={required}
           value={phone}
-          onChange={(event) =>
-            setPhone(event.target.value.replace(/\D/g, ""))
-          }
+          onChange={(event) => {
+            setPhone(event.target.value.replace(/\D/g, ""));
+            onValueChange?.();
+          }}
           placeholder="Phone number"
           aria-invalid={Boolean(countryError || phoneError)}
           aria-describedby={describedBy}

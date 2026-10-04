@@ -151,6 +151,8 @@ describe("validateFeedbackForm", () => {
 describe("normalizePhone", () => {
   it.each([
     ["9915762182", "IN", "+919915762182"],
+    // Regression: a valid 10-digit Indian national number must pass.
+    ["7986975391", "IN", "+917986975391"],
     ["712 345678", "KE", "+254712345678"],
     ["4155552671", "US", "+14155552671"],
     ["020 7946 0958", "GB", "+442079460958"],

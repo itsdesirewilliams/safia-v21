@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 
 import { submitQueryForm } from "@/app/(site)/contact-us/actions";
 import { buttonStyles } from "@/components/ui/button";
@@ -19,23 +19,44 @@ import {
   TextField,
 } from "./fields";
 
+/** The shape of a contact-form server action (injectable for tests). */
+export type ContactFormAction = (
+  state: ContactFormState,
+  formData: FormData,
+) => Promise<ContactFormState>;
+
 export type QueryFormProps = {
   /**
    * Country to pre-select in the phone field, typically detected from the
    * request. Falls back to the first country when absent.
    */
   defaultCountry?: string;
+  /** Override the server action (used by tests). */
+  action?: ContactFormAction;
 };
 
 /**
  * The Inquiry form (spec #6). The single implementation used on both the
  * Contact Us page and the homepage, so the two behave identically.
  */
-export function QueryForm({ defaultCountry }: QueryFormProps = {}) {
+export function QueryForm({
+  defaultCountry,
+  action = submitQueryForm,
+}: QueryFormProps = {}) {
   const [state, formAction, isPending] = useActionState<
     ContactFormState,
     FormData
-  >(submitQueryForm, INITIAL_CONTACT_FORM_STATE);
+  >(action, INITIAL_CONTACT_FORM_STATE);
+
+  // Fields the visitor has edited since the last submit. Their stale server
+  // errors are hidden as soon as the field changes, and cleared on submit.
+  const [dirty, setDirty] = useState<Record<string, boolean>>({});
+  const markDirty = (name: string) =>
+    setDirty((current) =>
+      current[name] ? current : { ...current, [name]: true },
+    );
+  const errorFor = (name: string) =>
+    dirty[name] ? undefined : state.errors?.[name];
 
   if (state.status === "success" && state.message) {
     return <FormSuccess message={state.message} kind="query" />;
@@ -44,7 +65,7 @@ export function QueryForm({ defaultCountry }: QueryFormProps = {}) {
   const values = state.values;
 
   return (
-    <form action={formAction} noValidate>
+    <form action={formAction} noValidate onSubmit={() => setDirty({})}>
       <div className="grid gap-4 sm:grid-cols-2">
         <TextField
           id="query-name"
@@ -53,15 +74,20 @@ export function QueryForm({ defaultCountry }: QueryFormProps = {}) {
           required
           autoComplete="name"
           defaultValue={values?.name}
-          error={state.errors?.name}
+          error={errorFor("name")}
+          onValueChange={() => markDirty("name")}
         />
         <CountryPhoneField
           idPrefix="query"
           countryDefault={values?.country ?? defaultCountry}
           phoneDefault={values?.phone}
-          countryError={state.errors?.country}
-          phoneError={state.errors?.phone}
+          countryError={errorFor("country")}
+          phoneError={errorFor("phone")}
           required
+          onValueChange={() => {
+            markDirty("country");
+            markDirty("phone");
+          }}
         />
       </div>
 
@@ -69,8 +95,9 @@ export function QueryForm({ defaultCountry }: QueryFormProps = {}) {
         <CategoryCheckboxes
           idPrefix="query"
           defaultSelected={values?.categories}
-          error={state.errors?.categories}
+          error={errorFor("categories")}
           required
+          onValueChange={() => markDirty("categories")}
         />
       </div>
 
@@ -82,7 +109,8 @@ export function QueryForm({ defaultCountry }: QueryFormProps = {}) {
           required
           hint="Tell us what you need, including sizes if applicable."
           defaultValue={values?.message}
-          error={state.errors?.message}
+          error={errorFor("message")}
+          onValueChange={() => markDirty("message")}
         />
       </div>
 

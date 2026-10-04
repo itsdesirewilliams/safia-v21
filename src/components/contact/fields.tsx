@@ -49,6 +49,8 @@ export type TextFieldProps = {
   defaultValue?: string;
   error?: string;
   hint?: string;
+  /** Called when the value changes, so stale errors can be cleared. */
+  onValueChange?: () => void;
 };
 
 export function TextField({
@@ -61,6 +63,7 @@ export function TextField({
   defaultValue,
   error,
   hint,
+  onValueChange,
 }: TextFieldProps) {
   const errorId = error ? `${id}-error` : undefined;
   return (
@@ -76,6 +79,7 @@ export function TextField({
         autoComplete={autoComplete}
         required={required}
         defaultValue={defaultValue}
+        onChange={onValueChange}
         aria-invalid={Boolean(error)}
         aria-describedby={errorId}
         className={FIELD_CLASS}
@@ -94,6 +98,8 @@ export type TextAreaFieldProps = {
   error?: string;
   hint?: string;
   rows?: number;
+  /** Called when the value changes, so stale errors can be cleared. */
+  onValueChange?: () => void;
 };
 
 export function TextAreaField({
@@ -105,6 +111,7 @@ export function TextAreaField({
   error,
   hint,
   rows = 4,
+  onValueChange,
 }: TextAreaFieldProps) {
   const errorId = error ? `${id}-error` : undefined;
   return (
@@ -119,6 +126,7 @@ export function TextAreaField({
         rows={rows}
         required={required}
         defaultValue={defaultValue}
+        onChange={onValueChange}
         aria-invalid={Boolean(error)}
         aria-describedby={errorId}
         className={FIELD_CLASS}
