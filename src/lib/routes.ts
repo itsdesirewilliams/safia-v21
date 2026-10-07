@@ -1,4 +1,8 @@
-import { CATEGORIES, type CategorySlug } from "@/lib/catalogue/categories";
+import {
+  CATEGORIES,
+  PRODUCT_MENU_ORDER,
+  type CategorySlug,
+} from "@/lib/catalogue/categories";
 
 /**
  * The public routing map — the single source of truth for every public URL
@@ -13,8 +17,14 @@ export const ROUTING_MAP = {
   gallery: "/gallery",
   qualityFirst: "/quality-first",
   catalogue: "/catalogue",
+  search: "/search",
   categoryListing: "/products/[category]",
   patternDetail: "/products/[category]/[pattern]",
+  // The radial ranges sit beside the existing Nylon Truck & Bus category.
+  tbrSafeway: "/products/truck-bus-tire/tbr-safeway",
+  tbrPatternDetail: "/products/truck-bus-tire/tbr-safeway/[pattern]",
+  pcrSafeway: "/products/truck-bus-tire/pcr-safeway",
+  pcrPatternDetail: "/products/truck-bus-tire/pcr-safeway/[pattern]",
   blogListing: "/blogs",
   post: "/blogs/[slug]",
 } as const;
@@ -27,10 +37,17 @@ export const ROUTES = {
   gallery: ROUTING_MAP.gallery,
   qualityFirst: ROUTING_MAP.qualityFirst,
   catalogue: ROUTING_MAP.catalogue,
+  search: ROUTING_MAP.search,
   blogs: ROUTING_MAP.blogListing,
   category: (slug: CategorySlug) => `/products/${slug}`,
   pattern: (category: CategorySlug, pattern: string) =>
     `/products/${category}/${pattern}`,
+  tbrSafeway: ROUTING_MAP.tbrSafeway,
+  tbrPattern: (pattern: string) =>
+    `/products/truck-bus-tire/tbr-safeway/${pattern}`,
+  pcrSafeway: ROUTING_MAP.pcrSafeway,
+  pcrPattern: (pattern: string) =>
+    `/products/truck-bus-tire/pcr-safeway/${pattern}`,
   post: (slug: string) => `/blogs/${slug}`,
 } as const;
 
@@ -47,10 +64,18 @@ export type NavItem =
   | NavLink
   | { label: string; children: readonly NavLink[] };
 
-const PRODUCTS_CHILDREN: readonly NavLink[] = CATEGORIES.map((category) => ({
-  label: category.displayName,
-  href: ROUTES.category(category.slug),
-}));
+/**
+ * The seven product ranges in their canonical menu order (two-column layout).
+ * Kept in the routing map so the header, the footer and the route tests share a
+ * single source of truth for the order.
+ */
+const PRODUCTS_CHILDREN: readonly NavLink[] = PRODUCT_MENU_ORDER.map((slug) => {
+  const category = CATEGORIES.find((entry) => entry.slug === slug);
+  return {
+    label: category?.displayName ?? slug,
+    href: ROUTES.category(slug),
+  };
+});
 
 /**
  * Header primary navigation. Products is a dropdown of the seven canonical
@@ -93,6 +118,7 @@ export const SMOKE_ROUTES: readonly string[] = [
   ROUTES.gallery,
   ROUTES.qualityFirst,
   ROUTES.catalogue,
+  ROUTES.search,
   ...CATEGORIES.map((category) => ROUTES.category(category.slug)),
   ROUTES.pattern("motorcycle", "motorcycle-tyres-sfm-101"),
   ROUTES.blogs,

@@ -126,4 +126,54 @@ describe("searchPatterns", () => {
     expect(await searchPatterns(fakeClient("nonsense"), "TR-1042")).toEqual([]);
     expect(await searchPatterns(fakeClient(null), "TR-1042")).toEqual([]);
   });
+
+  it("merges TBR range matches by size with the database results", async () => {
+    const results = await searchPatterns(fakeClient([]), "295/80R22.5");
+
+    expect(results[0]).toMatchObject({
+      displayName: "295/80R22.5",
+      categoryDisplayName: "Truck & Bus Radial Tyres",
+      href: expect.stringMatching(
+        /^\/products\/truck-bus-tire\/tbr-safeway\//,
+      ),
+    });
+  });
+
+  it("merges PCR range matches by size with the database results", async () => {
+    const results = await searchPatterns(fakeClient([]), "205/65R15");
+
+    expect(results[0]).toMatchObject({
+      displayName: "205/65R15",
+      categoryDisplayName: "Passenger Car Radial Tyres",
+      href: expect.stringMatching(
+        /^\/products\/truck-bus-tire\/pcr-safeway\//,
+      ),
+    });
+  });
+
+  it("still returns radial matches for a size-shaped query", async () => {
+    const results = await searchPatterns(fakeClient([]), "11R22.5-16PR TL");
+
+    expect(results.some((result) => result.displayName === "11R22.5")).toBe(
+      true,
+    );
+  });
+
+  it("drops a result that matched only a partial Pattern Code", async () => {
+    const results = await searchPatterns(
+      fakeClient([
+        {
+          category_slug: "motorcycle",
+          category_display_name: "Motorcycle Tyres",
+          pattern_slug: "motorcycle-tyres-sfm-101",
+          pattern_code: "SFM-101",
+          display_name: "MOTORCYCLE TYRES",
+          sizes: ["2.75-17"],
+        },
+      ]),
+      "fm",
+    );
+
+    expect(results).toEqual([]);
+  });
 });

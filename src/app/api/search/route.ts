@@ -4,6 +4,7 @@ import {
   MIN_SEARCH_LENGTH,
   sanitizeQuery,
   searchPatterns,
+  toPublicResult,
 } from "@/lib/catalogue/search";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -24,7 +25,8 @@ export async function GET(request: Request) {
   try {
     const supabase = await createSupabaseServerClient();
     const results = await searchPatterns(supabase, query);
-    return NextResponse.json({ results });
+    // Strip internal Pattern Codes before the response leaves the server.
+    return NextResponse.json({ results: results.map(toPublicResult) });
   } catch {
     // Search must never break the page; degrade to no results.
     return NextResponse.json({ results: [] });

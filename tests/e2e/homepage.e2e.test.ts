@@ -178,14 +178,15 @@ describe("server-side product search", () => {
     expect(match?.categorySlug).toBe("agriculture");
   });
 
-  it("resolves a pattern-code query to a Pattern", async () => {
+  it("resolves an exact Pattern Code internally without exposing the code", async () => {
     const response = await fetch(`${BASE_URL}/api/search?q=TR-1042`);
     const body = (await response.json()) as {
-      results: { patternSlug: string; patternCode: string }[];
+      results: { patternSlug: string; patternCode?: string }[];
     };
 
     expect(body.results[0]?.patternSlug).toBe("bias-tractor-tyres-tr-1042");
-    expect(body.results[0]?.patternCode).toBe("TR-1042");
+    // Pattern Codes are internal and never leave the server.
+    expect(body.results[0]?.patternCode).toBeUndefined();
   });
 
   it("resolves a category query to Patterns", async () => {

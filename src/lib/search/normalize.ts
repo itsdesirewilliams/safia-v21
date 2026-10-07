@@ -2,7 +2,10 @@ import type { CategorySlug } from "@/lib/catalogue/categories";
 import { catalogueSizeDictionary } from "@/lib/catalogue/dataset";
 
 import { matchCategoryAliases } from "./aliases";
+import { MAX_SEARCH_LENGTH, MIN_SEARCH_LENGTH } from "./limits";
 import { extractSizeCandidates, type SizeDictionary } from "./size";
+
+export { MAX_SEARCH_LENGTH, MIN_SEARCH_LENGTH };
 
 /**
  * Customer search-query normalization (Phase 1).
@@ -21,9 +24,6 @@ import { extractSizeCandidates, type SizeDictionary } from "./size";
  * `aliases.ts`, size rules in `size.ts`, and stop-words/cleaning rules here,
  * without touching the search engine.
  */
-
-export const MIN_SEARCH_LENGTH = 2;
-export const MAX_SEARCH_LENGTH = 64;
 
 /** Match score states, from strongest to weakest. */
 export type SearchMatchState =

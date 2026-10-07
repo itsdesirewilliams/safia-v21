@@ -1,0 +1,1559 @@
+{
+  "range": "tbr",
+  "application": "Truck & Bus",
+  "patterns": [
+    {
+      "patternCode": "FM18",
+      "slug": "fm18",
+      "variants": [
+        {
+          "size": "7.50R16LT-16PR TL",
+          "application": "Truck & Bus",
+          "liSr": "125/121L",
+          "cc": 650,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTA01",
+            "firemax": "FM18",
+            "safecess": "SFC18",
+            "treadDepthMm": 12,
+            "fobUsd": 52,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "11R22.5-16PR TL",
+          "application": "Truck & Bus",
+          "liSr": "146/143L",
+          "cc": 280,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTA01",
+            "firemax": "FM18",
+            "safecess": "SFC18",
+            "treadDepthMm": 15,
+            "fobUsd": 88,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "11R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "149/146L",
+          "cc": 280,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTA01",
+            "firemax": "FM18",
+            "safecess": null,
+            "treadDepthMm": 15,
+            "fobUsd": 88,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "11R24.5-16PR TL",
+          "application": "Truck & Bus",
+          "liSr": "149/146M",
+          "cc": 254,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTA01",
+            "firemax": "FM18",
+            "safecess": "SFC18",
+            "treadDepthMm": 15,
+            "fobUsd": 101,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "12R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "152/149L",
+          "cc": 240,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTA01",
+            "firemax": "FM18",
+            "safecess": "SFC18",
+            "treadDepthMm": 14.5,
+            "fobUsd": 101,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "13R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "156/153L",
+          "cc": 228,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTA01",
+            "firemax": "FM18",
+            "safecess": "SFC18",
+            "treadDepthMm": 15,
+            "fobUsd": 121,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "295/80R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "152/149L",
+          "cc": 264,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTA01",
+            "firemax": "FM18",
+            "safecess": "SFC18",
+            "treadDepthMm": 15,
+            "fobUsd": 96,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "315/80R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "156/153L",
+          "cc": 242,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTA01",
+            "firemax": "FM18",
+            "safecess": "SFC18",
+            "treadDepthMm": 15,
+            "fobUsd": 93,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "12.00R24-20PR TT",
+          "application": "Truck & Bus",
+          "liSr": "160/157K",
+          "cc": 196,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTA01",
+            "firemax": "FM18",
+            "safecess": "SFC18",
+            "treadDepthMm": 15,
+            "fobUsd": 127,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "12.00R20-20PR TT",
+          "application": "Truck & Bus",
+          "liSr": "156/153K",
+          "cc": 230,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTA01",
+            "firemax": "FM18",
+            "safecess": "SFC18",
+            "treadDepthMm": 15,
+            "fobUsd": 131,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM188",
+      "slug": "fm188",
+      "variants": [
+        {
+          "size": "11R22.5-16PR TL",
+          "application": "Truck & Bus",
+          "liSr": "146/143M",
+          "cc": 280,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT188",
+            "firemax": "FM188",
+            "safecess": null,
+            "treadDepthMm": 14.5,
+            "fobUsd": 88,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "11R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "149/146L",
+          "cc": 280,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT188",
+            "firemax": "FM188",
+            "safecess": null,
+            "treadDepthMm": 14.5,
+            "fobUsd": 88,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "12R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "152/149M",
+          "cc": 240,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT188",
+            "firemax": "FM188",
+            "safecess": null,
+            "treadDepthMm": 15,
+            "fobUsd": 101,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "295/80R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "152/149M",
+          "cc": 264,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT188",
+            "firemax": "FM188",
+            "safecess": null,
+            "treadDepthMm": 15,
+            "fobUsd": 96,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "315/80R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "157/154M",
+          "cc": 244,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT188",
+            "firemax": "FM188",
+            "safecess": null,
+            "treadDepthMm": 15,
+            "fobUsd": 94,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM66",
+      "slug": "fm66",
+      "variants": [
+        {
+          "size": "11R22.5-16PR TL",
+          "application": "Truck & Bus",
+          "liSr": "146/143L",
+          "cc": 280,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTL02",
+            "firemax": "FM66",
+            "safecess": "SFC66",
+            "treadDepthMm": 15,
+            "fobUsd": 88,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "11R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "149/146L",
+          "cc": 280,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTL02",
+            "firemax": "FM66",
+            "safecess": null,
+            "treadDepthMm": 15,
+            "fobUsd": 88,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "12R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "152/149L",
+          "cc": 240,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTL02",
+            "firemax": "FM66",
+            "safecess": "SFC66",
+            "treadDepthMm": 15,
+            "fobUsd": 101,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "295/80R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "152/149L",
+          "cc": 270,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTL02",
+            "firemax": "FM66",
+            "safecess": "SFC66",
+            "treadDepthMm": 15,
+            "fobUsd": 95,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "315/80R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "156/153L",
+          "cc": 242,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTL02",
+            "firemax": "FM66",
+            "safecess": "SFC66",
+            "treadDepthMm": 14.5,
+            "fobUsd": 93,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM787",
+      "slug": "fm787",
+      "variants": [
+        {
+          "size": "11R22.5-16PR TL",
+          "application": "Truck & Bus",
+          "liSr": "146/143M",
+          "cc": 280,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT787",
+            "firemax": "FM787",
+            "safecess": null,
+            "treadDepthMm": 14.5,
+            "fobUsd": 88,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "11R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "149/146L",
+          "cc": 280,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT787",
+            "firemax": "FM787",
+            "safecess": null,
+            "treadDepthMm": 14.5,
+            "fobUsd": 88,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "12R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "152/149M",
+          "cc": 240,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT787",
+            "firemax": "FM787",
+            "safecess": null,
+            "treadDepthMm": 15,
+            "fobUsd": 101,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "295/80R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "152/149M",
+          "cc": 264,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT787",
+            "firemax": "FM787",
+            "safecess": null,
+            "treadDepthMm": 15,
+            "fobUsd": 95,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM76",
+      "slug": "fm76",
+      "variants": [
+        {
+          "size": "11R22.5-16PR TL",
+          "application": "Truck & Bus",
+          "liSr": "146/143M",
+          "cc": 280,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTL05",
+            "firemax": "FM76",
+            "safecess": "SFC76",
+            "treadDepthMm": 14.5,
+            "fobUsd": 91,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "11R24.5-16PR TL",
+          "application": "Truck & Bus",
+          "liSr": "149/146M",
+          "cc": 254,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTL05",
+            "firemax": "FM76",
+            "safecess": "SFC76",
+            "treadDepthMm": 14.5,
+            "fobUsd": 101,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "285/75R24.5-14PR  TL",
+          "application": "Truck & Bus",
+          "liSr": "144/141M",
+          "cc": 262,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTL05",
+            "firemax": "FM76",
+            "safecess": "SFC76",
+            "treadDepthMm": 14,
+            "fobUsd": 97,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "295/75R22.5-16PR TL",
+          "application": "Truck & Bus",
+          "liSr": "146/143M",
+          "cc": 288,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTL05",
+            "firemax": "FM76",
+            "safecess": "SFC76",
+            "treadDepthMm": 14.5,
+            "fobUsd": 96,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM59",
+      "slug": "fm59",
+      "variants": [
+        {
+          "size": "11R22.5-16PR TL",
+          "application": "Truck & Bus",
+          "liSr": "146/143M",
+          "cc": 280,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTR79",
+            "firemax": "FM59",
+            "safecess": "SFC59",
+            "treadDepthMm": 20.5,
+            "fobUsd": 95,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "11R24.5-16PR TL",
+          "application": "Truck & Bus",
+          "liSr": "149/146M",
+          "cc": 252,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTR79",
+            "firemax": "FM59",
+            "safecess": "SFC59",
+            "treadDepthMm": 20.5,
+            "fobUsd": 110,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "285/75R24.5-14PR  TL",
+          "application": "Truck & Bus",
+          "liSr": "144/141M",
+          "cc": 262,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTR79",
+            "firemax": "FM59",
+            "safecess": "SFC59",
+            "treadDepthMm": 19,
+            "fobUsd": 106,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "295/75R22.5-16PR TL",
+          "application": "Truck & Bus",
+          "liSr": "146/143M",
+          "cc": 288,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTR79",
+            "firemax": "FM59",
+            "safecess": "SFC59",
+            "treadDepthMm": 20.5,
+            "fobUsd": 105,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM88",
+      "slug": "fm88",
+      "variants": [
+        {
+          "size": "11R22.5-16PR TL",
+          "application": "Truck & Bus",
+          "liSr": "146/143M",
+          "cc": 280,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTD88",
+            "firemax": "FM88",
+            "safecess": "SFC69",
+            "treadDepthMm": 19.5,
+            "fobUsd": 95,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "11R24.5-16PR TL",
+          "application": "Truck & Bus",
+          "liSr": "149/146M",
+          "cc": 252,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTD88",
+            "firemax": "FM88",
+            "safecess": "SFC69",
+            "treadDepthMm": 19.5,
+            "fobUsd": 110,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "295/75R22.5-16PR TL",
+          "application": "Truck & Bus",
+          "liSr": "146/143M",
+          "cc": 288,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTD88",
+            "firemax": "FM88",
+            "safecess": "SFC69",
+            "treadDepthMm": 19.5,
+            "fobUsd": 105,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM750",
+      "slug": "fm750",
+      "variants": [
+        {
+          "size": "11R22.5-16PR TL",
+          "application": "Truck & Bus",
+          "liSr": "146/143M",
+          "cc": 280,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT750",
+            "firemax": "FM750",
+            "safecess": null,
+            "treadDepthMm": 18.5,
+            "fobUsd": 106,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "11R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "149/146L",
+          "cc": 280,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT750",
+            "firemax": "FM750",
+            "safecess": null,
+            "treadDepthMm": 18.5,
+            "fobUsd": 106,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM08",
+      "slug": "fm08",
+      "variants": [
+        {
+          "size": "11R22.5-16PR TL",
+          "application": "Truck & Bus",
+          "liSr": "146/143M",
+          "cc": 280,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTR67",
+            "firemax": "FM08",
+            "safecess": "SFC08",
+            "treadDepthMm": 18,
+            "fobUsd": 95,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "295/80R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "152/149L",
+          "cc": 264,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTR67",
+            "firemax": "FM08",
+            "safecess": "SFC08",
+            "treadDepthMm": 19,
+            "fobUsd": 103,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "315/70R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "154/151L",
+          "cc": 250,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTR67",
+            "firemax": "FM08",
+            "safecess": null,
+            "treadDepthMm": 20,
+            "fobUsd": 107,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "315/80R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "156/153L",
+          "cc": 240,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTR67",
+            "firemax": "FM08",
+            "safecess": "SFC08",
+            "treadDepthMm": 19,
+            "fobUsd": 106,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM760",
+      "slug": "fm760",
+      "variants": [
+        {
+          "size": "12R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "152/149M",
+          "cc": 240,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT760",
+            "firemax": "FM760",
+            "safecess": null,
+            "treadDepthMm": 18.5,
+            "fobUsd": 119,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM87",
+      "slug": "fm87",
+      "variants": [
+        {
+          "size": "12R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "152/149L",
+          "cc": 240,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTD87",
+            "firemax": "FM87",
+            "safecess": "SFC79",
+            "treadDepthMm": 24,
+            "fobUsd": 126,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM99",
+      "slug": "fm99",
+      "variants": [
+        {
+          "size": "13R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "156/153L",
+          "cc": 206,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTA35",
+            "firemax": "FM99",
+            "safecess": "SFC01",
+            "treadDepthMm": 20,
+            "fobUsd": 124,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "295/80R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "152/149L",
+          "cc": 264,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTA35",
+            "firemax": "FM99",
+            "safecess": "SFC01",
+            "treadDepthMm": 22,
+            "fobUsd": 112,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "12.00R20-20PR TT",
+          "application": "Truck & Bus",
+          "liSr": "156/153K",
+          "cc": 230,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTA35",
+            "firemax": "FM99",
+            "safecess": "SFC01",
+            "treadDepthMm": 20,
+            "fobUsd": 138,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM57",
+      "slug": "fm57",
+      "variants": [
+        {
+          "size": "285/75R24.5-14PR  TL",
+          "application": "Truck & Bus",
+          "liSr": "144/141M",
+          "cc": 262,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTL03",
+            "firemax": "FM57",
+            "safecess": "SFC57",
+            "treadDepthMm": 11,
+            "fobUsd": 94,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "295/75R22.5-16PR TL",
+          "application": "Truck & Bus",
+          "liSr": "146/143M",
+          "cc": 288,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTL03",
+            "firemax": "FM57",
+            "safecess": "SFC57",
+            "treadDepthMm": 14.5,
+            "fobUsd": 93,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM86",
+      "slug": "fm86",
+      "variants": [
+        {
+          "size": "295/80R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "152/149L",
+          "cc": 264,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTL86",
+            "firemax": "FM86",
+            "safecess": "SFC55",
+            "treadDepthMm": 15,
+            "fobUsd": 95,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM266",
+      "slug": "fm266",
+      "variants": [
+        {
+          "size": "295/80R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "152/149M",
+          "cc": 270,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT266",
+            "firemax": "FM266",
+            "safecess": null,
+            "treadDepthMm": 15,
+            "fobUsd": 95,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM19+",
+      "slug": "fm19-plus",
+      "variants": [
+        {
+          "size": "295/80R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "152/149M",
+          "cc": 264,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KDM19+",
+            "firemax": "FM19+",
+            "safecess": null,
+            "treadDepthMm": 18,
+            "fobUsd": 103,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "315/80R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "157/154M",
+          "cc": 244,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KDM19+",
+            "firemax": "FM19+",
+            "safecess": null,
+            "treadDepthMm": 19,
+            "fobUsd": 106,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM968",
+      "slug": "fm968",
+      "variants": [
+        {
+          "size": "295/80R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "152/149M",
+          "cc": 264,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT968",
+            "firemax": "FM968",
+            "safecess": null,
+            "treadDepthMm": 19,
+            "fobUsd": 107,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM767",
+      "slug": "fm767",
+      "variants": [
+        {
+          "size": "295/80R22.5-18PR TL",
+          "application": "Truck & Bus",
+          "liSr": "152/149K",
+          "cc": 264,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT767",
+            "firemax": "FM767",
+            "safecess": null,
+            "treadDepthMm": 20,
+            "fobUsd": 112,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM919",
+      "slug": "fm919",
+      "variants": [
+        {
+          "size": "315/70R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "154/151L",
+          "cc": 250,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KDM919",
+            "firemax": "FM919",
+            "safecess": "SFC77",
+            "treadDepthMm": 15,
+            "fobUsd": 98,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM166",
+      "slug": "fm166",
+      "variants": [
+        {
+          "size": "315/80R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "157/154M",
+          "cc": 244,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT166",
+            "firemax": "FM166",
+            "safecess": null,
+            "treadDepthMm": 15,
+            "fobUsd": 95,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM330",
+      "slug": "fm330",
+      "variants": [
+        {
+          "size": "315/80R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "157/154M",
+          "cc": 242,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT330",
+            "firemax": "FM330",
+            "safecess": null,
+            "treadDepthMm": 15,
+            "fobUsd": 95,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM350",
+      "slug": "fm350",
+      "variants": [
+        {
+          "size": "315/80R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "157/154M",
+          "cc": 242,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT350",
+            "firemax": "FM350",
+            "safecess": null,
+            "treadDepthMm": 15,
+            "fobUsd": 95,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM800",
+      "slug": "fm800",
+      "variants": [
+        {
+          "size": "315/80R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "156/153L",
+          "cc": 242,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT800",
+            "firemax": "FM800",
+            "safecess": "SFC68",
+            "treadDepthMm": 15,
+            "fobUsd": 94,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        },
+        {
+          "size": "12.00R24-20PR TT",
+          "application": "Truck & Bus",
+          "liSr": "160/157K",
+          "cc": 196,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT800",
+            "firemax": "FM800",
+            "safecess": "SFC68",
+            "treadDepthMm": 15,
+            "fobUsd": 127,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM77",
+      "slug": "fm77",
+      "variants": [
+        {
+          "size": "315/80R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "156/153L",
+          "cc": 240,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTR77",
+            "firemax": "FM77",
+            "safecess": "SFC87",
+            "treadDepthMm": 18.5,
+            "fobUsd": 103,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM380",
+      "slug": "fm380",
+      "variants": [
+        {
+          "size": "315/80R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "157/154M",
+          "cc": 240,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT380",
+            "firemax": "FM380",
+            "safecess": null,
+            "treadDepthMm": 19,
+            "fobUsd": 106,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM19",
+      "slug": "fm19",
+      "variants": [
+        {
+          "size": "315/80R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "156/153L",
+          "cc": 240,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KDM19",
+            "firemax": "FM19",
+            "safecess": "SFC39",
+            "treadDepthMm": 18,
+            "fobUsd": 106,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM58",
+      "slug": "fm58",
+      "variants": [
+        {
+          "size": "12.00R24-20PR TT",
+          "application": "Truck & Bus",
+          "liSr": "160/157K",
+          "cc": 196,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTR56",
+            "firemax": "FM58",
+            "safecess": "SFC58",
+            "treadDepthMm": 15,
+            "fobUsd": 127,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM89",
+      "slug": "fm89",
+      "variants": [
+        {
+          "size": "12.00R24-20PR TT",
+          "application": "Truck & Bus",
+          "liSr": "160/157K",
+          "cc": 196,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTD89",
+            "firemax": "FM89",
+            "safecess": "SFC89",
+            "treadDepthMm": 16,
+            "fobUsd": 132,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM985",
+      "slug": "fm985",
+      "variants": [
+        {
+          "size": "12.00R20-20PR TT",
+          "application": "Truck & Bus",
+          "liSr": "156/153K",
+          "cc": 230,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT985",
+            "firemax": "FM985",
+            "safecess": null,
+            "treadDepthMm": 19,
+            "fobUsd": 138,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM06",
+      "slug": "fm06",
+      "variants": [
+        {
+          "size": "385/65R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "160L",
+          "cc": 196,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTR57",
+            "firemax": "FM06",
+            "safecess": "SFC06",
+            "treadDepthMm": 15,
+            "fobUsd": 126,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM07",
+      "slug": "fm07",
+      "variants": [
+        {
+          "size": "385/65R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "160L",
+          "cc": 196,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KTR59",
+            "firemax": "FM07",
+            "safecess": "SFC07",
+            "treadDepthMm": 15,
+            "fobUsd": 126,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM900",
+      "slug": "fm900",
+      "variants": [
+        {
+          "size": "385/65R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "160L",
+          "cc": 196,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT900",
+            "firemax": "FM900",
+            "safecess": null,
+            "treadDepthMm": 15,
+            "fobUsd": 126,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM100",
+      "slug": "fm100",
+      "variants": [
+        {
+          "size": "385/65R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "160L",
+          "cc": 196,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT100",
+            "firemax": "FM100",
+            "safecess": "SFC100",
+            "treadDepthMm": 15,
+            "fobUsd": 126,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    },
+    {
+      "patternCode": "FM200",
+      "slug": "fm200",
+      "variants": [
+        {
+          "size": "385/65R22.5-20PR TL",
+          "application": "Truck & Bus",
+          "liSr": "160L",
+          "cc": 196,
+          "internal": {
+            "brand": "SAFEWAY",
+            "sourceBrand": "KPATOS/FIREMAX",
+            "kpatos": "KT200",
+            "firemax": "FM200",
+            "safecess": "SFC200",
+            "treadDepthMm": 15,
+            "fobUsd": 126,
+            "orderQty": null,
+            "containerVolume": 0,
+            "totalAmountUsd": 0,
+            "fillerSize": null
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -12,6 +12,27 @@ export type Category = (typeof CATEGORIES)[number];
 export type CategorySlug = Category["slug"];
 
 /**
+ * The Products dropdown order (spec: navigation UX). This is deliberately NOT
+ * the `CATEGORIES` order and must never be alphabetized. The menu is rendered
+ * as a two-column grid filled row-by-row, so this sequence places:
+ *
+ *   left column  → Truck & Bus, Agriculture, Forklift, Tubes
+ *   right column → Three Wheeler, OTR, Motorcycle
+ *
+ * Read as a single ordered list it is: Truck & Bus, Three Wheeler, Agriculture,
+ * OTR, Forklift, Motorcycle, Tubes.
+ */
+export const PRODUCT_MENU_ORDER: readonly CategorySlug[] = [
+  "truck-bus",
+  "three-wheeler",
+  "agriculture",
+  "otr",
+  "forklift",
+  "motorcycle",
+  "tubes",
+];
+
+/**
  * Customer-facing one-line descriptions for each range. Display copy only —
  * never product data — shared by the homepage range cards and the catalogue.
  */

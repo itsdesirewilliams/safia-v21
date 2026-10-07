@@ -12,11 +12,16 @@
  * the dataset does not contain is simply dropped.
  */
 
+import { normalizeTyreSize } from "./tyre-size";
+
 /** lower-cased canonical size → the exact size as stored in the dataset. */
 export type SizeDictionary = ReadonlyMap<string, string>;
 
-/** A token made only of size-building characters (digits and size separators). */
-const NUMERIC_TOKEN = /^(?=.*\d)[0-9.\-/x]+$/;
+/**
+ * A token made only of size-building characters: digits, size separators and
+ * the construction/type letters that appear inside real sizes (r/zr, l, x).
+ */
+const NUMERIC_TOKEN = /^(?=.*\d)[0-9.\-/xzrl]+$/;
 const ATOM = /^\d{1,4}(?:\.\d+)?$/;
 const ATOM_GLOBAL = /\d+(?:\.\d+)?/g;
 const BARE_INTEGER = /^\d{5,6}$/;
@@ -131,6 +136,16 @@ function collectRun(
   sizes: SizeDictionary,
   out: Set<string>,
 ): void {
+  // Canonical normalization first: the same rules the range search and the
+  // dictionary keys use, so "295/80 R22.5" and "6.50/16" resolve here too.
+  const canonical = normalizeTyreSize(run.join(" "));
+  if (canonical) {
+    const confirmed = confirm(canonical, sizes);
+    if (confirmed) {
+      out.add(confirmed);
+    }
+  }
+
   if (run.length === 1) {
     collectToken(run[0], sizes, out);
   } else if (run.length === 2) {

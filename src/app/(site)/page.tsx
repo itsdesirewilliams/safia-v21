@@ -97,6 +97,8 @@ export default async function HomePage() {
                     <SearchBox
                       suggestions={HERO_SUGGESTION_POOL}
                       placeholderPhrases={HERO_PLACEHOLDER_PHRASES}
+                      labels={dict.search}
+                      locale={locale}
                     />
                   </div>
                 </Reveal>

@@ -1,5 +1,7 @@
 import masterData from "../../../supabase/master-product-data.json";
 
+import { normalizeTyreSize } from "@/lib/search/tyre-size";
+
 import {
   normalizeMasterData,
   type MasterDataset,
@@ -56,11 +58,13 @@ export function patternSizes(pattern: NormalizedPattern): string[] {
 let cachedSizeDictionary: ReadonlyMap<string, string> | null = null;
 
 /**
- * Every canonical Variant size in the catalogue, keyed by its lower-cased form
- * so lookups are case-insensitive, with the value the exact size as stored
- * (e.g. `11l-15` → `11L-15`). This is the authority the search-normalization
- * layer confirms its candidates against: normalization proposes, the dataset
- * disposes.
+ * Every canonical Variant size in the catalogue, keyed by BOTH its lower-cased
+ * form and its canonical tyre-size key (`normalizeTyreSize`), with the value the
+ * exact size as stored (e.g. `11l-15` → `11L-15`, `7.5-16` → `7.50-16`). This is
+ * the authority the search-normalization layer confirms its candidates against:
+ * normalization proposes, the dataset disposes. Because both sides are keyed the
+ * same way, a formatting variation ("6.50 16", "6.50/16") resolves to the same
+ * stored size.
  */
 export function catalogueSizeDictionary(): ReadonlyMap<string, string> {
   if (cachedSizeDictionary) {
@@ -71,11 +75,16 @@ export function catalogueSizeDictionary(): ReadonlyMap<string, string> {
   for (const pattern of CATALOGUE.patterns) {
     for (const variant of pattern.variants) {
       const size = variant.public.size;
-      if (size) {
-        const key = size.toLowerCase();
-        if (!sizes.has(key)) {
-          sizes.set(key, size);
-        }
+      if (!size) {
+        continue;
+      }
+      const key = size.toLowerCase();
+      if (!sizes.has(key)) {
+        sizes.set(key, size);
+      }
+      const canonical = normalizeTyreSize(size);
+      if (canonical && !sizes.has(canonical)) {
+        sizes.set(canonical, size);
       }
     }
   }

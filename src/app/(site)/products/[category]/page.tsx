@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 
 import { Breadcrumbs } from "@/components/catalogue/breadcrumbs";
 import { PatternCard } from "@/components/catalogue/pattern-card";
+import { RangeSwitcher } from "@/components/catalogue/range-switcher";
 import { Container } from "@/components/ui/container";
 import { PageHeader } from "@/components/ui/page-header";
 import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
@@ -86,7 +87,13 @@ export default async function CategoryPage({
         }
         title={dict.categories[category.slug]}
         description={CATEGORY_DESCRIPTIONS[category.slug]}
-      />
+      >
+        {category.slug === "truck-bus" && (
+          <div className="mt-8">
+            <RangeSwitcher active="nylon" locale={locale} dict={dict} />
+          </div>
+        )}
+      </PageHeader>
 
       <section className="py-16 lg:py-24">
         <Container size="listing">

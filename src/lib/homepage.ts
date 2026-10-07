@@ -5,6 +5,11 @@ import {
   type CategorySlug,
 } from "@/lib/catalogue/categories";
 import { CATALOGUE, patternSizes } from "@/lib/catalogue/dataset";
+import {
+  RANGE_DATASETS,
+  rangePatternSizes,
+  type RangeId,
+} from "@/lib/catalogue/range-data";
 import type {
   HeroSuggestion,
   HeroSuggestionPool,
@@ -12,6 +17,7 @@ import type {
 import { titleCasePhrase } from "@/lib/catalogue/suggestions";
 import { countryCode } from "@/lib/contact/countries";
 import { ROUTES } from "@/lib/routes";
+import { normalizeTyreSize } from "@/lib/search/tyre-size";
 
 /**
  * Developer-owned homepage content (spec #8). Everything here ships via code;
@@ -78,22 +84,38 @@ export const TESTIMONIALS: readonly Testimonial[] = [
   },
 ];
 
-const HERO_SIZE_SUGGESTION_LIMIT = 24;
+const HERO_SIZE_SUGGESTION_LIMIT = 48;
+
+/** The public name and route for each radial range (no Pattern Codes). */
+const RANGE_PUBLIC: Record<RangeId, { name: string; href: string }> = {
+  tbr: { name: "Truck & Bus Radial Tyres", href: ROUTES.tbrSafeway },
+  pcr: { name: "Passenger Car Radial Tyres", href: ROUTES.pcrSafeway },
+};
 
 /**
  * The pool the hero search suggestions rotate through. Every value is taken
- * from the bundled master dataset — categories, real Variant sizes and real
- * functional/display names — so nothing is invented. Built once at module load
- * and passed to the client search box.
+ * from the bundled catalogue — categories, real Variant sizes (including the
+ * TBR/PCR radial ranges) and real functional/display names — so nothing is
+ * invented and no Pattern Code is ever exposed. Built once at module load and
+ * passed to the client search box.
  */
 function buildHeroSuggestionPool(): HeroSuggestionPool {
-  const category: HeroSuggestion[] = HOME_CATEGORY_CARDS.map((card) => ({
-    kind: "category",
-    label: card.displayName,
-    hint: "Category",
-    query: card.displayName,
-    href: ROUTES.category(card.slug),
-  }));
+  const category: HeroSuggestion[] = [
+    ...HOME_CATEGORY_CARDS.map((card) => ({
+      kind: "category" as const,
+      label: card.displayName,
+      hint: "Category",
+      query: card.displayName,
+      href: ROUTES.category(card.slug),
+    })),
+    ...(Object.keys(RANGE_PUBLIC) as RangeId[]).map((range) => ({
+      kind: "category" as const,
+      label: RANGE_PUBLIC[range].name,
+      hint: "Range",
+      query: RANGE_PUBLIC[range].name,
+      href: RANGE_PUBLIC[range].href,
+    })),
+  ];
 
   const name: HeroSuggestion[] = [];
   const size: HeroSuggestion[] = [];
@@ -102,6 +124,7 @@ function buildHeroSuggestionPool(): HeroSuggestionPool {
 
   for (const pattern of CATALOGUE.patterns) {
     const categoryInfo = getCategory(pattern.categorySlug);
+    const categoryLabel = categoryInfo?.displayName ?? pattern.categorySlug;
     const isFunctionalName =
       categoryInfo !== undefined &&
       pattern.displayName !== categoryInfo.displayName;
@@ -111,7 +134,7 @@ function buildHeroSuggestionPool(): HeroSuggestionPool {
       name.push({
         kind: "name",
         label: pattern.displayName,
-        hint: pattern.patternCode,
+        hint: categoryLabel,
         query: pattern.displayName,
         href: ROUTES.pattern(pattern.categorySlug, pattern.slug),
       });
@@ -125,10 +148,35 @@ function buildHeroSuggestionPool(): HeroSuggestionPool {
       size.push({
         kind: "size",
         label: variantSize,
-        hint: pattern.patternCode,
+        hint: categoryLabel,
         query: variantSize,
         href: ROUTES.pattern(pattern.categorySlug, pattern.slug),
       });
+    }
+  }
+
+  // Radial ranges: discoverable by real size (never by Pattern Code).
+  for (const range of Object.keys(RANGE_PUBLIC) as RangeId[]) {
+    const dataset = RANGE_DATASETS[range];
+    for (const pattern of dataset.patterns) {
+      const href =
+        range === "tbr"
+          ? ROUTES.tbrPattern(pattern.slug)
+          : ROUTES.pcrPattern(pattern.slug);
+      for (const rawSize of rangePatternSizes(pattern)) {
+        const label = normalizeTyreSize(rawSize) ?? rawSize;
+        if (seenSizes.has(label)) {
+          continue;
+        }
+        seenSizes.add(label);
+        size.push({
+          kind: "size",
+          label,
+          hint: RANGE_PUBLIC[range].name,
+          query: label,
+          href,
+        });
+      }
     }
   }
 

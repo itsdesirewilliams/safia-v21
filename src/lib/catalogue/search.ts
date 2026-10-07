@@ -1,4 +1,4 @@
-import { isCategorySlug, type CategorySlug } from "@/lib/catalogue/categories";
+import { isCategorySlug } from "@/lib/catalogue/categories";
 import {
   MAX_SEARCH_LENGTH,
   MIN_SEARCH_LENGTH,
@@ -6,30 +6,34 @@ import {
   sanitizeQuery,
 } from "@/lib/search/normalize";
 
+import { searchRanges } from "./range-search";
+import {
+  toPublicResult,
+  type SearchResult,
+  searchResultHref,
+} from "./search-result";
+
 /**
- * Server-side product search (spec #8), now fronted by the customer-query
- * normalization pipeline (Phase 1).
+ * Server-side product search, fronted by the customer-query normalization
+ * pipeline and the canonical tyre-size normalizer.
  *
  * The pipeline turns messy input into canonical terms — a confirmed tyre size,
  * a category slug, or the cleaned query — and this module matches those terms
- * against a Variant `size`, a Pattern `patternCode`, a Pattern `displayName` or
- * a Category. Every hit resolves to a **Pattern** (never a Variant) and links to
- * the Pattern detail page. The matching itself still runs in Postgres (ILIKE)
- * via the `search_patterns` RPC; this module normalizes the query, tries the
- * canonical terms in priority order and maps rows — the seam the tests exercise.
+ * against a Variant `size`, a Pattern `displayName` or a Category. Every hit
+ * resolves to a **Pattern** (never a Variant) and links to the Pattern detail
+ * page. The matching itself still runs in Postgres (ILIKE) via the
+ * `search_patterns` RPC; this module normalizes the query, tries the canonical
+ * terms in priority order and maps rows — the seam the tests exercise.
+ *
+ * Pattern Codes are internal identifiers and are NOT a public search concept.
+ * The RPC still scans the code column, so a row that matched *only* on its code
+ * is dropped here; a customer can never surface a product by typing a code.
  */
 
 export { MAX_SEARCH_LENGTH, MIN_SEARCH_LENGTH, sanitizeQuery };
 export type { SearchMatchState } from "@/lib/search/normalize";
-
-export type SearchResult = {
-  categorySlug: CategorySlug;
-  categoryDisplayName: string;
-  patternSlug: string;
-  patternCode: string;
-  displayName: string;
-  sizes: string[];
-};
+export { searchResultHref, toPublicResult };
+export type { SearchResult };
 
 /** The narrow slice of the Supabase client the search needs. */
 export interface SearchClient {
@@ -93,6 +97,33 @@ function mapRows(data: unknown): SearchResult[] {
   return results;
 }
 
+/**
+ * Whether a result matched *only* through a partial Pattern Code. Pattern Codes
+ * are internal identifiers and not a public search concept, so a partial code
+ * ("fm" hitting "SFM-101") is dropped: a hit must also match the public name or
+ * category. An exact full code still resolves to its Pattern (internal route
+ * resolution), which is how a variant is looked up behind the scenes.
+ */
+function isCodeOnlyMatch(result: SearchResult, query: string): boolean {
+  const cleaned = query.trim().toLowerCase();
+  if (cleaned.length === 0) {
+    return false;
+  }
+  const code = result.patternCode?.toLowerCase();
+  if (!code) {
+    return false;
+  }
+  if (cleaned === code) {
+    return false;
+  }
+  if (!code.includes(cleaned)) {
+    return false;
+  }
+  const name = result.displayName.toLowerCase();
+  const category = result.categoryDisplayName.toLowerCase();
+  return !name.includes(cleaned) && !category.includes(cleaned);
+}
+
 /** Query one term group, de-duplicating Patterns across its terms. */
 async function queryTerms(
   client: SearchClient,
@@ -133,9 +164,11 @@ export async function searchPatterns(
   query: string,
 ): Promise<SearchResult[]> {
   const normalized = normalizeSearchQuery(query);
+  // The radial ranges (TBR/PCR) are searched locally, independent of the DB.
+  const rangeResults = searchRanges(query);
 
   if (normalized.matchState === "INVALID") {
-    return [];
+    return rangeResults.slice(0, MAX_RESULTS);
   }
 
   const groups: string[][] = [];
@@ -173,5 +206,23 @@ export async function searchPatterns(
       .map((entry) => entry.result);
   }
 
-  return results.slice(0, MAX_RESULTS);
+  // Pattern Codes are internal: drop any row that matched only its code.
+  results = results.filter(
+    (result) => !isCodeOnlyMatch(result, normalized.normalizedQuery),
+  );
+
+  // Category results first (they honour the category ranking), then the radial
+  // range matches. De-duplicate by destination so a Pattern is never repeated.
+  const seen = new Set<string>();
+  const merged: SearchResult[] = [];
+  for (const result of [...results, ...rangeResults]) {
+    const key = searchResultHref(result);
+    if (seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    merged.push(result);
+  }
+
+  return merged.slice(0, MAX_RESULTS);
 }

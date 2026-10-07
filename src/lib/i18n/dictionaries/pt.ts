@@ -14,13 +14,16 @@ export const pt: Dictionary = {
     gallery: "Galeria",
     blogs: "Blogue",
     warranty: "Garantia",
+    nylon: "Pneus de náilon",
+    pcr: "PCR — Radial para automóveis de passageiros",
+    tbr: "TBR — Radial para camião e autocarro",
   },
   common: {
     requestQuotation: "Pedir orçamento",
     exploreCatalogue: "Explorar o catálogo",
     openCatalogue: "Abrir o catálogo",
     searchCatalogue: "Pesquisar no catálogo",
-    searchPlaceholder: "Pesquise por medida, código de padrão ou categoria",
+    searchPlaceholder: "Pesquise por medida, nome ou categoria",
     viewAll: "Ver tudo",
     readMore: "Ler mais",
     backToHome: "Voltar ao início",
@@ -31,6 +34,21 @@ export const pt: Dictionary = {
     all: "Todos",
     reset: "Redefinir",
     apply: "Aplicar",
+    comingSoon: "Em breve",
+  },
+  search: {
+    title: "Pesquisar",
+    description:
+      "Pesquise no catálogo da Safeway Tyre por medida, nome ou categoria.",
+    placeholder: "Experimente pesquisar…",
+    trySearching: "Experimente pesquisar",
+    results: "Resultados da pesquisa",
+    noResults:
+      "Nenhum produto encontrado. Experimente uma medida como 6.50-16 ou uma linha como Pneus agrícolas.",
+    searching: "A pesquisar…",
+    suggestions: "Pesquisas populares",
+    inputLabel: "Pesquise pneus por medida, nome ou categoria",
+    resultsLabel: "Resultados da pesquisa de produtos",
   },
   header: {
     primaryNav: "Principal",
@@ -52,7 +70,7 @@ export const pt: Dictionary = {
   home: {
     heroTitle: "Pneus que mantêm o mundo em movimento",
     heroSubtitle:
-      "A Safeway Tyre fabrica e exporta pneus duráveis para mercados internacionais. Pesquise no catálogo por medida, código de padrão, nome ou categoria.",
+      "A Safeway Tyre fabrica e exporta pneus duráveis para mercados internacionais. Pesquise no catálogo por medida, nome ou categoria.",
     tourHeading: "Faça um tour pela nossa indústria",
     tourDescription:
       "Entre na nossa fábrica online: uma breve amostra de como a Safeway Tyre fabrica os seus pneus.",
@@ -133,6 +151,43 @@ export const pt: Dictionary = {
     tread: "Banda de rodagem",
     tyreType: "Tipo de pneu",
   },
+  tbr: {
+    eyebrow: "Pneus para camião e autocarro",
+    title: "Pneus radiais para camião e autocarro",
+    description:
+      "A gama TBR (radial para camião e autocarro) da Safeway traz a construção radial às aplicações de camião e autocarro. A gama é oferecida com um conjunto crescente de códigos de padrão e medidas.",
+    catalogueHeading: "Catálogo TBR",
+    catalogueDescription:
+      "O catálogo de radiais para camião e autocarro da Safeway, apresentado em formato horizontal.",
+    patternsHeading: "Padrões TBR",
+    patternsDescription:
+      "Cada cartão corresponde a um código de padrão. A lista completa de medidas é apresentada na página do padrão.",
+    availableSizes: "Medidas disponíveis",
+    manufacturingHeading: "Fabricado na China",
+    manufacturingDescription:
+      "Os produtos de pneus radiais da Safeway são fabricados através da nossa parceria de fabrico em Shandong, na China.",
+    indiaHeading: "Náilon — Índia",
+    indiaBody: "Os pneus de náilon da Safeway são fabricados na Índia.",
+    chinaHeading: "Radial — Shandong, China",
+    chinaBody:
+      "Os pneus radiais da Safeway são fabricados através da nossa operação e parceria de fabrico em Shandong, na China. A Safeway é cofabricante e coproprietária da operação de fabrico.",
+    specificationsComingSoon: "Especificações completas em breve",
+    specificationsComingSoonDetail:
+      "A tabela completa de medidas e especificações deste padrão será adicionada numa fase posterior.",
+  },
+  pcr: {
+    eyebrow: "Pneus para camião e autocarro",
+    title: "Pneus radiais para automóveis de passageiros",
+    description:
+      "A gama PCR (radial para automóveis de passageiros) da Safeway traz a construção radial às aplicações de automóveis de passageiros. A gama é oferecida com um conjunto crescente de códigos de padrão e medidas.",
+    catalogueHeading: "Catálogo PCR",
+    catalogueDescription:
+      "O catálogo de radiais para automóveis de passageiros da Safeway, apresentado em formato horizontal.",
+    patternsHeading: "Padrões PCR",
+    patternsDescription:
+      "Cada cartão corresponde a um código de padrão. A lista completa de medidas é apresentada na página do padrão.",
+    availableSizes: "Medidas disponíveis",
+  },
   categories: {
     motorcycle: "Pneus para motociclo",
     "three-wheeler": "Pneus para veículos de três rodas",
@@ -146,6 +201,6 @@ export const pt: Dictionary = {
     siteTagline: "Exportamos pneus duráveis para todo o mundo",
     homeTitle: "Safeway Tyre | Exportamos pneus duráveis para todo o mundo",
     homeDescription:
-      "Pesquise no catálogo da Safeway Tyre por medida, código de padrão ou categoria, explore as nossas linhas de produtos e envie uma consulta.",
+      "Pesquise no catálogo da Safeway Tyre por medida ou categoria, explore as nossas linhas de produtos e envie uma consulta.",
   },
 };

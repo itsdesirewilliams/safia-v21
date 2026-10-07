@@ -14,13 +14,16 @@ export const es: Dictionary = {
     gallery: "Galería",
     blogs: "Blog",
     warranty: "Garantía",
+    nylon: "Neumáticos de nailon",
+    pcr: "PCR — Radial para turismos",
+    tbr: "TBR — Radial para camión y autobús",
   },
   common: {
     requestQuotation: "Solicitar presupuesto",
     exploreCatalogue: "Explorar el catálogo",
     openCatalogue: "Abrir el catálogo",
     searchCatalogue: "Buscar en el catálogo",
-    searchPlaceholder: "Busca por medida, código de patrón o categoría",
+    searchPlaceholder: "Busca por medida, nombre o categoría",
     viewAll: "Ver todo",
     readMore: "Leer más",
     backToHome: "Volver al inicio",
@@ -31,6 +34,21 @@ export const es: Dictionary = {
     all: "Todos",
     reset: "Restablecer",
     apply: "Aplicar",
+    comingSoon: "Próximamente",
+  },
+  search: {
+    title: "Buscar",
+    description:
+      "Busca en el catálogo de Safeway Tyre por medida, nombre o categoría.",
+    placeholder: "Prueba a buscar…",
+    trySearching: "Prueba a buscar",
+    results: "Resultados de búsqueda",
+    noResults:
+      "No se encontraron productos. Prueba con una medida como 6.50-16 o una gama como Neumáticos agrícolas.",
+    searching: "Buscando…",
+    suggestions: "Búsquedas populares",
+    inputLabel: "Busca neumáticos por medida, nombre o categoría",
+    resultsLabel: "Resultados de búsqueda de productos",
   },
   header: {
     primaryNav: "Principal",
@@ -52,7 +70,7 @@ export const es: Dictionary = {
   home: {
     heroTitle: "Neumáticos que mantienen el mundo en movimiento",
     heroSubtitle:
-      "Safeway Tyre fabrica y exporta neumáticos duraderos para mercados internacionales. Busca en el catálogo por medida, código de patrón, nombre o categoría.",
+      "Safeway Tyre fabrica y exporta neumáticos duraderos para mercados internacionales. Busca en el catálogo por medida, nombre o categoría.",
     tourHeading: "Recorre nuestra industria",
     tourDescription:
       "Entra en nuestra fábrica en línea: un breve vistazo a cómo Safeway Tyre fabrica sus neumáticos.",
@@ -133,6 +151,43 @@ export const es: Dictionary = {
     tread: "Banda de rodadura",
     tyreType: "Tipo de neumático",
   },
+  tbr: {
+    eyebrow: "Neumáticos para camión y autobús",
+    title: "Neumáticos radiales para camión y autobús",
+    description:
+      "La gama TBR (radial para camión y autobús) de Safeway incorpora la construcción radial a aplicaciones de camión y autobús. La gama se ofrece con un conjunto creciente de códigos de patrón y medidas.",
+    catalogueHeading: "Catálogo TBR",
+    catalogueDescription:
+      "El catálogo de radiales para camión y autobús de Safeway, presentado en formato horizontal.",
+    patternsHeading: "Patrones TBR",
+    patternsDescription:
+      "Cada tarjeta corresponde a un código de patrón. La lista completa de medidas se muestra en la página del patrón.",
+    availableSizes: "Medidas disponibles",
+    manufacturingHeading: "Fabricado en China",
+    manufacturingDescription:
+      "Los productos de neumáticos radiales de Safeway se fabrican a través de nuestra asociación de fabricación en Shandong, China.",
+    indiaHeading: "Nailon — India",
+    indiaBody: "Los neumáticos de nailon de Safeway se fabrican en India.",
+    chinaHeading: "Radial — Shandong, China",
+    chinaBody:
+      "Los neumáticos radiales de Safeway se fabrican a través de nuestra operación y asociación de fabricación en Shandong, China. Safeway es cofabricante y copropietaria de la operación de fabricación.",
+    specificationsComingSoon: "Especificaciones completas próximamente",
+    specificationsComingSoonDetail:
+      "La tabla completa de medidas y especificaciones de este patrón se añadirá en una fase posterior.",
+  },
+  pcr: {
+    eyebrow: "Neumáticos para camión y autobús",
+    title: "Neumáticos radiales para turismos",
+    description:
+      "La gama PCR (radial para turismos) de Safeway incorpora la construcción radial a aplicaciones de turismo. La gama se ofrece con un conjunto creciente de códigos de patrón y medidas.",
+    catalogueHeading: "Catálogo PCR",
+    catalogueDescription:
+      "El catálogo de radiales para turismos de Safeway, presentado en formato horizontal.",
+    patternsHeading: "Patrones PCR",
+    patternsDescription:
+      "Cada tarjeta corresponde a un código de patrón. La lista completa de medidas se muestra en la página del patrón.",
+    availableSizes: "Medidas disponibles",
+  },
   categories: {
     motorcycle: "Neumáticos para motocicleta",
     "three-wheeler": "Neumáticos para vehículos de tres ruedas",
@@ -146,6 +201,6 @@ export const es: Dictionary = {
     siteTagline: "Exportamos neumáticos duraderos a todo el mundo",
     homeTitle: "Safeway Tyre | Exportamos neumáticos duraderos a todo el mundo",
     homeDescription:
-      "Busca en el catálogo de Safeway Tyre por medida, código de patrón o categoría, explora nuestras gamas de productos y envía una consulta.",
+      "Busca en el catálogo de Safeway Tyre por medida o categoría, explora nuestras gamas de productos y envía una consulta.",
   },
 };

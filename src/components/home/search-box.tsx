@@ -1,153 +1,55 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 
-import { MIN_SEARCH_LENGTH, type SearchResult } from "@/lib/catalogue/search";
+import { PopularSearches } from "@/components/search/popular-searches";
+import { SearchInput } from "@/components/search/search-input";
+import { SearchResultRow } from "@/components/search/search-result-row";
+import { searchResultHref } from "@/lib/catalogue/search-result";
+import { MIN_SEARCH_LENGTH } from "@/lib/search/limits";
 import {
   HERO_PLACEHOLDER_ROTATE_MS,
   HERO_SUGGESTION_ROTATE_MS,
   pickHeroSuggestions,
-  type HeroSuggestion,
   type HeroSuggestionPool,
 } from "@/lib/catalogue/suggestions";
-import { ROUTES } from "@/lib/routes";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
+import type { Locale } from "@/lib/i18n/config";
+import { localizedHref } from "@/lib/i18n/url";
+import { useProductSearch } from "@/lib/search/use-product-search";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
-
-const DEBOUNCE_MS = 250;
-
-/** Static prefix that stays visible for the whole placeholder animation. */
-const PLACEHOLDER_PREFIX = "Try searching ";
-
-const TYPE_MS = 55;
-const DELETE_MS = 30;
-const MIN_HOLD_MS = 900;
-
-function patternHref(result: SearchResult): string {
-  return ROUTES.pattern(result.categorySlug, result.patternSlug);
-}
-
-/**
- * The animated, dynamic half of the hero placeholder. Only this phrase types
- * and deletes character by character; the static prefix is rendered separately
- * and never animates. Each phrase cycles on roughly the `HERO_PLACEHOLDER_ROTATE_MS`
- * cadence, and reduced-motion users get a static first phrase instead.
- */
-function useTypewriter(phrases: readonly string[], animate: boolean): string {
-  const [index, setIndex] = useState(0);
-  const [text, setText] = useState("");
-  const [phase, setPhase] = useState<"typing" | "holding" | "deleting">(
-    "typing",
-  );
-
-  const target = phrases.length > 0 ? phrases[index % phrases.length] : "";
-
-  useEffect(() => {
-    if (!animate || phrases.length === 0) {
-      return;
-    }
-
-    const delay =
-      phase === "typing"
-        ? text.length < target.length
-          ? TYPE_MS
-          : 0
-        : phase === "holding"
-          ? Math.max(
-              MIN_HOLD_MS,
-              HERO_PLACEHOLDER_ROTATE_MS - target.length * (TYPE_MS + DELETE_MS),
-            )
-          : text.length > 0
-            ? DELETE_MS
-            : 0;
-
-    const timer = setTimeout(() => {
-      if (phase === "typing") {
-        if (text.length < target.length) {
-          setText(target.slice(0, text.length + 1));
-        } else {
-          setPhase("holding");
-        }
-      } else if (phase === "holding") {
-        setPhase("deleting");
-      } else if (text.length > 0) {
-        setText(target.slice(0, text.length - 1));
-      } else {
-        setIndex((current) => current + 1);
-        setPhase("typing");
-      }
-    }, delay);
-
-    return () => clearTimeout(timer);
-  }, [animate, phrases, phase, text, target]);
-
-  if (!animate) {
-    return phrases[0] ?? "";
-  }
-
-  return text;
-}
-
-function SuggestionChips({
-  suggestions,
-  rotation,
-}: {
-  suggestions: HeroSuggestion[];
-  rotation: number;
-}) {
-  return (
-    <div className="mt-3">
-      <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-white/40">
-        Popular searches
-      </p>
-      <ul
-        key={rotation}
-        className="mt-2.5 flex flex-wrap gap-2 animate-fade-in motion-reduce:animate-none"
-      >
-        {suggestions.map((suggestion) => (
-          <li key={`${suggestion.kind}-${suggestion.href}`}>
-            <Link
-              href={suggestion.href}
-              className="inline-flex min-h-11 items-center rounded-lg border border-white/15 bg-white/[0.06] px-3.5 py-2 text-sm font-medium text-white/75 transition-colors hover:border-white/35 hover:bg-white/10 hover:text-white"
-            >
-              {suggestion.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
 
 export function SearchBox({
   suggestions = { category: [], size: [], name: [] },
   placeholderPhrases = [],
+  labels,
+  locale,
 }: {
   suggestions?: HeroSuggestionPool;
   placeholderPhrases?: readonly string[];
+  labels: Dictionary["search"];
+  locale?: Locale;
 }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<SearchResult[]>([]);
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [rotation, setRotation] = useState(0);
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const { results, loading } = useProductSearch(query);
   const reduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const listId = useId();
-  const inputId = useId();
 
   const heroSuggestions = useMemo(
     () => pickHeroSuggestions(suggestions, rotation),
     [suggestions, rotation],
   );
 
-  const typedPhrase = useTypewriter(placeholderPhrases, !reduceMotion);
-
+  // Popular searches rotate every ~10s.
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (reduceMotion) {
       return;
     }
     const interval = setInterval(
@@ -155,56 +57,36 @@ export function SearchBox({
       HERO_SUGGESTION_ROTATE_MS,
     );
     return () => clearInterval(interval);
-  }, []);
+  }, [reduceMotion]);
+
+  // The placeholder rotates every ~5s, but never while the visitor is typing.
+  useEffect(() => {
+    if (reduceMotion || query.trim().length > 0 || placeholderPhrases.length <= 1) {
+      return;
+    }
+    const interval = setInterval(
+      () => setPlaceholderIndex((index) => index + 1),
+      HERO_PLACEHOLDER_ROTATE_MS,
+    );
+    return () => clearInterval(interval);
+  }, [reduceMotion, query, placeholderPhrases.length]);
+
+  const placeholder =
+    placeholderPhrases.length > 0
+      ? `${labels.trySearching} ${
+          placeholderPhrases[placeholderIndex % placeholderPhrases.length]
+        }...`
+      : labels.trySearching;
 
   function onQueryChange(value: string) {
     setQuery(value);
     if (value.trim().length < MIN_SEARCH_LENGTH) {
-      setResults([]);
       setOpen(false);
-      setLoading(false);
       setActiveIndex(-1);
+    } else {
+      setOpen(true);
     }
   }
-
-  useEffect(() => {
-    const trimmed = query.trim();
-
-    if (trimmed.length < MIN_SEARCH_LENGTH) {
-      return;
-    }
-
-    const controller = new AbortController();
-
-    const timer = setTimeout(async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(
-          `/api/search?q=${encodeURIComponent(trimmed)}`,
-          { signal: controller.signal },
-        );
-        if (!response.ok) {
-          throw new Error(`Search failed: ${response.status}`);
-        }
-        const data = (await response.json()) as { results?: SearchResult[] };
-        setResults(Array.isArray(data.results) ? data.results : []);
-        setOpen(true);
-        setActiveIndex(-1);
-      } catch (error) {
-        if (!(error instanceof DOMException && error.name === "AbortError")) {
-          setResults([]);
-          setOpen(true);
-        }
-      } finally {
-        setLoading(false);
-      }
-    }, DEBOUNCE_MS);
-
-    return () => {
-      controller.abort();
-      clearTimeout(timer);
-    };
-  }, [query]);
 
   useEffect(() => {
     function onPointerDown(event: PointerEvent) {
@@ -239,64 +121,51 @@ export function SearchBox({
       event.preventDefault();
       const target = results[activeIndex >= 0 ? activeIndex : 0];
       setOpen(false);
-      router.push(patternHref(target));
+      router.push(localizedHref(locale ?? "en", searchResultHref(target)));
     }
   }
 
   const trimmedQuery = query.trim();
-  const showEmpty = open && !loading && results.length === 0 && trimmedQuery.length >= MIN_SEARCH_LENGTH;
+  const showEmpty =
+    open && !loading && results.length === 0 && trimmedQuery.length >= MIN_SEARCH_LENGTH;
   const showSuggestions = trimmedQuery.length === 0 && heroSuggestions.length > 0;
   const showPlaceholder = trimmedQuery.length === 0;
 
   return (
     <div ref={containerRef} className="relative">
-      <label htmlFor={inputId} className="sr-only">
-        Search tyres by size, pattern code, name or category
-      </label>
-      <div className="relative">
-        <svg
-          aria-hidden="true"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.75"
-          className="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-400"
-        >
-          <circle cx="11" cy="11" r="7" />
-          <path strokeLinecap="round" d="m20 20-3.5-3.5" />
-        </svg>
-        <input
-          id={inputId}
-          type="search"
-          value={query}
-          onChange={(event) => onQueryChange(event.target.value)}
-          onFocus={() => results.length > 0 && setOpen(true)}
-          onKeyDown={onKeyDown}
-          role="combobox"
-          aria-expanded={open}
-          aria-controls={listId}
-          aria-autocomplete="list"
-          aria-activedescendant={
-            activeIndex >= 0 ? `${listId}-${activeIndex}` : undefined
-          }
-          autoComplete="off"
-          className="w-full rounded-lg border border-transparent bg-white py-4 pl-14 pr-5 text-base font-medium text-ink-900 shadow-pop outline-none transition focus:ring-4 focus:ring-brand-500/30"
-        />
-        {showPlaceholder && (
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute left-14 right-5 top-1/2 -translate-y-1/2 truncate text-base font-normal text-ink-400"
-          >
-            {PLACEHOLDER_PREFIX}
-            {typedPhrase}
-          </span>
-        )}
-      </div>
+      <SearchInput
+        value={query}
+        onChange={onQueryChange}
+        onKeyDown={onKeyDown}
+        onFocus={() => results.length > 0 && setOpen(true)}
+        ariaLabel={labels.inputLabel}
+        listId={listId}
+        open={open}
+        activeDescendant={
+          activeIndex >= 0 ? `${listId}-${activeIndex}` : undefined
+        }
+        className="border-transparent shadow-pop"
+        overlay={
+          showPlaceholder ? (
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute left-14 right-5 top-1/2 -translate-y-1/2 truncate text-base font-normal text-ink-400"
+            >
+              {placeholder}
+            </span>
+          ) : undefined
+        }
+      />
 
       {showSuggestions && (
-        <SuggestionChips
+        <PopularSearches
           suggestions={heroSuggestions}
-          rotation={rotation}
+          label={labels.suggestions}
+          tone="onDark"
+          onSelect={(value) => {
+            setQuery(value);
+            setOpen(true);
+          }}
         />
       )}
 
@@ -304,50 +173,30 @@ export function SearchBox({
         <ul
           id={listId}
           role="listbox"
-          aria-label="Product search results"
+          aria-label={labels.resultsLabel}
           className="absolute z-30 mt-3 max-h-96 w-full overflow-auto rounded-lg border border-ink-200 bg-white py-2 text-left shadow-pop"
         >
           {loading ? (
-            <li className="px-5 py-3 text-sm text-ink-600">Searching…</li>
+            <li className="px-5 py-3 text-sm text-ink-600">{labels.searching}</li>
           ) : showEmpty ? (
             <li className="px-5 py-3 text-sm text-ink-600">
-              No matching patterns found. Try a size such as{" "}
-              <span className="font-medium text-ink-900">6.00-16</span> or a
-              code such as{" "}
-              <span className="font-medium text-ink-900">TR-1042</span>.
+              {labels.noResults}
             </li>
           ) : (
             results.map((result, index) => (
               <li
-                key={result.patternSlug}
+                key={searchResultHref(result)}
                 id={`${listId}-${index}`}
                 role="option"
                 aria-selected={index === activeIndex}
               >
-                <Link
-                  href={patternHref(result)}
-                  onClick={() => setOpen(false)}
-                  onMouseEnter={() => setActiveIndex(index)}
-                  className={`flex items-start justify-between gap-4 px-5 py-3 transition-colors ${
-                    index === activeIndex ? "bg-ink-50" : "hover:bg-ink-50"
-                  }`}
-                >
-                  <span className="min-w-0">
-                    <span className="block truncate text-sm font-semibold text-ink-950">
-                      {result.displayName}
-                    </span>
-                    <span className="mt-0.5 block text-xs text-ink-600">
-                      {result.categoryDisplayName}
-                      {result.sizes.length > 0 &&
-                        ` · ${result.sizes.slice(0, 3).join(", ")}${
-                          result.sizes.length > 3 ? "…" : ""
-                        }`}
-                    </span>
-                  </span>
-                  <span className="shrink-0 rounded-lg bg-ink-950 px-2 py-1 text-[11px] font-semibold tracking-wide text-white">
-                    {result.patternCode}
-                  </span>
-                </Link>
+                <SearchResultRow
+                  result={result}
+                  locale={locale}
+                  active={index === activeIndex}
+                  onSelect={() => setOpen(false)}
+                  onActivate={() => setActiveIndex(index)}
+                />
               </li>
             ))
           )}

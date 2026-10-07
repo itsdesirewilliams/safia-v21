@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { CATEGORIES } from "@/lib/catalogue/categories";
+import {
+  CATEGORIES,
+  PRODUCT_MENU_ORDER,
+} from "@/lib/catalogue/categories";
 import {
   FOOTER_NAV,
   PRIMARY_NAV,
@@ -19,6 +22,7 @@ const EXPECTED_PATTERNS = [
   "/gallery",
   "/quality-first",
   "/catalogue",
+  "/search",
   "/products/[category]",
   "/products/[category]/[pattern]",
   "/blogs",
@@ -84,7 +88,7 @@ describe("header navigation", () => {
     ).toBe(true);
   });
 
-  it("lists all seven categories in the Products dropdown", () => {
+  it("lists all seven categories in the Products dropdown in menu order", () => {
     const products = PRIMARY_NAV.find((item) => item.label === "Products");
     expect(products && "children" in products).toBe(true);
     if (!products || !("children" in products)) {
@@ -92,7 +96,7 @@ describe("header navigation", () => {
     }
     expect(products.children).toHaveLength(7);
     expect(products.children.map((child) => child.href)).toEqual(
-      CATEGORIES.map((category) => `/products/${category.slug}`),
+      PRODUCT_MENU_ORDER.map((slug) => `/products/${slug}`),
     );
   });
 

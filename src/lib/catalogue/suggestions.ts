@@ -30,8 +30,8 @@ export type HeroSuggestionPool = {
 
 export const HERO_SUGGESTION_COUNT = 3;
 export const HERO_SUGGESTION_PER_KIND = 1;
-/** Rotation cadence for the suggestions, in milliseconds (three per two minutes). */
-export const HERO_SUGGESTION_ROTATE_MS = 40_000;
+/** Rotation cadence for the popular-search group, in milliseconds. */
+export const HERO_SUGGESTION_ROTATE_MS = 10_000;
 
 /** Cadence at which the hero search placeholder cycles to the next phrase. */
 export const HERO_PLACEHOLDER_ROTATE_MS = 5_000;

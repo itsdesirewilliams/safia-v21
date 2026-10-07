@@ -18,6 +18,10 @@ export type Dictionary = {
     gallery: string;
     blogs: string;
     warranty: string;
+    /** Truck & Bus sub-ranges. */
+    nylon: string;
+    pcr: string;
+    tbr: string;
   };
   common: {
     requestQuotation: string;
@@ -35,6 +39,47 @@ export type Dictionary = {
     all: string;
     reset: string;
     apply: string;
+    comingSoon: string;
+  };
+  tbr: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    catalogueHeading: string;
+    catalogueDescription: string;
+    patternsHeading: string;
+    patternsDescription: string;
+    availableSizes: string;
+    manufacturingHeading: string;
+    manufacturingDescription: string;
+    indiaHeading: string;
+    indiaBody: string;
+    chinaHeading: string;
+    chinaBody: string;
+    specificationsComingSoon: string;
+    specificationsComingSoonDetail: string;
+  };
+  pcr: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    catalogueHeading: string;
+    catalogueDescription: string;
+    patternsHeading: string;
+    patternsDescription: string;
+    availableSizes: string;
+  };
+  search: {
+    title: string;
+    description: string;
+    placeholder: string;
+    trySearching: string;
+    results: string;
+    noResults: string;
+    searching: string;
+    suggestions: string;
+    inputLabel: string;
+    resultsLabel: string;
   };
   header: {
     primaryNav: string;
@@ -136,13 +181,16 @@ export const en: Dictionary = {
     gallery: "Gallery",
     blogs: "Blogs",
     warranty: "Warranty",
+    nylon: "Nylon Tyres",
+    pcr: "PCR — Passenger Car Radial",
+    tbr: "TBR — Truck & Bus Radial",
   },
   common: {
     requestQuotation: "Request a Quotation",
     exploreCatalogue: "Explore the Catalogue",
     openCatalogue: "Open the Catalogue",
     searchCatalogue: "Search the catalogue",
-    searchPlaceholder: "Search by size, pattern code or category",
+    searchPlaceholder: "Search by size, name or category",
     viewAll: "View all",
     readMore: "Read more",
     backToHome: "Back to home",
@@ -153,6 +201,58 @@ export const en: Dictionary = {
     all: "All",
     reset: "Reset",
     apply: "Apply",
+    comingSoon: "Coming soon",
+  },
+  tbr: {
+    eyebrow: "Truck & Bus Tyres",
+    title: "Truck & Bus Radial Tyres",
+    description:
+      "Safeway's Truck & Bus Radial (TBR) range brings radial tyre construction to truck and bus applications. The range is offered across a growing set of pattern codes and sizes.",
+    catalogueHeading: "TBR Catalogue",
+    catalogueDescription:
+      "The Safeway Truck & Bus Radial catalogue, presented in landscape.",
+    patternsHeading: "TBR Patterns",
+    patternsDescription:
+      "Each card is one Pattern Code. The full size list is shown on the Pattern page.",
+    availableSizes: "Available sizes",
+    manufacturingHeading: "Manufactured in China",
+    manufacturingDescription:
+      "Safeway's radial tyre products are manufactured through our manufacturing partnership in Shandong, China.",
+    indiaHeading: "Nylon — India",
+    indiaBody: "Safeway's Nylon tyres are manufactured in India.",
+    chinaHeading: "Radial — Shandong, China",
+    chinaBody:
+      "Safeway's radial tyres are manufactured through our manufacturing operation and partnership in Shandong, China. Safeway is a co-manufacturer and part-owner of the manufacturing operation.",
+    specificationsComingSoon: "Full specifications coming soon",
+    specificationsComingSoonDetail:
+      "The complete size and specification table for this pattern will be added in a later phase.",
+  },
+  pcr: {
+    eyebrow: "Truck & Bus Tyres",
+    title: "Passenger Car Radial Tyres",
+    description:
+      "Safeway's Passenger Car Radial (PCR) range brings radial tyre construction to passenger car applications. The range is offered across a growing set of pattern codes and sizes.",
+    catalogueHeading: "PCR Catalogue",
+    catalogueDescription:
+      "The Safeway Passenger Car Radial catalogue, presented in landscape.",
+    patternsHeading: "PCR Patterns",
+    patternsDescription:
+      "Each card is one Pattern Code. The full size list is shown on the Pattern page.",
+    availableSizes: "Available sizes",
+  },
+  search: {
+    title: "Search",
+    description:
+      "Search the Safeway Tyre catalogue by size, name or category.",
+    placeholder: "Try searching…",
+    trySearching: "Try searching",
+    results: "Search results",
+    noResults:
+      "No matching products found. Try a tyre size such as 6.50-16, or a range such as Agriculture Tyres.",
+    searching: "Searching…",
+    suggestions: "Popular searches",
+    inputLabel: "Search tyres by size, name or category",
+    resultsLabel: "Product search results",
   },
   header: {
     primaryNav: "Primary",
@@ -177,7 +277,7 @@ export const en: Dictionary = {
   home: {
     heroTitle: "Tires That Keep the World Moving",
     heroSubtitle:
-      "Safeway Tyre manufactures and exports durable tyres for international markets. Search the catalogue by size, pattern code, name or category.",
+      "Safeway Tyre manufactures and exports durable tyres for international markets. Search the catalogue by size, name or category.",
     tourHeading: "Take a Tour of Our Industry",
     tourDescription:
       "Step inside our factory online — a short sneak peek at how Safeway Tyre makes its tyres.",
@@ -272,6 +372,6 @@ export const en: Dictionary = {
     siteTagline: "Exporting Durable Tyres Worldwide",
     homeTitle: "Safeway Tyre | Exporting Durable Tyres Worldwide",
     homeDescription:
-      "Search Safeway Tyre's catalogue by size, pattern code or category, explore our product ranges, and send an enquiry.",
+      "Search Safeway Tyre's catalogue by size or category, explore our product ranges, and send an enquiry.",
   },
 };

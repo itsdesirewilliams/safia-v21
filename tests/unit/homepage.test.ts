@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
 
 import { CATEGORIES } from "@/lib/catalogue/categories";
-import { titleCasePhrase } from "@/lib/catalogue/suggestions";
+import { RANGE_DATASETS } from "@/lib/catalogue/range-data";
+import {
+  HERO_PLACEHOLDER_ROTATE_MS,
+  HERO_SUGGESTION_ROTATE_MS,
+  titleCasePhrase,
+} from "@/lib/catalogue/suggestions";
+import { CATALOGUE } from "@/lib/catalogue/dataset";
 import { countryCode, countryFlag } from "@/lib/contact/countries";
 import {
   HERO_PLACEHOLDER_PHRASES,
@@ -70,6 +76,26 @@ describe("homepage placeholder phrases", () => {
     expect(HERO_PLACEHOLDER_PHRASES.length).toBeGreaterThan(0);
     for (const phrase of HERO_PLACEHOLDER_PHRASES) {
       expect(real.has(phrase)).toBe(true);
+    }
+  });
+
+  it("rotates the placeholder every 5s and the popular group every 10s", () => {
+    expect(HERO_PLACEHOLDER_ROTATE_MS).toBe(5_000);
+    expect(HERO_SUGGESTION_ROTATE_MS).toBe(10_000);
+  });
+
+  it("never exposes a Pattern Code in the rotating examples", () => {
+    const codes = new Set<string>();
+    for (const pattern of CATALOGUE.patterns) {
+      codes.add(pattern.patternCode.toLowerCase());
+    }
+    for (const range of ["tbr", "pcr"] as const) {
+      for (const pattern of RANGE_DATASETS[range].patterns) {
+        codes.add(pattern.patternCode.toLowerCase());
+      }
+    }
+    for (const phrase of HERO_PLACEHOLDER_PHRASES) {
+      expect(codes.has(phrase.toLowerCase())).toBe(false);
     }
   });
 

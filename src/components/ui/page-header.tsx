@@ -6,6 +6,8 @@ import { cn } from "@/lib/cn";
 export type PageHeaderProps = {
   title: ReactNode;
   description?: ReactNode;
+  /** Small uppercase label shown above the title (taxonomy). */
+  eyebrow?: ReactNode;
   breadcrumb?: ReactNode;
   actions?: ReactNode;
   children?: ReactNode;
@@ -23,21 +25,41 @@ export type PageHeaderProps = {
 export function PageHeader({
   title,
   description,
+  eyebrow,
   breadcrumb,
   actions,
   children,
   className,
   containerSize = "default",
 }: PageHeaderProps) {
+  // The listing pages use a wide container, so the hero copy is allowed a wider
+  // measure — otherwise a two-sentence description wraps to three lines on
+  // desktop despite the space available.
+  const wide = containerSize === "listing";
+
   return (
     <header className={cn("border-b border-ink-200 bg-ink-50", className)}>
       <Container size={containerSize} className="py-12 lg:py-16">
         {breadcrumb && <div className="mb-6">{breadcrumb}</div>}
-        <h1 className="max-w-3xl text-balance text-3xl font-bold tracking-tight text-ink-950 sm:text-4xl">
+        {eyebrow && (
+          <p className="text-eyebrow text-brand-600">{eyebrow}</p>
+        )}
+        <h1
+          className={cn(
+            "text-balance text-3xl font-bold tracking-tight text-ink-950 sm:text-4xl",
+            wide ? "max-w-4xl" : "max-w-3xl",
+            eyebrow ? "mt-3" : undefined,
+          )}
+        >
           {title}
         </h1>
         {description && (
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-pretty text-ink-600 sm:text-lg">
+          <p
+            className={cn(
+              "mt-4 text-base leading-relaxed text-pretty text-ink-600 sm:text-lg",
+              wide ? "max-w-4xl" : "max-w-2xl",
+            )}
+          >
             {description}
           </p>
         )}

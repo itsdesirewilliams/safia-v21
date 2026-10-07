@@ -22,10 +22,13 @@ export function PatternCard({
   pattern,
   imageUrl = null,
   locale = "en",
+  href,
 }: {
   pattern: NormalizedPattern;
   imageUrl?: string | null;
   locale?: Locale;
+  /** Override the destination (e.g. the TBR range uses its own route tree). */
+  href?: string;
 }) {
   const sizes = patternSizes(pattern);
   const preview = sizes.slice(0, SIZE_PREVIEW);
@@ -33,10 +36,10 @@ export function PatternCard({
 
   return (
     <Link
-      href={localizedHref(
-        locale,
-        ROUTES.pattern(pattern.categorySlug, pattern.slug),
-      )}
+      href={
+        href ??
+        localizedHref(locale, ROUTES.pattern(pattern.categorySlug, pattern.slug))
+      }
       className="group flex h-full items-stretch gap-4 rounded-card border border-ink-200 bg-white p-5 transition duration-300 hover:-translate-y-1 hover:border-ink-300 hover:shadow-card motion-reduce:hover:translate-y-0"
     >
       <PatternImage
