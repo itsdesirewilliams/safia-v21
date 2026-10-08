@@ -29,7 +29,7 @@ export default async function PatternImagesPage() {
       <AdminPageHeader
         eyebrow="Products"
         title="Pattern images"
-        description={`One image per Pattern, matched by filename to the canonical Pattern Code (e.g. SFM-101.png). ${existing.length} ${
+        description={`One image per Pattern, matched by filename to the canonical Pattern Code across every range (e.g. SFM-101.png, fm-06.webp). ${existing.length} ${
           existing.length === 1 ? "pattern has" : "patterns have"
         } an image.`}
         breadcrumbs={[

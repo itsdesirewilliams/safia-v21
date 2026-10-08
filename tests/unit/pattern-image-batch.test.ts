@@ -19,18 +19,21 @@ const DIRECTORY: PatternImageDirectoryEntry[] = [
     displayName: "Motorcycle Tyres",
     categorySlug: "motorcycle",
     categoryName: "Motorcycle Tyres",
+    range: "Motorcycle Tyres",
   },
   {
     patternCode: "TR-1019",
     displayName: "AGRICULTURE IMPLEMENT TYRE",
     categorySlug: "agriculture",
     categoryName: "Agriculture Tyres",
+    range: "Agriculture Tyres",
   },
   {
     patternCode: "POWERMINER",
     displayName: "Truck & Bus Tyres",
     categorySlug: "truck-bus",
     categoryName: "Truck & Bus Tyres",
+    range: "Nylon",
   },
 ];
 
@@ -43,11 +46,11 @@ describe("pattern code extraction", () => {
     expect(patternCodeFromFileName("POWERMINER.avif")).toBe("POWERMINER");
   });
 
-  it("keeps hyphens rather than inventing them", () => {
-    // The canonical normalization layer never inserts a hyphen, so a missing
-    // one is a different code and must not silently resolve.
+  it("extracts the raw stem, while lookup tolerates separators", () => {
+    // Extraction preserves the stem exactly; the alias-tolerant lookup then
+    // treats separators as equivalent, so `SFM101` resolves to `SFM-101`.
     expect(patternCodeFromFileName("SFM101.jpg")).toBe("SFM101");
-    expect(patternCodeFromFileName("SFM101.jpg")).not.toBe("SFM-101");
+    expect(lookupPatternCode("SFM101", DIRECTORY).status).toBe("matched");
   });
 
   it("returns null when the filename has no stem", () => {

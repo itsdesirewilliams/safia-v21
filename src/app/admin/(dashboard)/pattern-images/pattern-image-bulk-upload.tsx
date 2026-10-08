@@ -9,7 +9,6 @@ import { formatFileSize } from "@/lib/media/format";
 import {
   buildPatternImagePath,
   normalizePatternCode,
-  patternCodeFromFileName,
   planPatternImageFiles,
   PATTERN_IMAGE_ACCEPT,
   PATTERN_IMAGE_BATCH_MAX,
@@ -190,7 +189,8 @@ export function PatternImageBulkUpload({
           continue;
         }
 
-        const code = patternCodeFromFileName(item.file.name);
+        // The plan already resolved the filename to its canonical Pattern Code.
+        const code = item.plan.code;
         if (!code) {
           const message = "Could not read a Pattern Code from the filename.";
           outcomes.set(item.id, { ok: false, error: message });
@@ -312,10 +312,13 @@ export function PatternImageBulkUpload({
         Upload Pattern Images
       </h2>
       <p className="mt-1 text-sm text-ink-600">
-        The filename is the Pattern Code (<code>SFM-101.jpg</code> →{" "}
-        <code>SFM-101</code>). Extension, case and surrounding spaces are
-        ignored. Up to {PATTERN_IMAGE_BATCH_MAX} images per batch. Images are
-        stored in the dedicated <code>product-images</code> bucket.
+        The filename is matched to a Pattern Code across every range. Extension,
+        case, spaces and separators are ignored, and a trailing{" "}
+        <code>+</code> may be written <code>PLUS</code> —{" "}
+        <code>fm-06.webp</code> → <code>FM06</code>,{" "}
+        <code>fm-601-plus.webp</code> → <code>FM601+</code>. Up to{" "}
+        {PATTERN_IMAGE_BATCH_MAX} images per batch. Images are stored in the
+        dedicated <code>product-images</code> bucket.
       </p>
 
       <div

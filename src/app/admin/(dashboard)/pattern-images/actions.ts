@@ -3,9 +3,10 @@
 import { revalidatePath } from "next/cache";
 
 import { requireMediaManager } from "@/lib/auth/session";
-import { findPatternsByCode } from "@/lib/catalogue/pattern-directory";
+import { patternDirectory } from "@/lib/catalogue/pattern-directory";
 import {
   isSafePatternImagePath,
+  lookupPatternCode,
   normalizePatternCode,
   patternCodeFromFileName,
   PATTERN_IMAGE_BATCH_MAX,
@@ -42,6 +43,10 @@ export async function commitPatternImagesAction(
     ? entries.slice(0, PATTERN_IMAGE_BATCH_MAX)
     : [];
 
+  // The catalogue-wide index (master + TBR + PCR); filenames resolve against
+  // it with the same alias-tolerant normalization the client preview uses.
+  const directory = patternDirectory();
+
   const failures: PatternImageBatchFailure[] = [];
   const existingByCode = new Map(
     (await listPatternImageRecords()).map((record) => [
@@ -73,11 +78,32 @@ export async function commitPatternImagesAction(
       continue;
     }
 
-    const code = patternCodeFromFileName(name);
-    if (!code) {
+    const candidate = patternCodeFromFileName(name);
+    if (!candidate) {
       await fail(name, path, "Could not read a Pattern Code from the filename.");
       continue;
     }
+
+    const lookup = lookupPatternCode(candidate, directory);
+    if (lookup.status === "not-found") {
+      await fail(name, path, "Pattern Code not found");
+      continue;
+    }
+    if (lookup.status === "ambiguous") {
+      const options = lookup.matches
+        .map((match) => match.patternCode)
+        .join(", ");
+      await fail(
+        name,
+        path,
+        `Pattern Code ${candidate} matches more than one pattern (${options}).`,
+      );
+      continue;
+    }
+
+    // The canonical catalogue Pattern Code is always the stored identifier.
+    const pattern = lookup.entry;
+    const code = pattern.patternCode;
 
     if (seenCodes.has(code)) {
       await fail(
@@ -88,21 +114,6 @@ export async function commitPatternImagesAction(
       continue;
     }
     seenCodes.add(code);
-
-    const matches = findPatternsByCode(code);
-    if (matches.length === 0) {
-      await fail(name, path, "Pattern Code not found");
-      continue;
-    }
-    if (matches.length > 1) {
-      await fail(
-        name,
-        path,
-        `Pattern Code ${code} matches more than one pattern.`,
-      );
-      continue;
-    }
-    const pattern = matches[0];
 
     const validation = validateUpload({
       fileName: name,

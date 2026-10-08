@@ -1,12 +1,16 @@
 /**
  * Contract for the Admin Pattern Image bulk uploader.
  *
- * The filename is the identifier: its stem (extension stripped, whitespace
- * trimmed, case-insensitive) must equal a canonical `patternCode` in the
- * product dataset. Matching is deliberately exact — `SFM-101.jpg` resolves to
- * `SFM-101`, but `SFM101.jpg` does not, because the canonical normalization
- * layer preserves hyphens and never inserts them. The dataset stays the source
- * of truth; this module only proposes, the caller disposes.
+ * The filename is a *user-provided alias*: its stem is extension-stripped,
+ * trimmed and case-folded, then reduced to a normalized lookup key so common
+ * formatting variations resolve to the same Pattern Code — separators (`-`, `_`
+ * and spaces) are equivalent, and a trailing `+` may be written `PLUS`
+ * (`fm-06.webp` → `FM06`, `fm-601-plus.webp` → `FM601+`). The candidate is then
+ * compared against the normalized canonical Pattern Codes derived from the
+ * whole catalogue; the catalogue stays the source of truth and this module only
+ * proposes, the caller disposes. It never manufactures a code that is not in the
+ * catalogue, and a candidate that matches more than one canonical code is
+ * reported as ambiguous rather than guessed.
  */
 
 /** The dedicated bucket that holds Pattern-level imagery. */
@@ -24,10 +28,13 @@ export const PATTERN_IMAGE_PATH_ROOT = "patterns";
 
 /** A Pattern entry the uploader can resolve a filename against. */
 export type PatternImageDirectoryEntry = {
+  /** The canonical Pattern Code as stored in the catalogue. */
   patternCode: string;
   displayName: string;
   categorySlug: string;
   categoryName: string;
+  /** The product range label: `Nylon`, `TBR`, `PCR`, or the category name. */
+  range: string;
 };
 
 export type PatternCodeLookup =
@@ -38,6 +45,22 @@ export type PatternCodeLookup =
 /** Canonical comparison form for a Pattern Code: trimmed, upper-cased. */
 export function normalizePatternCode(value: string): string {
   return value.trim().toUpperCase();
+}
+
+/**
+ * The normalized key a Pattern Code (or a filename alias) is matched on.
+ *
+ * It upper-cases, folds a trailing `+` / `PLUS` / `-PLUS` / `_PLUS` / ` PLUS`
+ * alias to `+`, then removes the separator characters (`-`, `_`, spaces) so
+ * `FM06`, `FM-06`, `FM 06` and `fm_06` all share one key. This is applied to
+ * both the uploaded filename and the canonical catalogue codes, so the two are
+ * compared on equal footing. It deliberately does NOT drop other characters, so
+ * it cannot merge unrelated codes; the catalogue lookup still decides validity.
+ */
+export function patternLookupKey(value: string): string {
+  const upper = value.trim().toUpperCase();
+  const withPlus = upper.replace(/(?:[-_\s]*PLUS|\+)$/, "+");
+  return withPlus.replace(/[-_\s]+/g, "");
 }
 
 const EXTENSION = /\.([A-Za-z0-9]+)$/;
@@ -59,9 +82,12 @@ export function lookupPatternCode(
   code: string,
   directory: readonly PatternImageDirectoryEntry[],
 ): PatternCodeLookup {
-  const normalized = normalizePatternCode(code);
+  const key = patternLookupKey(code);
+  if (key === "") {
+    return { status: "not-found" };
+  }
   const matches = directory.filter(
-    (entry) => normalizePatternCode(entry.patternCode) === normalized,
+    (entry) => patternLookupKey(entry.patternCode) === key,
   );
 
   if (matches.length === 0) {
@@ -76,7 +102,11 @@ export function lookupPatternCode(
 /** Turn one distinct filename into its upload plan. */
 export type PatternImagePlan = {
   fileName: string;
-  /** The detected Pattern Code, or `null` when the filename has no stem. */
+  /**
+   * The canonical Pattern Code once the filename resolves (e.g. `fm-06.webp` →
+   * `FM06`), the raw candidate when it does not, or `null` when the filename has
+   * no stem. The canonical catalogue code is always the stored identifier.
+   */
   code: string | null;
   entry: PatternImageDirectoryEntry | null;
   /**
@@ -100,9 +130,9 @@ export function planPatternImageFiles(
   const seen = new Set<string>();
 
   return fileNames.map((fileName) => {
-    const code = patternCodeFromFileName(fileName);
+    const candidate = patternCodeFromFileName(fileName);
 
-    if (!code) {
+    if (!candidate) {
       return {
         fileName,
         code: null,
@@ -112,12 +142,12 @@ export function planPatternImageFiles(
       };
     }
 
-    const lookup = lookupPatternCode(code, directory);
+    const lookup = lookupPatternCode(candidate, directory);
 
     if (lookup.status === "not-found") {
       return {
         fileName,
-        code,
+        code: candidate,
         entry: null,
         status: "failed",
         reason: "Pattern Code not found",
@@ -125,14 +155,18 @@ export function planPatternImageFiles(
     }
 
     if (lookup.status === "ambiguous") {
+      const options = lookup.matches.map((match) => match.patternCode).join(", ");
       return {
         fileName,
-        code,
+        code: candidate,
         entry: null,
         status: "failed",
-        reason: `Pattern Code ${code} matches more than one pattern.`,
+        reason: `Ambiguous Pattern Code — matches ${options}.`,
       };
     }
+
+    // The canonical catalogue code is always the stored identifier.
+    const code = lookup.entry.patternCode;
 
     if (seen.has(code)) {
       return {
