@@ -33,6 +33,7 @@ vi.mock("@/components/catalogue/breadcrumbs", () => ({
 
 import PcrSafewayPage from "@/app/(site)/products/truck-bus-tire/pcr-safeway/page";
 import TbrSafewayPage from "@/app/(site)/products/truck-bus-tire/tbr-safeway/page";
+import { listRangePatterns } from "@/lib/catalogue/range-data";
 
 describe("TBR index pattern images", () => {
   it("renders the uploaded image for a pattern that has one", async () => {
@@ -51,5 +52,26 @@ describe("PCR index pattern images", () => {
   it("renders the uploaded image for a pattern that has one", async () => {
     const html = renderToStaticMarkup(await PcrSafewayPage());
     expect(html).toContain(FM316_URL);
+  });
+});
+
+describe("TBR temporary pattern exclusion", () => {
+  it("hides FM57 from the public listing", async () => {
+    const html = renderToStaticMarkup(await TbrSafewayPage());
+    expect(html).not.toContain(">FM57<");
+  });
+
+  it("leaves every other TBR pattern listed", async () => {
+    const html = renderToStaticMarkup(await TbrSafewayPage());
+    expect(html).toContain(">FM18<");
+    expect(html).toContain(">FM166<");
+  });
+
+  it("keeps FM57 in the underlying TBR data", () => {
+    expect(
+      listRangePatterns("tbr").some(
+        (pattern) => pattern.patternCode === "FM57",
+      ),
+    ).toBe(true);
   });
 });

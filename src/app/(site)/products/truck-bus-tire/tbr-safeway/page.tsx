@@ -20,6 +20,14 @@ import { ROUTES } from "@/lib/routes";
 /** Pattern images come from the request-scoped media layer, so render on demand. */
 export const dynamic = "force-dynamic";
 
+/**
+ * TEMPORARY: TBR Pattern Codes hidden from the public listing only (e.g. a
+ * pattern whose product image is not displaying correctly yet). The underlying
+ * catalogue data in `data/tbr.json` is untouched — remove a code from this set
+ * to restore it, with no other change.
+ */
+const HIDDEN_TBR_PATTERN_CODES = new Set(["FM57"]);
+
 export async function generateMetadata() {
   const dict = await getDictionary();
   return {
@@ -47,7 +55,9 @@ export default async function TbrSafewayPage() {
     listPatternImageUrls(),
   ]);
   const catalogueImage = readRangeCatalogueLandscapeImage("tbr");
-  const patterns = listRangePatterns("tbr");
+  const patterns = listRangePatterns("tbr").filter(
+    (pattern) => !HIDDEN_TBR_PATTERN_CODES.has(pattern.patternCode),
+  );
 
   return (
     <div className="bg-white">
