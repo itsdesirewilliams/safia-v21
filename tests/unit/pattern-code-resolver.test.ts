@@ -82,6 +82,10 @@ describe("filename aliases resolve to the canonical code", () => {
     ["FM 06.webp", "FM06"],
     ["FM07.webp", "FM07"],
     ["fm-07.webp", "FM07"],
+    ["fm-18.webp", "FM18"],
+    ["fm-19.webp", "FM19"],
+    ["fm-59.webp", "FM59"],
+    ["fm-985.webp", "FM985"],
     ["FM19+.webp", "FM19+"],
     ["FM19-PLUS.webp", "FM19+"],
     ["fm19-plus.webp", "FM19+"],
@@ -111,6 +115,32 @@ describe("filename aliases resolve to the canonical code", () => {
     expect(plan.code).toBe("FM601+");
     expect(plan.code).not.toBe("fm-601-plus");
   });
+});
+
+/**
+ * The Admin preview renders exactly the fields of a plan (`code`, `entry`), so
+ * planning against the real catalogue directory is the preview path.
+ */
+describe("admin preview path (real catalogue directory)", () => {
+  const previews: ReadonlyArray<[string, string, string]> = [
+    ["fm-18.webp", "FM18", "Truck & Bus Radial"],
+    ["fm-19-plus.webp", "FM19+", "Truck & Bus Radial"],
+    ["fm-06.webp", "FM06", "Truck & Bus Radial"],
+    ["fm-316.webp", "FM316", "Passenger Car Radial"],
+    ["fm-601-plus.webp", "FM601+", "Passenger Car Radial"],
+    ["rt-3000.webp", "RT3000", "Passenger Car Radial"],
+    ["powerminer.webp", "POWERMINER", "Truck & Bus Tyres"],
+  ];
+
+  for (const [fileName, code, category] of previews) {
+    it(`${fileName} previews as ${code} / ${category}`, () => {
+      const [plan] = planPatternImageFiles([fileName], DIRECTORY, new Set());
+      expect(plan.status).toBe("ready");
+      expect(plan.code).toBe(code);
+      expect(plan.entry?.patternCode).toBe(code);
+      expect(plan.entry?.categoryName).toBe(category);
+    });
+  }
 });
 
 describe("patternLookupKey", () => {
