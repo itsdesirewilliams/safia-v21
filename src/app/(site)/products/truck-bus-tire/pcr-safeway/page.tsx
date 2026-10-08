@@ -12,8 +12,13 @@ import {
 } from "@/lib/catalogue/range-data";
 import { getDictionary, getLocale } from "@/lib/i18n/server";
 import { languageAlternates, localizedHref } from "@/lib/i18n/url";
+import { normalizePatternCode } from "@/lib/media/pattern-image-batch";
+import { listPatternImageUrls } from "@/lib/media/pattern-images-server";
 import { readRangeCatalogueLandscapeImage } from "@/lib/media/range-catalogue-assets";
 import { ROUTES } from "@/lib/routes";
+
+/** Pattern images come from the request-scoped media layer, so render on demand. */
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   const dict = await getDictionary();
@@ -35,7 +40,11 @@ export async function generateMetadata() {
  * (`src/lib/catalogue/data/pcr.json`, from the canonical ORDER SHEET).
  */
 export default async function PcrSafewayPage() {
-  const [dict, locale] = await Promise.all([getDictionary(), getLocale()]);
+  const [dict, locale, images] = await Promise.all([
+    getDictionary(),
+    getLocale(),
+    listPatternImageUrls(),
+  ]);
   const catalogueImage = readRangeCatalogueLandscapeImage("pcr");
   const patterns = listRangePatterns("pcr");
 
@@ -112,6 +121,10 @@ export default async function PcrSafewayPage() {
                   <PatternCard
                     pattern={rangePatternToNormalized(pattern)}
                     locale={locale}
+                    imageUrl={
+                      images.get(normalizePatternCode(pattern.patternCode)) ??
+                      null
+                    }
                     href={localizedHref(
                       locale,
                       ROUTES.pcrPattern(pattern.slug),
