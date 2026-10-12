@@ -14,7 +14,7 @@ import { getDictionary, getLocale } from "@/lib/i18n/server";
 import { languageAlternates, localizedHref } from "@/lib/i18n/url";
 import { normalizePatternCode } from "@/lib/media/pattern-image-batch";
 import { listPatternImageUrls } from "@/lib/media/pattern-images-server";
-import { readRangeCatalogueLandscapeImage } from "@/lib/media/range-catalogue-assets";
+import { readRangeCatalogueLandscapeImages } from "@/lib/media/range-catalogue-assets";
 import { ROUTES } from "@/lib/routes";
 
 /** Pattern images come from the request-scoped media layer, so render on demand. */
@@ -45,7 +45,7 @@ export default async function PcrSafewayPage() {
     getLocale(),
     listPatternImageUrls(),
   ]);
-  const catalogueImage = readRangeCatalogueLandscapeImage("pcr");
+  const catalogueImages = readRangeCatalogueLandscapeImages("pcr");
   const patterns = listRangePatterns("pcr");
 
   return (
@@ -84,18 +84,25 @@ export default async function PcrSafewayPage() {
             description={dict.pcr.catalogueDescription}
           />
           <div className="mt-10">
-            {catalogueImage ? (
-              <div className="overflow-hidden rounded-card border border-ink-200 bg-white shadow-card">
-                {/* Natural ratio preserved: never cropped or forced square. */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={catalogueImage}
-                  alt={dict.pcr.catalogueHeading}
-                  loading="lazy"
-                  decoding="async"
-                  className="block h-auto w-full"
-                />
-              </div>
+            {catalogueImages.length > 0 ? (
+              <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                {catalogueImages.map((src, index) => (
+                  <li
+                    key={src}
+                    className="overflow-hidden rounded-card border border-ink-200 bg-white shadow-card"
+                  >
+                    {/* Natural ratio preserved: never cropped or forced square. */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={src}
+                      alt={`${dict.pcr.catalogueHeading} — page ${index + 1} of ${catalogueImages.length}`}
+                      loading="lazy"
+                      decoding="async"
+                      className="block h-auto w-full"
+                    />
+                  </li>
+                ))}
+              </ul>
             ) : (
               <PlaceholderPanel
                 kind="media"

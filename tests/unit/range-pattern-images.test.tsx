@@ -75,3 +75,17 @@ describe("TBR temporary pattern exclusion", () => {
     ).toBe(true);
   });
 });
+
+describe("range catalogue artwork isolation", () => {
+  it("renders TBR catalogue artwork on the TBR page, never PCR", async () => {
+    const html = renderToStaticMarkup(await TbrSafewayPage());
+    expect(html).toContain("/assets/catalogue/tbr/");
+    expect(html).not.toContain("/assets/catalogue/pcr/");
+  });
+
+  it("renders PCR catalogue artwork on the PCR page, never TBR", async () => {
+    const html = renderToStaticMarkup(await PcrSafewayPage());
+    expect(html).toContain("/assets/catalogue/pcr/");
+    expect(html).not.toContain("/assets/catalogue/tbr/");
+  });
+});

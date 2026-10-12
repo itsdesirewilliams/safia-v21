@@ -1,4 +1,4 @@
-import { readdirSync } from "node:fs";
+import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 import type { RangeId } from "@/lib/catalogue/range-data";
@@ -8,18 +8,13 @@ import { naturalCompare } from "@/lib/natural-order";
  * Server-only discovery of the supplied radial-range catalogue artwork.
  *
  * Each radial range (TBR, PCR) ships **landscape artwork only** — there is no
- * portrait/mobile variant, so the image is shown at its natural ratio at every
- * viewport and is never cropped. Drop a landscape file into
- * `public/assets/catalogue/<range>/landscape/` and it appears with no code
- * change; until then the page renders its neutral labelled placeholder (no
- * invented imagery).
+ * portrait/mobile variant, so every catalogue page is shown at its natural
+ * ratio at every viewport and is never cropped. The pages live directly in
+ * `public/assets/catalogue/<range>/` (a `landscape/` subfolder is used instead
+ * when one exists), so dropping a numbered page in adds it with no code change.
+ * Until any page exists the owning page renders its neutral labelled
+ * placeholder (no invented imagery).
  */
-
-/** Public URL root for each range's landscape catalogue artwork. */
-export const RANGE_CATALOGUE_LANDSCAPE_ROOTS: Record<RangeId, string> = {
-  tbr: "/assets/catalogue/tbr/landscape",
-  pcr: "/assets/catalogue/pcr/landscape",
-};
 
 /** Image formats accepted for the catalogue artwork. */
 export const RANGE_CATALOGUE_IMAGE_EXTENSIONS = [
@@ -31,6 +26,8 @@ export const RANGE_CATALOGUE_IMAGE_EXTENSIONS = [
   ".svg",
 ] as const;
 
+const PUBLIC_DIR = join(process.cwd(), "public");
+
 function isCatalogueImage(filename: string): boolean {
   const lower = filename.toLowerCase();
   return RANGE_CATALOGUE_IMAGE_EXTENSIONS.some((extension) =>
@@ -38,33 +35,38 @@ function isCatalogueImage(filename: string): boolean {
   );
 }
 
-function rangeCatalogueDir(range: RangeId): string {
-  return join(
-    process.cwd(),
-    "public",
-    "assets",
-    "catalogue",
-    range,
-    "landscape",
-  );
+/** A range's artwork folder segments (repo-relative) and its public URL root. */
+function rangeCatalogueLocation(range: RangeId): {
+  segments: string[];
+  urlRoot: string;
+} {
+  const base = ["assets", "catalogue", range];
+  const landscape = [...base, "landscape"];
+
+  if (existsSync(join(PUBLIC_DIR, ...landscape))) {
+    return {
+      segments: landscape,
+      urlRoot: `/assets/catalogue/${range}/landscape`,
+    };
+  }
+
+  return { segments: base, urlRoot: `/assets/catalogue/${range}` };
 }
 
-/** The supplied landscape catalogue URL for a range, or `null` when absent. */
-export function readRangeCatalogueLandscapeImage(
-  range: RangeId,
-): string | null {
+/**
+ * Every supplied landscape catalogue page URL for a range, in natural page
+ * order (`2` before `10`). An empty array when the range ships no artwork yet.
+ */
+export function readRangeCatalogueLandscapeImages(range: RangeId): string[] {
+  const { segments, urlRoot } = rangeCatalogueLocation(range);
+
   try {
-    const filename = readdirSync(rangeCatalogueDir(range), {
-      withFileTypes: true,
-    })
+    return readdirSync(join(PUBLIC_DIR, ...segments), { withFileTypes: true })
       .filter((entry) => entry.isFile() && isCatalogueImage(entry.name))
       .map((entry) => entry.name)
-      .sort(naturalCompare)[0];
-
-    return filename
-      ? `${RANGE_CATALOGUE_LANDSCAPE_ROOTS[range]}/${encodeURIComponent(filename)}`
-      : null;
+      .sort(naturalCompare)
+      .map((filename) => `${urlRoot}/${encodeURIComponent(filename)}`);
   } catch {
-    return null;
+    return [];
   }
 }
