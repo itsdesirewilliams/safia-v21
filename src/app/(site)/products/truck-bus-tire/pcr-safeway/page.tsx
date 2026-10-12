@@ -1,5 +1,6 @@
 import { Breadcrumbs } from "@/components/catalogue/breadcrumbs";
 import { PatternCard } from "@/components/catalogue/pattern-card";
+import { RangeCatalogueSlider } from "@/components/catalogue/range-catalogue-slider";
 import { RangeSwitcher } from "@/components/catalogue/range-switcher";
 import { Container } from "@/components/ui/container";
 import { PageHeader } from "@/components/ui/page-header";
@@ -85,24 +86,10 @@ export default async function PcrSafewayPage() {
           />
           <div className="mt-10">
             {catalogueImages.length > 0 ? (
-              <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                {catalogueImages.map((src, index) => (
-                  <li
-                    key={src}
-                    className="overflow-hidden rounded-card border border-ink-200 bg-white shadow-card"
-                  >
-                    {/* Natural ratio preserved: never cropped or forced square. */}
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={src}
-                      alt={`${dict.pcr.catalogueHeading} — page ${index + 1} of ${catalogueImages.length}`}
-                      loading="lazy"
-                      decoding="async"
-                      className="block h-auto w-full"
-                    />
-                  </li>
-                ))}
-              </ul>
+              <RangeCatalogueSlider
+                slides={catalogueImages}
+                label={dict.pcr.catalogueHeading}
+              />
             ) : (
               <PlaceholderPanel
                 kind="media"
