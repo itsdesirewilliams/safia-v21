@@ -8,6 +8,20 @@ The public website and product catalogue for Safeway Tyre (a brand of DEE RON Au
 - The old `safewaytyre.com` website is a reference for information architecture and links only — never for content, product data, imagery, artwork, UI design, or media. Do not scrape it to fill missing inputs; render a labelled placeholder instead.
 - Missing external inputs are flagged, not invented (see `docs/missing-inputs.md`).
 
+## Localization
+
+**Locale**:
+The language the public site is served in. English is the default and lives on the canonical root URLs; the other nine are served under a URL prefix (`/fr/...`, `/ar/...`). The active locale is resolved server-side from the request and remembered in the `NEXT_LOCALE` cookie.
+_Avoid_: language (use Locale for the served language), translation
+
+**Reference country**:
+The single country a Locale is written for, shown beside it in the language selector as a country flag. It is not a list of the countries where the language is spoken. English → United Kingdom, French → France, Swahili → Kenya, Arabic → Egypt.
+_Avoid_: locale country, market
+
+**Language switch**:
+Choosing another locale in the header selector. It navigates to the same page under the new language prefix and refetches the server tree, so the page is rendered in the chosen language immediately.
+_Avoid_: translation toggle
+
 ## Language
 
 **Category**:

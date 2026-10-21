@@ -1,15 +1,15 @@
 import Link from "next/link";
 
 import { SectionHeading } from "@/components/ui/section-heading";
-import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { Reveal } from "@/components/ui/reveal";
 import { QUALITY_FIRST_EXPLANATION } from "@/lib/quality-first";
 
 /**
  * The developer-owned testing explanation. Structure only: the copy lives in
  * `src/lib/quality-first.ts` and ships with the code, so it has no admin
- * surface. Specific standards, machine names and certifications are not
- * supplied, so a labelled note stands in rather than inventing them.
+ * surface. The testing-floor walkthrough and the "more detail coming soon"
+ * stand-in have been removed; the section now closes with the continuation
+ * links to the rest of the site.
  */
 export function TestingExplanation() {
   return (
@@ -40,15 +40,7 @@ export function TestingExplanation() {
           </Reveal>
         ))}
 
-        <Reveal delay={160}>
-          <PlaceholderPanel
-            kind="certification"
-            label={QUALITY_FIRST_EXPLANATION.note.label}
-            detail={QUALITY_FIRST_EXPLANATION.note.detail}
-          />
-        </Reveal>
-
-        <Reveal delay={200}>
+        <Reveal delay={120}>
           <nav aria-label="Related pages" className="border-t border-ink-200 pt-8">
             <p className="text-sm font-semibold text-ink-500">Continue</p>
             <ul className="mt-4 flex flex-wrap gap-2">

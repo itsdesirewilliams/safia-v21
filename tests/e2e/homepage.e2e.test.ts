@@ -104,10 +104,10 @@ describe("homepage vertical slice", () => {
     expect(html).not.toContain("Explore Quality First");
   });
 
-  it("shows the three sample testimonials, each with a name, country and SVG flag", async () => {
+  it("shows every testimonial with a name, a country on its own line and an SVG flag", async () => {
     const html = await (await fetch(`${BASE_URL}/`)).text();
 
-    expect(TESTIMONIALS).toHaveLength(3);
+    expect(TESTIMONIALS).toHaveLength(10);
     for (const testimonial of TESTIMONIALS) {
       expect(html).toContain(testimonial.author);
       expect(html).toContain(testimonial.location);
@@ -116,6 +116,26 @@ describe("homepage vertical slice", () => {
     }
     // No regional-indicator emoji flag should be present in the markup.
     expect(html).not.toMatch(/[\u{1F1E6}-\u{1F1FF}]{2}/u);
+  });
+
+  it("opens testimonial slots for the seven new markets, marked as drafts", async () => {
+    const html = await (await fetch(`${BASE_URL}/`)).text();
+
+    for (const market of [
+      "Chile",
+      "Peru",
+      "Egypt",
+      "Bolivia",
+      "Kenya",
+      "Tanzania",
+      "Malawi",
+    ]) {
+      expect(html, market).toContain(market);
+    }
+
+    // The draft slots are labelled, so no placeholder reads as a real quote.
+    expect(html).toContain("Draft placeholder");
+    expect(html).toContain("Name to be supplied");
   });
 
   it("keeps the static prefix of the search placeholder visible", async () => {

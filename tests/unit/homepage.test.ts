@@ -52,8 +52,18 @@ describe("homepage category cards", () => {
 });
 
 describe("homepage testimonials", () => {
-  it("ships three temporary sample testimonials, each with a resolved country code", () => {
-    expect(TESTIMONIALS).toHaveLength(3);
+  const NEW_MARKETS = [
+    "Chile",
+    "Peru",
+    "Egypt",
+    "Bolivia",
+    "Kenya",
+    "Tanzania",
+    "Malawi",
+  ];
+
+  it("ships the three sample testimonials and the seven new market slots", () => {
+    expect(TESTIMONIALS).toHaveLength(10);
 
     for (const testimonial of TESTIMONIALS) {
       expect(testimonial.quote.length).toBeGreaterThan(0);
@@ -61,6 +71,37 @@ describe("homepage testimonials", () => {
       expect(testimonial.location.length).toBeGreaterThan(0);
       expect(testimonial.countryCode).toBe(countryCode(testimonial.location));
       expect(testimonial.countryCode).toMatch(/^[A-Z]{2}$/);
+    }
+  });
+
+  it("covers Chile, Peru, Egypt, Bolivia, Kenya, Tanzania and Malawi", () => {
+    const locations = TESTIMONIALS.map((testimonial) => testimonial.location);
+
+    for (const market of NEW_MARKETS) {
+      expect(locations, market).toContain(market);
+    }
+
+    expect(countryCode("Chile")).toBe("CL");
+    expect(countryCode("Peru")).toBe("PE");
+    expect(countryCode("Egypt")).toBe("EG");
+    expect(countryCode("Bolivia")).toBe("BO");
+    expect(countryCode("Kenya")).toBe("KE");
+    expect(countryCode("Tanzania")).toBe("TZ");
+    expect(countryCode("Malawi")).toBe("MW");
+  });
+
+  it("marks every entry as a draft until a customer quote is approved", () => {
+    for (const testimonial of TESTIMONIALS) {
+      expect(testimonial.status, testimonial.location).toBe("draft");
+    }
+
+    // The new slots never present an invented quotation as a real one.
+    for (const market of NEW_MARKETS) {
+      const entry = TESTIMONIALS.find(
+        (testimonial) => testimonial.location === market,
+      );
+      expect(entry?.quote, market).toContain("Draft placeholder");
+      expect(entry?.author, market).toBe("Name to be supplied");
     }
   });
 });

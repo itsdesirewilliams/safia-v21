@@ -52,13 +52,33 @@ export type Testimonial = {
   location: string;
   /** ISO 3166-1 alpha-2 code for `location`, or null when unresolved. */
   countryCode: string | null;
+  /**
+   * Every entry ships as a draft. No approved customer quotation has been
+   * supplied for these markets, so the cards are marked as placeholders
+   * rather than published as verified endorsements.
+   */
+  status: "draft";
 };
 
 /**
- * Temporary sample testimonials for the homepage. These are clearly fictional
- * entries shown until real customer stories are supplied; replace the entries
- * here when Safeway provides approved testimonials. No photos are used — each
- * entry shows the person, their country and that country's flag.
+ * The placeholder copy used by the draft entries. It is deliberately explicit
+ * so a draft card can never be read as a real customer quotation.
+ */
+const DRAFT_QUOTE =
+  "Draft placeholder — the approved customer quotation for this market has not been supplied yet.";
+
+/**
+ * Homepage testimonials.
+ *
+ * No approved customer testimonials have been supplied for any of these
+ * markets, so every entry is a clearly marked draft. The first three are the
+ * long-standing sample entries; the remaining seven are the slots opened for
+ * Chile, Peru, Egypt, Bolivia, Kenya, Tanzania and Malawi. Replace the draft
+ * fields here with approved quotes, names and, if available, company details
+ * — no admin or database step is involved.
+ *
+ * No photos are used — each entry shows the person, their country and that
+ * country's flag.
  */
 export const TESTIMONIALS: readonly Testimonial[] = [
   {
@@ -67,6 +87,7 @@ export const TESTIMONIALS: readonly Testimonial[] = [
     author: "Juan Carlos",
     location: "Brazil",
     countryCode: countryCode("Brazil"),
+    status: "draft",
   },
   {
     quote:
@@ -74,6 +95,7 @@ export const TESTIMONIALS: readonly Testimonial[] = [
     author: "Aisha Rahman",
     location: "United Arab Emirates",
     countryCode: countryCode("United Arab Emirates"),
+    status: "draft",
   },
   {
     quote:
@@ -81,6 +103,56 @@ export const TESTIMONIALS: readonly Testimonial[] = [
     author: "Milan Novak",
     location: "Czechia",
     countryCode: countryCode("Czechia"),
+    status: "draft",
+  },
+  {
+    quote: DRAFT_QUOTE,
+    author: "Name to be supplied",
+    location: "Chile",
+    countryCode: countryCode("Chile"),
+    status: "draft",
+  },
+  {
+    quote: DRAFT_QUOTE,
+    author: "Name to be supplied",
+    location: "Peru",
+    countryCode: countryCode("Peru"),
+    status: "draft",
+  },
+  {
+    quote: DRAFT_QUOTE,
+    author: "Name to be supplied",
+    location: "Egypt",
+    countryCode: countryCode("Egypt"),
+    status: "draft",
+  },
+  {
+    quote: DRAFT_QUOTE,
+    author: "Name to be supplied",
+    location: "Bolivia",
+    countryCode: countryCode("Bolivia"),
+    status: "draft",
+  },
+  {
+    quote: DRAFT_QUOTE,
+    author: "Name to be supplied",
+    location: "Kenya",
+    countryCode: countryCode("Kenya"),
+    status: "draft",
+  },
+  {
+    quote: DRAFT_QUOTE,
+    author: "Name to be supplied",
+    location: "Tanzania",
+    countryCode: countryCode("Tanzania"),
+    status: "draft",
+  },
+  {
+    quote: DRAFT_QUOTE,
+    author: "Name to be supplied",
+    location: "Malawi",
+    countryCode: countryCode("Malawi"),
+    status: "draft",
   },
 ];
 

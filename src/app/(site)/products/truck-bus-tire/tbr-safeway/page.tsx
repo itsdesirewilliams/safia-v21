@@ -11,7 +11,7 @@ import {
   listRangePatterns,
   rangePatternToNormalized,
 } from "@/lib/catalogue/range-data";
-import { getDictionary, getLocale } from "@/lib/i18n/server";
+import { getActiveLocale, getDictionary } from "@/lib/i18n/server";
 import { languageAlternates, localizedHref } from "@/lib/i18n/url";
 import { normalizePatternCode } from "@/lib/media/pattern-image-batch";
 import { listPatternImageUrls } from "@/lib/media/pattern-images-server";
@@ -52,7 +52,7 @@ export async function generateMetadata() {
 export default async function TbrSafewayPage() {
   const [dict, locale, images] = await Promise.all([
     getDictionary(),
-    getLocale(),
+    getActiveLocale(),
     listPatternImageUrls(),
   ]);
   const catalogueImages = readRangeCatalogueLandscapeImages("tbr");

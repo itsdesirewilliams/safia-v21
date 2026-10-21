@@ -11,7 +11,7 @@ import {
   HERO_PLACEHOLDER_PHRASES,
   HERO_SUGGESTION_POOL,
 } from "@/lib/homepage";
-import { getDictionary, getLocale } from "@/lib/i18n/server";
+import { getActiveLocale, getDictionary } from "@/lib/i18n/server";
 import { languageAlternates } from "@/lib/i18n/url";
 import { ROUTES } from "@/lib/routes";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -47,7 +47,10 @@ export default async function SearchPage({
   const initialQuery = typeof raw === "string" ? raw : "";
   const query = sanitizeQuery(initialQuery);
 
-  const [dict, locale] = await Promise.all([getDictionary(), getLocale()]);
+  const [dict, locale] = await Promise.all([
+    getDictionary(),
+    getActiveLocale(),
+  ]);
 
   let initialResults: SearchResult[] = [];
   if (query.length >= MIN_SEARCH_LENGTH) {

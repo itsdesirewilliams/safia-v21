@@ -12,7 +12,7 @@ import {
   getCategory,
 } from "@/lib/catalogue/categories";
 import { listPatternsByCategory } from "@/lib/catalogue/dataset";
-import { getDictionary, getLocale } from "@/lib/i18n/server";
+import { getActiveLocale, getDictionary } from "@/lib/i18n/server";
 import { languageAlternates, localizedHref } from "@/lib/i18n/url";
 import { normalizePatternCode } from "@/lib/media/pattern-image-batch";
 import { listPatternImageUrls } from "@/lib/media/pattern-images-server";
@@ -41,7 +41,7 @@ export async function generateMetadata({
     alternates: category
       ? {
           canonical: localizedHref(
-            (await getLocale()),
+            (await getActiveLocale()),
             ROUTES.category(category.slug),
           ),
           languages: languageAlternates(ROUTES.category(category.slug)),
@@ -67,7 +67,7 @@ export default async function CategoryPage({
   const [images, dict, locale] = await Promise.all([
     listPatternImageUrls(),
     getDictionary(),
-    getLocale(),
+    getActiveLocale(),
   ]);
 
   return (

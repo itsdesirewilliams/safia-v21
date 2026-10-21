@@ -70,11 +70,30 @@ describe("testing explanation", () => {
 
     expect(html).toContain("How Quality Is Built In");
     expect(html).toContain("A Discipline That Runs Through Production");
-    expect(html).toContain("More Detail Coming Soon");
     expect(html).toContain('href="/products/truck-bus"');
     expect(html).toContain('href="/catalogue"');
     expect(html).toContain('href="/contact-us"');
     expect(html).toContain('href="/about-us"');
     expect(html).toContain('href="/warranty"');
+  });
+
+  it("no longer shows the testing-floor walkthrough or the coming-soon note", () => {
+    const html = renderToStaticMarkup(<TestingExplanation />);
+
+    expect(html).not.toContain("See the Testing Floor");
+    expect(html).not.toContain("The story rail above collects short videos");
+    expect(html).not.toContain("More Detail Coming Soon");
+    expect(html).not.toContain("More details coming soon");
+    // No empty placeholder panel is left behind.
+    expect(html).not.toContain("Testing Videos Coming Soon");
+  });
+
+  it("keeps the continuation navigation after the remaining explanation", () => {
+    const html = renderToStaticMarkup(<TestingExplanation />);
+
+    expect(html).toContain("Continue");
+    expect(html).toContain("Truck &amp; Bus tyres");
+    expect(html).toContain("Explore the Catalogue");
+    expect(html).toContain("About Us");
   });
 });

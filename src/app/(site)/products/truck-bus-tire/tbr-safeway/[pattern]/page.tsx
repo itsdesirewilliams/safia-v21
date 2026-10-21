@@ -9,7 +9,7 @@ import {
   getRangePattern,
   rangeApplication,
 } from "@/lib/catalogue/range-data";
-import { getDictionary, getLocale } from "@/lib/i18n/server";
+import { getActiveLocale, getDictionary } from "@/lib/i18n/server";
 import { languageAlternates, localizedHref } from "@/lib/i18n/url";
 import { getPatternImageUrl } from "@/lib/media/pattern-images-server";
 import { ROUTES } from "@/lib/routes";
@@ -35,7 +35,7 @@ export async function generateMetadata({
     alternates: pattern
       ? {
           canonical: localizedHref(
-            await getLocale(),
+            await getActiveLocale(),
             ROUTES.tbrPattern(pattern.slug),
           ),
           languages: languageAlternates(ROUTES.tbrPattern(pattern.slug)),
@@ -63,7 +63,7 @@ export default async function TbrPatternPage({
 
   const [dict, locale, imageUrl] = await Promise.all([
     getDictionary(),
-    getLocale(),
+    getActiveLocale(),
     getPatternImageUrl(pattern.patternCode),
   ]);
 

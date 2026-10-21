@@ -1,11 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 
+import { CountryFlag } from "@/components/ui/country-flag";
 import { cn } from "@/lib/cn";
-import { LOCALE_META, LOCALE_ORDER, type Locale } from "@/lib/i18n/config";
+import {
+  LOCALE_COOKIE,
+  LOCALE_COOKIE_MAX_AGE,
+  LOCALE_META,
+  LOCALE_ORDER,
+  type Locale,
+} from "@/lib/i18n/config";
 import { switchLocaleHref } from "@/lib/i18n/url";
 
 function Chevron({ open }: { open: boolean }) {
@@ -44,9 +51,27 @@ function CheckIcon() {
 }
 
 /**
- * The public language selector. Compact closed state (`EN ▾`), full language
- * names in the dropdown, keyboard accessible, closes on outside click / Escape /
- * selection. It never uses country flags.
+ * Remember the visitor's choice before the navigation starts, so the server
+ * treats the new language as the explicit choice even on the canonical root
+ * URL (which otherwise redirects to the last remembered language).
+ */
+function rememberLocale(locale: Locale) {
+  document.cookie = `${LOCALE_COOKIE}=${locale}; path=/; max-age=${LOCALE_COOKIE_MAX_AGE}; samesite=lax`;
+}
+
+/**
+ * The public language selector. The closed state shows the compact locale code
+ * and the flag of the language's reference country; the dropdown lists every
+ * supported language with its own name, its reference country and that
+ * country's SVG flag (never an emoji). Keyboard accessible: the trigger is a
+ * button, the list is an ARIA listbox driven with the arrow keys, Enter and
+ * Escape.
+ *
+ * Choosing a language navigates to the same page under the new language
+ * prefix and then refreshes the server tree. The refresh matters: every
+ * language is served from the same route (the proxy rewrites `/fr/about-us`
+ * to `/about-us`), so without it the client router would keep the segments it
+ * already has and the page would stay in the previous language.
  */
 export function LanguageSelector({
   locale,
@@ -56,21 +81,28 @@ export function LanguageSelector({
   label: string;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+  /** The path a pending language switch is waiting to land on. */
+  const pendingPath = useRef<string | null>(null);
 
   useEffect(() => {
     if (!open) {
       return;
     }
     const onPointerDown = (event: PointerEvent) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
+      if (rootRef.current && !rootRef.current.contains(event.target as Node)) {
         setOpen(false);
       }
     };
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setOpen(false);
+        triggerRef.current?.focus();
       }
     };
     document.addEventListener("pointerdown", onPointerDown);
@@ -81,49 +113,155 @@ export function LanguageSelector({
     };
   }, [open]);
 
-  function remember() {
-    // The proxy persists the chosen language as a cookie on navigation.
-    setOpen(false);
+  // A language switch only changes the URL prefix, and every language is
+  // served from the same route, so the client router keeps the tree it
+  // already has. Once the new URL has landed, refetch it so the page is
+  // actually rendered in the chosen language.
+  useEffect(() => {
+    const target = pendingPath.current;
+    if (!target || target !== pathname) {
+      return;
+    }
+    pendingPath.current = null;
+    router.refresh();
+  }, [pathname, router]);
+
+  const choose = useCallback(
+    (option: Locale) => {
+      setOpen(false);
+      triggerRef.current?.focus();
+
+      if (option === locale) {
+        return;
+      }
+
+      const href = switchLocaleHref(option, pathname);
+      rememberLocale(option);
+      pendingPath.current = href;
+      router.push(href);
+    },
+    [locale, pathname, router],
+  );
+
+  function onListKeyDown(event: React.KeyboardEvent<HTMLUListElement>) {
+    switch (event.key) {
+      case "ArrowDown":
+        event.preventDefault();
+        setActiveIndex((index) => (index + 1) % LOCALE_ORDER.length);
+        break;
+      case "ArrowUp":
+        event.preventDefault();
+        setActiveIndex(
+          (index) => (index - 1 + LOCALE_ORDER.length) % LOCALE_ORDER.length,
+        );
+        break;
+      case "Home":
+        event.preventDefault();
+        setActiveIndex(0);
+        break;
+      case "End":
+        event.preventDefault();
+        setActiveIndex(LOCALE_ORDER.length - 1);
+        break;
+      case "Enter":
+      case " ": {
+        event.preventDefault();
+        const option = LOCALE_ORDER[activeIndex];
+        if (option) {
+          choose(option);
+        }
+        break;
+      }
+      case "Tab":
+        setOpen(false);
+        break;
+      default:
+        break;
+    }
   }
 
+  function openList() {
+    setActiveIndex(Math.max(0, LOCALE_ORDER.indexOf(locale)));
+    setOpen(true);
+  }
+
+  const meta = LOCALE_META[locale];
+
   return (
-    <div ref={ref} className="relative">
+    <div ref={rootRef} className="relative">
       <button
+        ref={triggerRef}
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label={label}
-        onClick={() => setOpen((value) => !value)}
-        className="inline-flex h-10 items-center gap-1 rounded-full border border-ink-200 px-3 text-xs font-semibold text-ink-700 transition-colors hover:border-ink-300 hover:text-ink-950"
+        aria-label={`${label}: ${meta.nativeName} (${meta.short})`}
+        onClick={() => (open ? setOpen(false) : openList())}
+        className="inline-flex h-10 items-center gap-1.5 rounded-full border border-ink-200 px-3 text-xs font-semibold text-ink-700 transition-colors hover:border-ink-300 hover:text-ink-950"
       >
-        {LOCALE_META[locale].short}
+        <span aria-hidden="true">
+          <CountryFlag
+            code={meta.countryCode}
+            country={meta.country}
+            flagClassName="h-3 w-auto"
+          />
+        </span>
+        {meta.short}
         <Chevron open={open} />
       </button>
 
       {open && (
         <ul
+          ref={listRef}
           role="listbox"
+          tabIndex={-1}
           aria-label={label}
-          className="absolute end-0 z-50 mt-2 w-44 overflow-hidden rounded-lg border border-ink-200 bg-white py-1 shadow-pop"
+          aria-activedescendant={`language-option-${LOCALE_ORDER[activeIndex]}`}
+          onKeyDown={onListKeyDown}
+          className="absolute end-0 z-50 mt-2 max-h-[70vh] w-64 overflow-y-auto rounded-lg border border-ink-200 bg-white py-1 shadow-pop"
         >
-          {LOCALE_ORDER.map((option) => {
+          {LOCALE_ORDER.map((option, index) => {
             const current = option === locale;
+            const meta = LOCALE_META[option];
             return (
-              <li key={option} role="option" aria-selected={current}>
+              <li
+                key={option}
+                id={`language-option-${option}`}
+                role="option"
+                aria-selected={current}
+                className={cn(
+                  "flex items-center gap-3 px-3.5 py-2 transition-colors",
+                  index === activeIndex && "bg-ink-50",
+                )}
+              >
                 <Link
                   href={switchLocaleHref(option, pathname)}
-                  onClick={remember}
-                  dir={LOCALE_META[option].dir}
+                  tabIndex={-1}
+                  onClick={() => choose(option)}
+                  lang={option}
                   className={cn(
-                    "flex items-center justify-between gap-3 px-3.5 py-2 text-sm transition-colors",
+                    "flex flex-1 items-center gap-3 text-sm",
                     current
-                      ? "bg-ink-50 font-semibold text-ink-950"
-                      : "text-ink-700 hover:bg-ink-50 hover:text-ink-950",
+                      ? "font-semibold text-ink-950"
+                      : "text-ink-700 hover:text-ink-950",
                   )}
                 >
-                  <span>{LOCALE_META[option].nativeName}</span>
-                  {current && <CheckIcon />}
+                  <span aria-hidden="true">
+                    <CountryFlag
+                      code={meta.countryCode}
+                      country={meta.country}
+                      flagClassName="h-4 w-auto"
+                    />
+                  </span>
+                  {/* `dir="auto"` aligns each name with its own script while
+                      the flag column stays in the same place for every row. */}
+                  <span className="flex flex-col">
+                    <span dir="auto">{meta.nativeName}</span>
+                    <span dir="auto" className="text-xs text-ink-500">
+                      {meta.country}
+                    </span>
+                  </span>
                 </Link>
+                {current && <CheckIcon />}
               </li>
             );
           })}

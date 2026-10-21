@@ -142,7 +142,6 @@ export function SiteFooter({
                   <ArrowIcon className="h-4 w-4" />
                 </span>
               </a>
-              <p className="mt-3 text-sm text-white/50">{SITE.legalName}</p>
             </Reveal>
           </div>
 

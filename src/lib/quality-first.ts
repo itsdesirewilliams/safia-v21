@@ -39,20 +39,7 @@ export const QUALITY_FIRST_EXPLANATION = {
         "This page brings that work together in one place, so customers and partners can see how the tyres they order are handled before they leave the factory.",
       ],
     },
-    {
-      heading: "See the Testing Floor",
-      body: [
-        "The story rail above collects short videos from Safeway Tyre's testing process. Select any card to watch it in full.",
-        "The footage is added directly, so the record grows as more videos are supplied.",
-      ],
-    },
   ] satisfies readonly ExplanationBlock[],
-  /** Labelled stand-in for the detailed process copy that has not been supplied. */
-  note: {
-    label: "More Detail Coming Soon",
-    detail:
-      "Detailed information about our testing standards, equipment and processes will be published here soon.",
-  },
   links: [
     { label: "Truck & Bus tyres", href: ROUTES.category("truck-bus") },
     { label: "Explore the Catalogue", href: ROUTES.catalogue },

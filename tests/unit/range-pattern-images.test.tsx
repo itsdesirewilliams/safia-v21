@@ -7,7 +7,7 @@ vi.mock("@/lib/i18n/server", async () => {
   const { en } = await import("@/lib/i18n/dictionaries/en");
   return {
     getDictionary: async () => en,
-    getLocale: async () => "en",
+    getActiveLocale: async () => "en",
   };
 });
 

@@ -23,10 +23,13 @@ export function CountryFlag({
   code,
   country,
   className,
+  flagClassName,
 }: {
   code: string | null;
   country: string;
   className?: string;
+  /** Overrides the size of the rendered flag (the wrapper keeps its own). */
+  flagClassName?: string;
 }) {
   const Flag = code ? FLAG_MAP[code.toUpperCase()] : undefined;
 
@@ -50,7 +53,10 @@ export function CountryFlag({
     >
       <Flag
         title={country}
-        className="block h-3.5 w-auto rounded-[2px] border border-black/10 shadow-soft"
+        className={cn(
+          "block h-3.5 w-auto rounded-[2px] border border-black/10 shadow-soft",
+          flagClassName,
+        )}
       />
     </span>
   );

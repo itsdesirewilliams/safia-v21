@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { CATALOGUE } from "@/lib/catalogue/dataset";
-import { getDictionary, getLocale } from "@/lib/i18n/server";
+import { getActiveLocale, getDictionary } from "@/lib/i18n/server";
 import { languageAlternates, localizedHref } from "@/lib/i18n/url";
 import { ROUTES } from "@/lib/routes";
 
@@ -29,7 +29,10 @@ export async function generateMetadata() {
  * straight at the supplied PDF.
  */
 export default async function CataloguePage() {
-  const [dict, locale] = await Promise.all([getDictionary(), getLocale()]);
+  const [dict, locale] = await Promise.all([
+    getDictionary(),
+    getActiveLocale(),
+  ]);
   return (
     <>
       <section id="catalogue" className="scroll-mt-28 bg-white py-20 lg:py-28">

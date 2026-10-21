@@ -5,7 +5,9 @@ import { ConfigError, getSupabaseEnv } from "@/lib/config";
 import {
   DEFAULT_LOCALE,
   LOCALE_COOKIE,
+  LOCALE_COOKIE_MAX_AGE,
   LOCALE_HEADER,
+  isPrefixedLocale,
   type Locale,
 } from "@/lib/i18n/config";
 
@@ -17,19 +19,12 @@ import {
  *     the login screen. Authorization itself is enforced server-side in the
  *     admin layout and actions — this is only a convenience.
  *  2. Locale routing for the public site. English stays on the canonical root
- *     URLs; `/es`, `/pt` and `/ar` are rewritten to the same page tree with an
+ *     URLs; every other locale (`/fr`, `/pt`, `/es`, `/de`, `/nl`, `/pl`, `/ru`,
+ *     `/sw`, `/ar`) is rewritten to the same page tree with an
  *     `x-safeway-locale` request header, so server components render the right
  *     language with no client round-trip. `/en/...` permanently redirects to the
  *     unprefixed URL to avoid duplicate content.
  */
-
-const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
-
-type PrefixedLocale = "es" | "pt" | "ar";
-
-function isPrefixedLocale(value: string | undefined): value is PrefixedLocale {
-  return value === "es" || value === "pt" || value === "ar";
-}
 
 function requestWithLocale(
   request: NextRequest,
@@ -110,7 +105,8 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url, 308);
   }
 
-  // `/es|/pt|/ar/...` → rewrite to the shared tree with the locale header.
+  // `/fr|/pt|/es|/de|/nl|/pl|/ru|/sw|/ar/...` → rewrite to the shared tree with
+  // the locale header.
   if (isPrefixedLocale(segment)) {
     const url = request.nextUrl.clone();
     const rest = pathname.slice(`/${segment}`.length);

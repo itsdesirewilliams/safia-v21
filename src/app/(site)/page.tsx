@@ -33,7 +33,7 @@ import {
   CATALOGUE_HEADER_WIDTH,
   readCatalogueHeaderImage,
 } from "@/lib/media/catalogue-visual-assets";
-import { getDictionary, getLocale } from "@/lib/i18n/server";
+import { getActiveLocale, getDictionary } from "@/lib/i18n/server";
 import { languageAlternates, localizedHref } from "@/lib/i18n/url";
 import { readProductRangeImages } from "@/lib/media/product-range-assets";
 import { isValidYoutubeVideoId } from "@/lib/media/youtube";
@@ -58,7 +58,10 @@ export async function generateMetadata() {
 }
 
 export default async function HomePage() {
-  const [dict, locale] = await Promise.all([getDictionary(), getLocale()]);
+  const [dict, locale] = await Promise.all([
+    getDictionary(),
+    getActiveLocale(),
+  ]);
   const configuredYoutubeId = getYoutubeVideoId();
   const youtubeId = isValidYoutubeVideoId(configuredYoutubeId)
     ? configuredYoutubeId
@@ -345,16 +348,24 @@ export default async function HomePage() {
                         <blockquote className="text-base leading-relaxed text-ink-800">
                           &ldquo;{testimonial.quote}&rdquo;
                         </blockquote>
-                        <p className="mt-5 text-sm font-semibold text-ink-950">
-                          {testimonial.author}
-                          <span className="inline-flex flex-wrap items-center gap-x-1.5 font-normal text-ink-500">
-                            <span>— {testimonial.location}</span>
+                        <div className="mt-5 space-y-1">
+                          <p className="text-sm font-semibold text-ink-950">
+                            {testimonial.author}
+                          </p>
+                          <p className="flex items-start gap-1.5 text-sm font-normal text-ink-500">
                             <CountryFlag
                               code={testimonial.countryCode}
                               country={testimonial.location}
+                              className="mt-0.5 shrink-0"
                             />
-                          </span>
-                        </p>
+                            <span>{testimonial.location}</span>
+                            {testimonial.status === "draft" && (
+                              <span className="shrink-0 rounded-full border border-ink-200 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-ink-400">
+                                Draft
+                              </span>
+                            )}
+                          </p>
+                        </div>
                       </div>
                     </Reveal>
                   </li>

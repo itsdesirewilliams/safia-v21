@@ -72,11 +72,20 @@ async function get(path: string): Promise<string> {
 const TBR = listRangePatterns("tbr");
 const PCR = listRangePatterns("pcr");
 
+/**
+ * FM57 is temporarily hidden from the TBR index (see the page's
+ * `HIDDEN_TBR_PATTERN_CODES` set), so it has no card to assert on.
+ */
+const HIDDEN_TBR_PATTERN_CODES = new Set(["FM57"]);
+
 describe("TBR range", () => {
   it("index returns 200 with a card for every canonical Pattern Code", async () => {
     const html = await get("/products/truck-bus-tire/tbr-safeway");
     expect(html).toContain("Truck &amp; Bus Radial Tyres");
     for (const pattern of TBR) {
+      if (HIDDEN_TBR_PATTERN_CODES.has(pattern.patternCode)) {
+        continue;
+      }
       expect(html, pattern.patternCode).toContain(
         `/products/truck-bus-tire/tbr-safeway/${pattern.slug}`,
       );

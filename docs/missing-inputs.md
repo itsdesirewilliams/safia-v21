@@ -34,7 +34,7 @@ shell builds and runs without them; features that need them fail loudly with a
 | Input | Env var | Blocks | Notes |
 | --- | --- | --- | --- |
 | Certification assets | — (asset) | Homepage / About Us | Not supplied; the homepage renders a labelled placeholder rather than inventing names or marks |
-| Testimonial content | — (content) | Homepage | Not supplied; the homepage renders a labelled placeholder rather than inventing quotes |
+| Testimonial content | — (content) | Homepage | Not supplied; the homepage renders clearly marked draft testimonial cards (name, country and SVG flag) instead of inventing quotes. Approved quotations, customer names and company details are still needed for Brazil, the United Arab Emirates, Czechia, Chile, Peru, Egypt, Bolivia, Kenya, Tanzania and Malawi |
 | Product / category imagery | — (asset) | Homepage product ranges, Pattern pages | Not supplied; the homepage uses branded abstract tiles as clearly-temporary placeholders rather than stock or old-site imagery |
 | Slider artwork | — (asset) | Catalogue & Business Profile sliders | Not supplied; labelled placeholder SVGs ship in `public/assets/{landscape,portrait}/{catalogue,business-profile}` and are replaced by dropping matching filenames into both ratio folders |
 | Catalogue download URL | `NEXT_PUBLIC_CATALOGUE_DOWNLOAD_URL` | Catalogue download action | No PDF link supplied; `/catalogue` shows a labelled placeholder for the download action until one is set |
@@ -59,8 +59,10 @@ shell builds and runs without them; features that need them fail loudly with a
 - `/api/health` reports `503` and `supabase: "unconfigured"` when Supabase
   configuration is absent.
 - Homepage sections with an unsupplied input render a labelled placeholder
-  rather than inventing content: certifications, testimonials and the map (no
-  `NEXT_PUBLIC_COMPANY_ADDRESS`). The homepage tour uses the supplied YouTube
+  rather than inventing content: certifications and the map (no
+  `NEXT_PUBLIC_COMPANY_ADDRESS`). The testimonials render draft cards that are
+  labelled as drafts and carry placeholder copy until approved customer
+  quotations are supplied. The homepage tour uses the supplied YouTube
   video (`4jM2jUcc5Kc`), and the homepage Instagram section reads the local
   `public/assets/instagram` folder — it falls back to a labelled state only
   when that folder contains no supported images (no API or token involved).

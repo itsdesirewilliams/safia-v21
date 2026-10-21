@@ -8,7 +8,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { getCategory } from "@/lib/catalogue/categories";
 import { getPattern } from "@/lib/catalogue/dataset";
 import { patternEyebrow } from "@/lib/catalogue/pattern-label";
-import { getDictionary, getLocale } from "@/lib/i18n/server";
+import { getActiveLocale, getDictionary } from "@/lib/i18n/server";
 import { languageAlternates, localizedHref } from "@/lib/i18n/url";
 import { getPatternImageUrl } from "@/lib/media/pattern-images-server";
 import { ROUTES } from "@/lib/routes";
@@ -34,7 +34,7 @@ export async function generateMetadata({
     alternates: found
       ? {
           canonical: localizedHref(
-            await getLocale(),
+            await getActiveLocale(),
             ROUTES.pattern(found.categorySlug, found.slug),
           ),
           languages: languageAlternates(
@@ -69,7 +69,7 @@ export default async function PatternPage({
   const [imageUrl, dict, locale] = await Promise.all([
     getPatternImageUrl(pattern.patternCode),
     getDictionary(),
-    getLocale(),
+    getActiveLocale(),
   ]);
   const categoryName = dict.categories[category.slug];
 
