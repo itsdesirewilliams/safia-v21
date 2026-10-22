@@ -34,7 +34,6 @@ export const pl: Dictionary = {
     all: "Wszystkie",
     reset: "Wyczyść",
     apply: "Zastosuj",
-    comingSoon: "Już wkrótce",
   },
   tbr: {
     eyebrow: "Opony do ciężarówek i autobusów",
@@ -56,9 +55,6 @@ export const pl: Dictionary = {
     chinaHeading: "Radialne — Szandong, Chiny",
     chinaBody:
       "Opony radialne Safeway są wytwarzane za pośrednictwem naszej operacji produkcyjnej i współpracy produkcyjnej w prowincji Szandong w Chinach. Safeway jest współproducentem i współwłaścicielem zakładu produkcyjnego.",
-    specificationsComingSoon: "Pełne specyfikacje już wkrótce",
-    specificationsComingSoonDetail:
-      "Pełna tabela rozmiarów i specyfikacji tego bieżnika zostanie dodana w późniejszym etapie.",
   },
   pcr: {
     eyebrow: "Opony do ciężarówek i autobusów",
@@ -121,11 +117,11 @@ export const pl: Dictionary = {
     qualityDescription:
       "Produkty Safeway Tyre posiadają uznane oznaczenia jakości i zgodności.",
     testimonialsHeading: "Zaufanie importerów na całym świecie",
+    testimonialsPrevious: "Poprzednia opinia",
+    testimonialsNext: "Następna opinia",
     instagramHeading: "Śledź nas na Instagramie",
     instagramDescription: "Wgląd w najnowsze wiadomości Safeway Tyre.",
     inquiryHeading: "Formularz zapytania",
-    inquiryDescription:
-      "Podaj potrzebne rozmiary i bieżniki, a nasz zespół odpowie wyceną.",
     mapHeading: "Znajdź nas na mapie",
     mapDescription: "Siedziba Safeway Tyre w Ludhianie, w Indiach.",
   },
@@ -155,6 +151,7 @@ export const pl: Dictionary = {
     openingHours: "Godziny otwarcia",
     corporateOffice: "Biuro główne",
     factory: "Fabryka",
+    inquiryDescription: "Podaj potrzebne rozmiary i bieżniki, a nasz zespół odpowie wyceną.",
   },
   qualityFirst: {
     title: "Jakość przede wszystkim",

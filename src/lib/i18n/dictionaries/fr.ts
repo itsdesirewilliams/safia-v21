@@ -34,7 +34,6 @@ export const fr: Dictionary = {
     all: "Tous",
     reset: "Réinitialiser",
     apply: "Appliquer",
-    comingSoon: "Bientôt disponible",
   },
   tbr: {
     eyebrow: "Pneus pour camions et autobus",
@@ -56,9 +55,6 @@ export const fr: Dictionary = {
     chinaHeading: "Radial — Shandong, Chine",
     chinaBody:
       "Les pneus radiaux de Safeway sont fabriqués au travers de notre opération et de notre partenariat de fabrication dans le Shandong, en Chine. Safeway est co-fabricant et co-propriétaire de l'opération de fabrication.",
-    specificationsComingSoon: "Spécifications complètes bientôt disponibles",
-    specificationsComingSoonDetail:
-      "Le tableau complet des dimensions et spécifications de ce dessin sera ajouté lors d'une phase ultérieure.",
   },
   pcr: {
     eyebrow: "Pneus pour camions et autobus",
@@ -121,11 +117,11 @@ export const fr: Dictionary = {
     qualityDescription:
       "Les produits Safeway Tyre sont garantis par des marques reconnues de qualité et de conformité.",
     testimonialsHeading: "La confiance des importateurs du monde entier",
+    testimonialsPrevious: "Témoignage précédent",
+    testimonialsNext: "Témoignage suivant",
     instagramHeading: "Suivez-nous sur Instagram",
     instagramDescription: "Un aperçu des dernières nouvelles de Safeway Tyre.",
     inquiryHeading: "Formulaire de demande",
-    inquiryDescription:
-      "Indiquez-nous les dimensions et les dessins dont vous avez besoin et notre équipe vous répondra avec un devis.",
     mapHeading: "Trouvez-nous sur la carte",
     mapDescription:
       "Le siège social de Safeway Tyre à Ludhiana, en Inde.",
@@ -156,6 +152,7 @@ export const fr: Dictionary = {
     openingHours: "Horaires d'ouverture",
     corporateOffice: "Siège social",
     factory: "Usine",
+    inquiryDescription: "Indiquez-nous les dimensions et les dessins dont vous avez besoin et notre équipe vous répondra avec un devis.",
   },
   qualityFirst: {
     title: "La qualité d'abord",

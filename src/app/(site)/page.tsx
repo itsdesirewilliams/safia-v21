@@ -13,8 +13,7 @@ import { RevealText } from "@/components/motion/reveal-text";
 import { QueryForm } from "@/components/contact/query-form";
 import { ArrowIcon, ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { CountryFlag } from "@/components/ui/country-flag";
-import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
+import { TestimonialCarousel } from "@/components/home/testimonial-carousel";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import {
@@ -26,7 +25,7 @@ import {
   HERO_PLACEHOLDER_PHRASES,
   HERO_SUGGESTION_POOL,
   HOME_CATEGORY_CARDS,
-  TESTIMONIALS,
+  PUBLISHED_TESTIMONIALS,
 } from "@/lib/homepage";
 import {
   CATALOGUE_HEADER_HEIGHT,
@@ -34,6 +33,11 @@ import {
   readCatalogueHeaderImage,
 } from "@/lib/media/catalogue-visual-assets";
 import { getActiveLocale, getDictionary } from "@/lib/i18n/server";
+import { readInstagramImages } from "@/lib/media/instagram-assets";
+import {
+  readCertificates,
+  readCertificationLogos,
+} from "@/lib/media/certification-assets";
 import { languageAlternates, localizedHref } from "@/lib/i18n/url";
 import { readProductRangeImages } from "@/lib/media/product-range-assets";
 import { isValidYoutubeVideoId } from "@/lib/media/youtube";
@@ -62,6 +66,13 @@ export default async function HomePage() {
     getDictionary(),
     getActiveLocale(),
   ]);
+
+  // Sections whose artwork is supplied by the repo (or the Media layer) are
+  // rendered only when there is something to show, so no section is left
+  // standing empty.
+  const hasCertifications =
+    readCertificationLogos().length > 0 || readCertificates().length > 0;
+  const hasInstagram = readInstagramImages().length > 0;
   const configuredYoutubeId = getYoutubeVideoId();
   const youtubeId = isValidYoutubeVideoId(configuredYoutubeId)
     ? configuredYoutubeId
@@ -309,96 +320,64 @@ export default async function HomePage() {
       </section>
 
       {/* Quality & certifications */}
-      <section className="bg-white pb-20 lg:pb-28">
-        <Container>
-          <Reveal variant="mask">
-            <SectionHeading
-              accentLine
-              title={dict.home.qualityHeading}
-              description={dict.home.qualityDescription}
-            />
-          </Reveal>
-          <div className="mt-14">
-            <Reveal>
-              <Certifications />
+      {hasCertifications && (
+        <section className="bg-white pb-20 lg:pb-28">
+          <Container>
+            <Reveal variant="mask">
+              <SectionHeading
+                accentLine
+                title={dict.home.qualityHeading}
+                description={dict.home.qualityDescription}
+              />
             </Reveal>
-          </div>
-        </Container>
-      </section>
+            <div className="mt-14">
+              <Reveal>
+                <Certifications />
+              </Reveal>
+            </div>
+          </Container>
+        </section>
+      )}
 
       {/* Testimonials */}
-      <section className="bg-ink-50 py-20 lg:py-28">
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-16">
+      {PUBLISHED_TESTIMONIALS.length > 0 && (
+        <section className="bg-ink-50 py-20 lg:py-28">
+          <Container>
             <Reveal>
               <SectionHeading
                 accentLine
                 title={dict.home.testimonialsHeading}
               />
             </Reveal>
-            {TESTIMONIALS.length > 0 ? (
-              <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                {TESTIMONIALS.map((testimonial, index) => (
-                  <li
-                    key={`${testimonial.author}-${testimonial.location}`}
-                    className="h-full"
-                  >
-                    <Reveal delay={(index % 3) * 90} className="h-full">
-                      <div className="flex h-full flex-col rounded-card border border-ink-200 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-ink-300 hover:shadow-card motion-reduce:hover:translate-y-0">
-                        <blockquote className="text-base leading-relaxed text-ink-800">
-                          &ldquo;{testimonial.quote}&rdquo;
-                        </blockquote>
-                        <div className="mt-5 space-y-1">
-                          <p className="text-sm font-semibold text-ink-950">
-                            {testimonial.author}
-                          </p>
-                          <p className="flex items-start gap-1.5 text-sm font-normal text-ink-500">
-                            <CountryFlag
-                              code={testimonial.countryCode}
-                              country={testimonial.location}
-                              className="mt-0.5 shrink-0"
-                            />
-                            <span>{testimonial.location}</span>
-                            {testimonial.status === "draft" && (
-                              <span className="shrink-0 rounded-full border border-ink-200 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-ink-400">
-                                Draft
-                              </span>
-                            )}
-                          </p>
-                        </div>
-                      </div>
-                    </Reveal>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <Reveal delay={100}>
-                <PlaceholderPanel
-                  kind="testimonial"
-                  label="Testimonials Coming Soon"
-                  detail="Customer testimonials will be published here soon."
-                />
-              </Reveal>
-            )}
-          </div>
-        </Container>
-      </section>
+            <div className="mt-14">
+              <TestimonialCarousel
+                testimonials={PUBLISHED_TESTIMONIALS}
+                label={dict.home.testimonialsHeading}
+                previousLabel={dict.home.testimonialsPrevious}
+                nextLabel={dict.home.testimonialsNext}
+              />
+            </div>
+          </Container>
+        </section>
+      )}
 
       {/* Instagram */}
-      <section className="bg-white py-20 lg:py-28">
-        <Container>
-          <Reveal variant="mask">
-            <SectionHeading
-              accentLine
-              title={dict.home.instagramHeading}
-              description={dict.home.instagramDescription}
-            />
-          </Reveal>
-          <div className="mt-14">
-            <InstagramFeed />
-          </div>
-        </Container>
-      </section>
+      {hasInstagram && (
+        <section className="bg-white py-20 lg:py-28">
+          <Container>
+            <Reveal variant="mask">
+              <SectionHeading
+                accentLine
+                title={dict.home.instagramHeading}
+                description={dict.home.instagramDescription}
+              />
+            </Reveal>
+            <div className="mt-14">
+              <InstagramFeed />
+            </div>
+          </Container>
+        </section>
+      )}
 
       {/* Inquiry */}
       <section className="bg-ink-50 py-20 lg:py-28">
@@ -409,7 +388,7 @@ export default async function HomePage() {
                 <SectionHeading
                   accentLine
                   title={dict.home.inquiryHeading}
-                  description={dict.home.inquiryDescription}
+                  description={dict.contact.inquiryDescription}
                 />
               </Reveal>
               <Reveal delay={80}>

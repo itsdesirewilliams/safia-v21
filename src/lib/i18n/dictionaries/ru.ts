@@ -34,7 +34,6 @@ export const ru: Dictionary = {
     all: "Все",
     reset: "Сбросить",
     apply: "Применить",
-    comingSoon: "Скоро будет доступно",
   },
   tbr: {
     eyebrow: "Шины для грузовиков и автобусов",
@@ -56,9 +55,6 @@ export const ru: Dictionary = {
     chinaHeading: "Радиальные — Шаньдун, Китай",
     chinaBody:
       "Радиальные шины Safeway производятся на нашей производственной площадке и в рамках партнёрства в провинции Шаньдун, Китай. Safeway является соизготовителем и совладельцем производственной площадки.",
-    specificationsComingSoon: "Полные характеристики — скоро",
-    specificationsComingSoonDetail:
-      "Полная таблица типоразмеров и характеристик этого рисунка будет добавлена на более позднем этапе.",
   },
   pcr: {
     eyebrow: "Шины для грузовиков и автобусов",
@@ -121,11 +117,11 @@ export const ru: Dictionary = {
     qualityDescription:
       "Продукция Safeway Tyre подтверждена признанными знаками качества и соответствия.",
     testimonialsHeading: "Нам доверяют импортёры по всему миру",
+    testimonialsPrevious: "Предыдущий отзыв",
+    testimonialsNext: "Следующий отзыв",
     instagramHeading: "Подписывайтесь на наш Instagram",
     instagramDescription: "Краткий обзор самых свежих новостей Safeway Tyre.",
     inquiryHeading: "Форма запроса",
-    inquiryDescription:
-      "Укажите нужные размеры и рисунки — наша команда ответит предложением с ценой.",
     mapHeading: "Найдите нас на карте",
     mapDescription: "Головной офис Safeway Tyre в Лудхиане, Индия.",
   },
@@ -155,6 +151,7 @@ export const ru: Dictionary = {
     openingHours: "Часы работы",
     corporateOffice: "Головной офис",
     factory: "Завод",
+    inquiryDescription: "Укажите нужные размеры и рисунки — наша команда ответит предложением с ценой.",
   },
   qualityFirst: {
     title: "Качество прежде всего",

@@ -34,7 +34,6 @@ export const es: Dictionary = {
     all: "Todos",
     reset: "Restablecer",
     apply: "Aplicar",
-    comingSoon: "Próximamente",
   },
   search: {
     title: "Buscar",
@@ -83,11 +82,11 @@ export const es: Dictionary = {
     qualityDescription:
       "Los productos Safeway Tyre cuentan con marcas reconocidas de calidad y cumplimiento.",
     testimonialsHeading: "La confianza de importadores de todo el mundo",
+    testimonialsPrevious: "Testimonio anterior",
+    testimonialsNext: "Testimonio siguiente",
     instagramHeading: "Síguenos en Instagram",
     instagramDescription: "Un vistazo a lo último de Safeway Tyre.",
     inquiryHeading: "Formulario de consulta",
-    inquiryDescription:
-      "Indícanos las medidas y los patrones que necesitas y nuestro equipo te responderá con un presupuesto.",
     mapHeading: "Encuéntranos en el mapa",
     mapDescription: "Oficina corporativa de Safeway Tyre en Ludhiana, India.",
   },
@@ -117,6 +116,7 @@ export const es: Dictionary = {
     openingHours: "Horario de atención",
     corporateOffice: "Oficina corporativa",
     factory: "Fábrica",
+    inquiryDescription: "Indícanos las medidas y los patrones que necesitas y nuestro equipo te responderá con un presupuesto.",
   },
   qualityFirst: {
     title: "Calidad ante todo",
@@ -171,9 +171,6 @@ export const es: Dictionary = {
     chinaHeading: "Radial — Shandong, China",
     chinaBody:
       "Los neumáticos radiales de Safeway se fabrican a través de nuestra operación y asociación de fabricación en Shandong, China. Safeway es cofabricante y copropietaria de la operación de fabricación.",
-    specificationsComingSoon: "Especificaciones completas próximamente",
-    specificationsComingSoonDetail:
-      "La tabla completa de medidas y especificaciones de este patrón se añadirá en una fase posterior.",
   },
   pcr: {
     eyebrow: "Neumáticos para camión y autobús",

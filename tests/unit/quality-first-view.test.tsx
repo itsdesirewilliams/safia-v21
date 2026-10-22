@@ -40,11 +40,10 @@ describe("Quality First hero", () => {
 });
 
 describe("story rail", () => {
-  it("shows a labelled empty state when there are no videos", () => {
+  it("renders nothing when there are no videos", () => {
     const html = renderToStaticMarkup(<StoryRail stories={[]} />);
 
-    expect(html).toContain("Testing Videos Coming Soon");
-    expect(html).not.toContain("Scroll stories left");
+    expect(html).toBe("");
   });
 
   it("renders one playable card per story as a natural-ratio video", () => {
@@ -84,8 +83,8 @@ describe("testing explanation", () => {
     expect(html).not.toContain("The story rail above collects short videos");
     expect(html).not.toContain("More Detail Coming Soon");
     expect(html).not.toContain("More details coming soon");
-    // No empty placeholder panel is left behind.
-    expect(html).not.toContain("Testing Videos Coming Soon");
+    // No unfinished-content wording is left behind.
+    expect(html).not.toContain("Coming Soon");
   });
 
   it("keeps the continuation navigation after the remaining explanation", () => {

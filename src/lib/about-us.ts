@@ -28,10 +28,6 @@ export type TeamMember = {
 export const ABOUT_TEAM = {
   title: "Meet the Team",
   description: "A few members of the Safeway Tyre team.",
-  empty: {
-    label: "Team Profiles Coming Soon",
-    detail: "We are preparing team-member profiles. Please check back soon.",
-  },
 } as const;
 
 /**

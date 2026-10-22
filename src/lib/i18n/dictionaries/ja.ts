@@ -34,7 +34,6 @@ export const ja: Dictionary = {
     all: "すべて",
     reset: "リセット",
     apply: "適用",
-    comingSoon: "近日公開",
   },
   tbr: {
     eyebrow: "トラック・バス用タイヤ",
@@ -56,9 +55,6 @@ export const ja: Dictionary = {
     chinaHeading: "ラジアル — 山東省、中国",
     chinaBody:
       "Safeway Tyre のラジアルタイヤは、中国山東省における自社製造と製造パートナー経由で生産されています。Safeway Tyre はこの製造活動の共同製造者かつ一部所有者です。",
-    specificationsComingSoon: "詳細仕様は近日公開",
-    specificationsComingSoonDetail:
-      "このパターンのサイズ・仕様一覧表は、後の段階で追加予定です。",
   },
   pcr: {
     eyebrow: "トラック・バス用タイヤ",
@@ -120,11 +116,11 @@ export const ja: Dictionary = {
     qualityDescription:
       "Safeway Tyre の製品は、認知された品質・適合マークによって裏付けられています。",
     testimonialsHeading: "世界の輸入商的信頼",
+    testimonialsPrevious: "前のお客様の声",
+    testimonialsNext: "次のお客様の声",
     instagramHeading: "Instagram をフォロー",
     instagramDescription: "Safeway Tyre の最新情報をご覧ください。",
     inquiryHeading: "お問い合わせフォーム",
-    inquiryDescription:
-      "ご希望のサイズとパターンをお知らせください。担当チームよりお見積りでご返信します。",
     mapHeading: "地図で見る",
     mapDescription: "インド ルディアナにある Safeway Tyre の本社。",
   },
@@ -154,6 +150,7 @@ export const ja: Dictionary = {
     openingHours: "営業時間",
     corporateOffice: "本社",
     factory: "工場",
+    inquiryDescription: "ご希望のサイズとパターンをお知らせください。担当チームよりお見積りでご返信します。",
   },
   qualityFirst: {
     title: "品質第一",

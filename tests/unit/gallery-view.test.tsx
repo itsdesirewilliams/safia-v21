@@ -38,10 +38,10 @@ describe("viewer index navigation", () => {
 });
 
 describe("gallery grid", () => {
-  it("shows a labelled placeholder when no images are supplied", () => {
+  it("renders nothing when no images are supplied", () => {
     const html = renderToStaticMarkup(<GalleryGrid images={[]} />);
 
-    expect(html).toContain("Gallery Coming Soon");
+    expect(html).toBe("");
   });
 
   it("renders a Masonry layout with a sizer and natural-ratio items", () => {

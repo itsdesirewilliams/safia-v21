@@ -39,19 +39,22 @@ export default async function QualityFirstPage() {
     <>
       <QualityFirstHero />
 
-      <section id="stories" className="scroll-mt-28 bg-white py-20 lg:py-28">
-        <Container>
-          <Reveal>
-            <SectionHeading
-              title={QUALITY_FIRST_STORY_SECTION.title}
-              description={QUALITY_FIRST_STORY_SECTION.description}
-            />
-          </Reveal>
-          <div className="mt-12">
-            <StoryRail stories={stories} />
-          </div>
-        </Container>
-      </section>
+      {/* The testing-floor videos, only when footage is supplied. */}
+      {stories.length > 0 && (
+        <section id="stories" className="scroll-mt-28 bg-white py-20 lg:py-28">
+          <Container>
+            <Reveal>
+              <SectionHeading
+                title={QUALITY_FIRST_STORY_SECTION.title}
+                description={QUALITY_FIRST_STORY_SECTION.description}
+              />
+            </Reveal>
+            <div className="mt-12">
+              <StoryRail stories={stories} />
+            </div>
+          </Container>
+        </section>
+      )}
 
       <section className="bg-ink-50 py-20 lg:py-28">
         <Container>

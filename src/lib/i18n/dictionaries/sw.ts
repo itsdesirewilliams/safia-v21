@@ -34,7 +34,6 @@ export const sw: Dictionary = {
     all: "Zote",
     reset: "Anzisha upya",
     apply: "Tumia",
-    comingSoon: "Inapatikana karibuni",
   },
   tbr: {
     eyebrow: "Tire za malori na mabasi",
@@ -56,9 +55,6 @@ export const sw: Dictionary = {
     chinaHeading: "Radiyal — Shandong, China",
     chinaBody:
       "Tire za radiyal za Safeway hutengenezwa kupitia uzalishaji wetu na ushirika wa uzalishaji huko Shandong, China. Safeway ni mwenza na mmiliki mwenyewe kwa kituo cha uzalishaji.",
-    specificationsComingSoon: "Maelezo kamili yatapatikana karibuni",
-    specificationsComingSoonDetail:
-      "Jedwali kamili la vipimo na maelezo ya mchoro huu litaongezwa katika hatua ya baadaye.",
   },
   pcr: {
     eyebrow: "Tire za malori na mabasi",
@@ -121,11 +117,11 @@ export const sw: Dictionary = {
     qualityDescription:
       "Bidhaa za Safeway Tyre zinaungwa na alama za ubora na uzingatiaji zinazotambulika.",
     testimonialsHeading: "Inaminwa na wageni duniani",
+    testimonialsPrevious: "Maoni ya awali",
+    testimonialsNext: "Maoni ya baadaye",
     instagramHeading: "Tufuatilie kwenye Instagram",
     instagramDescription: "Muhtasari wa habari za hivi karibuni za Safeway Tyre.",
     inquiryHeading: "Fomu ya hoja",
-    inquiryDescription:
-      "Tuambie vipimo na michoro unayohitaji, na timu yetu itajibu kwa bei.",
     mapHeading: "Tupate kwenye ramani",
     mapDescription:
       "Ofisi kuu ya Safeway Tyre huko Ludhiana, India.",
@@ -156,6 +152,7 @@ export const sw: Dictionary = {
     openingHours: "Saa za kufungua",
     corporateOffice: "Ofisi kuu",
     factory: "Kituo",
+    inquiryDescription: "Tuambie vipimo na michoro unayohitaji, na timu yetu itajibu kwa bei.",
   },
   qualityFirst: {
     title: "Ubora kwanza",

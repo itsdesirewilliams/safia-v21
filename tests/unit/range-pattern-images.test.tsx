@@ -44,7 +44,7 @@ describe("TBR index pattern images", () => {
   it("falls back to the neutral placeholder for a pattern with no image", async () => {
     const html = renderToStaticMarkup(await TbrSafewayPage());
     // FM166 has an image; every other TBR pattern has none and must fall back.
-    expect(html).toContain("Pattern image coming soon");
+    expect(html).toContain("Pattern image");
   });
 });
 

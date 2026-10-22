@@ -1,5 +1,4 @@
 import { ArrowIcon, ButtonLink } from "@/components/ui/button";
-import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { getOptionalCatalogueDownloadUrl } from "@/lib/config";
 import { readCataloguePdfUrl } from "@/lib/media/catalogue-assets";
 
@@ -13,16 +12,10 @@ import { readCataloguePdfUrl } from "@/lib/media/catalogue-assets";
 export function CatalogueDownload() {
   const url = readCataloguePdfUrl() ?? getOptionalCatalogueDownloadUrl();
 
+  // Without a supplied PDF there is nothing to download, so the action is
+  // not shown at all.
   if (!url) {
-    return (
-      <div className="mt-8">
-        <PlaceholderPanel
-          kind="media"
-          label="Catalogue Download Coming Soon"
-          detail="The downloadable catalogue will be available here soon."
-        />
-      </div>
-    );
+    return null;
   }
 
   return (

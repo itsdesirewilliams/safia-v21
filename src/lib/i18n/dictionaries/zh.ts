@@ -34,7 +34,6 @@ export const zh: Dictionary = {
     all: "全部",
     reset: "重置",
     apply: "应用",
-    comingSoon: "即将推出",
   },
   tbr: {
     eyebrow: "卡车与客车轮胎",
@@ -55,9 +54,6 @@ export const zh: Dictionary = {
     chinaHeading: "子午线 — 山东，中国",
     chinaBody:
       "Safeway Tyre 的子午线轮胎通过我们在山东中国的生产业务及合作伙伴制造。Safeway Tyre 是该制造业务的联合制造商和共同所有者。",
-    specificationsComingSoon: "完整规格即将推出",
-    specificationsComingSoonDetail:
-      "该花纹的完整规格与参数表将在后续阶段补充。",
   },
   pcr: {
     eyebrow: "卡车与客车轮胎",
@@ -115,11 +111,11 @@ export const zh: Dictionary = {
     qualityHeading: "质量与认证",
     qualityDescription: "Safeway Tyre 产品拥有公认的质量与合规标志。",
     testimonialsHeading: "深受全球进口商信赖",
+    testimonialsPrevious: "上一条评价",
+    testimonialsNext: "下一条评价",
     instagramHeading: "在 Instagram 上关注我们",
     instagramDescription: "抢先了解 Safeway Tyre 的最新动态。",
     inquiryHeading: "询价表单",
-    inquiryDescription:
-      "告诉我们您需要的规格和花纹，我们的团队将回复报价。",
     mapHeading: "在地图上找到我们",
     mapDescription: "Safeway Tyre 位于印度路德喜亚的公司总部。",
   },
@@ -148,6 +144,7 @@ export const zh: Dictionary = {
     openingHours: "营业时间",
     corporateOffice: "公司总部",
     factory: "工厂",
+    inquiryDescription: "告诉我们您需要的规格和花纹，我们的团队将回复报价。",
   },
   qualityFirst: {
     title: "质量优先",

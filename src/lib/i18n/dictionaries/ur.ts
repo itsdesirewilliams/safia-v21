@@ -34,7 +34,6 @@ export const ur: Dictionary = {
     all: "تمام",
     reset: "ری سیٹ",
     apply: "لاگو کریں",
-    comingSoon: "جلد آ رہا ہے",
   },
   tbr: {
     eyebrow: "ٹرک اور بس کے ٹائر",
@@ -56,9 +55,6 @@ export const ur: Dictionary = {
     chinaHeading: "ریڈیل — شاندونگ، چین",
     chinaBody:
       "Safeway Tyre کے ریڈیل ٹائر چین کے شاندونگ میں ہماری تیاری یونٹ اور شراکت کے ذریعے بنائے جاتے ہیں۔ Safeway Tyre اس تیاری یونٹ کا مشترکہ تیار کنندہ اور جزو مالک ہے۔",
-    specificationsComingSoon: "مکمل تفصیلات جلد آ رہی ہیں",
-    specificationsComingSoonDetail:
-      "اس پیٹرن کی مکمل سائز اور تفصیلات کا جدول بعد کے مرحلے میں شامل کیا جائے گا۔",
   },
   pcr: {
     eyebrow: "ٹرک اور بس کے ٹائر",
@@ -120,11 +116,11 @@ export const ur: Dictionary = {
     qualityDescription:
       "Safeway Tyre کی مصنوعات کے پیچھے مانے گئے معیار اور مطابقت کے نشانات موجود ہیں۔",
     testimonialsHeading: "دنیا بھر کے درآمد کنندگان کا اعتماد",
+    testimonialsPrevious: "پچھلا تبصرہ",
+    testimonialsNext: "اگلا تبصرہ",
     instagramHeading: "ہمیں Instagram پر فالو کریں",
     instagramDescription: "Safeway Tyre کی تازہ ترین خبروں کا ایک نظارہ۔",
     inquiryHeading: "استفسار فارم",
-    inquiryDescription:
-      "ہمیں مطلوبہ سائز اور پیٹرن بتائیں۔ ہماری ٹیم قیمت کے ساتھ جواب دے گی۔",
     mapHeading: "نقشے پر ہمیں تلاش کریں",
     mapDescription: "بھارت کے لڈیانے میں Safeway Tyre کا مرکزی دفتر۔",
   },
@@ -154,6 +150,7 @@ export const ur: Dictionary = {
     openingHours: "اوقاتِ کار",
     corporateOffice: "مرکزی دفتر",
     factory: "کارخانہ",
+    inquiryDescription: "ہمیں مطلوبہ سائز اور پیٹرن بتائیں۔ ہماری ٹیم قیمت کے ساتھ جواب دے گی۔",
   },
   qualityFirst: {
     title: "پہلے معیار",

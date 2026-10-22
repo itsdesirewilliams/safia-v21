@@ -2,10 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { Reveal } from "@/components/ui/reveal";
 import type { QualityFirstStory } from "@/lib/media/quality-first";
-import { QUALITY_FIRST_EMPTY_STATES } from "@/lib/quality-first";
 
 import { StoryCard } from "./story-card";
 import { VideoViewer } from "./video-viewer";
@@ -76,13 +74,7 @@ export function StoryRail({ stories }: StoryRailProps) {
   }
 
   if (stories.length === 0) {
-    return (
-      <PlaceholderPanel
-        kind="video"
-        label={QUALITY_FIRST_EMPTY_STATES.stories.label}
-        detail={QUALITY_FIRST_EMPTY_STATES.stories.detail}
-      />
-    );
+    return null;
   }
 
   const activeStory = openIndex === null ? null : stories[openIndex];

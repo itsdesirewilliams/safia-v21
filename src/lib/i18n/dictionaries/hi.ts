@@ -34,7 +34,6 @@ export const hi: Dictionary = {
     all: "सभी",
     reset: "रीसेट",
     apply: "लागू करें",
-    comingSoon: "जल्द आ रहा है",
   },
   tbr: {
     eyebrow: "ट्रक और बस टायर",
@@ -56,9 +55,6 @@ export const hi: Dictionary = {
     chinaHeading: "रेडियल — शेडोंग, चीन",
     chinaBody:
       "Safeway Tyre के रेडियल टायर हमारी शेडोंग, चीन की निर्माण इकाई और साझेदारी के माध्यम से बनाए जाते हैं। Safeway Tyre इस निर्माण इकाई का संयुक्त निर्माता और सह-स्वामी है।",
-    specificationsComingSoon: "पूर्ण विनिर्देश जल्द आ रहे हैं",
-    specificationsComingSoonDetail:
-      "इस फ्रेस की पूर्ण साइज़ और विनिर्देश तालिका बाद के चरण में जोड़ी जाएगी।",
   },
   pcr: {
     eyebrow: "ट्रक और बस टायर",
@@ -121,11 +117,11 @@ export const hi: Dictionary = {
     qualityDescription:
       "Safeway Tyre उत्पादों के पीछे मान्यता प्राप्त गुणवत्ता और अनुपालन चिह्न हैं।",
     testimonialsHeading: "विश्व भर के आयातकों का भरोसा",
+    testimonialsPrevious: "पिछली प्रशंसा",
+    testimonialsNext: "अगली प्रशंसा",
     instagramHeading: "इंस्टाग्राम पर हमें फ़ॉलो करें",
     instagramDescription: "Safeway Tyre की नवीनतम जानकारी देखें।",
     inquiryHeading: "पूछताछ फ़ॉर्म",
-    inquiryDescription:
-      "हमें बताएँ कि आपको कौन-से साइज़ और फ्रेस चाहिए, हमारी टीम कोटेशन के साथ उत्तर देगी।",
     mapHeading: "मानचित्र पर हमें खोजें",
     mapDescription: "भारत के लुधियाना में Safeway Tyre का कॉर्पोरेट कार्यालय।",
   },
@@ -155,6 +151,7 @@ export const hi: Dictionary = {
     openingHours: "खुलने का समय",
     corporateOffice: "कॉर्पोरेट कार्यालय",
     factory: "कारखाना",
+    inquiryDescription: "हमें बताएँ कि आपको कौन-से साइज़ और फ्रेस चाहिए, हमारी टीम कोटेशन के साथ उत्तर देगी।",
   },
   qualityFirst: {
     title: "गुणवत्ता पहले",

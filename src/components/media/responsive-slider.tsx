@@ -1,4 +1,3 @@
-import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { readSliderSlides } from "@/lib/media/slider-assets";
 import { resolveSliderConfig, type SliderCollection } from "@/lib/media/slider";
 
@@ -32,13 +31,7 @@ export function ResponsiveSlider({
   const slides = readSliderSlides(collection);
 
   if (slides.length === 0) {
-    return (
-      <PlaceholderPanel
-        kind="media"
-        label={`${config.label} Coming Soon`}
-        detail={`This ${config.label.toLowerCase()} will be available here soon.`}
-      />
-    );
+    return null;
   }
 
   return (

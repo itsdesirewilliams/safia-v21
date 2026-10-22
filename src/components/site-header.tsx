@@ -590,11 +590,8 @@ export function SiteHeader({
                                         {sub.label}
                                       </Link>
                                     ) : (
-                                      <span className="flex items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm text-ink-400">
+                                      <span className="block rounded-lg px-3 py-2 text-sm text-ink-400">
                                         {sub.label}
-                                        <span className="text-[10px] font-semibold uppercase tracking-wide text-ink-300">
-                                          {dict.common.comingSoon}
-                                        </span>
                                       </span>
                                     )}
                                   </li>
@@ -775,11 +772,8 @@ export function SiteHeader({
                                               {sub.label}
                                             </Link>
                                           ) : (
-                                            <span className="flex items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm text-ink-400">
+                                            <span className="block rounded-lg px-3 py-2 text-sm text-ink-400">
                                               {sub.label}
-                                              <span className="text-[10px] font-semibold uppercase tracking-wide text-ink-300">
-                                                {dict.common.comingSoon}
-                                              </span>
                                             </span>
                                           )}
                                         </li>

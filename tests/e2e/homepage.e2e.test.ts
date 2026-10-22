@@ -4,7 +4,11 @@ import { resolve } from "node:path";
 
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import { HOME_CATEGORY_CARDS, TESTIMONIALS } from "@/lib/homepage";
+import {
+  HOME_CATEGORY_CARDS,
+  PUBLISHED_TESTIMONIALS,
+  TESTIMONIALS,
+} from "@/lib/homepage";
 
 const PORT = 4312;
 const BASE_URL = `http://127.0.0.1:${PORT}`;
@@ -104,11 +108,13 @@ describe("homepage vertical slice", () => {
     expect(html).not.toContain("Explore Quality First");
   });
 
-  it("shows every testimonial with a name, a country on its own line and an SVG flag", async () => {
+  it("shows the published testimonials with a name, a country and an SVG flag", async () => {
     const html = await (await fetch(`${BASE_URL}/`)).text();
 
     expect(TESTIMONIALS).toHaveLength(10);
-    for (const testimonial of TESTIMONIALS) {
+    expect(PUBLISHED_TESTIMONIALS).toHaveLength(3);
+
+    for (const testimonial of PUBLISHED_TESTIMONIALS) {
       expect(html).toContain(testimonial.author);
       expect(html).toContain(testimonial.location);
       // Deterministic SVG flag, keyed by ISO code (never an emoji).
@@ -118,7 +124,7 @@ describe("homepage vertical slice", () => {
     expect(html).not.toMatch(/[\u{1F1E6}-\u{1F1FF}]{2}/u);
   });
 
-  it("opens testimonial slots for the seven new markets, marked as drafts", async () => {
+  it("keeps the seven market entries in the source without publishing them", async () => {
     const html = await (await fetch(`${BASE_URL}/`)).text();
 
     for (const market of [
@@ -130,12 +136,12 @@ describe("homepage vertical slice", () => {
       "Tanzania",
       "Malawi",
     ]) {
-      expect(html, market).toContain(market);
+      const entry = TESTIMONIALS.find((item) => item.location === market);
+      expect(entry, market).toBeDefined();
+      // Awaiting the customer's approval, so it is not on the page.
+      expect(entry?.published, market).toBe(false);
+      expect(html, market).not.toContain(entry!.quote);
     }
-
-    // The draft slots are labelled, so no placeholder reads as a real quote.
-    expect(html).toContain("Draft placeholder");
-    expect(html).toContain("Name to be supplied");
   });
 
   it("keeps the static prefix of the search placeholder visible", async () => {

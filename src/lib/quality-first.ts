@@ -56,10 +56,3 @@ export const QUALITY_FIRST_CTA = {
   primary: { label: "Request a Quotation", href: ROUTES.contactUs },
   secondary: { label: "Explore the Catalogue", href: ROUTES.catalogue },
 } as const;
-
-export const QUALITY_FIRST_EMPTY_STATES = {
-  stories: {
-    label: "Testing Videos Coming Soon",
-    detail: "Footage from Safeway Tyre's testing floor will appear here soon.",
-  },
-} as const;

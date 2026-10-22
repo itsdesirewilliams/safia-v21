@@ -1,5 +1,4 @@
 import { CertificateCarousel } from "@/components/home/certificate-carousel";
-import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import {
   readCertificates,
   readCertificationLogos,
@@ -17,14 +16,7 @@ export function Certifications() {
   const certificates = readCertificates();
 
   if (logos.length === 0 && certificates.length === 0) {
-    return (
-      <PlaceholderPanel
-        kind="certification"
-        label="Certifications Coming Soon"
-        detail="Our certification marks and documents will be published here soon."
-        className="h-full"
-      />
-    );
+    return null;
   }
 
   return (

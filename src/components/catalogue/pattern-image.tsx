@@ -51,7 +51,7 @@ export function PatternImage({ src, alt, className }: PatternImageProps) {
               d="M12 3.75v3M12 17.25v3M3.75 12h3M17.25 12h3"
             />
           </svg>
-          <span className="sr-only">Pattern image coming soon</span>
+          <span className="sr-only">Pattern image</span>
         </span>
       )}
     </div>

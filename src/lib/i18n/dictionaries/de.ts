@@ -34,7 +34,6 @@ export const de: Dictionary = {
     all: "Alle",
     reset: "Zurücksetzen",
     apply: "Anwenden",
-    comingSoon: "Demnächst verfügbar",
   },
   tbr: {
     eyebrow: "Lkw- und Busreifen",
@@ -56,9 +55,6 @@ export const de: Dictionary = {
     chinaHeading: "Radial — Shandong, China",
     chinaBody:
       "Safeways Radialreifen werden über unsere Fertigung und unsere Fertigungspartnerschaft in Shandong, China, hergestellt. Safeway ist Mitfertiger und Mitinhaber des Fertigungsbetriebs.",
-    specificationsComingSoon: "Vollständige Spezifikationen demnächst",
-    specificationsComingSoonDetail:
-      "Die vollständige Größen- und Spezifikationstabelle dieses Profils wird in einer späteren Phase ergänzt.",
   },
   pcr: {
     eyebrow: "Lkw- und Busreifen",
@@ -121,11 +117,11 @@ export const de: Dictionary = {
     qualityDescription:
       "Safeway Tyre Produkte tragen anerkannte Qualitäts- und Konformitätszeichen.",
     testimonialsHeading: "Das Vertrauen von Importeuren weltweit",
+    testimonialsPrevious: "Vorherige Kundenstimme",
+    testimonialsNext: "Nächste Kundenstimme",
     instagramHeading: "Folgen Sie uns auf Instagram",
     instagramDescription: "Ein Blick auf das Neueste von Safeway Tyre.",
     inquiryHeading: "Anfrageformular",
-    inquiryDescription:
-      "Nennen Sie uns die benötigten Größen und Profile, und unser Team antwortet mit einem Angebot.",
     mapHeading: "Finden Sie uns auf der Karte",
     mapDescription:
       "Safeway Tyres Unternehmenszentrale in Ludhiana, Indien.",
@@ -156,6 +152,7 @@ export const de: Dictionary = {
     openingHours: "Öffnungszeiten",
     corporateOffice: "Unternehmenszentrale",
     factory: "Werk",
+    inquiryDescription: "Nennen Sie uns die benötigten Größen und Profile, und unser Team antwortet mit einem Angebot.",
   },
   qualityFirst: {
     title: "Qualität zuerst",

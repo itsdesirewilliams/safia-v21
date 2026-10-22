@@ -1,5 +1,4 @@
 import { Container } from "@/components/ui/container";
-import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import {
@@ -42,9 +41,6 @@ function PortraitPlaceholder() {
           strokeWidth="8"
         />
       </svg>
-      <span className="absolute right-4 top-4 text-[10px] font-medium uppercase tracking-[0.18em] text-white/45">
-        Portrait placeholder
-      </span>
     </div>
   );
 }
@@ -59,10 +55,16 @@ export type AboutTeamProps = {
  * is image-first: the name and position sit as an overlay on the bottom-left of
  * the image, with the short quote in the content area below. Portraits are
  * discovered from `public/assets/team` (by the slug of the member's name) and
- * used automatically; only when none is present does the neutral placeholder
- * appear.
+ * used automatically; a member without a portrait gets the neutral silhouette.
+ *
+ * With no members there is nothing to show, so the section is not rendered at
+ * all rather than announcing that it is unfinished.
  */
 export function AboutTeam({ members = ABOUT_TEAM_MEMBERS }: AboutTeamProps) {
+  if (members.length === 0) {
+    return null;
+  }
+
   return (
     <section id="team" className="scroll-mt-28 bg-white py-20 lg:py-28">
       <Container>
@@ -73,61 +75,51 @@ export function AboutTeam({ members = ABOUT_TEAM_MEMBERS }: AboutTeamProps) {
           />
         </Reveal>
 
-        {members.length === 0 ? (
-          <Reveal delay={120} className="mt-12">
-            <PlaceholderPanel
-              kind="media"
-              label={ABOUT_TEAM.empty.label}
-              detail={ABOUT_TEAM.empty.detail}
-            />
-          </Reveal>
-        ) : (
-          <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {members.map((member, index) => {
-              const image = member.image ?? readTeamImageUrl(member.name);
+        <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {members.map((member, index) => {
+            const image = member.image ?? readTeamImageUrl(member.name);
 
-              return (
-                <li key={member.name}>
-                  <Reveal delay={(index % 3) * 90} className="h-full">
-                    <article className="flex h-full flex-col overflow-hidden rounded-card border border-ink-200 bg-white shadow-card">
-                      <div className="relative aspect-[4/5] w-full overflow-hidden bg-ink-950">
-                        {image ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={image}
-                            alt={member.name}
-                            className="absolute inset-0 h-full w-full object-cover"
-                          />
-                        ) : (
-                          <PortraitPlaceholder />
-                        )}
-
-                        <span
-                          aria-hidden="true"
-                          className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-ink-950/90 via-ink-950/45 to-transparent"
+            return (
+              <li key={member.name}>
+                <Reveal delay={(index % 3) * 90} className="h-full">
+                  <article className="flex h-full flex-col overflow-hidden rounded-card border border-ink-200 bg-white shadow-card">
+                    <div className="relative aspect-[4/5] w-full overflow-hidden bg-ink-950">
+                      {image ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={image}
+                          alt={member.name}
+                          className="absolute inset-0 h-full w-full object-cover"
                         />
-                        <div className="absolute inset-x-0 bottom-0 p-5">
-                          <h3 className="text-h3 text-white">{member.name}</h3>
-                          <p className="mt-1 text-sm font-semibold text-white/80">
-                            {member.role}
-                          </p>
-                        </div>
-                      </div>
+                      ) : (
+                        <PortraitPlaceholder />
+                      )}
 
-                      <div className="flex flex-1 flex-col p-6">
-                        {member.bio && (
-                          <p className="text-sm leading-relaxed text-ink-600">
-                            {member.bio}
-                          </p>
-                        )}
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-ink-950/90 via-ink-950/45 to-transparent"
+                      />
+                      <div className="absolute inset-x-0 bottom-0 p-5">
+                        <h3 className="text-h3 text-white">{member.name}</h3>
+                        <p className="mt-1 text-sm font-semibold text-white/80">
+                          {member.role}
+                        </p>
                       </div>
-                    </article>
-                  </Reveal>
-                </li>
-              );
-            })}
-          </ul>
-        )}
+                    </div>
+
+                    <div className="flex flex-1 flex-col p-6">
+                      {member.bio && (
+                        <p className="text-sm leading-relaxed text-ink-600">
+                          {member.bio}
+                        </p>
+                      )}
+                    </div>
+                  </article>
+                </Reveal>
+              </li>
+            );
+          })}
+        </ul>
       </Container>
     </section>
   );

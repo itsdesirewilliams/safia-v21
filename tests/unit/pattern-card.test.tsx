@@ -54,7 +54,7 @@ describe("Pattern card", () => {
 
   it("renders a neutral fallback when no image is associated", () => {
     const html = renderToStaticMarkup(<PatternCard pattern={AGRICULTURE} />);
-    expect(html).toContain("Pattern image coming soon");
+    expect(html).toContain("Pattern image");
     expect(html).not.toContain("<img");
   });
 

@@ -34,7 +34,6 @@ export const ar: Dictionary = {
     all: "الكل",
     reset: "إعادة تعيين",
     apply: "تطبيق",
-    comingSoon: "قريبًا",
   },
   search: {
     title: "البحث",
@@ -81,11 +80,11 @@ export const ar: Dictionary = {
     qualityHeading: "الجودة والاعتمادات",
     qualityDescription: "منتجات Safeway Tyre مدعومة بعلامات جودة ومطابقة معترف بها.",
     testimonialsHeading: "ثقة المستوردين حول العالم",
+    testimonialsPrevious: "الشهادة السابقة",
+    testimonialsNext: "الشهادة التالية",
     instagramHeading: "تابعنا على إنستغرام",
     instagramDescription: "لمحة عن أحدث ما لدى Safeway Tyre.",
     inquiryHeading: "نموذج الاستفسار",
-    inquiryDescription:
-      "أخبرنا بالمقاسات والنقشات التي تحتاجها وسيردّ فريقنا بعرض سعر.",
     mapHeading: "جدنا على الخريطة",
     mapDescription: "المكتب الرئيسي لSafeway Tyre في لوديانا، الهند.",
   },
@@ -114,6 +113,7 @@ export const ar: Dictionary = {
     openingHours: "ساعات العمل",
     corporateOffice: "المكتب الرئيسي",
     factory: "المصنع",
+    inquiryDescription: "أخبرنا بالمقاسات والنقشات التي تحتاجها وسيردّ فريقنا بعرض سعر.",
   },
   qualityFirst: {
     title: "الجودة أولاً",
@@ -168,9 +168,6 @@ export const ar: Dictionary = {
     chinaHeading: "الشعاعية — شاندونغ، الصين",
     chinaBody:
       "تُصنَّع الإطارات الشعاعية من سيفواي من خلال عمليتنا وشراكتنا التصنيعية في شاندونغ، الصين. وسيفواي شريك في التصنيع ومالك جزئي للعملية التصنيعية.",
-    specificationsComingSoon: "المواصفات الكاملة قريبًا",
-    specificationsComingSoonDetail:
-      "سيُضاف جدول المقاسات والمواصفات الكامل لهذه النقشة في مرحلة لاحقة.",
   },
   pcr: {
     eyebrow: "إطارات الشاحنات والحافلات",

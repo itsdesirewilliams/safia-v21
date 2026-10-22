@@ -4,8 +4,8 @@ import { Breadcrumbs } from "@/components/catalogue/breadcrumbs";
 import { PatternCard } from "@/components/catalogue/pattern-card";
 import { RangeSwitcher } from "@/components/catalogue/range-switcher";
 import { Container } from "@/components/ui/container";
+import { ButtonLink } from "@/components/ui/button";
 import { PageHeader } from "@/components/ui/page-header";
-import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { Reveal } from "@/components/ui/reveal";
 import {
   CATEGORY_DESCRIPTIONS,
@@ -98,11 +98,20 @@ export default async function CategoryPage({
       <section className="py-16 lg:py-24">
         <Container size="listing">
           {patterns.length === 0 ? (
-            <PlaceholderPanel
-              kind="media"
-              label="Tubes Coming Soon"
-              detail="This range is coming soon. Contact us for current availability or specific sizes."
-            />
+            /* A range without its own pattern list is confirmed per order.
+               The page stays complete: the range is described, the enquiry
+               path is given, and no promise is made about a date. */
+            <div className="rounded-card border border-ink-200 bg-white p-8 sm:p-10">
+              <p className="max-w-2xl text-base leading-relaxed text-ink-600">
+                {dict.contact.inquiryDescription}
+              </p>
+              <ButtonLink
+                href={localizedHref(locale, ROUTES.contactUs)}
+                className="mt-6"
+              >
+                {dict.common.requestQuotation}
+              </ButtonLink>
+            </div>
           ) : (
             <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {patterns.map((pattern, index) => (

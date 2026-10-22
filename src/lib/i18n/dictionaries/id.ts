@@ -34,7 +34,6 @@ export const id: Dictionary = {
     all: "Semua",
     reset: "Atur ulang",
     apply: "Terapkan",
-    comingSoon: "Segera hadir",
   },
   tbr: {
     eyebrow: "Ban truk dan bus",
@@ -56,9 +55,6 @@ export const id: Dictionary = {
     chinaHeading: "Radial — Shandong, Tiongkok",
     chinaBody:
       "Ban radial Safeway diproduksi melalui operasi produksi dan kemitraan kami di Shandong, Tiongkok. Safeway adalah produsen bersama dan pemilik sebagian dari operasi produksi tersebut.",
-    specificationsComingSoon: "Spesifikasi lengkap segera hadir",
-    specificationsComingSoonDetail:
-      "Tabel ukuran dan spesifikasi lengkap untuk pola ini akan ditambahkan pada tahap berikutnya.",
   },
   pcr: {
     eyebrow: "Ban truk dan bus",
@@ -121,11 +117,11 @@ export const id: Dictionary = {
     qualityDescription:
       "Produk Safeway Tyre didukung tanda mutu dan kepatuhan yang diakui.",
     testimonialsHeading: "Dipercaya importir di seluruh dunia",
+    testimonialsPrevious: "Testimoni sebelumnya",
+    testimonialsNext: "Testimoni berikutnya",
     instagramHeading: "Ikuti kami di Instagram",
     instagramDescription: "Sekilas kabar terbaru dari Safeway Tyre.",
     inquiryHeading: "Formulir permintaan",
-    inquiryDescription:
-      "Sampaikan ukuran dan pola yang Anda butuhkan, dan tim kami akan menjawab dengan penawaran.",
     mapHeading: "Temukan kami di peta",
     mapDescription: "Kantor pusat Safeway Tyre di Ludhiana, India.",
   },
@@ -155,6 +151,7 @@ export const id: Dictionary = {
     openingHours: "Jam buka",
     corporateOffice: "Kantor pusat",
     factory: "Pabrik",
+    inquiryDescription: "Sampaikan ukuran dan pola yang Anda butuhkan, dan tim kami akan menjawab dengan penawaran.",
   },
   qualityFirst: {
     title: "Mutu lebih dulu",

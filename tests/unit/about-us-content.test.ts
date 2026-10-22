@@ -22,10 +22,9 @@ describe("About Us content", () => {
     }
   });
 
-  it("names the Team section and its labelled empty state", () => {
+  it("names the Team section", () => {
     expect(ABOUT_TEAM.title).toBe("Meet the Team");
-    expect(ABOUT_TEAM.empty.label.length).toBeGreaterThan(0);
-    expect(ABOUT_TEAM.empty.detail.length).toBeGreaterThan(0);
+    expect(ABOUT_TEAM.description.length).toBeGreaterThan(0);
   });
 
   it("describes the team neutrally, not as the company leadership", () => {

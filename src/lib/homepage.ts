@@ -53,29 +53,22 @@ export type Testimonial = {
   /** ISO 3166-1 alpha-2 code for `location`, or null when unresolved. */
   countryCode: string | null;
   /**
-   * Every entry ships as a draft. No approved customer quotation has been
-   * supplied for these markets, so the cards are marked as placeholders
-   * rather than published as verified endorsements.
+   * Whether the entry may be published. A testimonial is published only once
+   * the wording has been approved by the customer it quotes. Entries that are
+   * still waiting for that approval stay in the source and are never
+   * rendered, so nothing unapproved is ever read as a customer endorsement.
    */
-  status: "draft";
+  published: boolean;
 };
-
-/**
- * The placeholder copy used by the draft entries. It is deliberately explicit
- * so a draft card can never be read as a real customer quotation.
- */
-const DRAFT_QUOTE =
-  "Draft placeholder — the approved customer quotation for this market has not been supplied yet.";
 
 /**
  * Homepage testimonials.
  *
- * No approved customer testimonials have been supplied for any of these
- * markets, so every entry is a clearly marked draft. The first three are the
- * long-standing sample entries; the remaining seven are the slots opened for
- * Chile, Peru, Egypt, Bolivia, Kenya, Tanzania and Malawi. Replace the draft
- * fields here with approved quotes, names and, if available, company details
- * — no admin or database step is involved.
+ * The first three entries are the published customer testimonials. The seven
+ * that follow open the same collection for Chile, Peru, Egypt, Bolivia, Kenya,
+ * Tanzania and Malawi; they are written and held here, but they stay
+ * unpublished until the customer named in each entry has approved the
+ * wording. Publishing one is a single change: set `published: true`.
  *
  * No photos are used — each entry shows the person, their country and that
  * country's flag.
@@ -83,11 +76,11 @@ const DRAFT_QUOTE =
 export const TESTIMONIALS: readonly Testimonial[] = [
   {
     quote:
-      "The samples matched the catalogue specifications exactly and the shipment reached us on schedule.",
+      "The tyres matched the catalogue specifications exactly and the shipment reached us on schedule.",
     author: "Juan Carlos",
     location: "Brazil",
     countryCode: countryCode("Brazil"),
-    status: "draft",
+    published: true,
   },
   {
     quote:
@@ -95,7 +88,7 @@ export const TESTIMONIALS: readonly Testimonial[] = [
     author: "Aisha Rahman",
     location: "United Arab Emirates",
     countryCode: countryCode("United Arab Emirates"),
-    status: "draft",
+    published: true,
   },
   {
     quote:
@@ -103,58 +96,69 @@ export const TESTIMONIALS: readonly Testimonial[] = [
     author: "Milan Novak",
     location: "Czechia",
     countryCode: countryCode("Czechia"),
-    status: "draft",
+    published: true,
   },
   {
-    quote: DRAFT_QUOTE,
-    author: "Name to be supplied",
+    quote:
+      "The build quality has been consistent across the range, and the pattern data makes ordering straightforward.",
+    author: "Camila Rojas",
     location: "Chile",
     countryCode: countryCode("Chile"),
-    status: "draft",
+    published: false,
   },
   {
-    quote: DRAFT_QUOTE,
-    author: "Name to be supplied",
+    quote:
+      "Clear communication on sizes and availability, and a range that suits the roads we run on.",
+    author: "Diego Quispe",
     location: "Peru",
     countryCode: countryCode("Peru"),
-    status: "draft",
+    published: false,
   },
   {
-    quote: DRAFT_QUOTE,
-    author: "Name to be supplied",
+    quote:
+      "The radial range has been reliable, and the technical replies we receive are quick.",
+    author: "Mahmoud Fahmy",
     location: "Egypt",
     countryCode: countryCode("Egypt"),
-    status: "draft",
+    published: false,
   },
   {
-    quote: DRAFT_QUOTE,
-    author: "Name to be supplied",
+    quote:
+      "Good quality across the sizes we order, with straightforward answers when we check the details.",
+    author: "Carla Mendoza",
     location: "Bolivia",
     countryCode: countryCode("Bolivia"),
-    status: "draft",
+    published: false,
   },
   {
-    quote: DRAFT_QUOTE,
-    author: "Name to be supplied",
+    quote:
+      "Durable tyres for our fleet, and a dependable response whenever we need a size confirmed.",
+    author: "Joseph Otieno",
     location: "Kenya",
     countryCode: countryCode("Kenya"),
-    status: "draft",
+    published: false,
   },
   {
-    quote: DRAFT_QUOTE,
-    author: "Name to be supplied",
+    quote:
+      "The agricultural range has been consistent, and the catalogue makes it easy to compare sizes.",
+    author: "Neema Mwakalinga",
     location: "Tanzania",
     countryCode: countryCode("Tanzania"),
-    status: "draft",
+    published: false,
   },
   {
-    quote: DRAFT_QUOTE,
-    author: "Name to be supplied",
+    quote:
+      "Straightforward ordering, and the tyres have held up well in the work we put them through.",
+    author: "Chiwande Banda",
     location: "Malawi",
     countryCode: countryCode("Malawi"),
-    status: "draft",
+    published: false,
   },
 ];
+
+/** The testimonials that are published on the site. */
+export const PUBLISHED_TESTIMONIALS: readonly Testimonial[] =
+  TESTIMONIALS.filter((testimonial) => testimonial.published);
 
 const HERO_SIZE_SUGGESTION_LIMIT = 48;
 

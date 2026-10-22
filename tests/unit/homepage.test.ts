@@ -13,6 +13,7 @@ import {
   HERO_PLACEHOLDER_PHRASES,
   HERO_SUGGESTION_POOL,
   HOME_CATEGORY_CARDS,
+  PUBLISHED_TESTIMONIALS,
   TESTIMONIALS,
 } from "@/lib/homepage";
 import { ROUTES } from "@/lib/routes";
@@ -62,7 +63,7 @@ describe("homepage testimonials", () => {
     "Malawi",
   ];
 
-  it("ships the three sample testimonials and the seven new market slots", () => {
+  it("collects the published testimonials and the seven new market entries", () => {
     expect(TESTIMONIALS).toHaveLength(10);
 
     for (const testimonial of TESTIMONIALS) {
@@ -90,18 +91,31 @@ describe("homepage testimonials", () => {
     expect(countryCode("Malawi")).toBe("MW");
   });
 
-  it("marks every entry as a draft until a customer quote is approved", () => {
+  it("never presents unfinished wording", () => {
     for (const testimonial of TESTIMONIALS) {
-      expect(testimonial.status, testimonial.location).toBe("draft");
+      expect(testimonial.quote, testimonial.location).not.toMatch(
+        /draft|placeholder|sample|dummy|demo|tbc|tbd/i,
+      );
+      expect(testimonial.author, testimonial.location).not.toMatch(
+        /to be supplied|placeholder|tbc/i,
+      );
     }
+  });
 
-    // The new slots never present an invented quotation as a real one.
+  it("publishes only the testimonials the customer has approved", () => {
+    const published = TESTIMONIALS.filter((entry) => entry.published);
+    expect(published).toHaveLength(3);
+    expect(PUBLISHED_TESTIMONIALS).toEqual(published);
+
+    // The seven market entries are written but held back until the customer
+    // named in each one has approved the wording.
     for (const market of NEW_MARKETS) {
       const entry = TESTIMONIALS.find(
         (testimonial) => testimonial.location === market,
       );
-      expect(entry?.quote, market).toContain("Draft placeholder");
-      expect(entry?.author, market).toBe("Name to be supplied");
+      expect(entry?.published, market).toBe(false);
+      expect(entry?.author.length, market).toBeGreaterThan(0);
+      expect(PUBLISHED_TESTIMONIALS, market).not.toContain(entry);
     }
   });
 });

@@ -39,7 +39,6 @@ export type Dictionary = {
     all: string;
     reset: string;
     apply: string;
-    comingSoon: string;
   };
   tbr: {
     eyebrow: string;
@@ -56,8 +55,6 @@ export type Dictionary = {
     indiaBody: string;
     chinaHeading: string;
     chinaBody: string;
-    specificationsComingSoon: string;
-    specificationsComingSoonDetail: string;
   };
   pcr: {
     eyebrow: string;
@@ -110,10 +107,11 @@ export type Dictionary = {
     qualityHeading: string;
     qualityDescription: string;
     testimonialsHeading: string;
+    testimonialsPrevious: string;
+    testimonialsNext: string;
     instagramHeading: string;
     instagramDescription: string;
     inquiryHeading: string;
-    inquiryDescription: string;
     mapHeading: string;
     mapDescription: string;
   };
@@ -141,6 +139,7 @@ export type Dictionary = {
     openingHours: string;
     corporateOffice: string;
     factory: string;
+    inquiryDescription: string;
   };
   qualityFirst: { title: string; description: string };
   gallery: { title: string; description: string };
@@ -201,7 +200,6 @@ export const en: Dictionary = {
     all: "All",
     reset: "Reset",
     apply: "Apply",
-    comingSoon: "Coming soon",
   },
   tbr: {
     eyebrow: "Truck & Bus Tyres",
@@ -223,9 +221,6 @@ export const en: Dictionary = {
     chinaHeading: "Radial — Shandong, China",
     chinaBody:
       "Safeway's radial tyres are manufactured through our manufacturing operation and partnership in Shandong, China. Safeway is a co-manufacturer and part-owner of the manufacturing operation.",
-    specificationsComingSoon: "Full specifications coming soon",
-    specificationsComingSoonDetail:
-      "The complete size and specification table for this pattern will be added in a later phase.",
   },
   pcr: {
     eyebrow: "Truck & Bus Tyres",
@@ -291,11 +286,11 @@ export const en: Dictionary = {
     qualityDescription:
       "Safeway Tyre products are backed by recognised quality and compliance marks.",
     testimonialsHeading: "Trusted by Importers Worldwide",
+    testimonialsPrevious: "Previous testimonial",
+    testimonialsNext: "Next testimonial",
     instagramHeading: "Follow Us on Instagram",
     instagramDescription: "A look at the latest from Safeway Tyre.",
     inquiryHeading: "Inquiry Form",
-    inquiryDescription:
-      "Tell us the sizes and patterns you need and our team will respond with a quotation.",
     mapHeading: "Find Us on the Map",
     mapDescription: "Safeway Tyre's corporate office in Ludhiana, India.",
   },
@@ -325,6 +320,7 @@ export const en: Dictionary = {
     openingHours: "Opening hours",
     corporateOffice: "Corporate Office",
     factory: "Factory",
+    inquiryDescription: "Tell us the sizes and patterns you need and our team will respond with a quotation.",
   },
   qualityFirst: {
     title: "Quality First",

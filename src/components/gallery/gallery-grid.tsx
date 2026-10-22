@@ -2,9 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { cn } from "@/lib/cn";
-import { GALLERY_EMPTY_STATE } from "@/lib/gallery";
 import type { GalleryImage } from "@/lib/media/gallery";
 
 import { GalleryViewer } from "./gallery-viewer";
@@ -107,13 +105,7 @@ export function GalleryGrid({ images }: GalleryGridProps) {
   }, [images.length]);
 
   if (images.length === 0) {
-    return (
-      <PlaceholderPanel
-        kind="media"
-        label={GALLERY_EMPTY_STATE.label}
-        detail={GALLERY_EMPTY_STATE.detail}
-      />
-    );
+    return null;
   }
 
   return (

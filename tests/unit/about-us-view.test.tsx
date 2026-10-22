@@ -17,10 +17,10 @@ describe("About Us bio", () => {
 });
 
 describe("About Us team", () => {
-  it("shows a labelled placeholder when no members are supplied", () => {
+  it("renders nothing when no members are supplied", () => {
     const html = renderToStaticMarkup(<AboutTeam members={[]} />);
 
-    expect(html).toContain("Team Profiles Coming Soon");
+    expect(html).toBe("");
   });
 
   it("overlays the name and position on the image with the quote below", () => {
@@ -37,8 +37,9 @@ describe("About Us team", () => {
     expect(html).toContain("Leads the company.");
     // Readable scrim behind the overlaid name, over the placeholder portrait.
     expect(html).toContain("from-ink-950/90");
-    expect(html).toContain("Portrait placeholder");
-    expect(html).not.toContain("Team Profiles Coming Soon");
+    // A neutral silhouette, with no unfinished-content label on it.
+    expect(html).not.toContain("Portrait placeholder");
+    expect(html).not.toContain("Coming Soon");
   });
 
   it("uses a supplied portrait instead of the placeholder when present", () => {

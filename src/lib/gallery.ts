@@ -13,11 +13,6 @@ export const GALLERY_PAGE = {
     "A look at Safeway Tyre — the ranges we make and the places they run. Select any image to view it larger.",
 } as const;
 
-export const GALLERY_EMPTY_STATE = {
-  label: "Gallery Coming Soon",
-  detail: "Photographs from Safeway Tyre will be published here soon.",
-} as const;
-
 /**
  * Wrap an index into `0..count-1` so viewer next/previous stays bound to the
  * sequence. Returns 0 for an empty sequence.

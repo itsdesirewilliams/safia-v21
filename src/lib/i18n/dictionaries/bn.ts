@@ -34,7 +34,6 @@ export const bn: Dictionary = {
     all: "সব",
     reset: "রিসেট",
     apply: "প্রয়োগ করুন",
-    comingSoon: "শীঘ্রই আসছে",
   },
   tbr: {
     eyebrow: "ট্রাক ও বাস টায়ার",
@@ -56,9 +55,6 @@ export const bn: Dictionary = {
     chinaHeading: "রেডিয়াল — শান্দুং, চীন",
     chinaBody:
       "Safeway Tyre-এর রেডিয়াল টায়ার আমাদের শান্দুং, চীনের উৎপাদন কার্যক্রম ও অংশীদারিত্বের মাধ্যমে তৈরি হয়। Safeway Tyre এই উৎপাদন কার্যক্রমের যৌথ প্রস্তুতকারক ও অংশ-মালিক।",
-    specificationsComingSoon: "সম্পূর্ণ স্পেসিফিকেশন শীঘ্রই আসছে",
-    specificationsComingSoonDetail:
-      "এই ধাঁচের সম্পূর্ণ মাপ ও স্পেসিফিকেশন টেবিল পরবর্তী ধাপে যোগ করা হবে।",
   },
   pcr: {
     eyebrow: "ট্রাক ও বাস টায়ার",
@@ -121,11 +117,11 @@ export const bn: Dictionary = {
     qualityDescription:
       "Safeway Tyreের পণ্যের পেছনে স্বীকৃত গুণমান ও সম্মতির চিহ্ন রয়েছে।",
     testimonialsHeading: "বিশ্বজুড়ে আমদানিকারকদের আস্থা",
+    testimonialsPrevious: "পূর্ববর্তী প্রশংসা",
+    testimonialsNext: "পরবর্তী প্রশংসা",
     instagramHeading: "ইনস্টাগ্রামে আমাদের ফলো করুন",
     instagramDescription: "Safeway Tyreের সাম্প্রতিক খবরের একটি ঝলক।",
     inquiryHeading: "জিজ্ঞাসা ফর্ম",
-    inquiryDescription:
-      "আপনার প্রয়োজনীয় মাপ ও ধাঁচ জানান, আমাদের টিম দরপত্রসহ উত্তর দেবে।",
     mapHeading: "মানচিত্রে আমাদের খুঁজুন",
     mapDescription: "ভারতের লুধিয়ানায় Safeway Tyreের কর্পোরেট অফিস।",
   },
@@ -155,6 +151,7 @@ export const bn: Dictionary = {
     openingHours: "খোলার সময়",
     corporateOffice: "কর্পোরেট অফিস",
     factory: "কারখানা",
+    inquiryDescription: "আপনার প্রয়োজনীয় মাপ ও ধাঁচ জানান, আমাদের টিম দরপত্রসহ উত্তর দেবে।",
   },
   qualityFirst: {
     title: "গুণমান্থ প্রথমে",

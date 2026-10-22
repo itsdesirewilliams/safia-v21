@@ -34,7 +34,6 @@ export const nl: Dictionary = {
     all: "Alle",
     reset: "Herstellen",
     apply: "Toepassen",
-    comingSoon: "Binnenkort beschikbaar",
   },
   tbr: {
     eyebrow: "Vrachtwagen- en busbanden",
@@ -56,9 +55,6 @@ export const nl: Dictionary = {
     chinaHeading: "Radiaal — Shandong, China",
     chinaBody:
       "Safeway's radiale banden worden geproduceerd via onze productieactiviteit en productiepartner in Shandong, China. Safeway is medefabrikant en mede-eigenaar van de productieactiviteit.",
-    specificationsComingSoon: "Volledige specificaties binnenkort",
-    specificationsComingSoonDetail:
-      "De volledige maat- en specificatietabel van dit profiel wordt in een latere fase toegevoegd.",
   },
   pcr: {
     eyebrow: "Vrachtwagen- en busbanden",
@@ -121,11 +117,11 @@ export const nl: Dictionary = {
     qualityDescription:
       "Safeway Tyre-producten dragen erkende kwaliteits- en conformiteitsmerken.",
     testimonialsHeading: "Vertrouwd door importeurs wereldwijd",
+    testimonialsPrevious: "Vorige testimonial",
+    testimonialsNext: "Volgende testimonial",
     instagramHeading: "Volg ons op Instagram",
     instagramDescription: "Een blik op het nieuwste van Safeway Tyre.",
     inquiryHeading: "Aanvraagformulier",
-    inquiryDescription:
-      "Vertel ons welke maten en profielen u nodig heeft, dan reageert ons team met een offerte.",
     mapHeading: "Vind ons op de kaart",
     mapDescription: "De hoofdkantoor van Safeway Tyre in Ludhiana, India.",
   },
@@ -155,6 +151,7 @@ export const nl: Dictionary = {
     openingHours: "Openingstijden",
     corporateOffice: "Hoofdkantoor",
     factory: "Fabriek",
+    inquiryDescription: "Vertel ons welke maten en profielen u nodig heeft, dan reageert ons team met een offerte.",
   },
   qualityFirst: {
     title: "Kwaliteit voorop",

@@ -1,5 +1,4 @@
 import { InstagramStrip } from "@/components/home/instagram-strip";
-import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { readInstagramImages } from "@/lib/media/instagram-assets";
 
 /**
@@ -12,13 +11,7 @@ export function InstagramFeed() {
   const images = readInstagramImages();
 
   if (images.length === 0) {
-    return (
-      <PlaceholderPanel
-        kind="media"
-        label="Instagram Coming Soon"
-        detail="Photographs from Safeway Tyre will appear here soon."
-      />
-    );
+    return null;
   }
 
   return <InstagramStrip images={images} />;

@@ -119,11 +119,13 @@ describe("Category listing", () => {
     );
   });
 
-  it("shows Tubes as a category whose data is still to come", async () => {
+  it("shows Tubes as an enquiry-led category, with no unfinished wording", async () => {
     const html = await get("/products/tubes");
 
     expect(html).toContain("Tubes");
-    expect(html).toContain("Tubes Coming Soon");
+    expect(html).toContain("Inner tubes for a range of tyre applications.");
+    expect(html).toContain("Request a Quotation");
+    expect(html).not.toMatch(/Coming Soon/i);
   });
 
   it("404s an unknown category", async () => {
