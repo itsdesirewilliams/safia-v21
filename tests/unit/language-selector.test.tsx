@@ -2,13 +2,18 @@
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const push = vi.fn();
-const refresh = vi.fn();
-let pathname = "/";
+const mocks = vi.hoisted(() => ({
+  pathname: "/",
+  navigateToPath: vi.fn(),
+}));
+
+vi.mock("@/lib/i18n/navigate", () => ({
+  navigateToPath: (href: string) => mocks.navigateToPath(href),
+}));
 
 vi.mock("next/navigation", () => ({
-  usePathname: () => pathname,
-  useRouter: () => ({ push, replace: vi.fn(), prefetch: vi.fn(), refresh }),
+  usePathname: () => mocks.pathname,
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() }),
 }));
 
 vi.mock("next/link", () => ({
@@ -16,41 +21,41 @@ vi.mock("next/link", () => ({
     href,
     children,
     onClick,
+    prefetch,
     ...props
-  }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
-    <a
-      href={href}
-      {...props}
-      onClick={(event) => {
-        // `next/link` intercepts the click; jsdom cannot follow a navigation.
-        event.preventDefault();
-        onClick?.(event);
-      }}
-    >
-      {children}
-    </a>
-  ),
+  }: React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+    href: string;
+    prefetch?: boolean;
+  }) => {
+    // `next/link` consumes `prefetch`; a plain anchor does not.
+    void prefetch;
+    return (
+      <a
+        href={href}
+        {...props}
+        onClick={(event) => {
+          onClick?.(event);
+        }}
+      >
+        {children}
+      </a>
+    );
+  },
 }));
 
 import { LanguageSelector } from "@/components/i18n/language-selector";
 import { LOCALE_META, LOCALE_ORDER } from "@/lib/i18n/config";
 
 beforeEach(() => {
-  pathname = "/";
-  push.mockClear();
-  refresh.mockClear();
+  mocks.pathname = "/";
+  mocks.navigateToPath.mockClear();
   document.cookie = "NEXT_LOCALE=; path=/; max-age=0";
 });
 
 afterEach(cleanup);
 
 function renderSelector(locale: "en" | "fr" = "en") {
-  const utils = render(<LanguageSelector locale={locale} label="Language" />);
-  return {
-    ...utils,
-    rerenderSelector: () =>
-      utils.rerender(<LanguageSelector locale={locale} label="Language" />),
-  };
+  return render(<LanguageSelector locale={locale} label="Language" />);
 }
 
 function openList() {
@@ -61,9 +66,9 @@ function openList() {
 describe("language selector", () => {
   it("shows the compact locale code in the closed state", () => {
     renderSelector("en");
-    expect(screen.getByRole("button", { name: /^Language/ }).textContent).toContain(
-      "EN",
-    );
+    expect(
+      screen.getByRole("button", { name: /^Language/ }).textContent,
+    ).toContain("EN");
   });
 
   it("lists every supported language with its reference country and a flag", () => {
@@ -106,33 +111,18 @@ describe("language selector", () => {
     expect(selected[0].getAttribute("id")).toBe("language-option-fr");
   });
 
-  it("navigates to the same page in the chosen language on the first click", () => {
+  it("loads the same page in the chosen language on the first click", () => {
     renderSelector();
     const list = openList();
 
     const french = within(list).getByRole("option", { name: /Français/ });
     fireEvent.click(within(french).getByRole("link"));
 
-    expect(push).toHaveBeenCalledTimes(1);
-    expect(push).toHaveBeenCalledWith("/fr");
-    // The choice is remembered before the navigation so the server treats it
-    // as the explicit language.
+    expect(mocks.navigateToPath).toHaveBeenCalledTimes(1);
+    expect(mocks.navigateToPath).toHaveBeenCalledWith("/fr");
+    // The choice is remembered before the navigation, so the server treats
+    // it as the explicit language.
     expect(document.cookie).toContain("NEXT_LOCALE=fr");
-  });
-
-  it("refreshes the server tree once the new language URL has landed", () => {
-    const { rerenderSelector } = renderSelector();
-    const list = openList();
-    const swahili = within(list).getByRole("option", { name: /Kiswahili/ });
-    fireEvent.click(within(swahili).getByRole("link"));
-
-    expect(refresh).not.toHaveBeenCalled();
-
-    // The router lands on the new URL, then the tree is refetched so the page
-    // is actually rendered in the chosen language.
-    pathname = "/sw";
-    rerenderSelector();
-    expect(refresh).toHaveBeenCalledTimes(1);
   });
 
   it("does not navigate when the current language is chosen again", () => {
@@ -141,18 +131,17 @@ describe("language selector", () => {
     const english = within(list).getByRole("option", { name: /English/ });
     fireEvent.click(within(english).getByRole("link"));
 
-    expect(push).not.toHaveBeenCalled();
-    expect(refresh).not.toHaveBeenCalled();
+    expect(mocks.navigateToPath).not.toHaveBeenCalled();
   });
 
   it("switches back to the unprefixed English URL", () => {
-    pathname = "/fr/about-us";
+    mocks.pathname = "/fr/about-us";
     renderSelector("fr");
     const list = openList();
     const english = within(list).getByRole("option", { name: /English/ });
     fireEvent.click(within(english).getByRole("link"));
 
-    expect(push).toHaveBeenCalledWith("/about-us");
+    expect(mocks.navigateToPath).toHaveBeenCalledWith("/about-us");
   });
 
   it("is driven by the keyboard", () => {
@@ -170,6 +159,6 @@ describe("language selector", () => {
     );
 
     fireEvent.keyDown(list, { key: "Enter" });
-    expect(push).toHaveBeenCalledWith("/ar");
+    expect(mocks.navigateToPath).toHaveBeenCalledWith("/ar");
   });
 });

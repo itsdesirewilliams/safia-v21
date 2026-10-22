@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 import { CountryFlag } from "@/components/ui/country-flag";
 import { cn } from "@/lib/cn";
@@ -13,6 +13,7 @@ import {
   LOCALE_ORDER,
   type Locale,
 } from "@/lib/i18n/config";
+import { navigateToPath } from "@/lib/i18n/navigate";
 import { switchLocaleHref } from "@/lib/i18n/url";
 
 function Chevron({ open }: { open: boolean }) {
@@ -52,8 +53,8 @@ function CheckIcon() {
 
 /**
  * Remember the visitor's choice before the navigation starts, so the server
- * treats the new language as the explicit choice even on the canonical root
- * URL (which otherwise redirects to the last remembered language).
+ * treats the new language as the explicit choice. Without it the canonical
+ * root URL would be redirected back to the language that was chosen last.
  */
 function rememberLocale(locale: Locale) {
   document.cookie = `${LOCALE_COOKIE}=${locale}; path=/; max-age=${LOCALE_COOKIE_MAX_AGE}; samesite=lax`;
@@ -67,11 +68,9 @@ function rememberLocale(locale: Locale) {
  * button, the list is an ARIA listbox driven with the arrow keys, Enter and
  * Escape.
  *
- * Choosing a language navigates to the same page under the new language
- * prefix and then refreshes the server tree. The refresh matters: every
- * language is served from the same route (the proxy rewrites `/fr/about-us`
- * to `/about-us`), so without it the client router would keep the segments it
- * already has and the page would stay in the previous language.
+ * Choosing a language loads the same page in that language. The navigation is
+ * a document navigation on purpose — see `navigateToPath` for why a
+ * client-side navigation cannot switch the language here.
  */
 export function LanguageSelector({
   locale,
@@ -81,14 +80,10 @@ export function LanguageSelector({
   label: string;
 }) {
   const pathname = usePathname();
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const listRef = useRef<HTMLUListElement>(null);
-  /** The path a pending language switch is waiting to land on. */
-  const pendingPath = useRef<string | null>(null);
 
   useEffect(() => {
     if (!open) {
@@ -113,35 +108,18 @@ export function LanguageSelector({
     };
   }, [open]);
 
-  // A language switch only changes the URL prefix, and every language is
-  // served from the same route, so the client router keeps the tree it
-  // already has. Once the new URL has landed, refetch it so the page is
-  // actually rendered in the chosen language.
-  useEffect(() => {
-    const target = pendingPath.current;
-    if (!target || target !== pathname) {
+  function choose(option: Locale) {
+    setOpen(false);
+    triggerRef.current?.focus();
+
+    if (option === locale) {
       return;
     }
-    pendingPath.current = null;
-    router.refresh();
-  }, [pathname, router]);
 
-  const choose = useCallback(
-    (option: Locale) => {
-      setOpen(false);
-      triggerRef.current?.focus();
-
-      if (option === locale) {
-        return;
-      }
-
-      const href = switchLocaleHref(option, pathname);
-      rememberLocale(option);
-      pendingPath.current = href;
-      router.push(href);
-    },
-    [locale, pathname, router],
-  );
+    const href = switchLocaleHref(option, pathname);
+    rememberLocale(option);
+    navigateToPath(href);
+  }
 
   function onListKeyDown(event: React.KeyboardEvent<HTMLUListElement>) {
     switch (event.key) {
@@ -211,7 +189,6 @@ export function LanguageSelector({
 
       {open && (
         <ul
-          ref={listRef}
           role="listbox"
           tabIndex={-1}
           aria-label={label}
@@ -221,7 +198,7 @@ export function LanguageSelector({
         >
           {LOCALE_ORDER.map((option, index) => {
             const current = option === locale;
-            const meta = LOCALE_META[option];
+            const optionMeta = LOCALE_META[option];
             return (
               <li
                 key={option}
@@ -236,7 +213,14 @@ export function LanguageSelector({
                 <Link
                   href={switchLocaleHref(option, pathname)}
                   tabIndex={-1}
-                  onClick={() => choose(option)}
+                  // The option is loaded as a document; prefetching it would
+                  // fetch every language page and overwrite the remembered
+                  // language cookie.
+                  prefetch={false}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    choose(option);
+                  }}
                   lang={option}
                   className={cn(
                     "flex flex-1 items-center gap-3 text-sm",
@@ -247,17 +231,17 @@ export function LanguageSelector({
                 >
                   <span aria-hidden="true">
                     <CountryFlag
-                      code={meta.countryCode}
-                      country={meta.country}
+                      code={optionMeta.countryCode}
+                      country={optionMeta.country}
                       flagClassName="h-4 w-auto"
                     />
                   </span>
                   {/* `dir="auto"` aligns each name with its own script while
                       the flag column stays in the same place for every row. */}
                   <span className="flex flex-col">
-                    <span dir="auto">{meta.nativeName}</span>
+                    <span dir="auto">{optionMeta.nativeName}</span>
                     <span dir="auto" className="text-xs text-ink-500">
-                      {meta.country}
+                      {optionMeta.country}
                     </span>
                   </span>
                 </Link>
