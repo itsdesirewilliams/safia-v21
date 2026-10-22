@@ -9,6 +9,7 @@
   --font-sans: var(--font-mona-sans), ui-sans-serif, system-ui, sans-serif;
   --font-devanagari: var(--font-anek-devanagari), var(--font-mona-sans),
     sans-serif;
+  --font-bangla: var(--font-anek-bangla), var(--font-mona-sans), sans-serif;
 
   /* Neutral scale (cool charcoal → off-white) */
   --color-ink-950: #071018; /* deep */

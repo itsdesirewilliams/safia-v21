@@ -7,21 +7,28 @@
  * prefix (`/es/...`, `/pt/...`, `/ar/...`) so existing English links and SEO
  * never break. The admin is never localized.
  *
- * A language is not a country. Each locale carries one *reference* country —
- * the flag shown beside it in the selector is that country's flag, not a
- * claim about where the language is spoken.
+ * A language is not a country. Each locale carries one *reference country* —
+ * the country the translation is written for. The flag shown beside it in the
+ * selector is that country's flag, not a claim about where the language is
+ * spoken.
  */
 export const LOCALES = [
   "en",
   "fr",
   "pt",
   "es",
+  "zh",
+  "hi",
+  "ar",
+  "bn",
+  "ru",
+  "ja",
   "de",
+  "id",
+  "ur",
+  "sw",
   "nl",
   "pl",
-  "ru",
-  "sw",
-  "ar",
 ] as const;
 
 export type Locale = (typeof LOCALES)[number];
@@ -42,12 +49,18 @@ export const PREFIXED_LOCALES = [
   "fr",
   "pt",
   "es",
+  "zh",
+  "hi",
+  "ar",
+  "bn",
+  "ru",
+  "ja",
   "de",
+  "id",
+  "ur",
+  "sw",
   "nl",
   "pl",
-  "ru",
-  "sw",
-  "ar",
 ] as const;
 
 export type PrefixedLocale = (typeof PREFIXED_LOCALES)[number];
@@ -58,6 +71,15 @@ export function isPrefixedLocale(value: unknown): value is PrefixedLocale {
     (PREFIXED_LOCALES as readonly string[]).includes(value)
   );
 }
+
+/**
+ * The script a language is written in. It selects the typeface stack the page
+ * is rendered with: Mona Sans covers Latin, Anek Devanagari covers the
+ * Devanagari languages and Anek Bangla covers Bengali. Chinese and Japanese
+ * fall back to the reader's system font, which is the usual approach for
+ * CJK web typography.
+ */
+export type LocaleScript = "latin" | "devanagari" | "bangla";
 
 export type LocaleMeta = {
   /** Full name in the language itself, shown inside the dropdown. */
@@ -73,6 +95,8 @@ export type LocaleMeta = {
   country: string;
   /** ISO 3166-1 alpha-2 code of the reference country, used for its flag. */
   countryCode: string;
+  /** The script the translation is written in. */
+  script: LocaleScript;
 };
 
 export const LOCALE_META: Record<Locale, LocaleMeta> = {
@@ -82,6 +106,7 @@ export const LOCALE_META: Record<Locale, LocaleMeta> = {
     dir: "ltr",
     country: "United Kingdom",
     countryCode: "GB",
+    script: "latin",
   },
   fr: {
     nativeName: "Français",
@@ -89,6 +114,7 @@ export const LOCALE_META: Record<Locale, LocaleMeta> = {
     dir: "ltr",
     country: "France",
     countryCode: "FR",
+    script: "latin",
   },
   pt: {
     nativeName: "Português",
@@ -96,6 +122,7 @@ export const LOCALE_META: Record<Locale, LocaleMeta> = {
     dir: "ltr",
     country: "Portugal",
     countryCode: "PT",
+    script: "latin",
   },
   es: {
     nativeName: "Español",
@@ -103,27 +130,39 @@ export const LOCALE_META: Record<Locale, LocaleMeta> = {
     dir: "ltr",
     country: "Spain",
     countryCode: "ES",
+    script: "latin",
   },
-  de: {
-    nativeName: "Deutsch",
-    short: "DE",
+  zh: {
+    nativeName: "简体中文",
+    short: "ZH",
     dir: "ltr",
-    country: "Germany",
-    countryCode: "DE",
+    country: "China",
+    countryCode: "CN",
+    script: "latin",
   },
-  nl: {
-    nativeName: "Nederlands",
-    short: "NL",
+  hi: {
+    nativeName: "हिन्दी",
+    short: "HI",
     dir: "ltr",
-    country: "Netherlands",
-    countryCode: "NL",
+    country: "India",
+    countryCode: "IN",
+    script: "devanagari",
   },
-  pl: {
-    nativeName: "Polski",
-    short: "PL",
+  ar: {
+    nativeName: "العربية",
+    short: "AR",
+    dir: "rtl",
+    country: "Saudi Arabia",
+    countryCode: "SA",
+    script: "latin",
+  },
+  bn: {
+    nativeName: "বাংলা",
+    short: "BN",
     dir: "ltr",
-    country: "Poland",
-    countryCode: "PL",
+    country: "Bangladesh",
+    countryCode: "BD",
+    script: "bangla",
   },
   ru: {
     nativeName: "Русский",
@@ -131,6 +170,39 @@ export const LOCALE_META: Record<Locale, LocaleMeta> = {
     dir: "ltr",
     country: "Russia",
     countryCode: "RU",
+    script: "latin",
+  },
+  ja: {
+    nativeName: "日本語",
+    short: "JA",
+    dir: "ltr",
+    country: "Japan",
+    countryCode: "JP",
+    script: "latin",
+  },
+  de: {
+    nativeName: "Deutsch",
+    short: "DE",
+    dir: "ltr",
+    country: "Germany",
+    countryCode: "DE",
+    script: "latin",
+  },
+  id: {
+    nativeName: "Bahasa Indonesia",
+    short: "ID",
+    dir: "ltr",
+    country: "Indonesia",
+    countryCode: "ID",
+    script: "latin",
+  },
+  ur: {
+    nativeName: "اردو",
+    short: "UR",
+    dir: "rtl",
+    country: "Pakistan",
+    countryCode: "PK",
+    script: "devanagari",
   },
   sw: {
     nativeName: "Kiswahili",
@@ -138,13 +210,23 @@ export const LOCALE_META: Record<Locale, LocaleMeta> = {
     dir: "ltr",
     country: "Kenya",
     countryCode: "KE",
+    script: "latin",
   },
-  ar: {
-    nativeName: "العربية",
-    short: "AR",
-    dir: "rtl",
-    country: "Egypt",
-    countryCode: "EG",
+  nl: {
+    nativeName: "Nederlands",
+    short: "NL",
+    dir: "ltr",
+    country: "Netherlands",
+    countryCode: "NL",
+    script: "latin",
+  },
+  pl: {
+    nativeName: "Polski",
+    short: "PL",
+    dir: "ltr",
+    country: "Poland",
+    countryCode: "PL",
+    script: "latin",
   },
 };
 
@@ -154,12 +236,18 @@ export const LOCALE_ORDER: readonly Locale[] = [
   "fr",
   "pt",
   "es",
+  "zh",
+  "hi",
+  "ar",
+  "bn",
+  "ru",
+  "ja",
   "de",
+  "id",
+  "ur",
+  "sw",
   "nl",
   "pl",
-  "ru",
-  "sw",
-  "ar",
 ];
 
 export function isLocale(value: unknown): value is Locale {
@@ -168,6 +256,11 @@ export function isLocale(value: unknown): value is Locale {
 
 export function localeDir(locale: Locale): "ltr" | "rtl" {
   return LOCALE_META[locale].dir;
+}
+
+/** The script a locale is written in. */
+export function localeScript(locale: Locale): LocaleScript {
+  return LOCALE_META[locale].script;
 }
 
 /** The first path segment if it is a supported locale, else `null`. */

@@ -1,15 +1,21 @@
 import { DEFAULT_LOCALE, type Locale } from "../config";
 
 import { ar } from "./ar";
+import { bn } from "./bn";
 import { de } from "./de";
 import { en, type Dictionary } from "./en";
 import { es } from "./es";
 import { fr } from "./fr";
+import { hi } from "./hi";
+import { id } from "./id";
+import { ja } from "./ja";
 import { nl } from "./nl";
 import { pl } from "./pl";
 import { pt } from "./pt";
 import { ru } from "./ru";
 import { sw } from "./sw";
+import { ur } from "./ur";
+import { zh } from "./zh";
 
 /** All dictionaries, keyed by locale. English is the fallback. */
 export const DICTIONARIES: Record<Locale, Dictionary> = {
@@ -17,12 +23,18 @@ export const DICTIONARIES: Record<Locale, Dictionary> = {
   fr,
   pt,
   es,
+  zh,
+  hi,
+  ar,
+  bn,
+  ru,
+  ja,
   de,
+  id,
+  ur,
+  sw,
   nl,
   pl,
-  ru,
-  sw,
-  ar,
 };
 
 export function dictionaryFor(locale: Locale): Dictionary {

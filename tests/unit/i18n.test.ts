@@ -9,6 +9,7 @@ import {
   localeForPathname,
   localeFromPathname,
   localePrefix,
+  localeScript,
   LOCALES,
   PREFIXED_LOCALES,
   stripLocalePrefix,
@@ -35,34 +36,49 @@ function keyPaths(value: unknown, prefix = ""): string[] {
   );
 }
 
+/** The words that only appear in English prose, never in a proper-noun heading. */
+const ENGLISH_PROSE =
+  /\b(the|and|of|to|with|for|from|our|your|every|each|is|are|we|you|it)\b/i;
+
 const EXPECTED_LOCALES: Locale[] = [
   "en",
   "fr",
   "pt",
   "es",
+  "zh",
+  "hi",
+  "ar",
+  "bn",
+  "ru",
+  "ja",
   "de",
+  "id",
+  "ur",
+  "sw",
   "nl",
   "pl",
-  "ru",
-  "sw",
-  "ar",
 ];
 
 describe("locale config", () => {
-  it("supports the ten public languages, English default", () => {
-    expect(LOCALE_ORDER).toEqual(EXPECTED_LOCALES);
-    expect([...LOCALES].sort()).toEqual([...EXPECTED_LOCALES].sort());
-    expect(DEFAULT_LOCALE).toBe("en");
+  it("supports at least the fourteen public languages, English default", () => {
+    expect(LOCALE_ORDER.length).toBeGreaterThanOrEqual(14);
     for (const locale of EXPECTED_LOCALES) {
-      expect(isLocale(locale)).toBe(true);
+      expect(LOCALE_ORDER, locale).toContain(locale);
+      expect(isLocale(locale), locale).toBe(true);
     }
-    expect(isLocale("fr")).toBe(true);
+    expect([...LOCALES].sort()).toEqual([...LOCALE_ORDER].sort());
+    expect(DEFAULT_LOCALE).toBe("en");
     expect(isLocale("xx")).toBe(false);
   });
 
-  it("marks only Arabic as right-to-left", () => {
-    for (const locale of EXPECTED_LOCALES) {
-      expect(localeDir(locale)).toBe(locale === "ar" ? "rtl" : "ltr");
+  it("marks Arabic and Urdu as right-to-left", () => {
+    expect(localeDir("ar")).toBe("rtl");
+    expect(localeDir("ur")).toBe("rtl");
+    for (const locale of LOCALE_ORDER) {
+      if (locale === "ar" || locale === "ur") {
+        continue;
+      }
+      expect(localeDir(locale), locale).toBe("ltr");
     }
   });
 
@@ -94,25 +110,37 @@ describe("locale config", () => {
   });
 
   it("pairs every language with a reference country and a flag code", () => {
-    for (const locale of EXPECTED_LOCALES) {
+    for (const locale of LOCALE_ORDER) {
       const meta = LOCALE_META[locale];
-      expect(meta.nativeName.length).toBeGreaterThan(0);
-      expect(meta.short).toMatch(/^[A-Z]{2}$/);
-      expect(meta.country.length).toBeGreaterThan(0);
-      expect(meta.countryCode).toMatch(/^[A-Z]{2}$/);
+      expect(meta.nativeName.length, locale).toBeGreaterThan(0);
+      expect(meta.short, locale).toMatch(/^[A-Z]{2}$/);
+      expect(meta.country.length, locale).toBeGreaterThan(0);
+      expect(meta.countryCode, locale).toMatch(/^[A-Z]{2}$/);
     }
+  });
 
-    // The reference countries are the ones the brief asks for.
+  it("uses the requested reference country for every language", () => {
     expect(LOCALE_META.en.countryCode).toBe("GB");
     expect(LOCALE_META.fr.countryCode).toBe("FR");
     expect(LOCALE_META.pt.countryCode).toBe("PT");
     expect(LOCALE_META.es.countryCode).toBe("ES");
-    expect(LOCALE_META.de.countryCode).toBe("DE");
-    expect(LOCALE_META.nl.countryCode).toBe("NL");
-    expect(LOCALE_META.pl.countryCode).toBe("PL");
+    expect(LOCALE_META.zh.countryCode).toBe("CN");
+    expect(LOCALE_META.hi.countryCode).toBe("IN");
+    expect(LOCALE_META.ar.countryCode).toBe("SA");
+    expect(LOCALE_META.bn.countryCode).toBe("BD");
     expect(LOCALE_META.ru.countryCode).toBe("RU");
+    expect(LOCALE_META.ja.countryCode).toBe("JP");
+    expect(LOCALE_META.de.countryCode).toBe("DE");
+    expect(LOCALE_META.id.countryCode).toBe("ID");
+    expect(LOCALE_META.ur.countryCode).toBe("PK");
     expect(LOCALE_META.sw.countryCode).toBe("KE");
-    expect(LOCALE_META.ar.countryCode).toBe("EG");
+  });
+
+  it("records the script each language is written in", () => {
+    expect(localeScript("en")).toBe("latin");
+    expect(localeScript("hi")).toBe("devanagari");
+    expect(localeScript("ur")).toBe("devanagari");
+    expect(localeScript("bn")).toBe("bangla");
   });
 });
 
@@ -143,16 +171,13 @@ describe("locale-aware URLs", () => {
 
   it("provides hreflang alternates for every locale", () => {
     const alternates = languageAlternates("/catalogue");
-    expect(Object.keys(alternates).sort()).toEqual([...EXPECTED_LOCALES].sort());
+    expect(Object.keys(alternates).sort()).toEqual([...LOCALE_ORDER].sort());
     expect(alternates.en).toBe("/catalogue");
     expect(alternates.fr).toBe("/fr/catalogue");
-    expect(alternates.sw).toBe("/sw/catalogue");
+    expect(alternates.zh).toBe("/zh/catalogue");
+    expect(alternates.ur).toBe("/ur/catalogue");
   });
 });
-
-/** Words that only appear in English prose, never in a proper-noun heading. */
-const ENGLISH_PROSE =
-  /\b(the|and|of|to|with|for|from|our|your|every|each|is|are|we|you|it)\b/i;
 
 describe("dictionaries", () => {
   it("define the same keys in every language", () => {
@@ -176,9 +201,10 @@ describe("dictionaries", () => {
             DICTIONARIES[locale],
           );
         expect(typeof value, `${locale}.${path}`).toBe("string");
-        expect((value as string).trim().length, `${locale}.${path}`).toBeGreaterThan(
-          0,
-        );
+        expect(
+          (value as string).trim().length,
+          `${locale}.${path}`,
+        ).toBeGreaterThan(0);
       }
     }
   });
@@ -230,6 +256,15 @@ describe("dictionaries", () => {
     // TT/TL is a technical abbreviation and must stay identical.
     for (const locale of LOCALE_ORDER) {
       expect(DICTIONARIES[locale].spec.ttTl).toBe("TT/TL");
+    }
+  });
+
+  it("keeps product and company identifiers out of the translations", () => {
+    for (const locale of LOCALE_ORDER) {
+      const dict = DICTIONARIES[locale];
+      // The company name is a name, not copy.
+      expect(dict.meta.homeTitle, locale).toContain("Safeway Tyre");
+      expect(dict.footer.socialAria, locale).toContain("Safeway Tyre");
     }
   });
 

@@ -1,4 +1,4 @@
-import { Anek_Devanagari } from "next/font/google";
+import { Anek_Bangla, Anek_Devanagari } from "next/font/google";
 import localFont from "next/font/local";
 
 /**
@@ -49,6 +49,19 @@ export const monaSansCondensed = localFont({
 export const anekDevanagari = Anek_Devanagari({
   subsets: ["devanagari"],
   variable: "--font-anek-devanagari",
+  display: "swap",
+  preload: false,
+  fallback: ["ui-sans-serif", "system-ui", "sans-serif"],
+});
+
+/**
+ * Anek Bangla, the Bengali sibling of the Devanagari face, applied only where
+ * Bengali copy is required (`--font-bangla`). Not preloaded: it downloads
+ * only on the Bengali pages.
+ */
+export const anekBangla = Anek_Bangla({
+  subsets: ["bengali"],
+  variable: "--font-anek-bangla",
   display: "swap",
   preload: false,
   fallback: ["ui-sans-serif", "system-ui", "sans-serif"],

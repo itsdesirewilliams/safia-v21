@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { LanguageSelector } from "@/components/i18n/language-selector";
 import { ButtonLink } from "@/components/ui/button";
@@ -33,6 +33,24 @@ type LocalizedNavItem =
  * (and back) without it snapping shut.
  */
 const PRODUCTS_CLOSE_DELAY_MS = 2500;
+
+/**
+ * `useLayoutEffect` on the server logs a warning and does nothing, so the
+ * measurement below falls back to `useEffect` there.
+ */
+const useIsomorphicLayoutEffect =
+  typeof window === "undefined" ? useEffect : useLayoutEffect;
+
+/** The breakpoint at which the horizontal navigation replaces the mobile menu. */
+const DESKTOP_BREAKPOINT = 1024;
+
+/** Whether the viewport is wide enough for the horizontal navigation. */
+function isDesktopViewport(): boolean {
+  if (typeof window.matchMedia !== "function") {
+    return true;
+  }
+  return window.matchMedia(`(min-width: ${DESKTOP_BREAKPOINT}px)`).matches;
+}
 
 /**
  * How long the floating Truck & Bus submenu lingers after the pointer leaves
@@ -132,6 +150,18 @@ export function SiteHeader({
   const [submenuOpen, setSubmenuOpen] = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
   const [mobileTruckBusOpen, setMobileTruckBusOpen] = useState(false);
+  /**
+   * Whether the horizontal navigation fits beside the logo, the search, the
+   * language selector and the quotation button. The labels are translated, so
+   * the width they need is not known in advance: it is measured and, when it
+   * does not fit, the mobile menu is used instead.
+   */
+  const [desktopNav, setDesktopNav] = useState(true);
+  const barRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLElement>(null);
+  const navListRef = useRef<HTMLUListElement>(null);
+  const actionsRef = useRef<HTMLDivElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   const nav: LocalizedNavItem[] = [
     { key: "home", label: dict.nav.home, href: localizedHref(locale, ROUTES.home) },
@@ -311,6 +341,58 @@ export function SiteHeader({
     };
   }, [mobileOpen]);
 
+  /**
+   * The navigation is measured, not sized in advance: every label is
+   * translated, so the width the navigation needs differs per language. The
+   * horizontal navigation is kept on one line and, when the labels do not fit
+   * beside the logo, the search, the language selector and the quotation
+   * button, the existing mobile menu is used instead.
+   */
+  useIsomorphicLayoutEffect(() => {
+    const bar = barRef.current;
+    const nav = navRef.current;
+    const list = navListRef.current;
+    const actions = actionsRef.current;
+    const menuButton = menuButtonRef.current;
+    if (!bar || !nav || !list || !actions || !menuButton) {
+      return;
+    }
+
+    const measure = () => {
+      // Below the desktop breakpoint the mobile menu is used, so there is
+      // nothing to measure and the horizontal navigation stays off.
+      if (!isDesktopViewport()) {
+        setDesktopNav(false);
+        return;
+      }
+
+      const actionsGap =
+        Number.parseFloat(getComputedStyle(actions).columnGap) || 0;
+      const menuVisible = menuButton.offsetParent !== null;
+      // The space the navigation would have if the mobile menu button were
+      // not showing: the button only appears when the navigation does not fit.
+      const available =
+        nav.clientWidth +
+        (menuVisible ? menuButton.offsetWidth + actionsGap : 0);
+
+      setDesktopNav(list.scrollWidth <= available + 1);
+    };
+
+    measure();
+
+    // The measurement is repeated whenever the bar or the labels change size.
+    if (typeof ResizeObserver === "undefined") {
+      return;
+    }
+    const observer = new ResizeObserver(measure);
+    observer.observe(bar);
+    observer.observe(list);
+    // The labels change width when the webfont arrives.
+    document.fonts?.ready.then(measure).catch(() => undefined);
+
+    return () => observer.disconnect();
+  }, [dict, locale]);
+
   const closeMenus = () => {
     clearProductsClose();
     clearSubmenuClose();
@@ -337,7 +419,10 @@ export function SiteHeader({
 
   return (
     <header className="sticky top-0 z-50 border-b border-ink-200/80 bg-white">
-      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-2 px-3 sm:gap-4 sm:px-6 lg:h-[4.5rem] lg:px-8">
+      <div
+        ref={barRef}
+        className="mx-auto flex h-16 w-full max-w-7xl items-center gap-2 px-3 sm:gap-3 sm:px-6 lg:h-[4.5rem] lg:px-8"
+      >
         <Link
           href={ROUTES.home}
           className="flex shrink-0 items-center"
@@ -353,8 +438,23 @@ export function SiteHeader({
           />
         </Link>
 
-        <nav aria-label={dict.header.primaryNav} className="hidden items-center lg:flex">
-          <ul className="flex items-center gap-1">
+        {/* The navigation takes the space that is left over, so its width
+            follows the length of the translated labels instead of a fixed
+            column. The labels stay on one line; when they do not fit, the
+            mobile menu is used instead. The navigation keeps its place in the
+            bar when it is hidden, so the measurement stays stable. */}
+        <nav
+          ref={navRef}
+          aria-label={dict.header.primaryNav}
+          className={cn(
+            "min-w-0 flex-1 overflow-hidden hidden lg:flex",
+            !desktopNav && "invisible",
+          )}
+        >
+          <ul
+            ref={navListRef}
+            className="flex w-max shrink-0 items-center gap-0.5"
+          >
             {nav.map((item) => {
               if (!("children" in item)) {
                 const active = isActive(pathname, item.href);
@@ -365,7 +465,7 @@ export function SiteHeader({
                       onClick={closeMenus}
                       aria-current={active ? "page" : undefined}
                       className={cn(
-                        "relative rounded-lg px-3.5 py-2 text-sm font-medium transition-colors",
+                        "relative block whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-medium transition-colors",
                         active
                           ? "text-brand-600"
                           : "text-ink-600 hover:bg-ink-50 hover:text-ink-950",
@@ -400,7 +500,7 @@ export function SiteHeader({
                     }}
                     onFocus={openProducts}
                     className={cn(
-                      "flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition-colors",
+                      "flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-medium transition-colors",
                       active
                         ? "text-brand-600"
                         : "text-ink-600 hover:bg-ink-50 hover:text-ink-950",
@@ -411,7 +511,7 @@ export function SiteHeader({
                   </button>
                   <div
                     className={cn(
-                      "absolute left-1/2 top-full z-50 mt-3 w-[24rem] -translate-x-1/2 rounded-lg border border-ink-200 bg-white p-2 shadow-pop transition duration-150",
+                      "absolute left-1/2 top-full z-50 mt-3 w-[24rem] max-w-[calc(100vw-2rem)] -translate-x-1/2 rounded-lg border border-ink-200 bg-white p-2 shadow-pop transition duration-150",
                       productsOpen
                         ? "visible translate-y-0 opacity-100"
                         : "invisible -translate-y-1 opacity-0",
@@ -512,11 +612,11 @@ export function SiteHeader({
           </ul>
         </nav>
 
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div ref={actionsRef} className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <Link
             href={localizedHref(locale, ROUTES.search)}
             aria-label={dict.header.searchAria}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink-200 text-ink-600 transition-colors hover:border-ink-300 hover:text-ink-950"
+            className="hidden h-10 w-10 items-center justify-center rounded-full border border-ink-200 text-ink-600 transition-colors hover:border-ink-300 hover:text-ink-950 sm:inline-flex"
           >
             <SearchIcon className="h-5 w-5" />
           </Link>
@@ -529,8 +629,14 @@ export function SiteHeader({
             {dict.common.requestQuotation}
           </Link>
           <button
+            ref={menuButtonRef}
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink-200 text-ink-800 transition-colors hover:bg-ink-50 lg:hidden"
+            className={cn(
+              "inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink-200 text-ink-800 transition-colors hover:bg-ink-50",
+              // The mobile menu is used below the desktop breakpoint, and on
+              // the desktop when the translated labels do not fit.
+              desktopNav ? "lg:hidden" : "inline-flex",
+            )}
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav"
             aria-label={dict.header.openMenu}
@@ -553,7 +659,7 @@ export function SiteHeader({
       {mobileOpen && (
         <div
           id="mobile-nav"
-          className="lg:hidden"
+          className={cn(desktopNav ? "lg:hidden" : "block")}
           role="dialog"
           aria-modal="true"
           aria-label="Navigation menu"

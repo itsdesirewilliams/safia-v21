@@ -39,7 +39,7 @@ export const ar: Dictionary = {
   search: {
     title: "البحث",
     description:
-      "ابحث في كتالوج سيفواي تاير بالمقاس أو الاسم أو الفئة.",
+      "ابحث في كتالوج Safeway Tyre بالمقاس أو الاسم أو الفئة.",
     placeholder: "جرّب البحث…",
     trySearching: "جرّب البحث",
     results: "نتائج البحث",
@@ -64,34 +64,34 @@ export const ar: Dictionary = {
     company: "الشركة",
     contact: "التواصل",
     rights: "جميع الحقوق محفوظة.",
-    socialAria: "سيفواي تاير على",
+    socialAria: "Safeway Tyre على",
   },
   breadcrumbs: { label: "مسار التنقل", catalogue: "الكتالوج" },
   home: {
     heroTitle: "إطارات تُبقي العالم في حركة",
     heroSubtitle:
-      "تصنّع سيفواي تاير وتصدّر إطارات متينة للأسواق الدولية. ابحث في الكتالوج بالمقاس أو الاسم أو الفئة.",
+      "تصنّع Safeway Tyre وتصدّر إطارات متينة للأسواق الدولية. ابحث في الكتالوج بالمقاس أو الاسم أو الفئة.",
     tourHeading: "جولة في صناعتنا",
     tourDescription:
-      "ادخل مصنعنا عبر الإنترنت — لمحة قصيرة عن كيفية صناعة سيفواي تاير لإطاراتها.",
+      "ادخل مصنعنا عبر الإنترنت — لمحة قصيرة عن كيفية صناعة Safeway Tyre لإطاراتها.",
     rangesHeading: "مجموعات المنتجات",
     rangesDescription: "ست مجموعات تغطي النقل والزراعة والصناعة.",
     catalogueHeading: "استكشف الكتالوج الرسمي",
-    catalogueDescription: "تصفّح كتالوج سيفواي تاير الكامل للنقشات والمقاسات.",
+    catalogueDescription: "تصفّح كتالوج Safeway Tyre الكامل للنقشات والمقاسات.",
     qualityHeading: "الجودة والاعتمادات",
-    qualityDescription: "منتجات سيفواي تاير مدعومة بعلامات جودة ومطابقة معترف بها.",
+    qualityDescription: "منتجات Safeway Tyre مدعومة بعلامات جودة ومطابقة معترف بها.",
     testimonialsHeading: "ثقة المستوردين حول العالم",
     instagramHeading: "تابعنا على إنستغرام",
-    instagramDescription: "لمحة عن أحدث ما لدى سيفواي تاير.",
+    instagramDescription: "لمحة عن أحدث ما لدى Safeway Tyre.",
     inquiryHeading: "نموذج الاستفسار",
     inquiryDescription:
       "أخبرنا بالمقاسات والنقشات التي تحتاجها وسيردّ فريقنا بعرض سعر.",
     mapHeading: "جدنا على الخريطة",
-    mapDescription: "المكتب الرئيسي لسيفواي تاير في لوديانا، الهند.",
+    mapDescription: "المكتب الرئيسي لSafeway Tyre في لوديانا، الهند.",
   },
   catalogue: {
     title: "الكتالوج",
-    description: "مجموعة سيفواي تاير الكاملة — النقشات والمقاسات في كل فئة.",
+    description: "مجموعة Safeway Tyre الكاملة — النقشات والمقاسات في كل فئة.",
     browseTitle: "تصفّح الكتالوج",
     download: "حمّل الكتالوج",
   },
@@ -109,7 +109,7 @@ export const ar: Dictionary = {
     send: "إرسال",
     sending: "جارٍ الإرسال…",
     preferWhatsapp: "تفضّل واتساب؟",
-    chatWithUs: "تحدث مع سيفواي تاير مباشرة",
+    chatWithUs: "تحدث مع Safeway Tyre مباشرة",
     chatCta: "تحدث عبر واتساب",
     openingHours: "ساعات العمل",
     corporateOffice: "المكتب الرئيسي",
@@ -118,22 +118,22 @@ export const ar: Dictionary = {
   qualityFirst: {
     title: "الجودة أولاً",
     description:
-      "عملية الاختبار وضبط الجودة لدى سيفواي تاير، من أرضية الاختبار إلى كل نقشة نصنعها.",
+      "عملية الاختبار وضبط الجودة لدى Safeway Tyre، من أرضية الاختبار إلى كل نقشة نصنعها.",
   },
   gallery: {
     title: "معرض الصور",
     description:
-      "معرض صور سيفواي تاير — المجموعات التي نصنعها والأماكن التي تسير فيها.",
+      "معرض صور Safeway Tyre — المجموعات التي نصنعها والأماكن التي تسير فيها.",
   },
   blog: {
     title: "المدونة",
-    description: "أخبار وأدلة وقصص من سيفواي تاير.",
+    description: "أخبار وأدلة وقصص من Safeway Tyre.",
     readPost: "اقرأ المقال",
     noPosts: "لم تُنشر أي مقالات بعد.",
   },
   warranty: {
     title: "الضمان",
-    description: "شروط ضمان إطارات سيفواي تاير.",
+    description: "شروط ضمان إطارات Safeway Tyre.",
   },
   notFound: {
     title: "الصفحة غير موجودة",
@@ -196,8 +196,8 @@ export const ar: Dictionary = {
   },
   meta: {
     siteTagline: "نصدّر إطارات متينة إلى العالم",
-    homeTitle: "سيفواي تاير | نصدّر إطارات متينة إلى العالم",
+    homeTitle: "Safeway Tyre | نصدّر إطارات متينة إلى العالم",
     homeDescription:
-      "ابحث في كتالوج سيفواي تاير بالمقاس أو الفئة، واستكشف مجموعات منتجاتنا، وأرسل استفسارًا.",
+      "ابحث في كتالوج Safeway Tyre بالمقاس أو الفئة، واستكشف مجموعات منتجاتنا، وأرسل استفسارًا.",
   },
 };

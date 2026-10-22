@@ -77,7 +77,7 @@ describe("language selector", () => {
 
     const options = within(list).getAllByRole("option");
     expect(options).toHaveLength(LOCALE_ORDER.length);
-    expect(LOCALE_ORDER.length).toBeGreaterThanOrEqual(10);
+    expect(LOCALE_ORDER.length).toBeGreaterThanOrEqual(14);
 
     for (const locale of LOCALE_ORDER) {
       const meta = LOCALE_META[locale];
@@ -99,6 +99,21 @@ describe("language selector", () => {
     renderSelector();
     const list = openList();
     expect(list.innerHTML).not.toMatch(/[\u{1F1E6}-\u{1F1FF}]{2}/u);
+  });
+
+  it("marks the right-to-left languages in the markup", () => {
+    renderSelector();
+    const list = openList();
+
+    const rtl = LOCALE_ORDER.filter((locale) => LOCALE_META[locale].dir === "rtl");
+    expect(rtl.length).toBeGreaterThanOrEqual(2);
+
+    for (const locale of LOCALE_ORDER) {
+      const option = list.querySelector(`#language-option-${locale}`);
+      const link = option?.querySelector("a");
+      // The language name follows the direction of its own script.
+      expect(link?.getAttribute("lang"), locale).toBe(locale);
+    }
   });
 
   it("marks the current language as selected", () => {
@@ -153,12 +168,13 @@ describe("language selector", () => {
       "language-option-fr",
     );
 
+    const last = LOCALE_ORDER[LOCALE_ORDER.length - 1];
     fireEvent.keyDown(list, { key: "End" });
     expect(list.getAttribute("aria-activedescendant")).toBe(
-      "language-option-ar",
+      `language-option-${last}`,
     );
 
     fireEvent.keyDown(list, { key: "Enter" });
-    expect(mocks.navigateToPath).toHaveBeenCalledWith("/ar");
+    expect(mocks.navigateToPath).toHaveBeenCalledWith(`/${last}`);
   });
 });

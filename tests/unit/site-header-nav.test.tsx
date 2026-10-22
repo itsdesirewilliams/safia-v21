@@ -17,6 +17,25 @@ vi.mock("next/image", () => ({
   default: () => null,
 }));
 
+// jsdom does not implement ResizeObserver or matchMedia, which the header
+// uses to measure the navigation.
+class ResizeObserverStub {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+vi.stubGlobal("ResizeObserver", ResizeObserverStub);
+vi.stubGlobal("matchMedia", (query: string) => ({
+  matches: true,
+  media: query,
+  onchange: null,
+  addListener: () => {},
+  removeListener: () => {},
+  addEventListener: () => {},
+  removeEventListener: () => {},
+  dispatchEvent: () => false,
+}));
+
 import { SiteHeader } from "@/components/site-header";
 import { PRODUCT_MENU_ORDER } from "@/lib/catalogue/categories";
 import { en } from "@/lib/i18n/dictionaries/en";
@@ -107,6 +126,50 @@ describe("header search", () => {
       name: en.header.searchAria,
     });
     expect(search.getAttribute("href")).toBe("/search");
+  });
+});
+
+describe("navigation width", () => {
+  it("gives the navigation the space that is left over instead of a fixed column", () => {
+    renderHeader();
+
+    const nav = screen.getByRole("navigation", { name: en.header.primaryNav });
+    // A flexible middle area: it grows with the space left over, it can
+    // shrink below its content and it never pushes the actions out of the bar.
+    expect(nav.className).toContain("flex-1");
+    expect(nav.className).toContain("min-w-0");
+    expect(nav.className).toContain("overflow-hidden");
+
+    const list = nav.querySelector("ul");
+    // The labels are laid out at their natural width so they can be measured
+    // against the space that is available.
+    expect(list?.className).toContain("w-max");
+    expect(list?.className).toContain("shrink-0");
+  });
+
+  it("keeps the navigation labels on one line", () => {
+    renderHeader();
+
+    const nav = screen.getByRole("navigation", { name: en.header.primaryNav });
+    const list = nav.querySelector("ul");
+    // The top-level items of the bar; the fly-out panels keep their own
+    // wrapping.
+    const items = Array.from(list?.children ?? []).filter(
+      (item): item is HTMLLIElement => item.tagName === "LI",
+    );
+    expect(items.length).toBeGreaterThan(0);
+
+    for (const item of items) {
+      const label = item.querySelector("a, button");
+      expect(label?.className, label?.textContent).toContain("whitespace-nowrap");
+    }
+  });
+
+  it("keeps the mobile menu available below the desktop breakpoint", () => {
+    renderHeader();
+
+    const menu = screen.getByRole("button", { name: en.header.openMenu });
+    expect(menu.className).toContain("lg:hidden");
   });
 });
 
