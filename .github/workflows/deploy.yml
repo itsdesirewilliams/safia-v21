@@ -16,15 +16,46 @@ jobs:
   deploy:
     name: Deploy to production
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
+      - name: Prepare SSH key
+        shell: bash
+        env:
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          install -m 700 -d "$HOME/.ssh"
+          printf '%s\n' "$SSH_KEY" > "$HOME/.ssh/deploy_key"
+          chmod 600 "$HOME/.ssh/deploy_key"
+
+      - name: Pin the ED25519 host key
+        shell: bash
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_HOST_FINGERPRINT: ${{ secrets.VPS_HOST_FINGERPRINT }}
+        run: |
+          set -euo pipefail
+          ssh-keyscan -T 15 -t ed25519 -p 22 "$VPS_HOST" > "$HOME/.ssh/known_hosts" 2>/dev/null
+          test -s "$HOME/.ssh/known_hosts"
+          actual="$(ssh-keygen -lf "$HOME/.ssh/known_hosts" | awk '{print $2}')"
+          if [ "$actual" != "$VPS_HOST_FINGERPRINT" ]; then
+            echo "Host key fingerprint mismatch: expected $VPS_HOST_FINGERPRINT, got $actual"
+            exit 1
+          fi
+
       - name: Deploy over SSH
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          fingerprint: ${{ secrets.VPS_HOST_FINGERPRINT }}
-          command_timeout: 20m
-          script_stop: true
-          script: /var/www/safewaytyre-deploy/deploy.sh
+        shell: bash
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          set -euo pipefail
+          ssh -i "$HOME/.ssh/deploy_key" \
+            -o IdentitiesOnly=yes \
+            -o BatchMode=yes \
+            -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile="$HOME/.ssh/known_hosts" \
+            -o HostKeyAlgorithms=ssh-ed25519 \
+            -o ConnectTimeout=30 \
+            -p 22 \
+            "$VPS_USER@$VPS_HOST" /var/www/safewaytyre-deploy/deploy.sh
