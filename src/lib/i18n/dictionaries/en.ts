@@ -270,7 +270,7 @@ export const en: Dictionary = {
     catalogue: "Catalogue",
   },
   home: {
-    heroTitle: "Tires That Keep the World Moving",
+    heroTitle: "Tyres That Keep the World Moving",
     heroSubtitle:
       "Safeway Tyre manufactures and exports durable tyres for international markets. Search the catalogue by size, name or category.",
     tourHeading: "Take a Tour of Our Industry",
@@ -368,6 +368,6 @@ export const en: Dictionary = {
     siteTagline: "Exporting Durable Tyres Worldwide",
     homeTitle: "Safeway Tyre | Exporting Durable Tyres Worldwide",
     homeDescription:
-      "Search Safeway Tyre's catalogue by size or category, explore our product ranges, and send an enquiry.",
+      "Safeway Tyre (DEE RON Automotives LLP) manufactures and exports truck & bus, agriculture, OTR, forklift, motorcycle and three-wheeler tyres from Ludhiana, India.",
   },
 };

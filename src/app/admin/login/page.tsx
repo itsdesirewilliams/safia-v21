@@ -8,7 +8,10 @@ import { ROUTES } from "@/lib/routes";
 
 import { LoginForm } from "./login-form";
 
-export const metadata = { title: "Admin sign in" };
+export const metadata = {
+  title: "Admin sign in",
+  robots: { index: false, follow: false },
+};
 
 export default async function AdminLoginPage({
   searchParams,

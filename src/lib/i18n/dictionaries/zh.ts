@@ -192,6 +192,6 @@ export const zh: Dictionary = {
     siteTagline: "向全球出口耐用轮胎",
     homeTitle: "Safeway Tyre | 向全球出口耐用轮胎",
     homeDescription:
-      "按规格或类别搜索 Safeway Tyre 产品目录，了解我们的产品系列并发送询价。",
+      "Safeway Tyre（DEE RON Automotives LLP）在印度卢迪亚纳生产并出口卡车与客车、农业、OTR、叉车、摩托车及三轮车轮胎。",
   },
 };

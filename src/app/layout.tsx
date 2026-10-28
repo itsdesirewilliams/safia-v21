@@ -33,6 +33,26 @@ export const metadata: Metadata = {
   },
   description:
     "Safeway Tyre is a tyre manufacturer in India, exporting truck, bus, agriculture, motorcycle, three-wheeler, industrial and OTR tyres worldwide.",
+  openGraph: {
+    type: "website",
+    siteName: SITE.name,
+    locale: "en_GB",
+    url: "https://safewaytyre.com",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Safeway Tyre — Exporting Durable Tyres Worldwide",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE.name} | ${SITE.tagline}`,
+    description:
+      "Safeway Tyre is a tyre manufacturer in India, exporting truck, bus, agriculture, motorcycle, three-wheeler, industrial and OTR tyres worldwide.",
+  },
   // Existing Safeway Tyre brand icons under `public/brand/` (no duplicates).
   icons: {
     icon: [

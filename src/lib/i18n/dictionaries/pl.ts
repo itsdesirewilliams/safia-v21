@@ -199,6 +199,6 @@ export const pl: Dictionary = {
     siteTagline: "Eksport trwałych opon na cały świat",
     homeTitle: "Safeway Tyre | Eksport trwałych opon na cały świat",
     homeDescription:
-      "Przeszukaj katalog Safeway Tyre według rozmiaru lub kategorii, poznaj nasze serie produktów i wyślij zapytanie.",
+      "Safeway Tyre (DEE RON Automotives LLP) produkuje i eksportuje opony do ciężarówek i autobusów, rolnicze, OTR, widłowe, motocyklowe i trójkołowe z Ludhiany w Indiach.",
   },
 };

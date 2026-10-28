@@ -101,3 +101,70 @@ describe("mapPostRow", () => {
     expect(mapPostRow({ ...ROW, status: "archived" })).toBeNull();
   });
 });
+
+describe("post SEO fields", () => {
+  it("trims and keeps optional SEO overrides", () => {
+    const result = validatePostInput({
+      title: "Hello world",
+      author: "Jane",
+      body: [],
+      seoTitle: "  Custom SEO title  ",
+      seoDescription: "  A custom description.  ",
+      ogMediaId: "  media-id  ",
+    });
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.seoTitle).toBe("Custom SEO title");
+      expect(result.value.seoDescription).toBe("A custom description.");
+      expect(result.value.ogMediaId).toBe("media-id");
+    }
+  });
+
+  it("blank SEO fields fall back to null", () => {
+    const result = validatePostInput({
+      title: "Hello world",
+      author: "Jane",
+      body: [],
+      seoTitle: "   ",
+      seoDescription: "",
+    });
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.seoTitle).toBeNull();
+      expect(result.value.seoDescription).toBeNull();
+    }
+  });
+
+  it("rejects an over-long SEO title", () => {
+    const result = validatePostInput({
+      title: "Hello world",
+      author: "Jane",
+      body: [],
+      seoTitle: "x".repeat(121),
+    });
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.errors.seoTitle).toBeTruthy();
+    }
+  });
+
+  it("maps SEO columns, defaulting to null for older rows", () => {
+    const withSeo = mapPostRow({
+      ...ROW,
+      seo_title: "SEO title",
+      seo_description: "SEO description",
+      og_media_id: "22222222-2222-2222-2222-222222222222",
+    });
+    expect(withSeo?.seoTitle).toBe("SEO title");
+    expect(withSeo?.seoDescription).toBe("SEO description");
+    expect(withSeo?.ogMediaId).toBe("22222222-2222-2222-2222-222222222222");
+
+    const legacy = mapPostRow(ROW);
+    expect(legacy?.seoTitle).toBeNull();
+    expect(legacy?.seoDescription).toBeNull();
+    expect(legacy?.ogMediaId).toBeNull();
+  });
+});

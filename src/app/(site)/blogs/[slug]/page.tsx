@@ -3,12 +3,21 @@ import { notFound } from "next/navigation";
 
 import { PostBody } from "@/components/blog/post-body";
 import { formatPostDate } from "@/components/blog/format";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Container } from "@/components/ui/container";
 import { PageHeader } from "@/components/ui/page-header";
 import { collectMediaIds } from "@/lib/blog/blocks";
 import { getPublishedPostBySlug } from "@/lib/blog/server";
+import { getActiveLocale, getDictionary } from "@/lib/i18n/server";
+import { localizedHref } from "@/lib/i18n/url";
 import { getMediaByIds } from "@/lib/media/server";
 import { ROUTES } from "@/lib/routes";
+import { pageMetadata } from "@/lib/seo/metadata";
+import {
+  articleSchema,
+  breadcrumbSchema,
+  organizationSchema,
+} from "@/lib/seo/structured-data";
 
 export const dynamic = "force-dynamic";
 
@@ -19,10 +28,26 @@ export async function generateMetadata({
 }) {
   const { slug } = await params;
   const post = await getPublishedPostBySlug(slug);
-  return {
-    title: post ? post.title : "Post",
-    description: post?.excerpt ?? undefined,
-  };
+
+  if (!post) {
+    return { title: "Post" };
+  }
+
+  const ogMedia = post.ogMediaId
+    ? (await getMediaByIds([post.ogMediaId]))[0]
+    : undefined;
+  const image = ogMedia ?? post.thumbnail;
+  const imageAlt = image?.alt ?? post.title;
+
+  return pageMetadata({
+    title: post.seoTitle ?? post.title,
+    description: post.seoDescription ?? post.excerpt ?? undefined,
+    path: ROUTES.post(post.slug),
+    type: "article",
+    images: image ? [{ url: image.url, alt: imageAlt }] : undefined,
+    publishedTime: post.publishedAt ?? undefined,
+    modifiedTime: post.updatedAt,
+  });
 }
 
 /**
@@ -42,12 +67,44 @@ export default async function PostPage({
     notFound();
   }
 
-  const media = await getMediaByIds(collectMediaIds(post.body));
+  const [media, ogMedia, locale, dict] = await Promise.all([
+    getMediaByIds(collectMediaIds(post.body)),
+    post.ogMediaId
+      ? getMediaByIds([post.ogMediaId]).then((items) => items[0])
+      : Promise.resolve(undefined),
+    getActiveLocale(),
+    getDictionary(),
+  ]);
   const mediaById = new Map(media.map((entry) => [entry.id, entry]));
   const date = formatPostDate(post.publishedAt);
+  const schemaImage = (ogMedia ?? post.thumbnail)?.url ?? null;
 
   return (
     <article className="bg-white">
+      <JsonLd
+        data={[
+          organizationSchema(),
+          breadcrumbSchema([
+            {
+              name: dict.nav.blogs,
+              path: localizedHref(locale, ROUTES.blogs),
+            },
+            {
+              name: post.title,
+              path: localizedHref(locale, ROUTES.post(post.slug)),
+            },
+          ]),
+          articleSchema({
+            headline: post.seoTitle ?? post.title,
+            description: post.seoDescription ?? post.excerpt,
+            path: localizedHref(locale, ROUTES.post(post.slug)),
+            author: post.author,
+            publishedAt: post.publishedAt,
+            updatedAt: post.updatedAt,
+            imageUrl: schemaImage,
+          }),
+        ]}
+      />
       <PageHeader title={post.title}>
         <p className="mt-4 text-sm font-semibold uppercase tracking-[0.16em] text-ink-500">
           By {post.author}

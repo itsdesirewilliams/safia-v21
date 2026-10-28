@@ -34,6 +34,9 @@ export const TITLE_MAX_LENGTH = 200;
 export const AUTHOR_MAX_LENGTH = 120;
 export const EXCERPT_MAX_LENGTH = 500;
 export const SLUG_MAX_LENGTH = 200;
+/** Optional SEO overrides. Blank values fall back to title/excerpt. */
+export const SEO_TITLE_MAX_LENGTH = 120;
+export const SEO_DESCRIPTION_MAX_LENGTH = 320;
 
 /** The blog listing page size (spec #2). */
 export const POSTS_PER_PAGE = 12;
@@ -52,6 +55,10 @@ export type Post = {
   author: string;
   excerpt: string | null;
   thumbnailMediaId: string | null;
+  /** Optional SEO overrides (see the post_seo migration). */
+  seoTitle: string | null;
+  seoDescription: string | null;
+  ogMediaId: string | null;
   body: PostBlock[];
   status: PostStatus;
   publishedAt: string | null;
@@ -67,6 +74,9 @@ export type PostInput = {
   author?: string | null;
   excerpt?: string | null;
   thumbnailMediaId?: string | null;
+  seoTitle?: string | null;
+  seoDescription?: string | null;
+  ogMediaId?: string | null;
   body?: unknown;
 };
 
@@ -76,6 +86,9 @@ export type PostInputValue = {
   author: string;
   excerpt: string | null;
   thumbnailMediaId: string | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  ogMediaId: string | null;
   body: PostBlock[];
 };
 
@@ -95,6 +108,9 @@ export function validatePostInput(input: PostInput): PostValidation {
   const author = cleanText(input.author);
   const excerpt = cleanText(input.excerpt);
   const thumbnailMediaId = cleanText(input.thumbnailMediaId);
+  const seoTitle = cleanText(input.seoTitle);
+  const seoDescription = cleanText(input.seoDescription);
+  const ogMediaId = cleanText(input.ogMediaId);
 
   if (!title) {
     errors.title = "A title is required.";
@@ -110,6 +126,14 @@ export function validatePostInput(input: PostInput): PostValidation {
 
   if (excerpt && excerpt.length > EXCERPT_MAX_LENGTH) {
     errors.excerpt = `The excerpt must be ${EXCERPT_MAX_LENGTH} characters or fewer.`;
+  }
+
+  if (seoTitle.length > SEO_TITLE_MAX_LENGTH) {
+    errors.seoTitle = `The SEO title must be ${SEO_TITLE_MAX_LENGTH} characters or fewer.`;
+  }
+
+  if (seoDescription.length > SEO_DESCRIPTION_MAX_LENGTH) {
+    errors.seoDescription = `The SEO description must be ${SEO_DESCRIPTION_MAX_LENGTH} characters or fewer.`;
   }
 
   const slugInput = cleanText(input.slug).toLowerCase();
@@ -135,6 +159,9 @@ export function validatePostInput(input: PostInput): PostValidation {
       author,
       excerpt: excerpt || null,
       thumbnailMediaId: thumbnailMediaId || null,
+      seoTitle: seoTitle || null,
+      seoDescription: seoDescription || null,
+      ogMediaId: ogMediaId || null,
       body: parsedBody.blocks,
     },
   };

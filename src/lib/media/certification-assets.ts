@@ -111,6 +111,26 @@ function listFiles(...segments: string[]): string[] {
   }
 }
 
+/**
+ * Accessible names for the supplied marks. They are derived from the asset
+ * filenames (which are the company's own labels); anything unrecognised gets a
+ * neutral "Certification mark" rather than an invented scheme name.
+ */
+const LOGO_ALT_BY_STEM: Record<string, string> = {
+  iso: "ISO certification mark",
+  bis: "BIS certification mark",
+  tuv: "TÜV certification mark",
+  "ece-e4": "ECE E4 approval mark",
+  "make-in-india": "Make in India mark",
+  irmri: "Certification mark",
+};
+
+/** Meaningful alt text for a certification logo. */
+export function certificationLogoAlt(filename: string): string {
+  const stem = stripExtensions(filename).toLowerCase();
+  return LOGO_ALT_BY_STEM[stem] ?? "Certification mark";
+}
+
 /** Map filenames to their public URLs, naturally ordered, dropping unsupported. */
 export function discoverCertificationLogos(
   filenames: readonly string[],
@@ -121,7 +141,7 @@ export function discoverCertificationLogos(
     .map((filename) => ({
       filename,
       url: `${CERTIFICATION_LOGOS_ROOT}/${encodePath(filename)}`,
-      alt: labelFromFilename(filename),
+      alt: certificationLogoAlt(filename),
     }));
 }
 

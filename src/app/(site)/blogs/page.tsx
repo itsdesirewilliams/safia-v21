@@ -6,17 +6,17 @@ import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { Reveal } from "@/components/ui/reveal";
 import { listPublishedPosts } from "@/lib/blog/server";
 import { getDictionary } from "@/lib/i18n/server";
-import { languageAlternates } from "@/lib/i18n/url";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   const dict = await getDictionary();
-  return {
+  return pageMetadata({
     title: dict.blog.title,
     description: dict.blog.description,
-    alternates: { canonical: "/blogs", languages: languageAlternates("/blogs") },
-  };
+    path: "/blogs",
+  });
 }
 
 /**

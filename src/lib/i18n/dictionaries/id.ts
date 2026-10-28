@@ -199,6 +199,6 @@ export const id: Dictionary = {
     siteTagline: "Mengekspor ban yang tahan lama ke seluruh dunia",
     homeTitle: "Safeway Tyre | Mengekspor ban yang tahan lama ke seluruh dunia",
     homeDescription:
-      "Telusuri katalog Safeway Tyre berdasarkan ukuran atau kategori, jelajahi rangkaian produk kami, dan kirim permintaan.",
+      "Safeway Tyre (DEE RON Automotives LLP) memproduksi dan mengekspor ban truk dan bus, pertanian, OTR, forklift, sepeda motor, dan roda tiga dari Ludhiana, India.",
   },
 };

@@ -17,6 +17,13 @@ import tbrJson from "./data/tbr.json";
 
 export type RangeId = "tbr" | "pcr";
 
+/**
+ * TBR Pattern Codes deliberately hidden from public listing surfaces (for
+ * example a pattern whose product image is still being fixed). The catalogue
+ * data itself is untouched; remove a code here to restore it everywhere.
+ */
+export const HIDDEN_TBR_PATTERN_CODES: ReadonlySet<string> = new Set(["FM57"]);
+
 /** Both radial ranges present under the canonical Truck & Bus category. */
 export const RANGE_CATEGORY: CategorySlug = "truck-bus";
 

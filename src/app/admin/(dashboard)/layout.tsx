@@ -11,7 +11,10 @@ import { requireUser } from "@/lib/auth/session";
 
 import { signOutAction } from "../actions";
 
-export const metadata = { title: "Admin" };
+export const metadata = {
+  title: "Admin",
+  robots: { index: false, follow: false },
+};
 
 /**
  * The guarded admin shell.

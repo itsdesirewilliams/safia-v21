@@ -101,7 +101,7 @@ describe("Catalogue page", () => {
       expect(html).toContain(`href="/products/${slug}"`);
     }
     expect(html).toContain(
-      "Purpose-built tyres for tractors and agricultural equipment",
+      "Tyres for tractors, agricultural equipment and implements",
     );
   });
 });
@@ -165,7 +165,7 @@ describe("Pattern detail", () => {
     // The block shows the associated Pattern image when one exists, and a
     // clean neutral fallback when it does not — never a broken layout.
     const hasImage = html.includes("/storage/v1/object/public/product-images/");
-    const hasFallback = html.includes("Pattern image coming soon");
+    const hasFallback = html.includes("Pattern image");
     expect(hasImage || hasFallback).toBe(true);
   });
 

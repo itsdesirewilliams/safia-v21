@@ -11,10 +11,17 @@ export type CategoryCardProps = {
   name?: string;
   /** Locale-aware href; falls back to the canonical route. */
   href?: string;
+  /** Localized commercial copy; falls back to the English range note. */
+  description?: string;
 };
 
 /** A category range card for the Catalogue page. Tubes is shown, deferred. */
-export function CategoryCard({ category, name, href }: CategoryCardProps) {
+export function CategoryCard({
+  category,
+  name,
+  href,
+  description,
+}: CategoryCardProps) {
   return (
     <Link
       href={href ?? ROUTES.category(category.slug)}
@@ -27,7 +34,7 @@ export function CategoryCard({ category, name, href }: CategoryCardProps) {
         </span>
       </div>
       <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-600">
-        {CATEGORY_DESCRIPTIONS[category.slug]}
+        {description ?? CATEGORY_DESCRIPTIONS[category.slug]}
       </p>
     </Link>
   );

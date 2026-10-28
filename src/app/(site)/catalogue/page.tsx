@@ -5,26 +5,25 @@ import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { CATALOGUE } from "@/lib/catalogue/dataset";
+import { categoryDescription } from "@/lib/i18n/category-copy";
 import { getActiveLocale, getDictionary } from "@/lib/i18n/server";
-import { languageAlternates, localizedHref } from "@/lib/i18n/url";
+import { localizedHref } from "@/lib/i18n/url";
+import { pageMetadata } from "@/lib/seo/metadata";
 import { ROUTES } from "@/lib/routes";
 
 export async function generateMetadata() {
   const dict = await getDictionary();
-  return {
+  return pageMetadata({
     title: dict.catalogue.title,
     description: dict.catalogue.description,
-    alternates: {
-      canonical: "/catalogue",
-      languages: languageAlternates("/catalogue"),
-    },
-  };
+    path: "/catalogue",
+  });
 }
 
 /**
  * The Catalogue page (spec #1 / Ticket #18). The responsive slider is the
  * shared component from Ticket #13, fed by the developer-provided catalogue
- * artwork under `public/assets/catalogue/portrait` — Catalogue ships portrait
+ * artwork under `public/assets/catalogue/portrait` â€” Catalogue ships portrait
  * artwork only, so it is shown at every size and the download action points
  * straight at the supplied PDF.
  */
@@ -67,6 +66,7 @@ export default async function CataloguePage() {
                   <CategoryCard
                     category={category}
                     name={dict.categories[category.slug]}
+                    description={categoryDescription(locale, category.slug)}
                     href={localizedHref(locale, ROUTES.category(category.slug))}
                   />
                 </Reveal>

@@ -200,6 +200,6 @@ export const sw: Dictionary = {
     siteTagline: "Kuuza tire za kudumu duniani kote",
     homeTitle: "Safeway Tyre | Kuuza tire za kudumu duniani kote",
     homeDescription:
-      "Tafuta kwenye katalogi ya Safeway Tyre kwa ukubwa au kategoria, chunguza familia zetu za bidhaa na tuma hoja.",
+      "Safeway Tyre (DEE RON Automotives LLP) hutengeneza na kusafirisha matairi ya lori na basi, kilimo, OTR, forklift, pikipiki na vyombo vitatu kutoka Ludhiana, India.",
   },
 };

@@ -7,6 +7,7 @@ import {
   LOCALE_COOKIE,
   LOCALE_COOKIE_MAX_AGE,
   LOCALE_HEADER,
+  LOCALE_REWRITE_HEADER,
   isPrefixedLocale,
   type Locale,
 } from "@/lib/i18n/config";
@@ -17,21 +18,33 @@ import {
  * Two responsibilities:
  *  1. Refresh the Supabase session for `/admin` and bounce signed-out users to
  *     the login screen. Authorization itself is enforced server-side in the
- *     admin layout and actions — this is only a convenience.
+ *     admin layout and actions – this is only a convenience.
  *  2. Locale routing for the public site. English stays on the canonical root
- *     URLs; every other locale (`/fr`, `/pt`, `/es`, `/de`, `/nl`, `/pl`, `/ru`,
- *     `/sw`, `/ar`) is rewritten to the same page tree with an
- *     `x-safeway-locale` request header, so server components render the right
- *     language with no client round-trip. `/en/...` permanently redirects to the
- *     unprefixed URL to avoid duplicate content.
+ *     URLs; every other locale (`/fr`, `/pt`, `/es`, `...`) is rewritten to the
+ *     same page tree with an `x-safeway-locale` request header, so server
+ *     components render the right language with no client round-trip.
+ *     `/en/...` permanently redirects to the unprefixed URL to avoid duplicate
+ *     content.
+ *
+ * The rewrite origin is forced to `http://` on purpose. When TLS terminates at
+ * a reverse proxy (Nginx sends `X-Forwarded-Proto: https` but forwards to the
+ * Node server over HTTP), `request.nextUrl` reports `https://<internal-host>`
+ * while the server's own origin is `http://<internal-host>`. Next then treats
+ * the rewrite as an external proxy request, fails the TLS handshake against
+ * the app itself and re-enters this proxy (resetting the locale cookie).
+ * Matching the server's real internal scheme keeps it an in-process rewrite.
  */
 
 function requestWithLocale(
   request: NextRequest,
   locale: Locale,
+  internalRewrite = false,
 ): Headers {
   const headers = new Headers(request.headers);
   headers.set(LOCALE_HEADER, locale);
+  if (internalRewrite) {
+    headers.set(LOCALE_REWRITE_HEADER, "1");
+  }
   return headers;
 }
 
@@ -44,8 +57,33 @@ function persistLocale(response: NextResponse, locale: Locale): NextResponse {
   return response;
 }
 
+/**
+ * Rewrite a prefixed locale path to the shared page tree with an internal
+ * origin, and remember the chosen language.
+ */
+function rewriteLocale(
+  request: NextRequest,
+  pathname: string,
+  search: string,
+  locale: Locale,
+): NextResponse {
+  const url = request.nextUrl.clone();
+  // `next start` always serves plain HTTP; TLS is terminated by the reverse
+  // proxy. Keep the rewrite origin identical to the internal request origin so
+  // Next resolves it as an in-process rewrite instead of proxying over TLS.
+  url.protocol = "http:";
+  url.pathname = pathname;
+  url.search = search;
+
+  const response = NextResponse.rewrite(url, {
+    request: { headers: requestWithLocale(request, locale, true) },
+  });
+
+  return persistLocale(response, locale);
+}
+
 export async function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
 
   // --- Admin: session refresh only, always English/LTR -------------------
   if (pathname.startsWith("/admin")) {
@@ -95,6 +133,13 @@ export async function proxy(request: NextRequest) {
   }
 
   // --- Public site: locale routing --------------------------------------
+
+  // A rewrite we issued ourselves already carries the locale. Never clobber
+  // it (which would reset both the header and the cookie to English).
+  if (request.headers.get(LOCALE_REWRITE_HEADER) === "1") {
+    return NextResponse.next();
+  }
+
   const segment = pathname.split("/")[1] ?? "";
 
   // `/en/...` → canonical unprefixed URL (permanent).
@@ -105,17 +150,10 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url, 308);
   }
 
-  // `/fr|/pt|/es|/de|/nl|/pl|/ru|/sw|/ar/...` → rewrite to the shared tree with
-  // the locale header.
+  // `/fr|/pt|/es/...` → rewrite to the shared tree with the locale header.
   if (isPrefixedLocale(segment)) {
-    const url = request.nextUrl.clone();
     const rest = pathname.slice(`/${segment}`.length);
-    url.pathname = rest === "" ? "/" : rest;
-
-    const response = NextResponse.rewrite(url, {
-      request: { headers: requestWithLocale(request, segment) },
-    });
-    return persistLocale(response, segment);
+    return rewriteLocale(request, rest === "" ? "/" : rest, search, segment);
   }
 
   // English (canonical). Returning visitors who chose another language are

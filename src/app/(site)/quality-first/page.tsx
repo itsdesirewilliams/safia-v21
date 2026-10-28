@@ -6,7 +6,7 @@ import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { getDictionary } from "@/lib/i18n/server";
-import { languageAlternates } from "@/lib/i18n/url";
+import { pageMetadata } from "@/lib/seo/metadata";
 import { listQualityFirstStories } from "@/lib/media/quality-first-server";
 import { QUALITY_FIRST_STORY_SECTION } from "@/lib/quality-first";
 
@@ -14,14 +14,11 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   const dict = await getDictionary();
-  return {
+  return pageMetadata({
     title: dict.qualityFirst.title,
     description: dict.qualityFirst.description,
-    alternates: {
-      canonical: "/quality-first",
-      languages: languageAlternates("/quality-first"),
-    },
-  };
+    path: "/quality-first",
+  });
 }
 
 /**

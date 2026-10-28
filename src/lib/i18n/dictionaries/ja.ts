@@ -198,6 +198,6 @@ export const ja: Dictionary = {
     siteTagline: "長寿命タイヤを世界へ",
     homeTitle: "Safeway Tyre | 長寿命タイヤを世界へ",
     homeDescription:
-      "Safeway Tyre のカタログをサイズ・カテゴリで検索し、製品シリーズをご覧のうえ、お問い合わせください。",
+      "Safeway Tyre（DEE RON Automotives LLP）はインド・ルディアナでトラック・バス用、農業用、OTR、フォークリフト、二輪、三輪のタイヤを製造・輸出しています。",
   },
 };

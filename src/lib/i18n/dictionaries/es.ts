@@ -198,6 +198,6 @@ export const es: Dictionary = {
     siteTagline: "Exportamos neumáticos duraderos a todo el mundo",
     homeTitle: "Safeway Tyre | Exportamos neumáticos duraderos a todo el mundo",
     homeDescription:
-      "Busca en el catálogo de Safeway Tyre por medida o categoría, explora nuestras gamas de productos y envía una consulta.",
+      "Safeway Tyre (DEE RON Automotives LLP) fabrica y exporta neumáticos para camiones y autobuses, agricultura, OTR, montacargas, motocicletas y triciclos desde Ludhiana, India.",
   },
 };

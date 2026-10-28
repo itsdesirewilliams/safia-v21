@@ -17,6 +17,10 @@ export type PostRow = {
   author: string;
   excerpt: string | null;
   thumbnail_media_id: string | null;
+  /** Added by the post_seo migration; absent on older rows. */
+  seo_title?: string | null;
+  seo_description?: string | null;
+  og_media_id?: string | null;
   body: unknown;
   status: string;
   published_at: string | null;
@@ -43,6 +47,9 @@ export function mapPostRow(row: PostRow): Post | null {
     author: row.author,
     excerpt: row.excerpt,
     thumbnailMediaId: row.thumbnail_media_id,
+    seoTitle: row.seo_title ?? null,
+    seoDescription: row.seo_description ?? null,
+    ogMediaId: row.og_media_id ?? null,
     body: blocksFrom(row.body),
     status,
     publishedAt: row.published_at,
@@ -60,6 +67,9 @@ export function toPostSummary(post: Post): PostSummary {
     author: post.author,
     excerpt: post.excerpt,
     thumbnailMediaId: post.thumbnailMediaId,
+    seoTitle: post.seoTitle,
+    seoDescription: post.seoDescription,
+    ogMediaId: post.ogMediaId,
     status: post.status,
     publishedAt: post.publishedAt,
     createdAt: post.createdAt,

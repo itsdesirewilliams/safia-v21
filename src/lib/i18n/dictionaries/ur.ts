@@ -198,6 +198,6 @@ export const ur: Dictionary = {
     siteTagline: "دنیا بھر میں پائیدار ٹائر کی برآمد",
     homeTitle: "Safeway Tyre | دنیا بھر میں پائیدار ٹائر کی برآمد",
     homeDescription:
-      "Safeway Tyre کی کیٹلاگ میں سائز یا زمرے سے تلاش کریں، ہماری مصنوعات کی سیریز دیکھیں اور استفسار بھیجیں۔",
+      "Safeway Tyre (DEE RON Automotives LLP) لدھیانہ، بھارت سے ٹرک و بس، زراعت، OTR، فورک لفٹ، موٹر سائیکل اور تین پہیہ ٹائر بناتا اور برآمد کرتا ہے۔",
   },
 };

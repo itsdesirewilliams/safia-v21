@@ -51,11 +51,15 @@ beforeAll(async () => {
     "next",
   );
 
-  server = spawn(process.execPath, [nextBin, "start", "-p", String(PORT)], {
-    cwd: process.cwd(),
-    env: { ...process.env, ...loadDotEnvLocal() },
-    stdio: "pipe",
-  });
+  server = spawn(
+    process.execPath,
+    [nextBin, "start", "-H", "127.0.0.1", "-p", String(PORT)],
+    {
+      cwd: process.cwd(),
+      env: { ...process.env, ...loadDotEnvLocal() },
+      stdio: "pipe",
+    },
+  );
 
   await waitForServer(`${BASE_URL}/`);
 }, 120_000);
@@ -79,17 +83,50 @@ describe("localized routes", () => {
       expect(html, locale).toContain(`lang="${locale}"`);
       expect(html, locale).toContain(`dir="${meta.dir}"`);
 
+      // Self-referencing canonical and a complete hreflang set, including
+      // x-default. No localized page canonicalises to English.
+      const canonicalUrl =
+        locale === "en"
+          ? "https://safewaytyre.com"
+          : `https://safewaytyre.com/${locale}`;
+      expect(html, locale).toContain(`rel="canonical" href="${canonicalUrl}"`);
+      const alternates = html.match(/hrefLang="([^"]+)"/g) ?? [];
+      expect(alternates, locale).toHaveLength(LOCALE_ORDER.length + 1);
+      expect(html, locale).toContain(`hrefLang="${locale}"`);
+      expect(html, locale).toContain('hrefLang="x-default"');
+
       // The page is translated: the English hero copy is gone.
       if (locale !== "en") {
         expect(html, locale).not.toContain(en.home.heroTitle);
       }
 
-      // The language is remembered for the next visit.
-      expect(response.headers.get("set-cookie"), locale).toContain(
-        `NEXT_LOCALE=${locale}`,
-      );
+      // The language is remembered for the next visit, and a second internal
+      // pass must not overwrite it with English.
+      const cookie = response.headers.get("set-cookie") ?? "";
+      expect(cookie, locale).toContain(`NEXT_LOCALE=${locale}`);
+      if (locale !== "en") {
+        expect(cookie, locale).not.toContain("NEXT_LOCALE=en");
+      }
     },
   );
+
+  it("serves localized routes behind a TLS-terminating proxy", async () => {
+    // Nginx terminates TLS and forwards plain HTTP with X-Forwarded-Proto.
+    // Next must not turn the locale rewrite into an https proxy to itself.
+    const response = await fetch(`${BASE_URL}/es/about-us`, {
+      headers: { "x-forwarded-proto": "https" },
+    });
+
+    expect(response.status).toBe(200);
+    const html = await response.text();
+    expect(html).toContain('lang="es"');
+    expect(html).toContain(
+      'rel="canonical" href="https://safewaytyre.com/es/about-us"',
+    );
+    expect(response.headers.get("set-cookie") ?? "").toContain(
+      "NEXT_LOCALE=es",
+    );
+  });
 
   it("keeps the chosen language when moving between pages", async () => {
     const response = await fetch(`${BASE_URL}/fr/about-us`);

@@ -66,6 +66,9 @@ export default async function EditPostPage({
           author: post.author,
           excerpt: post.excerpt ?? "",
           thumbnailMediaId: post.thumbnailMediaId,
+          seoTitle: post.seoTitle ?? "",
+          seoDescription: post.seoDescription ?? "",
+          ogMediaId: post.ogMediaId,
           body: post.body,
         }}
       />

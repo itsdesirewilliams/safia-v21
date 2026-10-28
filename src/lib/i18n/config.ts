@@ -38,6 +38,12 @@ export const DEFAULT_LOCALE: Locale = "en";
 /** Request header the proxy sets so server components know the locale. */
 export const LOCALE_HEADER = "x-safeway-locale";
 
+/**
+ * Marker the proxy adds to requests it rewrote itself. It lets the proxy
+ * recognise an internal locale rewrite and leave that request untouched.
+ */
+export const LOCALE_REWRITE_HEADER = "x-safeway-locale-rewrite";
+
 /** Cookie that remembers a visitor's chosen language. */
 export const LOCALE_COOKIE = "NEXT_LOCALE";
 

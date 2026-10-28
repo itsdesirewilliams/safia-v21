@@ -44,7 +44,7 @@ export function PatternCard({
     >
       <PatternImage
         src={imageUrl}
-        alt={pattern.patternCode}
+        alt={`${pattern.patternCode} tyre pattern`}
         className="h-24 w-24 shrink-0 sm:h-28 sm:w-28"
       />
 

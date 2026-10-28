@@ -2,21 +2,18 @@ import { GalleryGrid } from "@/components/gallery/gallery-grid";
 import { Container } from "@/components/ui/container";
 import { PageHeader } from "@/components/ui/page-header";
 import { getDictionary } from "@/lib/i18n/server";
-import { languageAlternates } from "@/lib/i18n/url";
+import { pageMetadata } from "@/lib/seo/metadata";
 import { listGalleryImages } from "@/lib/media/gallery-server";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   const dict = await getDictionary();
-  return {
+  return pageMetadata({
     title: dict.gallery.title,
     description: dict.gallery.description,
-    alternates: {
-      canonical: "/gallery",
-      languages: languageAlternates("/gallery"),
-    },
-  };
+    path: "/gallery",
+  });
 }
 
 /**

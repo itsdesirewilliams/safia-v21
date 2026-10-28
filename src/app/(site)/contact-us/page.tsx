@@ -6,24 +6,21 @@ import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { detectVisitorCountry } from "@/lib/contact/visitor-country-server";
 import { getDictionary } from "@/lib/i18n/server";
-import { languageAlternates } from "@/lib/i18n/url";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 export async function generateMetadata() {
   const dict = await getDictionary();
-  return {
+  return pageMetadata({
     title: dict.contact.title,
     description: dict.contact.description,
-    alternates: {
-      canonical: "/contact-us",
-      languages: languageAlternates("/contact-us"),
-    },
-  };
+    path: "/contact-us",
+  });
 }
 
 /**
  * Contact Us (spec #6): a Query form and a Feedback form over one shared
  * submission pipeline, plus the WhatsApp alternative and approved contact
- * details. Submissions are emailed only (ADR-0007) — nothing is stored.
+ * details. Submissions are emailed only (ADR-0007) â€” nothing is stored.
  */
 export default async function ContactUsPage() {
   // Coarse, IP-derived country only; used to pre-select the phone field.

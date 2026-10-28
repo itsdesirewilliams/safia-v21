@@ -171,11 +171,12 @@ describe("locale-aware URLs", () => {
 
   it("provides hreflang alternates for every locale", () => {
     const alternates = languageAlternates("/catalogue");
-    expect(Object.keys(alternates).sort()).toEqual([...LOCALE_ORDER].sort());
+    expect(Object.keys(alternates).sort()).toEqual([...LOCALE_ORDER, "x-default"].sort());
     expect(alternates.en).toBe("/catalogue");
     expect(alternates.fr).toBe("/fr/catalogue");
     expect(alternates.zh).toBe("/zh/catalogue");
     expect(alternates.ur).toBe("/ur/catalogue");
+    expect(alternates["x-default"]).toBe("/catalogue");
   });
 });
 

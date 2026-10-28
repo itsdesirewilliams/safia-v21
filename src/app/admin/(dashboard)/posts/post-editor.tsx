@@ -22,6 +22,9 @@ export type PostEditorProps = {
     author: string;
     excerpt: string;
     thumbnailMediaId: string | null;
+    seoTitle: string;
+    seoDescription: string;
+    ogMediaId: string | null;
     body: PostBlock[];
   };
 };
@@ -178,6 +181,62 @@ export function PostEditor({
                 use it here.
               </p>
             )}
+          </div>
+        </div>
+      </section>
+
+      <section className="rounded-card border border-ink-200 bg-white p-6">
+        <h2 className="text-lg font-semibold text-ink-950">Search &amp; social</h2>
+        <p className="mt-2 text-sm text-ink-600">
+          Optional. Leave a field blank to use the post title, excerpt and
+          thumbnail.
+        </p>
+
+        <div className="mt-5 grid gap-4">
+          <div>
+            <label htmlFor="post-seo-title" className={fieldLabelClass}>
+              SEO title
+            </label>
+            <input
+              id="post-seo-title"
+              name="seoTitle"
+              maxLength={120}
+              defaultValue={defaults.seoTitle}
+              className={fieldClass}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="post-seo-description" className={fieldLabelClass}>
+              SEO description
+            </label>
+            <textarea
+              id="post-seo-description"
+              name="seoDescription"
+              rows={3}
+              maxLength={320}
+              defaultValue={defaults.seoDescription}
+              className={fieldClass}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="post-og-image" className={fieldLabelClass}>
+              Social-sharing image (optional)
+            </label>
+            <select
+              id="post-og-image"
+              name="ogMediaId"
+              defaultValue={defaults.ogMediaId ?? ""}
+              className={fieldClass}
+            >
+              <option value="">Use the thumbnail</option>
+              {mediaOptions.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </section>

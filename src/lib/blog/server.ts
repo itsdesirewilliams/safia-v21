@@ -157,6 +157,8 @@ function friendlyError(message: string): string {
   return message;
 }
 
+const SEO_COLUMNS = ["seo_title", "seo_description", "og_media_id"] as const;
+
 function toPatch(input: PostInputValue): Record<string, unknown> {
   return {
     title: input.title,
@@ -164,8 +166,36 @@ function toPatch(input: PostInputValue): Record<string, unknown> {
     author: input.author,
     excerpt: input.excerpt,
     thumbnail_media_id: input.thumbnailMediaId,
+    seo_title: input.seoTitle,
+    seo_description: input.seoDescription,
+    og_media_id: input.ogMediaId,
     body: input.body,
   };
+}
+
+/**
+ * The SEO columns arrive with a migration. Until it is applied, keep Post
+ * editing working by retrying without them (the values are simply not stored).
+ */
+function isMissingSeoColumns(error: {
+  code?: string | null;
+  message: string;
+}): boolean {
+  return (
+    (error.code === "PGRST204" ||
+      /seo_title|seo_description|og_media_id/.test(error.message)) &&
+    /column|schema cache|does not exist/i.test(error.message)
+  );
+}
+
+function withoutSeoColumns(
+  patch: Record<string, unknown>,
+): Record<string, unknown> {
+  const copy = { ...patch };
+  for (const column of SEO_COLUMNS) {
+    delete copy[column];
+  }
+  return copy;
 }
 
 /** Create a Post. New posts always start as a Draft. */
@@ -174,17 +204,30 @@ export async function createPost(
   createdBy: string,
 ): Promise<PostMutationResult> {
   const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase
+  const patch = {
+    ...toPatch(input),
+    status: "draft",
+    created_by: createdBy,
+  };
+  let result = await supabase
     .from("posts")
-    .insert({ ...toPatch(input), status: "draft", created_by: createdBy })
+    .insert(patch)
     .select("*")
     .single();
 
-  if (error) {
-    return { ok: false, error: friendlyError(error.message) };
+  if (result.error && isMissingSeoColumns(result.error)) {
+    result = await supabase
+      .from("posts")
+      .insert(withoutSeoColumns(patch))
+      .select("*")
+      .single();
   }
 
-  const post = mapPostRow(data as PostRow);
+  if (result.error) {
+    return { ok: false, error: friendlyError(result.error.message) };
+  }
+
+  const post = mapPostRow(result.data as PostRow);
   return post
     ? { ok: true, post }
     : { ok: false, error: "The saved post could not be read." };
@@ -196,18 +239,28 @@ export async function updatePost(
   input: PostInputValue,
 ): Promise<PostMutationResult> {
   const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase
+  const patch = toPatch(input);
+  let result = await supabase
     .from("posts")
-    .update(toPatch(input))
+    .update(patch)
     .eq("id", id)
     .select("*")
     .single();
 
-  if (error) {
-    return { ok: false, error: friendlyError(error.message) };
+  if (result.error && isMissingSeoColumns(result.error)) {
+    result = await supabase
+      .from("posts")
+      .update(withoutSeoColumns(patch))
+      .eq("id", id)
+      .select("*")
+      .single();
   }
 
-  const post = mapPostRow(data as PostRow);
+  if (result.error) {
+    return { ok: false, error: friendlyError(result.error.message) };
+  }
+
+  const post = mapPostRow(result.data as PostRow);
   return post
     ? { ok: true, post }
     : { ok: false, error: "The updated post could not be read." };

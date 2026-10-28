@@ -12,7 +12,7 @@ import {
   HERO_SUGGESTION_POOL,
 } from "@/lib/homepage";
 import { getActiveLocale, getDictionary } from "@/lib/i18n/server";
-import { languageAlternates } from "@/lib/i18n/url";
+import { pageMetadata } from "@/lib/seo/metadata";
 import { ROUTES } from "@/lib/routes";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -20,14 +20,14 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   const dict = await getDictionary();
-  return {
+  return pageMetadata({
     title: dict.search.title,
     description: dict.search.description,
-    alternates: {
-      canonical: ROUTES.search,
-      languages: languageAlternates(ROUTES.search),
-    },
-  };
+    path: ROUTES.search,
+    // Internal result pages must not be indexed; the public categories and
+    // patterns they link to still are.
+    noindex: true,
+  });
 }
 
 /**

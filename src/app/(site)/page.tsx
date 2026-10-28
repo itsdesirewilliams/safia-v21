@@ -38,7 +38,15 @@ import {
   readCertificates,
   readCertificationLogos,
 } from "@/lib/media/certification-assets";
-import { languageAlternates, localizedHref } from "@/lib/i18n/url";
+import { localizedHref } from "@/lib/i18n/url";
+import { pageMetadata } from "@/lib/seo/metadata";
+import {
+  JsonLd,
+} from "@/components/seo/json-ld";
+import {
+  organizationSchema,
+  websiteSchema,
+} from "@/lib/seo/structured-data";
 import { readProductRangeImages } from "@/lib/media/product-range-assets";
 import { isValidYoutubeVideoId } from "@/lib/media/youtube";
 import { ROUTES } from "@/lib/routes";
@@ -54,11 +62,13 @@ import {
 
 export async function generateMetadata() {
   const dict = await getDictionary();
-  return {
-    title: dict.meta.homeTitle,
+  return pageMetadata({
+    // The stored title already names the brand; bypass the layout template so
+    // the brand is not appended twice.
+    title: { absolute: dict.meta.homeTitle },
     description: dict.meta.homeDescription,
-    alternates: { canonical: "/", languages: languageAlternates("/") },
-  };
+    path: "/",
+  });
 }
 
 export default async function HomePage() {
@@ -83,6 +93,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <JsonLd data={[organizationSchema(), websiteSchema()]} />
       {/* Hero — two-panel: copy/search + factory video */}
       <section className="bg-ink-50 px-4 pt-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-[96rem]">

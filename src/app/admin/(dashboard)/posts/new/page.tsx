@@ -36,6 +36,9 @@ export default async function NewPostPage() {
           author: "",
           excerpt: "",
           thumbnailMediaId: null,
+          seoTitle: "",
+          seoDescription: "",
+          ogMediaId: null,
           body: [],
         }}
       />

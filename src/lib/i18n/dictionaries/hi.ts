@@ -199,6 +199,6 @@ export const hi: Dictionary = {
     siteTagline: "दुनिया भर में टिकाऊ टायरों का निर्यात",
     homeTitle: "Safeway Tyre | दुनिया भर में टिकाऊ टायरों का निर्यात",
     homeDescription:
-      "Safeway Tyre के कैटलॉग में साइज़ या श्रेणी से खोजें, हमारी उत्पाद श्रृंखलाएँ देखें और पूछताछ भेजें।",
+      "Safeway Tyre (DEE RON Automotives LLP) लुधियाना, भारत से ट्रक व बस, कृषि, OTR, फोर्कलिफ्ट, मोटरसाइकिल और तीन पहिया टायर बनाता और निर्यात करता है।",
   },
 };

@@ -51,7 +51,7 @@ describe("certification discovery", () => {
     expect(logos[0]).toEqual({
       filename: "logo-2.png",
       url: `${CERTIFICATION_LOGOS_ROOT}/logo-2.png`,
-      alt: "logo 2",
+      alt: "Certification mark",
     });
   });
 

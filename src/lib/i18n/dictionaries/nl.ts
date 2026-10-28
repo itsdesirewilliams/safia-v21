@@ -199,6 +199,6 @@ export const nl: Dictionary = {
     siteTagline: "Duurzame banden wereldwijd geëxporteerd",
     homeTitle: "Safeway Tyre | Duurzame banden wereldwijd geëxporteerd",
     homeDescription:
-      "Zoek in de Safeway Tyre-catalogus op maat of categorie, ontdek onze productseries en stuur een aanvraag.",
+      "Safeway Tyre (DEE RON Automotives LLP) produceert en exporteert vrachtwagen- en busbanden, landbouw-, OTR-, heftruck-, motor- en driewielerbanden vanuit Ludhiana, India.",
   },
 };

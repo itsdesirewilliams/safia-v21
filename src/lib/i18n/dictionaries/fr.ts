@@ -200,6 +200,6 @@ export const fr: Dictionary = {
     siteTagline: "Exportation de pneus durables dans le monde entier",
     homeTitle: "Safeway Tyre | Exportation de pneus durables dans le monde entier",
     homeDescription:
-      "Recherchez dans le catalogue Safeway Tyre par dimension ou catégorie, explorez nos gammes de produits et envoyez une demande.",
+      "Safeway Tyre (DEE RON Automotives LLP) fabrique et exporte des pneus pour camions et bus, agricoles, OTR, chariots élévateurs, motos et tricycles depuis Ludhiana, en Inde.",
   },
 };

@@ -200,6 +200,6 @@ export const de: Dictionary = {
     siteTagline: "Langlebige Reifen weltweit exportiert",
     homeTitle: "Safeway Tyre | Langlebige Reifen weltweit exportiert",
     homeDescription:
-      "Suchen Sie im Safeway Tyre Katalog nach Größe oder Kategorie, entdecken Sie unsere Produktbereiche und senden Sie eine Anfrage.",
+      "Safeway Tyre (DEE RON Automotives LLP) stellt in Ludhiana, Indien, Lkw-, Bus-, Agrar-, OTR-, Gabelstapler-, Motorrad- und Dreiradreifen her und exportiert sie weltweit.",
   },
 };

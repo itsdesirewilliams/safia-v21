@@ -1,18 +1,23 @@
 import { Breadcrumbs } from "@/components/catalogue/breadcrumbs";
+import { CatalogueEnquiry } from "@/components/catalogue/catalogue-enquiry";
 import { PatternCard } from "@/components/catalogue/pattern-card";
 import { RangeCatalogueSlider } from "@/components/catalogue/range-catalogue-slider";
 import { RangeSwitcher } from "@/components/catalogue/range-switcher";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Container } from "@/components/ui/container";
 import { PageHeader } from "@/components/ui/page-header";
 import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import {
+  HIDDEN_TBR_PATTERN_CODES,
   listRangePatterns,
   rangePatternToNormalized,
 } from "@/lib/catalogue/range-data";
 import { getActiveLocale, getDictionary } from "@/lib/i18n/server";
-import { languageAlternates, localizedHref } from "@/lib/i18n/url";
+import { localizedHref } from "@/lib/i18n/url";
+import { pageMetadata } from "@/lib/seo/metadata";
+import { breadcrumbSchema } from "@/lib/seo/structured-data";
 import { normalizePatternCode } from "@/lib/media/pattern-image-batch";
 import { listPatternImageUrls } from "@/lib/media/pattern-images-server";
 import { readRangeCatalogueLandscapeImages } from "@/lib/media/range-catalogue-assets";
@@ -21,24 +26,14 @@ import { ROUTES } from "@/lib/routes";
 /** Pattern images come from the request-scoped media layer, so render on demand. */
 export const dynamic = "force-dynamic";
 
-/**
- * TEMPORARY: TBR Pattern Codes hidden from the public listing only (e.g. a
- * pattern whose product image is not displaying correctly yet). The underlying
- * catalogue data in `data/tbr.json` is untouched — remove a code from this set
- * to restore it, with no other change.
- */
-const HIDDEN_TBR_PATTERN_CODES = new Set(["FM57"]);
 
 export async function generateMetadata() {
   const dict = await getDictionary();
-  return {
-    title: `${dict.tbr.title} | ${dict.tbr.eyebrow}`,
+  return pageMetadata({
+    title: dict.tbr.title,
     description: dict.tbr.description,
-    alternates: {
-      canonical: ROUTES.tbrSafeway,
-      languages: languageAlternates(ROUTES.tbrSafeway),
-    },
-  };
+    path: ROUTES.tbrSafeway,
+  });
 }
 
 /**
@@ -62,6 +57,22 @@ export default async function TbrSafewayPage() {
 
   return (
     <div className="bg-white">
+      <JsonLd
+        data={breadcrumbSchema([
+          {
+            name: dict.breadcrumbs.catalogue,
+            path: localizedHref(locale, ROUTES.catalogue),
+          },
+          {
+            name: dict.categories["truck-bus"],
+            path: localizedHref(locale, ROUTES.category("truck-bus")),
+          },
+          {
+            name: dict.nav.tbr,
+            path: localizedHref(locale, ROUTES.tbrSafeway),
+          },
+        ])}
+      />
       <PageHeader
         containerSize="listing"
         breadcrumb={
@@ -167,6 +178,11 @@ export default async function TbrSafewayPage() {
               </p>
             </div>
           </div>
+        </Container>
+      </section>
+      <section className="bg-ink-50 py-16">
+        <Container size="listing">
+          <CatalogueEnquiry locale={locale} dict={dict} />
         </Container>
       </section>
     </div>

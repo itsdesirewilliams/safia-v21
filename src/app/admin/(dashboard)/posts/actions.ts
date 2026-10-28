@@ -47,6 +47,9 @@ export async function savePostAction(
     author: readField(formData, "author"),
     excerpt: readField(formData, "excerpt"),
     thumbnailMediaId: readField(formData, "thumbnailMediaId"),
+    seoTitle: readField(formData, "seoTitle"),
+    seoDescription: readField(formData, "seoDescription"),
+    ogMediaId: readField(formData, "ogMediaId"),
     body: readField(formData, "body"),
   });
 

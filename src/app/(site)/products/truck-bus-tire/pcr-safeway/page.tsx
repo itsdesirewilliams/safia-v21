@@ -1,7 +1,9 @@
 import { Breadcrumbs } from "@/components/catalogue/breadcrumbs";
+import { CatalogueEnquiry } from "@/components/catalogue/catalogue-enquiry";
 import { PatternCard } from "@/components/catalogue/pattern-card";
 import { RangeCatalogueSlider } from "@/components/catalogue/range-catalogue-slider";
 import { RangeSwitcher } from "@/components/catalogue/range-switcher";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Container } from "@/components/ui/container";
 import { PageHeader } from "@/components/ui/page-header";
 import { PlaceholderPanel } from "@/components/ui/placeholder-panel";
@@ -12,7 +14,9 @@ import {
   rangePatternToNormalized,
 } from "@/lib/catalogue/range-data";
 import { getActiveLocale, getDictionary } from "@/lib/i18n/server";
-import { languageAlternates, localizedHref } from "@/lib/i18n/url";
+import { localizedHref } from "@/lib/i18n/url";
+import { pageMetadata } from "@/lib/seo/metadata";
+import { breadcrumbSchema } from "@/lib/seo/structured-data";
 import { normalizePatternCode } from "@/lib/media/pattern-image-batch";
 import { listPatternImageUrls } from "@/lib/media/pattern-images-server";
 import { readRangeCatalogueLandscapeImages } from "@/lib/media/range-catalogue-assets";
@@ -23,14 +27,11 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   const dict = await getDictionary();
-  return {
-    title: `${dict.pcr.title} | ${dict.pcr.eyebrow}`,
+  return pageMetadata({
+    title: dict.pcr.title,
     description: dict.pcr.description,
-    alternates: {
-      canonical: ROUTES.pcrSafeway,
-      languages: languageAlternates(ROUTES.pcrSafeway),
-    },
-  };
+    path: ROUTES.pcrSafeway,
+  });
 }
 
 /**
@@ -51,6 +52,22 @@ export default async function PcrSafewayPage() {
 
   return (
     <div className="bg-white">
+      <JsonLd
+        data={breadcrumbSchema([
+          {
+            name: dict.breadcrumbs.catalogue,
+            path: localizedHref(locale, ROUTES.catalogue),
+          },
+          {
+            name: dict.categories["truck-bus"],
+            path: localizedHref(locale, ROUTES.category("truck-bus")),
+          },
+          {
+            name: dict.nav.pcr,
+            path: localizedHref(locale, ROUTES.pcrSafeway),
+          },
+        ])}
+      />
       <PageHeader
         containerSize="listing"
         breadcrumb={
@@ -156,6 +173,11 @@ export default async function PcrSafewayPage() {
               </p>
             </div>
           </div>
+        </Container>
+      </section>
+      <section className="bg-ink-50 py-16">
+        <Container size="listing">
+          <CatalogueEnquiry locale={locale} dict={dict} />
         </Container>
       </section>
     </div>

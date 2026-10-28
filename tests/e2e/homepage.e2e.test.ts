@@ -71,7 +71,7 @@ describe("homepage vertical slice", () => {
   it("renders every section end-to-end", async () => {
     const html = await (await fetch(`${BASE_URL}/`)).text();
 
-    expect(html).toContain("Tires That Keep the World Moving");
+    expect(html).toContain("Tyres That Keep the World Moving");
     expect(html).toContain("Take a Tour of Our Industry");
     expect(html).toContain("Product Ranges");
     expect(html).toContain("Explore the Official Catalogue");
@@ -93,8 +93,8 @@ describe("homepage vertical slice", () => {
     expect(html).toContain("marketing@safewaytyre.com");
     expect(html).toContain("marketing01@safewaytyre.com");
     // The Director address is always listed first, ahead of any marketing address.
-    expect(html.indexOf("Director@safewaytyre.com")).toBeLessThan(
-      html.indexOf("marketing@safewaytyre.com"),
+    expect(html.indexOf("mailto:Director@safewaytyre.com")).toBeLessThan(
+      html.indexOf("mailto:marketing@safewaytyre.com"),
     );
     expect(html).toContain("+91 90416 62182");
     expect(html).toContain("+91 80543 62182");
