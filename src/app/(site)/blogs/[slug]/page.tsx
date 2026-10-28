@@ -6,9 +6,10 @@ import { formatPostDate } from "@/components/blog/format";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Container } from "@/components/ui/container";
 import { PageHeader } from "@/components/ui/page-header";
-import { collectMediaIds } from "@/lib/blog/blocks";
+import { collectFaqItems, collectMediaIds } from "@/lib/blog/blocks";
 import { getPublishedPostBySlug } from "@/lib/blog/server";
 import { getActiveLocale, getDictionary } from "@/lib/i18n/server";
+import { getCategory } from "@/lib/catalogue/categories";
 import { localizedHref } from "@/lib/i18n/url";
 import { getMediaByIds } from "@/lib/media/server";
 import { ROUTES } from "@/lib/routes";
@@ -16,6 +17,7 @@ import { pageMetadata } from "@/lib/seo/metadata";
 import {
   articleSchema,
   breadcrumbSchema,
+  faqPageSchema,
   organizationSchema,
 } from "@/lib/seo/structured-data";
 
@@ -78,6 +80,10 @@ export default async function PostPage({
   const mediaById = new Map(media.map((entry) => [entry.id, entry]));
   const date = formatPostDate(post.publishedAt);
   const schemaImage = (ogMedia ?? post.thumbnail)?.url ?? null;
+  const categoryName = post.category
+    ? (getCategory(post.category)?.displayName ?? post.category)
+    : null;
+  const faqSchema = faqPageSchema(collectFaqItems(post.body));
 
   return (
     <article className="bg-white">
@@ -102,7 +108,9 @@ export default async function PostPage({
             publishedAt: post.publishedAt,
             updatedAt: post.updatedAt,
             imageUrl: schemaImage,
+            section: categoryName,
           }),
+          ...(faqSchema ? [faqSchema] : []),
         ]}
       />
       <PageHeader title={post.title}>

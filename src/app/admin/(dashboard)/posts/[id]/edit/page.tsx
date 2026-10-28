@@ -4,10 +4,9 @@ import { AdminPageHeader } from "@/components/admin/page-header";
 import { formatPostDate } from "@/components/blog/format";
 import { canDeletePosts } from "@/lib/auth/roles";
 import { getCurrentProfile, requirePostsAccess } from "@/lib/auth/session";
-import { toMediaOptions } from "@/lib/blog/media-options";
 import { postStatusLabel } from "@/lib/blog/post";
 import { getPostById } from "@/lib/blog/server";
-import { listMedia } from "@/lib/media/server";
+import { getMediaByIds, listMedia } from "@/lib/media/server";
 
 import { PostActions } from "../../post-actions";
 import { PostEditor } from "../../post-editor";
@@ -32,13 +31,23 @@ export default async function EditPostPage({
   }
 
   const images = await listMedia({ type: "image", limit: 240 });
-  const mediaOptions = toMediaOptions(images);
+  const preferredIds = [post.thumbnailMediaId, post.ogMediaId].filter(
+    (value): value is string => Boolean(value),
+  );
+  const preferred =
+    preferredIds.length > 0 ? await getMediaByIds(preferredIds) : [];
+  const mediaLibrary = [
+    ...preferred,
+    ...images.filter(
+      (entry) => !preferred.some((preferredEntry) => preferredEntry.id === entry.id),
+    ),
+  ];
 
   return (
     <div>
       <AdminPageHeader
         eyebrow="Blog"
-        title={post.title}
+        title={post.title.trim() || "Untitled draft"}
         description={`${postStatusLabel(post.status)} · updated ${formatPostDate(
           post.updatedAt,
         )}`}
@@ -48,28 +57,27 @@ export default async function EditPostPage({
           { label: "Edit" },
         ]}
         actions={
-          <PostActions
-            postId={post.id}
-            status={post.status}
-            canDelete={canDelete}
-          />
+          <PostActions postId={post.id} canDelete={canDelete} />
         }
       />
 
       <PostEditor
         mode="edit"
         postId={post.id}
-        mediaOptions={mediaOptions}
+        mediaLibrary={mediaLibrary}
         defaults={{
           title: post.title,
           slug: post.slug,
           author: post.author,
           excerpt: post.excerpt ?? "",
+          category: post.category ?? "",
           thumbnailMediaId: post.thumbnailMediaId,
           seoTitle: post.seoTitle ?? "",
           seoDescription: post.seoDescription ?? "",
           ogMediaId: post.ogMediaId,
           body: post.body,
+          status: post.status,
+          publishedSlug: post.status === "published" ? post.slug : null,
         }}
       />
     </div>

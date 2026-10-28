@@ -2,6 +2,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import { PostBody } from "@/components/blog/post-body";
+import type { PostBlock } from "@/lib/blog/blocks";
 import type { Media } from "@/lib/media/types";
 
 const MEDIA: Media = {
@@ -63,5 +64,137 @@ describe("PostBody", () => {
 
     expect(html).toContain("Image unavailable");
     expect(html).not.toContain("<img");
+  });
+});
+
+describe("PostBody block editor output", () => {
+  it("renders sanitized rich text with safe links", () => {
+    const html = renderToStaticMarkup(
+      <PostBody
+        blocks={[
+          {
+            type: "text",
+            html: '<p>Hello <strong>world</strong> <a href="https://example.com">link</a></p>',
+          },
+        ]}
+        media={new Map()}
+      />,
+    );
+
+    expect(html).toContain("<strong>world</strong>");
+    expect(html).toContain('href="https://example.com"');
+    expect(html).toContain('target="_blank"');
+    expect(html).toContain('rel="noopener noreferrer"');
+  });
+
+  it("renders H2/H3/H4 headings", () => {
+    const blocks: PostBlock[] = [
+      { type: "heading", level: 2, text: "Two" },
+      { type: "heading", level: 3, text: "Three" },
+      { type: "heading", level: 4, text: "Four" },
+    ];
+    const html = renderToStaticMarkup(<PostBody blocks={blocks} media={new Map()} />);
+
+    expect(html).toContain("<h2");
+    expect(html).toContain("<h3");
+    expect(html).toContain("<h4");
+  });
+
+  it("renders a list explainer with an H2 and H3 items", () => {
+    const html = renderToStaticMarkup(
+      <PostBody
+        blocks={[
+          {
+            type: "list",
+            heading: "Five factors",
+            items: [{ heading: "First factor", html: "<p>Details.</p>" }],
+          },
+        ]}
+        media={new Map()}
+      />,
+    );
+
+    expect(html).toContain("Five factors");
+    expect(html).toContain("First factor");
+    expect(html).toContain("Details.");
+  });
+
+  it("renders image + text with a media image", () => {
+    const html = renderToStaticMarkup(
+      <PostBody
+        blocks={[
+          {
+            type: "imageText",
+            position: "right",
+            mediaId: "m1",
+            caption: "Beside caption",
+            heading: "Beside heading",
+            html: "<p>Beside text.</p>",
+          },
+        ]}
+        media={new Map([["m1", MEDIA]])}
+      />,
+    );
+
+    expect(html).toContain(MEDIA.url);
+    expect(html).toContain("Beside heading");
+    expect(html).toContain("Beside text.");
+    expect(html).toContain("Beside caption");
+  });
+
+  it("renders tables responsively with a header row", () => {
+    const html = renderToStaticMarkup(
+      <PostBody
+        blocks={[
+          {
+            type: "table",
+            rows: [
+              ["Size", "Pattern"],
+              ["295/80R22.5", "FM-06"],
+            ],
+          },
+        ]}
+        media={new Map()}
+      />,
+    );
+
+    expect(html).toContain("overflow-x-auto");
+    expect(html).toContain("<table");
+    expect(html).toContain("<th");
+    expect(html).toContain("295/80R22.5");
+    expect(html).toContain("FM-06");
+  });
+
+  it("renders FAQ items as native collapsible details", () => {
+    const html = renderToStaticMarkup(
+      <PostBody
+        blocks={[
+          {
+            type: "faq",
+            heading: "Questions",
+            items: [{ question: "Why tyres?", html: "<p>Because they roll.</p>" }],
+          },
+        ]}
+        media={new Map()}
+      />,
+    );
+
+    expect(html).toContain("<details");
+    expect(html).toContain("<summary");
+    expect(html).toContain("Why tyres?");
+    expect(html).toContain("Because they roll.");
+  });
+
+  it("shows placeholders for empty image slots only in preview", () => {
+    const blocks: PostBlock[] = [{ type: "image", mediaId: "", alt: null, caption: null }];
+    const preview = renderToStaticMarkup(
+      <PostBody blocks={blocks} media={new Map()} preview />,
+    );
+    const publicHtml = renderToStaticMarkup(
+      <PostBody blocks={blocks} media={new Map()} />,
+    );
+
+    expect(preview).toContain("Image placeholder");
+    expect(publicHtml).not.toContain("Image placeholder");
   });
 });

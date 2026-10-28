@@ -157,7 +157,12 @@ function friendlyError(message: string): string {
   return message;
 }
 
-const SEO_COLUMNS = ["seo_title", "seo_description", "og_media_id"] as const;
+const OPTIONAL_COLUMNS = [
+  "seo_title",
+  "seo_description",
+  "og_media_id",
+  "category",
+] as const;
 
 function toPatch(input: PostInputValue): Record<string, unknown> {
   return {
@@ -165,6 +170,7 @@ function toPatch(input: PostInputValue): Record<string, unknown> {
     slug: input.slug,
     author: input.author,
     excerpt: input.excerpt,
+    category: input.category,
     thumbnail_media_id: input.thumbnailMediaId,
     seo_title: input.seoTitle,
     seo_description: input.seoDescription,
@@ -174,40 +180,44 @@ function toPatch(input: PostInputValue): Record<string, unknown> {
 }
 
 /**
- * The SEO columns arrive with a migration. Until it is applied, keep Post
+ * Optional columns arrive with migrations. Until they are applied, keep Post
  * editing working by retrying without them (the values are simply not stored).
  */
-function isMissingSeoColumns(error: {
+function isMissingOptionalColumns(error: {
   code?: string | null;
   message: string;
 }): boolean {
   return (
     (error.code === "PGRST204" ||
-      /seo_title|seo_description|og_media_id/.test(error.message)) &&
+      /seo_title|seo_description|og_media_id|category/.test(error.message)) &&
     /column|schema cache|does not exist/i.test(error.message)
   );
 }
 
-function withoutSeoColumns(
+function withoutOptionalColumns(
   patch: Record<string, unknown>,
 ): Record<string, unknown> {
   const copy = { ...patch };
-  for (const column of SEO_COLUMNS) {
+  for (const column of OPTIONAL_COLUMNS) {
     delete copy[column];
   }
   return copy;
 }
 
-/** Create a Post. New posts always start as a Draft. */
+/** Create a Post, as a Draft unless a publish is explicitly requested. */
 export async function createPost(
   input: PostInputValue,
   createdBy: string,
+  status: PostStatus = "draft",
 ): Promise<PostMutationResult> {
   const supabase = await createSupabaseServerClient();
   const patch = {
     ...toPatch(input),
-    status: "draft",
+    status,
     created_by: createdBy,
+    ...(status === "published"
+      ? { published_at: new Date().toISOString() }
+      : {}),
   };
   let result = await supabase
     .from("posts")
@@ -215,10 +225,10 @@ export async function createPost(
     .select("*")
     .single();
 
-  if (result.error && isMissingSeoColumns(result.error)) {
+  if (result.error && isMissingOptionalColumns(result.error)) {
     result = await supabase
       .from("posts")
-      .insert(withoutSeoColumns(patch))
+      .insert(withoutOptionalColumns(patch))
       .select("*")
       .single();
   }
@@ -247,10 +257,10 @@ export async function updatePost(
     .select("*")
     .single();
 
-  if (result.error && isMissingSeoColumns(result.error)) {
+  if (result.error && isMissingOptionalColumns(result.error)) {
     result = await supabase
       .from("posts")
-      .update(withoutSeoColumns(patch))
+      .update(withoutOptionalColumns(patch))
       .eq("id", id)
       .select("*")
       .single();
@@ -264,6 +274,27 @@ export async function updatePost(
   return post
     ? { ok: true, post }
     : { ok: false, error: "The updated post could not be read." };
+}
+
+export type SlugAvailability =
+  | { ok: true; available: boolean }
+  | { ok: false; error: string };
+
+/** Whether a slug is free, optionally excluding the post being edited. */
+export async function isSlugAvailable(
+  slug: string,
+  excludeId?: string | null,
+): Promise<SlugAvailability> {
+  const supabase = await createSupabaseServerClient();
+  let query = supabase.from("posts").select("id").eq("slug", slug).limit(1);
+  if (excludeId) {
+    query = query.neq("id", excludeId);
+  }
+  const { data, error } = await query;
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+  return { ok: true, available: (data ?? []).length === 0 };
 }
 
 /**

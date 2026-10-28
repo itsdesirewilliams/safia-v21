@@ -1,6 +1,5 @@
 import { AdminPageHeader } from "@/components/admin/page-header";
 import { requirePostsAccess } from "@/lib/auth/session";
-import { toMediaOptions } from "@/lib/blog/media-options";
 import { listMedia } from "@/lib/media/server";
 
 import { PostEditor } from "../post-editor";
@@ -12,14 +11,13 @@ export default async function NewPostPage() {
   await requirePostsAccess();
 
   const images = await listMedia({ type: "image", limit: 240 });
-  const mediaOptions = toMediaOptions(images);
 
   return (
     <div>
       <AdminPageHeader
         eyebrow="Blog"
         title="New post"
-        description="A new post starts as a draft. Save it, then publish it when it is ready."
+        description="A new post starts as a draft. Save it, preview it, then publish when it is ready."
         breadcrumbs={[
           { label: "Dashboard", href: "/admin" },
           { label: "Posts", href: "/admin/posts" },
@@ -29,17 +27,20 @@ export default async function NewPostPage() {
 
       <PostEditor
         mode="create"
-        mediaOptions={mediaOptions}
+        mediaLibrary={images}
         defaults={{
           title: "",
           slug: "",
           author: "",
           excerpt: "",
+          category: "",
           thumbnailMediaId: null,
           seoTitle: "",
           seoDescription: "",
           ogMediaId: null,
           body: [],
+          status: "draft",
+          publishedSlug: null,
         }}
       />
     </div>

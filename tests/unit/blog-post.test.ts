@@ -9,6 +9,12 @@ import {
 } from "@/lib/blog/post";
 import { mapPostRow, toPostSummary, type PostRow } from "@/lib/blog/record";
 
+const BASE_INPUT = {
+  title: "Hello world",
+  author: "Jane",
+  body: [{ type: "paragraph" as const, text: "Hi" }],
+};
+
 const ROW: PostRow = {
   id: "11111111-1111-1111-1111-111111111111",
   title: "A title",
@@ -59,12 +65,12 @@ describe("validatePostInput", () => {
     }
   });
 
-  it("requires a title and an author", () => {
+  it("requires a title when publishing and defaults a missing author", () => {
     const result = validatePostInput({ title: "  ", author: "", body: [] });
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(result.errors.title).toBeTruthy();
-      expect(result.errors.author).toBeTruthy();
+      expect(result.errors.author).toBeUndefined();
     }
   });
 
@@ -168,3 +174,42 @@ describe("post SEO fields", () => {
     expect(legacy?.ogMediaId).toBeNull();
   });
 });
+  it("allows a completely empty draft with a generated placeholder slug", () => {
+    const result = validatePostInput(
+      { title: "", author: "", body: [] },
+      { requireTitle: false, now: new Date("2026-03-01T00:00:00.000Z"), random: () => 0.5 },
+    );
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.title).toBe("");
+      expect(result.value.author).toBe("");
+      expect(result.value.slug).toMatch(/^draft-/);
+    }
+  });
+
+  it("validates the optional category against the catalogue", () => {
+    const valid = validatePostInput({ ...BASE_INPUT, category: "agriculture" });
+    expect(valid.ok).toBe(true);
+    if (valid.ok) {
+      expect(valid.value.category).toBe("agriculture");
+    }
+
+    const invalid = validatePostInput({ ...BASE_INPUT, category: "not-a-category" });
+    expect(invalid.ok).toBe(false);
+    if (!invalid.ok) {
+      expect(invalid.errors.category).toBeTruthy();
+    }
+  });
+
+  it("replaces a placeholder draft slug with a real slug on publish", () => {
+    const result = validatePostInput(
+      { ...BASE_INPUT, slug: "draft-abc-123" },
+      { requireTitle: true },
+    );
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.slug).toBe("hello-world");
+    }
+  });

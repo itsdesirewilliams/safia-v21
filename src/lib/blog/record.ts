@@ -16,6 +16,7 @@ export type PostRow = {
   slug: string;
   author: string;
   excerpt: string | null;
+  category?: string | null;
   thumbnail_media_id: string | null;
   /** Added by the post_seo migration; absent on older rows. */
   seo_title?: string | null;
@@ -46,6 +47,7 @@ export function mapPostRow(row: PostRow): Post | null {
     slug: row.slug,
     author: row.author,
     excerpt: row.excerpt,
+    category: row.category ?? null,
     thumbnailMediaId: row.thumbnail_media_id,
     seoTitle: row.seo_title ?? null,
     seoDescription: row.seo_description ?? null,
@@ -66,6 +68,7 @@ export function toPostSummary(post: Post): PostSummary {
     slug: post.slug,
     author: post.author,
     excerpt: post.excerpt,
+    category: post.category,
     thumbnailMediaId: post.thumbnailMediaId,
     seoTitle: post.seoTitle,
     seoDescription: post.seoDescription,

@@ -121,6 +121,7 @@ export type ArticleSchemaInput = {
   publishedAt?: string | null;
   updatedAt?: string | null;
   imageUrl?: string | null;
+  section?: string | null;
 };
 
 export function articleSchema(input: ArticleSchemaInput): JsonLdNode {
@@ -134,9 +135,31 @@ export function articleSchema(input: ArticleSchemaInput): JsonLdNode {
     mainEntityOfPage: absoluteUrl(input.path),
     author: { "@type": "Person", name: input.author },
     publisher: { "@id": ORGANIZATION_ID },
+    ...(input.section ? { articleSection: input.section } : {}),
     ...(input.publishedAt ? { datePublished: input.publishedAt } : {}),
     ...(input.updatedAt ? { dateModified: input.updatedAt } : {}),
     ...(input.imageUrl ? { image: absoluteUrl(input.imageUrl) } : {}),
+  };
+}
+
+/** FAQPage for the FAQ blocks on a published post. */
+export function faqPageSchema(
+  items: readonly { question: string; answer: string }[],
+): JsonLdNode | null {
+  if (items.length === 0) {
+    return null;
+  }
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
   };
 }
 

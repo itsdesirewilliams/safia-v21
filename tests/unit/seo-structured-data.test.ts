@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   articleSchema,
   breadcrumbSchema,
+  faqPageSchema,
   organizationSchema,
   productSchema,
   websiteSchema,
@@ -119,5 +120,31 @@ describe("Article schema", () => {
     expect(schema.mainEntityOfPage).toBe(
       "https://safewaytyre.com/blogs/choosing-a-truck-tyre",
     );
+  });
+});
+
+describe("FAQPage schema", () => {
+  it("returns null when there are no FAQ items", () => {
+    expect(faqPageSchema([])).toBeNull();
+  });
+
+  it("maps visible FAQ items to Question and Answer nodes", () => {
+    const schema = faqPageSchema([
+      { question: "Are tyres available?", answer: "Ask us for current sizes." },
+    ]);
+    const entities = schema?.mainEntity as {
+      "@type": string;
+      name: string;
+      acceptedAnswer: { "@type": string; text: string };
+    }[];
+
+    expect(schema?.["@type"]).toBe("FAQPage");
+    expect(entities).toHaveLength(1);
+    expect(entities[0]["@type"]).toBe("Question");
+    expect(entities[0].name).toBe("Are tyres available?");
+    expect(entities[0].acceptedAnswer).toEqual({
+      "@type": "Answer",
+      text: "Ask us for current sizes.",
+    });
   });
 });
