@@ -447,7 +447,7 @@ export function SiteHeader({
           ref={navRef}
           aria-label={dict.header.primaryNav}
           className={cn(
-            "min-w-0 flex-1 overflow-hidden hidden lg:flex",
+            "min-w-0 flex-1 hidden lg:flex",
             !desktopNav && "invisible",
           )}
         >

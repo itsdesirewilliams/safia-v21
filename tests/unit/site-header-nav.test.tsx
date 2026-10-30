@@ -138,7 +138,9 @@ describe("navigation width", () => {
     // shrink below its content and it never pushes the actions out of the bar.
     expect(nav.className).toContain("flex-1");
     expect(nav.className).toContain("min-w-0");
-    expect(nav.className).toContain("overflow-hidden");
+    // The Products fly-out is absolutely positioned below the bar; an
+    // overflow-hidden nav clipped it and made the menu invisible.
+    expect(nav.className).not.toContain("overflow-hidden");
 
     const list = nav.querySelector("ul");
     // The labels are laid out at their natural width so they can be measured
