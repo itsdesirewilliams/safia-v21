@@ -1,3 +1,4 @@
+import "../admin.css";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -5,6 +6,9 @@ import { redirect } from "next/navigation";
 import { canAccessAdmin } from "@/lib/auth/roles";
 import { getCurrentProfile } from "@/lib/auth/session";
 import { ROUTES } from "@/lib/routes";
+
+import { AdminThemeScript } from "@/components/admin/admin-theme-script";
+import { AdminThemeSwitcher } from "@/components/admin/admin-theme";
 
 import { LoginForm } from "./login-form";
 
@@ -27,7 +31,11 @@ export default async function AdminLoginPage({
   const { error } = await searchParams;
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-ink-50 px-4 py-16 sm:px-6">
+    <div className="admin-app admin-auth-app relative flex min-h-screen items-center justify-center bg-ink-50 px-4 py-16 sm:px-6">
+      <AdminThemeScript />
+      <div className="absolute right-4 top-4">
+        <AdminThemeSwitcher />
+      </div>
       <div className="w-full max-w-md">
         <Link
           href={ROUTES.home}

@@ -1,0 +1,542 @@
+/* -------------------------------------------------------------------------
+ * Safeway Tyre admin design system.
+ *
+ * Scoped to `.admin-app` so the public site (and its Safeway Green theme)
+ * never inherits admin-only dark tokens. The inline AdminThemeScript writes
+ * `data-admin-theme` before paint, so there is no light flash on load.
+ * ---------------------------------------------------------------------- */
+
+.admin-app {
+  --admin-bg: #f5f7fa;
+  --admin-surface: #ffffff;
+  --admin-surface-raised: #ffffff;
+  --admin-surface-muted: #eef2f6;
+  --admin-border: #dfe5ec;
+  --admin-border-strong: #c7d0db;
+  --admin-text: #111827;
+  --admin-text-muted: #5f6b7a;
+  --admin-text-subtle: #8491a2;
+  --admin-header: rgb(255 255 255 / 0.82);
+  --admin-strong: #101827;
+  --admin-sidebar: #0a111c;
+  --admin-sidebar-raised: #111a28;
+  --admin-sidebar-border: rgb(255 255 255 / 0.08);
+  --admin-sidebar-text: #cbd5e1;
+  --admin-sidebar-muted: #738196;
+  --admin-sidebar-active: rgb(255 255 255 / 0.09);
+  --admin-ring: rgb(11 99 246 / 0.18);
+  --admin-shadow: 0 1px 2px rgb(15 23 42 / 0.04),
+    0 12px 32px -16px rgb(15 23 42 / 0.16);
+  --admin-sidebar-width: 16.5rem;
+  --admin-sidebar-collapsed-width: 4.75rem;
+
+  /* Existing page classes use the public ink scale. Remap that scale inside
+   * the admin so existing cards, tables, forms and empty states adapt without
+   * rewriting every page. */
+  --color-ink-950: #111827;
+  --color-ink-900: #1e293b;
+  --color-ink-800: #273449;
+  --color-ink-700: #3b4a5f;
+  --color-ink-600: #5f6b7a;
+  --color-ink-500: #738196;
+  --color-ink-400: #9aa6b5;
+  --color-ink-300: #c7d0db;
+  --color-ink-200: #dfe5ec;
+  --color-ink-100: #eef2f6;
+  --color-ink-50: #f5f7fa;
+
+  --radius-card: 0.75rem;
+  --shadow-card: var(--admin-shadow);
+
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 82% -12%, rgb(11 99 246 / 0.07), transparent 30rem),
+    var(--admin-bg);
+  color: var(--admin-text);
+  color-scheme: light;
+}
+
+html[data-admin-theme="dark"] .admin-app {
+  --admin-bg: #070c13;
+  --admin-surface: #0e1622;
+  --admin-surface-raised: #121c2b;
+  --admin-surface-muted: #141f2e;
+  --admin-border: #223046;
+  --admin-border-strong: #30415a;
+  --admin-text: #edf3fb;
+  --admin-text-muted: #9aacbf;
+  --admin-text-subtle: #6e8197;
+  --admin-header: rgb(8 13 20 / 0.82);
+  --admin-strong: #1d2a3d;
+  --admin-sidebar: #070c13;
+  --admin-sidebar-raised: #0d1622;
+  --admin-sidebar-border: rgb(255 255 255 / 0.08);
+  --admin-sidebar-text: #d5dfeb;
+  --admin-sidebar-muted: #78899e;
+  --admin-sidebar-active: rgb(255 255 255 / 0.08);
+  --admin-ring: rgb(96 165 250 / 0.22);
+  --admin-shadow: 0 1px 2px rgb(0 0 0 / 0.3),
+    0 18px 42px -18px rgb(0 0 0 / 0.65);
+
+  --color-ink-950: #edf3fb;
+  --color-ink-900: #dce7f3;
+  --color-ink-800: #c6d4e4;
+  --color-ink-700: #a9bacb;
+  --color-ink-600: #8b9db2;
+  --color-ink-500: #73869b;
+  --color-ink-400: #5b6d83;
+  --color-ink-300: #3c4d63;
+  --color-ink-200: #223046;
+  --color-ink-100: #141f2e;
+  --color-ink-50: #0b131e;
+
+  --color-surface: var(--admin-surface);
+  --color-surface-muted: var(--admin-surface-muted);
+  --color-border: var(--admin-border);
+  --color-text: var(--admin-text);
+  --color-text-muted: var(--admin-text-muted);
+
+  color-scheme: dark;
+}
+
+.admin-app * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--admin-border-strong) transparent;
+}
+
+/* -------------------------------------------------------------------------
+ * Shared surfaces
+ * ---------------------------------------------------------------------- */
+
+.admin-app .bg-white {
+  background-color: var(--admin-surface);
+}
+
+.admin-app .bg-white\/85 {
+  background-color: color-mix(in srgb, var(--admin-surface) 85%, transparent);
+}
+
+.admin-app .bg-white\/60 {
+  background-color: color-mix(in srgb, var(--admin-surface) 60%, transparent);
+}
+
+.admin-app .bg-ink-950 {
+  background-color: var(--admin-strong);
+}
+
+.admin-app .bg-ink-950\/80 {
+  background-color: rgb(2 6 23 / 0.82);
+}
+
+.admin-app .bg-ink-950\/60 {
+  background-color: rgb(2 6 23 / 0.68);
+}
+
+.admin-app .backdrop\:bg-ink-950\/50::backdrop {
+  background-color: rgb(2 6 23 / 0.72);
+}
+
+.admin-app .bg-ink-50 {
+  background-color: var(--admin-surface-muted);
+}
+
+.admin-app .bg-ink-100 {
+  background-color: var(--admin-surface-muted);
+}
+
+.admin-app .hover\:bg-ink-50:hover {
+  background-color: var(--admin-surface-muted);
+}
+
+.admin-app .hover\:bg-white:hover {
+  background-color: var(--admin-surface);
+}
+
+.admin-app input,
+.admin-app textarea,
+.admin-app select {
+  color: var(--admin-text);
+}
+
+.admin-app input::placeholder,
+.admin-app textarea::placeholder {
+  color: var(--admin-text-subtle);
+}
+
+.admin-app select option {
+  background: var(--admin-surface);
+  color: var(--admin-text);
+}
+
+.admin-app dialog::backdrop {
+  background: rgb(2 6 23 / 0.72);
+  backdrop-filter: blur(4px);
+}
+
+/* -------------------------------------------------------------------------
+ * Shell
+ * ---------------------------------------------------------------------- */
+
+.admin-sidebar {
+  background: var(--admin-sidebar);
+  border-right: 1px solid var(--admin-sidebar-border);
+  box-shadow: 18px 0 50px -40px rgb(0 0 0 / 0.9);
+}
+
+.admin-sidebar-brand {
+  color: var(--admin-sidebar-text);
+}
+
+.admin-sidebar-mark {
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 0.22), transparent 55%),
+    var(--color-brand-600);
+  box-shadow: 0 10px 24px -12px var(--color-brand-600);
+}
+
+.admin-sidebar-section-label {
+  color: var(--admin-sidebar-muted);
+}
+
+.admin-sidebar-link {
+  color: var(--admin-sidebar-text);
+}
+
+.admin-sidebar-link:hover {
+  background: rgb(255 255 255 / 0.055);
+  color: #fff;
+}
+
+.admin-sidebar-link[data-active="true"] {
+  background: var(--admin-sidebar-active);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.04);
+}
+
+.admin-sidebar-link[data-active="true"] .admin-nav-icon {
+  color: var(--color-brand-300, #93c5fd);
+}
+
+.admin-nav-icon {
+  color: var(--admin-sidebar-muted);
+}
+
+.admin-sidebar-link:hover .admin-nav-icon {
+  color: var(--admin-sidebar-text);
+}
+
+.admin-sidebar-collapsed .admin-sidebar-label,
+.admin-sidebar-collapsed .admin-sidebar-section-label,
+.admin-sidebar-collapsed .admin-sidebar-chevron {
+  display: none;
+}
+
+.admin-sidebar-collapsed .admin-sidebar-link {
+  justify-content: center;
+  padding-inline: 0;
+}
+
+.admin-header {
+  background: var(--admin-header);
+  border-bottom: 1px solid var(--admin-border);
+  backdrop-filter: blur(18px);
+}
+
+.admin-icon-button,
+.admin-header-button {
+  display: inline-flex;
+  height: 2.25rem;
+  width: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.65rem;
+  border: 1px solid var(--admin-border);
+  background: var(--admin-surface);
+  color: var(--admin-text-muted);
+  transition: color 160ms ease, background-color 160ms ease,
+    border-color 160ms ease;
+}
+
+.admin-icon-button:hover,
+.admin-header-button:hover {
+  color: var(--admin-text);
+  border-color: var(--admin-border-strong);
+  background: var(--admin-surface-muted);
+}
+
+.admin-menu {
+  border: 1px solid var(--admin-border);
+  border-radius: 0.75rem;
+  background: var(--admin-surface-raised);
+  box-shadow: var(--shadow-pop, 0 24px 60px -18px rgb(0 0 0 / 0.32));
+}
+
+.admin-menu-item {
+  border-radius: 0.5rem;
+  padding: 0.55rem 0.65rem;
+  color: var(--admin-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.admin-menu-item:hover {
+  background: var(--admin-surface-muted);
+  color: var(--admin-text);
+}
+
+.admin-menu-item-active {
+  background: var(--color-brand-100);
+  color: var(--color-brand-700);
+}
+
+.admin-profile > summary {
+  list-style: none;
+}
+
+.admin-profile > summary::-webkit-details-marker {
+  display: none;
+}
+
+.admin-profile[open] > summary {
+  background: var(--admin-surface-muted);
+}
+
+.admin-main {
+  width: 100%;
+  max-width: 96rem;
+  margin-inline: auto;
+  padding: 1.25rem 1rem 3rem;
+}
+
+@media (min-width: 640px) {
+  .admin-main {
+    padding: 2rem 1.5rem 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .admin-main {
+    padding: 2.25rem 2.5rem 4.5rem;
+  }
+}
+
+/* -------------------------------------------------------------------------
+ * Page primitives used by the existing admin pages
+ * ---------------------------------------------------------------------- */
+
+.admin-app .rounded-card {
+  border-color: var(--admin-border);
+}
+
+.admin-app .shadow-card {
+  box-shadow: var(--admin-shadow);
+}
+
+.admin-app table {
+  color: var(--admin-text-muted);
+}
+
+.admin-app thead tr {
+  background: var(--admin-surface-muted);
+}
+
+.admin-app tbody tr:hover {
+  background: color-mix(in srgb, var(--admin-surface-muted) 65%, transparent);
+}
+
+.admin-app td,
+.admin-app th {
+  border-color: var(--admin-border);
+}
+
+/* -------------------------------------------------------------------------
+ * Tiptap editor in dark mode
+ * ---------------------------------------------------------------------- */
+
+html[data-admin-theme="dark"] .admin-app .safeway-tiptap {
+  --white: #111c2b;
+  --black: #f1f5f9;
+  --tt-toolbar-bg-color: var(--admin-surface);
+  --tt-toolbar-border-color: var(--admin-border);
+  --tt-gray-light-50: #0b131e;
+  --tt-gray-light-100: #111c2b;
+  --tt-gray-light-200: #223046;
+  --tt-gray-light-300: #3c4d63;
+  --tt-gray-light-400: #5b6d83;
+  --tt-gray-light-500: #73869b;
+  --tt-gray-light-600: #8b9db2;
+  --tt-gray-light-700: #a9bacb;
+  --tt-gray-light-800: #dce7f3;
+  --tt-gray-light-900: #edf3fb;
+  --tt-gray-light-a-50: rgb(255 255 255 / 0.04);
+  --tt-gray-light-a-100: rgb(255 255 255 / 0.06);
+  --tt-gray-light-a-200: rgb(255 255 255 / 0.1);
+  --tt-gray-light-a-300: rgb(255 255 255 / 0.2);
+  --tt-gray-light-a-400: rgb(255 255 255 / 0.42);
+  --tt-gray-light-a-500: rgb(255 255 255 / 0.64);
+  --tt-gray-light-a-600: rgb(255 255 255 / 0.78);
+  --tt-gray-light-a-700: rgb(255 255 255 / 0.87);
+  --tt-gray-light-a-800: rgb(255 255 255 / 0.95);
+  --tt-gray-light-a-900: rgb(255 255 255 / 0.98);
+}
+
+html[data-admin-theme="dark"] .admin-app .safeway-tiptap,
+html[data-admin-theme="dark"] .admin-app .safeway-tiptap-content {
+  background: var(--admin-surface);
+  color: var(--admin-text);
+}
+
+html[data-admin-theme="dark"] .admin-app .safeway-tiptap-content {
+  border-color: var(--admin-border);
+}
+
+html[data-admin-theme="dark"] .admin-app .safeway-tiptap-content.ProseMirror {
+  color: var(--tt-gray-light-800);
+}
+
+html[data-admin-theme="dark"] .admin-app .tiptap-dropdown-menu,
+html[data-admin-theme="dark"] .admin-app .tiptap-card,
+html[data-admin-theme="dark"] .admin-app .tiptap-popover,
+html[data-admin-theme="dark"] .admin-app .tiptap-tooltip {
+  background: var(--admin-surface-raised);
+  border-color: var(--admin-border);
+  color: var(--admin-text);
+}
+
+html[data-admin-theme="dark"] .admin-app .tiptap-button {
+  color: var(--admin-text-muted);
+}
+
+html[data-admin-theme="dark"] .admin-app .tiptap-button:hover {
+  background: var(--admin-surface-muted);
+  color: var(--admin-text);
+}
+
+/* -------------------------------------------------------------------------
+ * Login (admin-only auth surface)
+ * ---------------------------------------------------------------------- */
+
+.admin-auth-app {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 50% -10%, rgb(11 99 246 / 0.12), transparent 32rem),
+    var(--admin-bg);
+  color: var(--admin-text);
+}
+
+html[data-admin-theme="dark"] .admin-auth-app {
+  --admin-bg: #070c13;
+  --admin-surface: #0e1622;
+  --admin-surface-muted: #141f2e;
+  --admin-border: #223046;
+  --admin-text: #edf3fb;
+  --admin-text-muted: #9aacbf;
+  --admin-text-subtle: #6e8197;
+  --color-ink-950: #edf3fb;
+  --color-ink-900: #dce7f3;
+  --color-ink-800: #c6d4e4;
+  --color-ink-700: #a9bacb;
+  --color-ink-600: #8b9db2;
+  --color-ink-500: #73869b;
+  --color-ink-400: #5b6d83;
+  --color-ink-300: #3c4d63;
+  --color-ink-200: #223046;
+  --color-ink-100: #141f2e;
+  --color-ink-50: #0b131e;
+  color-scheme: dark;
+}
+
+.admin-auth-app .bg-white {
+  background-color: var(--admin-surface);
+}
+
+.admin-auth-app .bg-ink-50 {
+  background-color: var(--admin-bg);
+}
+
+@media (max-width: 1023px) {
+  .admin-sidebar-collapsed .admin-sidebar-link .admin-sidebar-label {
+    display: inline;
+  }
+
+  .admin-sidebar-collapsed .admin-sidebar-brand .admin-sidebar-label {
+    display: flex;
+  }
+
+  .admin-sidebar-collapsed .admin-sidebar-footer .admin-sidebar-label {
+    display: block;
+  }
+
+  .admin-sidebar-collapsed .admin-sidebar-section-label {
+    display: block;
+  }
+
+  .admin-sidebar-collapsed .admin-sidebar-chevron {
+    display: block;
+  }
+
+  .admin-sidebar-collapsed .admin-sidebar-link {
+    justify-content: flex-start;
+    padding-inline: 0.75rem;
+  }
+}
+
+html[data-admin-theme="dark"] .admin-auth-app img {
+  filter: invert(1) grayscale(1) brightness(1.8);
+}
+
+html[data-admin-theme="dark"] .admin-auth-app .rounded-card,
+html[data-admin-theme="dark"] .admin-auth-app .shadow-card {
+  box-shadow: var(--admin-shadow);
+}
+
+
+.admin-panel {
+  border: 1px solid var(--admin-border);
+  border-radius: 0.85rem;
+  background: var(--admin-surface);
+  box-shadow: var(--admin-shadow);
+}
+
+.admin-page-header {
+  border-color: var(--admin-border);
+}
+
+.admin-app .admin-panel .bg-white {
+  background-color: transparent;
+}
+
+
+
+
+
+.admin-app .file\:bg-ink-950::file-selector-button {
+  background-color: var(--admin-strong);
+  color: #fff;
+}
+
+html[data-admin-theme="dark"] .tiptap-tooltip,
+html[data-admin-theme="dark"] .tiptap-dropdown-menu,
+html[data-admin-theme="dark"] .tiptap-card,
+html[data-admin-theme="dark"] .tiptap-popover {
+  background: #121c2b;
+  border-color: #223046;
+  color: #edf3fb;
+}
+
+html[data-admin-theme="dark"] .tiptap-tooltip kbd {
+  background: #1d2a3d;
+  color: #edf3fb;
+}
+
+@media (min-width: 1024px) {
+  .admin-header-mobile {
+    display: none;
+  }
+}
+
+@media (max-width: 1023px) {
+  .admin-header-panel {
+    display: none;
+  }
+}

@@ -1,4 +1,6 @@
+import "../admin.css";
 import { AdminShell, type AdminNavSection } from "@/components/admin/admin-shell";
+import { AdminThemeScript } from "@/components/admin/admin-theme-script";
 import { buttonStyles } from "@/components/ui/button";
 import {
   canManageMedia,
@@ -42,7 +44,7 @@ export default async function AdminDashboardLayout({
     },
   ];
 
-  const content = [];
+  const content: AdminNavSection["items"] = [];
   if (canPosts) {
     content.push({ label: "Posts", href: "/admin/posts", icon: "posts" });
   }
@@ -59,14 +61,20 @@ export default async function AdminDashboardLayout({
       title: "Products",
       items: [
         {
-          label: "Pattern Images",
-          href: "/admin/pattern-images",
+          label: "Products",
           icon: "pattern",
-        },
-        {
-          label: "Product Media",
-          href: "/admin/product-images",
-          icon: "media",
+          children: [
+            {
+              label: "Pattern Images",
+              href: "/admin/pattern-images",
+              icon: "pattern",
+            },
+            {
+              label: "Product Media",
+              href: "/admin/product-images",
+              icon: "media",
+            },
+          ],
         },
       ],
     });
@@ -105,22 +113,25 @@ export default async function AdminDashboardLayout({
   }
 
   return (
-    <AdminShell
-      sections={sections}
-      email={profile.email}
-      roleLabel={role ? roleLabel(role) : "No role"}
-      signOut={
+    <>
+      <AdminThemeScript />
+      <AdminShell
+        sections={sections}
+        email={profile.email}
+        roleLabel={role ? roleLabel(role) : "No role"}
+        signOut={
         <form action={signOutAction}>
           <button
             type="submit"
-            className={buttonStyles("onDark", "sm", "w-full")}
+            className={buttonStyles("outline", "sm", "w-full")}
           >
             Sign out
           </button>
         </form>
-      }
-    >
-      {children}
-    </AdminShell>
+        }
+      >
+        {children}
+      </AdminShell>
+    </>
   );
 }

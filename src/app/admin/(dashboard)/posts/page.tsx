@@ -123,8 +123,8 @@ export default async function AdminPostsPage({
             : `No ${status} posts.`}
         </div>
       ) : (
-        <div className="mt-6 overflow-hidden rounded-card border border-ink-200 bg-white">
-          <table className="w-full border-collapse text-left text-sm">
+        <div className="mt-6 overflow-x-auto rounded-card border border-ink-200 bg-white">
+          <table className="w-full min-w-[46rem] border-collapse text-left text-sm">
             <caption className="sr-only">Blog posts</caption>
             <thead className="bg-ink-50">
               <tr>

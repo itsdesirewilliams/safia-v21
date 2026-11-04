@@ -85,8 +85,8 @@ export function UsersManager({
       </section>
 
       {/* Users table */}
-      <section className="overflow-hidden rounded-card border border-ink-200 bg-white">
-        <table className="w-full border-collapse text-left text-sm">
+      <section className="overflow-x-auto rounded-card border border-ink-200 bg-white">
+        <table className="w-full min-w-[48rem] border-collapse text-left text-sm">
           <caption className="sr-only">Users and roles</caption>
           <thead className="bg-ink-50">
             <tr>

@@ -1,18 +1,24 @@
 "use client";
 
+/* eslint-disable react-hooks/set-state-in-effect -- one-time localStorage/browser initialization */
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
+import { AdminIcon, type AdminIconName } from "@/components/admin/admin-icon";
+import { AdminThemeSwitcher } from "@/components/admin/admin-theme";
 import { cn } from "@/lib/cn";
 
 export type AdminNavItem = {
   label: string;
-  href: string;
-  /** Key into the built-in icon set. */
-  icon: string;
+  href?: string;
+  /** Key into the admin icon set. */
+  icon: AdminIconName;
   /** Only admins see this item. */
   adminOnly?: boolean;
+  /** Optional nested navigation, used for grouped modules. */
+  children?: AdminNavItem[];
 };
 
 export type AdminNavSection = {
@@ -28,54 +34,139 @@ export type AdminShellProps = {
   children: React.ReactNode;
 };
 
-const ICON_PATHS: Record<string, string> = {
-  dashboard:
-    "M3.75 3.75h6v6h-6zM14.25 3.75h6v6h-6zM3.75 14.25h6v6h-6zM14.25 14.25h6v6h-6z",
-  posts:
-    "M6 4.5h12a1.5 1.5 0 0 1 1.5 1.5v12A1.5 1.5 0 0 1 18 19.5H6A1.5 1.5 0 0 1 4.5 18V6A1.5 1.5 0 0 1 6 4.5ZM8.25 9h7.5M8.25 12h7.5M8.25 15h4.5",
-  media:
-    "M3.75 6.75h16.5v10.5H3.75zM3.75 15l4.5-4.5 3.75 3.75 2.25-2.25 4.5 4.5M14.25 9.75h.008v.008h-.008z",
-  gallery:
-    "M4.5 5.25h15v10.5h-15zM8.25 20.25l3.75-3 3 2.25 3.75-4.5M9.75 9h.008v.008H9.75z",
-  pattern:
-    "M12 3.75a8.25 8.25 0 1 0 0 16.5 8.25 8.25 0 0 0 0-16.5ZM12 7.5v4.5l3 1.5M8.25 12h.008M15.75 12h.008",
-  quality:
-    "M9 12.75 11 14.5l4-4.5M12 3l6.75 3v5.25c0 4.28-2.9 8.13-6.75 9.75-3.85-1.62-6.75-5.47-6.75-9.75V6L12 3Z",
-  appearance:
-    "M12 3.75a8.25 8.25 0 0 0 0 16.5c1.14 0 1.65-.74 1.65-1.5 0-.39-.14-.68-.38-.98-.24-.3-.38-.6-.38-1 0-.84.68-1.52 1.52-1.52h1.09A4.5 4.5 0 0 0 20.25 10.5C20.25 6.77 16.56 3.75 12 3.75ZM7.5 12a1.125 1.125 0 1 1 0-2.25 1.125 1.125 0 0 1 0 2.25Zm3-3.75a1.125 1.125 0 1 1 0-2.25 1.125 1.125 0 0 1 0 2.25Zm4.5 0a1.125 1.125 0 1 1 0-2.25 1.125 1.125 0 0 1 0 2.25Z",
-  users:
-    "M15 19.5v-1.5a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v1.5M9 11.25a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm12 8.25v-1.5a3 3 0 0 0-2.25-2.9M16.5 5.34a3 3 0 0 1 0 5.82",
-};
-
-function NavIcon({ name, className }: { name: string; className?: string }) {
-  const path = ICON_PATHS[name] ?? ICON_PATHS.dashboard;
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d={path} />
-    </svg>
-  );
-}
+const SIDEBAR_STORAGE_KEY = "safeway-admin-sidebar-collapsed";
 
 function isActive(pathname: string, href: string): boolean {
-  if (href === "/admin") {
-    return pathname === "/admin";
-  }
+  if (href === "/admin") return pathname === "/admin";
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
+function itemIsActive(pathname: string, item: AdminNavItem): boolean {
+  return Boolean(
+    (item.href && isActive(pathname, item.href)) ||
+      item.children?.some((child) => itemIsActive(pathname, child)),
+  );
+}
+
+function findActiveItem(
+  sections: AdminNavSection[],
+  pathname: string,
+): AdminNavItem | null {
+  for (const section of sections) {
+    for (const item of section.items) {
+      if (itemIsActive(pathname, item)) return item;
+    }
+  }
+  return null;
+}
+
+function initials(email: string | null): string {
+  if (!email) return "ST";
+  const local = email.split("@")[0] ?? "";
+  return local.slice(0, 2).toUpperCase() || "ST";
+}
+
+function SidebarNav({
+  sections,
+  collapsed,
+  onNavigate,
+  onExpand,
+}: {
+  sections: AdminNavSection[];
+  collapsed: boolean;
+  onNavigate: () => void;
+  onExpand: () => void;
+}) {
+  const pathname = usePathname();
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
+
+
+  const renderItem = (item: AdminNavItem) => {
+    const active = itemIsActive(pathname, item);
+    const hasChildren = Boolean(item.children?.length);
+    const expanded = openGroups[item.label] ?? true;
+
+    if (hasChildren && !item.href) {
+      return (
+        <li key={item.label}>
+          <button
+            type="button"
+            title={collapsed ? item.label : undefined}
+            aria-label={collapsed ? item.label : undefined}
+            aria-expanded={expanded}
+            data-active={active ? "true" : "false"}
+            onClick={() => {
+              if (collapsed) {
+                onExpand();
+                return;
+              }
+              setOpenGroups((current) => ({
+                ...current,
+                [item.label]: !expanded,
+              }));
+            }}
+            className="admin-sidebar-link group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors"
+          >
+            <AdminIcon name={item.icon} className="admin-nav-icon h-[18px] w-[18px] shrink-0" />
+            <span className="admin-sidebar-label flex-1 truncate text-left">
+              {item.label}
+            </span>
+            {!collapsed && (
+              <AdminIcon
+                name="chevronDown"
+                className={cn(
+                  "admin-sidebar-chevron h-3.5 w-3.5 transition-transform",
+                  expanded && "rotate-180",
+                )}
+              />
+            )}
+          </button>
+
+          {!collapsed && expanded && (
+            <ul className="mt-1 space-y-0.5 border-l border-white/10 pl-4">
+              {item.children?.map(renderItem)}
+            </ul>
+          )}
+        </li>
+      );
+    }
+
+    return (
+      <li key={item.href ?? item.label}>
+        <Link
+          href={item.href ?? "/admin"}
+          title={collapsed ? item.label : undefined}
+          aria-label={collapsed ? item.label : undefined}
+          aria-current={active ? "page" : undefined}
+          data-active={active ? "true" : "false"}
+          onClick={onNavigate}
+          className="admin-sidebar-link group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors"
+        >
+          <AdminIcon name={item.icon} className="admin-nav-icon h-[18px] w-[18px] shrink-0" />
+          <span className="admin-sidebar-label truncate">{item.label}</span>
+        </Link>
+      </li>
+    );
+  };
+
+  return (
+    <nav aria-label="Admin" className="flex-1 overflow-y-auto px-3 py-4">
+      {sections.map((section) => (
+        <div key={section.title} className="mb-5 last:mb-0">
+          <p className="admin-sidebar-section-label px-3 pb-2 text-[10px] font-semibold uppercase tracking-[0.18em]">
+            {section.title}
+          </p>
+          <ul className="space-y-0.5">{section.items.map(renderItem)}</ul>
+        </div>
+      ))}
+    </nav>
+  );
+}
+
 /**
- * The admin application shell: a persistent sidebar on desktop and a slide-over
- * drawer on mobile. Pure CSS transitions only — content is never hidden behind
- * an animation, so the workspace paints immediately (PART 12).
+ * Admin application shell: a collapsible, theme-aware SaaS sidebar and header.
+ * Navigation remains role-filtered by the server layout; this component only
+ * presents the destinations it receives.
  */
 export function AdminShell({
   sections,
@@ -85,127 +176,217 @@ export function AdminShell({
   children,
 }: AdminShellProps) {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
-  const nav = (
-    <nav aria-label="Admin" className="flex flex-1 flex-col gap-6 overflow-y-auto px-3 py-5">
-      {sections.map((section) => (
-        <div key={section.title}>
-          <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">
-            {section.title}
-          </p>
-          <ul className="space-y-0.5">
-            {section.items.map((item) => {
-              const active = isActive(pathname, item.href);
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    aria-current={active ? "page" : undefined}
-                    onClick={() => setOpen(false)}
-                    className={cn(
-                      "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                      active
-                        ? "bg-white/10 text-white"
-                        : "text-white/65 hover:bg-white/5 hover:text-white",
-                    )}
-                  >
-                    <NavIcon
-                      name={item.icon}
-                      className={cn(
-                        "h-5 w-5 shrink-0",
-                        active ? "text-accent-500" : "text-white/45",
-                      )}
-                    />
-                    {item.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      ))}
-    </nav>
+  useEffect(() => {
+    try {
+      setCollapsed(window.localStorage.getItem(SIDEBAR_STORAGE_KEY) === "1");
+    } catch {
+      // ignore unavailable storage
+    }
+  }, []);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previous;
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [mobileOpen]);
+
+  const activeItem = useMemo(
+    () => findActiveItem(sections, pathname),
+    [sections, pathname],
   );
+  const activeLabel = activeItem?.label ?? "Dashboard";
+
+  const setSidebarCollapsed = (next: boolean) => {
+    setCollapsed(next);
+    try {
+      window.localStorage.setItem(SIDEBAR_STORAGE_KEY, next ? "1" : "0");
+    } catch {
+      // ignore
+    }
+  };
 
   const brand = (
-    <Link href="/admin" className="flex items-center gap-2.5 px-5 py-5">
-      <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-accent-500 text-sm font-bold text-white">
+    <Link
+      href="/admin"
+      onClick={() => setMobileOpen(false)}
+      className="admin-sidebar-brand flex h-16 shrink-0 items-center gap-3 border-b border-white/10 px-4"
+    >
+      <span className="admin-sidebar-mark inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[0.65rem] text-sm font-bold text-white">
         S
       </span>
-      <span className="flex flex-col leading-tight">
-        <span className="text-sm font-bold tracking-tight text-white">
+      <span className="admin-sidebar-label flex min-w-0 flex-col leading-tight">
+        <span className="truncate text-sm font-semibold tracking-tight text-white">
           Safeway Tyre
         </span>
         <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/45">
-          Admin
+          Admin workspace
         </span>
       </span>
     </Link>
   );
 
   return (
-    <div className="min-h-screen bg-ink-50">
+    <div
+      className={cn(
+        "admin-app min-h-screen",
+        collapsed && "admin-sidebar-collapsed",
+      )}
+    >
       {/* Desktop sidebar */}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col bg-ink-950 lg:flex">
+      <aside
+        className={cn(
+          "admin-sidebar fixed inset-y-0 left-0 z-30 hidden flex-col transition-[width] duration-200 lg:flex",
+          collapsed ? "w-[var(--admin-sidebar-collapsed-width)]" : "w-[var(--admin-sidebar-width)]",
+        )}
+      >
         {brand}
-        {nav}
-        <div className="border-t border-white/10 px-5 py-4">
-          <p className="truncate text-xs font-medium text-white/80">{email}</p>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/40">
-            {roleLabel}
-          </p>
-          <div className="mt-3">{signOut}</div>
+        <SidebarNav
+          sections={sections}
+          collapsed={collapsed}
+          onNavigate={() => {}}
+          onExpand={() => setSidebarCollapsed(false)}
+        />
+        <div className="admin-sidebar-footer border-t border-white/10 p-3">
+          <div className="flex items-center gap-2.5 rounded-lg px-2 py-1.5">
+            <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-[11px] font-semibold text-white">
+              {initials(email)}
+            </span>
+            <span className="admin-sidebar-label min-w-0">
+              <span className="block truncate text-xs font-medium text-white/85">
+                {email ?? "Signed in"}
+              </span>
+              <span className="block truncate text-[10px] uppercase tracking-[0.14em] text-white/40">
+                {roleLabel}
+              </span>
+            </span>
+          </div>
         </div>
       </aside>
 
-      {/* Mobile top bar */}
-      <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-ink-200 bg-white px-4 py-3 lg:hidden">
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          aria-label="Open admin navigation"
-          aria-expanded={open}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-ink-200 text-ink-800"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5">
-            <path strokeLinecap="round" d="M4 7h16M4 12h16M4 17h16" />
-          </svg>
-        </button>
-        <Link href="/admin" className="text-sm font-bold tracking-tight text-ink-950">
-          Safeway Tyre Admin
-        </Link>
-        <span className="w-10" aria-hidden="true" />
-      </header>
+      <div
+        className={cn(
+          "min-h-screen transition-[padding] duration-200",
+          collapsed
+            ? "lg:pl-[var(--admin-sidebar-collapsed-width)]"
+            : "lg:pl-[var(--admin-sidebar-width)]",
+        )}
+      >
+        <header className="admin-header sticky top-0 z-20 flex h-16 items-center justify-between gap-3 px-4 sm:px-6">
+          <div className="flex min-w-0 items-center gap-2.5">
+            <button
+              type="button"
+              onClick={() => setMobileOpen(true)}
+              aria-label="Open admin navigation"
+              aria-expanded={mobileOpen}
+              className="admin-header-button admin-header-mobile lg:hidden"
+            >
+              <AdminIcon name="menu" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setSidebarCollapsed(!collapsed)}
+              aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+              className="admin-header-button admin-header-panel hidden lg:inline-flex"
+            >
+              <AdminIcon name="panelLeft" />
+            </button>
+
+            <nav
+              aria-label="Breadcrumb"
+              className="hidden min-w-0 items-center gap-1.5 text-sm sm:flex"
+            >
+              <Link
+                href="/admin"
+                className="shrink-0 text-ink-500 transition-colors hover:text-ink-900"
+              >
+                Admin
+              </Link>
+              <AdminIcon name="chevronRight" className="h-3.5 w-3.5 shrink-0 text-ink-300" />
+              <span className="truncate font-medium text-ink-900">{activeLabel}</span>
+            </nav>
+            <span className="truncate text-sm font-semibold text-ink-900 sm:hidden">
+              {activeLabel}
+            </span>
+          </div>
+
+          <div className="flex shrink-0 items-center gap-2">
+            <AdminThemeSwitcher />
+            <details className="admin-profile relative">
+              <summary className="flex cursor-pointer items-center gap-2 rounded-[0.65rem] border border-transparent p-1 pr-2 transition-colors hover:bg-ink-50">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-ink-100 text-[11px] font-semibold text-ink-700">
+                  {initials(email)}
+                </span>
+                <span className="hidden min-w-0 text-left md:block">
+                  <span className="block max-w-[12rem] truncate text-xs font-medium text-ink-900">
+                    {email ?? "Signed in"}
+                  </span>
+                  <span className="block text-[10px] uppercase tracking-[0.12em] text-ink-500">
+                    {roleLabel}
+                  </span>
+                </span>
+                <AdminIcon name="chevronDown" className="hidden h-3.5 w-3.5 text-ink-400 md:block" />
+              </summary>
+              <div className="admin-menu absolute right-0 top-full z-50 mt-2 w-64 p-2">
+                <div className="px-2.5 py-2">
+                  <p className="truncate text-sm font-semibold text-ink-950">{email}</p>
+                  <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-500">
+                    {roleLabel}
+                  </p>
+                </div>
+                <div className="border-t border-ink-200 p-1.5">{signOut}</div>
+              </div>
+            </details>
+          </div>
+        </header>
+
+        <main className="admin-main">{children}</main>
+      </div>
 
       {/* Mobile drawer */}
-      {open && (
+      {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <button
             type="button"
             aria-label="Close admin navigation"
-            onClick={() => setOpen(false)}
-            className="absolute inset-0 bg-ink-950/50"
+            onClick={() => setMobileOpen(false)}
+            className="absolute inset-0 bg-ink-950/60 backdrop-blur-sm"
           />
-          <div className="absolute inset-y-0 left-0 flex w-[84%] max-w-xs flex-col bg-ink-950">
-            {brand}
-            {nav}
-            <div className="border-t border-white/10 px-5 py-4">
-              <p className="truncate text-xs font-medium text-white/80">{email}</p>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/40">
-                {roleLabel}
-              </p>
-              <div className="mt-3">{signOut}</div>
+          <aside className="admin-sidebar absolute inset-y-0 left-0 flex w-[min(86%,20rem)] flex-col">
+            <div className="flex items-center justify-between border-b border-white/10 pr-2">
+              {brand}
+              <button
+                type="button"
+                onClick={() => setMobileOpen(false)}
+                aria-label="Close admin navigation"
+                className="admin-sidebar-link inline-flex h-9 w-9 items-center justify-center rounded-lg"
+              >
+                <AdminIcon name="close" className="h-5 w-5" />
+              </button>
             </div>
-          </div>
+            <SidebarNav
+              sections={sections}
+              collapsed={false}
+              onNavigate={() => setMobileOpen(false)}
+              onExpand={() => {}}
+            />
+          </aside>
         </div>
       )}
-
-      <div className="lg:pl-64">
-        <main className="mx-auto w-full max-w-[110rem] px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
-          {children}
-        </main>
-      </div>
     </div>
   );
 }

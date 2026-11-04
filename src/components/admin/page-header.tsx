@@ -26,7 +26,7 @@ export function AdminPageHeader({
   className,
 }: AdminPageHeaderProps) {
   return (
-    <header className={cn("border-b border-ink-200 pb-6", className)}>
+    <header className={cn("admin-page-header border-b border-ink-200 pb-6", className)}>
       {breadcrumbs && breadcrumbs.length > 0 && (
         <nav aria-label="Breadcrumb" className="mb-4">
           <ol className="flex flex-wrap items-center gap-1.5 text-xs font-medium text-ink-500">
