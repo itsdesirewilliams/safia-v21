@@ -22,10 +22,25 @@ const ALLOWED_TAGS = new Set([
   "em",
   "i",
   "u",
+  "s",
+  "del",
+  "code",
+  "pre",
   "a",
+  "ul",
+  "ol",
+  "li",
+  "blockquote",
+  "hr",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
 ]);
 
-const VOID_TAGS = new Set(["br"]);
+const VOID_TAGS = new Set(["br", "hr"]);
 
 /** Normalise and validate a link target. Returns null when unsafe. */
 export function normalizeLinkHref(raw: string): string | null {
@@ -121,9 +136,9 @@ export function sanitizeRichText(input: unknown): string {
       continue;
     }
 
-    if (tag === "br") {
+    if (tag === "br" || tag === "hr") {
       if (!closing) {
-        output += "<br>";
+        output += `<${tag}>`;
       }
       continue;
     }

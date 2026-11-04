@@ -1,26 +1,14 @@
 "use client";
 
-import {
-  Fragment,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type ClipboardEvent,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import { BlockEditor } from "@/components/admin/blog/block-editors";
 import { ImageDropzone } from "@/components/admin/blog/image-dropzone";
-import { InsertBlockMenu } from "@/components/admin/blog/insert-block-menu";
 import { PostPreview } from "@/components/admin/blog/post-preview";
+import { TiptapBodyEditor } from "@/components/admin/blog/tiptap-editor";
 import { buttonStyles } from "@/components/ui/button";
 import { fieldClass, fieldLabelClass } from "@/components/ui/form";
 import { cn } from "@/lib/cn";
 import { CATEGORIES } from "@/lib/catalogue/categories";
-import {
-  BLOCK_TYPE_OPTIONS,
-  type BlockComponent,
-} from "@/lib/blog/block-library";
 import { toEditorBlocks, type PostBlock } from "@/lib/blog/blocks";
 import type { PostEditorPayload } from "@/lib/blog/editor";
 import {
@@ -28,7 +16,6 @@ import {
   postSlugFromTitle,
   type PostStatus,
 } from "@/lib/blog/post";
-import { parsePastedTable } from "@/lib/blog/table-paste";
 import type { Media } from "@/lib/media/types";
 
 import {
@@ -37,8 +24,6 @@ import {
   savePostDraftAction,
   unpublishPostAction,
 } from "./actions";
-
-type EditorBlock = { key: string; block: PostBlock };
 
 export type PostEditorDefaults = {
   title: string;
@@ -62,39 +47,15 @@ export type PostEditorProps = {
   defaults: PostEditorDefaults;
 };
 
-let blockCounter = 0;
-
-function newKey(): string {
-  blockCounter += 1;
-  return `block-${Date.now().toString(36)}-${blockCounter}`;
-}
-
-function cloneBlock(block: PostBlock): PostBlock {
-  return JSON.parse(JSON.stringify(block)) as PostBlock;
-}
-
-function blockLabel(block: PostBlock): string {
-  return (
-    BLOCK_TYPE_OPTIONS.find((option) => option.type === block.type)?.label ??
-    block.type
-  );
-}
-
 function saveLabel(
   saving: boolean,
   dirty: boolean,
   lastSaved: Date | null,
   failed: boolean,
 ): string {
-  if (saving) {
-    return "Saving…";
-  }
-  if (failed) {
-    return "Save failed";
-  }
-  if (dirty) {
-    return "Unsaved changes";
-  }
+  if (saving) return "Saving…";
+  if (failed) return "Save failed";
+  if (dirty) return "Unsaved changes";
   if (lastSaved) {
     return `Saved ${lastSaved.toLocaleTimeString([], {
       hour: "2-digit",
@@ -117,8 +78,8 @@ export function PostEditor({
   );
   const [view, setView] = useState<"edit" | "preview">("edit");
   const [library, setLibrary] = useState<Media[]>([...mediaLibrary]);
-  const [blocks, setBlocks] = useState<EditorBlock[]>(() =>
-    toEditorBlocks(defaults.body).map((block) => ({ key: newKey(), block })),
+  const [blocks, setBlocks] = useState<PostBlock[]>(() =>
+    toEditorBlocks(defaults.body),
   );
   const [fields, setFields] = useState({
     title: defaults.title,
@@ -151,8 +112,6 @@ export function PostEditor({
   const dirtyRef = useRef(false);
   const revisionRef = useRef(0);
   const slugTouchedRef = useRef(slugTouched);
-  const activeBlockRef = useRef<string | null>(null);
-  const blockRefs = useRef(new Map<string, HTMLElement>());
 
   useEffect(() => {
     postIdRef.current = postId;
@@ -168,7 +127,7 @@ export function PostEditor({
 
   const payload: PostEditorPayload = {
     ...fields,
-    body: blocks.map((entry) => entry.block),
+    body: blocks,
     previousSlug: publishedSlug,
   };
 
@@ -196,9 +155,7 @@ export function PostEditor({
       setFields((current) => ({
         ...current,
         title: value,
-        ...(slugTouchedRef.current
-          ? {}
-          : { slug: postSlugFromTitle(value) }),
+        ...(slugTouchedRef.current ? {} : { slug: postSlugFromTitle(value) }),
       }));
       markDirty();
     },
@@ -217,78 +174,9 @@ export function PostEditor({
     [markDirty],
   );
 
-  const scrollToBlock = useCallback((key: string) => {
-    window.setTimeout(() => {
-      blockRefs.current.get(key)?.scrollIntoView({ block: "center", behavior: "smooth" });
-    }, 0);
-  }, []);
-
-  const updateBlock = useCallback(
-    (key: string, block: PostBlock) => {
-      setBlocks((current) =>
-        current.map((entry) => (entry.key === key ? { ...entry, block } : entry)),
-      );
-      markDirty();
-    },
-    [markDirty],
-  );
-
-  const insertBlocks = useCallback(
-    (index: number, newBlocks: readonly PostBlock[]) => {
-      if (newBlocks.length === 0) {
-        return;
-      }
-      const entries = newBlocks.map((block) => ({ key: newKey(), block }));
-      setBlocks((current) => {
-        const copy = [...current];
-        copy.splice(index, 0, ...entries);
-        return copy;
-      });
-      markDirty();
-      scrollToBlock(entries[0].key);
-    },
-    [markDirty, scrollToBlock],
-  );
-
-  const duplicateBlock = useCallback(
-    (key: string) => {
-      setBlocks((current) => {
-        const index = current.findIndex((entry) => entry.key === key);
-        if (index < 0) {
-          return current;
-        }
-        const entry = { key: newKey(), block: cloneBlock(current[index].block) };
-        const copy = [...current];
-        copy.splice(index + 1, 0, entry);
-        scrollToBlock(entry.key);
-        return copy;
-      });
-      markDirty();
-    },
-    [markDirty, scrollToBlock],
-  );
-
-  const moveBlock = useCallback(
-    (key: string, direction: -1 | 1) => {
-      setBlocks((current) => {
-        const index = current.findIndex((entry) => entry.key === key);
-        const target = index + direction;
-        if (index < 0 || target < 0 || target >= current.length) {
-          return current;
-        }
-        const copy = [...current];
-        const [entry] = copy.splice(index, 1);
-        copy.splice(target, 0, entry);
-        return copy;
-      });
-      markDirty();
-    },
-    [markDirty],
-  );
-
-  const removeBlock = useCallback(
-    (key: string) => {
-      setBlocks((current) => current.filter((entry) => entry.key !== key));
+  const updateBody = useCallback(
+    (nextBlocks: PostBlock[]) => {
+      setBlocks(nextBlocks);
       markDirty();
     },
     [markDirty],
@@ -303,16 +191,12 @@ export function PostEditor({
   }, []);
 
   const saveDraft = useCallback(async (silent = false) => {
-    if (savingRef.current || !payloadRef.current) {
-      return;
-    }
+    if (savingRef.current || !payloadRef.current) return;
     const revision = revisionRef.current;
     savingRef.current = true;
     setSaving(true);
     setSaveFailed(false);
-    if (!silent) {
-      setMessage(null);
-    }
+    if (!silent) setMessage(null);
 
     const result = await savePostDraftAction(
       payloadRef.current,
@@ -355,9 +239,7 @@ export function PostEditor({
   }, []);
 
   const publish = useCallback(async () => {
-    if (savingRef.current || !payloadRef.current) {
-      return;
-    }
+    if (savingRef.current || !payloadRef.current) return;
     if (
       status === "published" &&
       publishedSlug &&
@@ -366,9 +248,7 @@ export function PostEditor({
       const confirmed = window.confirm(
         "This post is published. Changing its slug changes the live URL. Continue?",
       );
-      if (!confirmed) {
-        return;
-      }
+      if (!confirmed) return;
     }
 
     const revision = revisionRef.current;
@@ -415,9 +295,7 @@ export function PostEditor({
   }, [fields.slug, publishedSlug, status]);
 
   const unpublish = useCallback(async () => {
-    if (!postIdRef.current || savingRef.current) {
-      return;
-    }
+    if (!postIdRef.current || savingRef.current) return;
     savingRef.current = true;
     setSaving(true);
     setSaveFailed(false);
@@ -438,23 +316,16 @@ export function PostEditor({
 
   // Autosave drafts after changes; published posts only change on Update.
   useEffect(() => {
-    if (status !== "draft") {
-      return;
-    }
+    if (status !== "draft") return;
     const timer = window.setInterval(() => {
-      if (dirtyRef.current && !savingRef.current) {
-        void saveDraft(true);
-      }
+      if (dirtyRef.current && !savingRef.current) void saveDraft(true);
     }, 7000);
     return () => window.clearInterval(timer);
   }, [status, saveDraft]);
 
-  // Warn about unsaved work when leaving the page.
   useEffect(() => {
     const handler = (event: BeforeUnloadEvent) => {
-      if (!dirtyRef.current) {
-        return;
-      }
+      if (!dirtyRef.current) return;
       event.preventDefault();
       event.returnValue = "";
     };
@@ -462,21 +333,14 @@ export function PostEditor({
     return () => window.removeEventListener("beforeunload", handler);
   }, []);
 
-  // Warn before following a link with unsaved changes (client navigation).
   useEffect(() => {
     const handler = (event: MouseEvent) => {
-      if (!dirtyRef.current) {
-        return;
-      }
+      if (!dirtyRef.current) return;
       const target = event.target as HTMLElement | null;
       const anchor = target?.closest("a");
-      if (!anchor) {
-        return;
-      }
+      if (!anchor) return;
       const href = anchor.getAttribute("href");
-      if (!href || href.startsWith("#") || anchor.target === "_blank") {
-        return;
-      }
+      if (!href || href.startsWith("#") || anchor.target === "_blank") return;
       if (!window.confirm("You have unsaved changes. Leave this page?")) {
         event.preventDefault();
       }
@@ -485,7 +349,6 @@ export function PostEditor({
     return () => document.removeEventListener("click", handler, true);
   }, []);
 
-  // Debounced slug availability check. Draft placeholder slugs are skipped.
   const slugValue = fields.slug.trim();
   const slugCheckActive =
     Boolean(slugValue) && !slugValue.startsWith("draft-");
@@ -497,58 +360,16 @@ export function PostEditor({
         : "checking";
 
   useEffect(() => {
-    if (!slugCheckActive) {
-      return;
-    }
+    if (!slugCheckActive) return;
     const timer = window.setTimeout(async () => {
       const result = await checkSlugAction(slugValue, postIdRef.current);
       setSlugCheckResult({
         slug: slugValue,
-        state: !result.ok
-          ? "invalid"
-          : result.available
-            ? "available"
-            : "taken",
+        state: !result.ok ? "invalid" : result.available ? "available" : "taken",
       });
     }, 450);
     return () => window.clearTimeout(timer);
   }, [slugValue, slugCheckActive]);
-
-  function handlePasteCapture(event: ClipboardEvent<HTMLElement>) {
-    const table = parsePastedTable({
-      html: event.clipboardData.getData("text/html"),
-      text: event.clipboardData.getData("text/plain"),
-    });
-    if (!table) {
-      return;
-    }
-    event.preventDefault();
-    event.stopPropagation();
-
-    const activeKey = activeBlockRef.current;
-    setBlocks((current) => {
-      const index = activeKey
-        ? current.findIndex((entry) => entry.key === activeKey)
-        : -1;
-
-      if (index >= 0 && current[index].block.type === "table") {
-        const copy = [...current];
-        copy[index] = {
-          ...copy[index],
-          block: { type: "table", rows: table },
-        };
-        return copy;
-      }
-
-      const entry = { key: newKey(), block: { type: "table" as const, rows: table } };
-      const insertAt = index >= 0 ? index + 1 : current.length;
-      const copy = [...current];
-      copy.splice(insertAt, 0, entry);
-      scrollToBlock(entry.key);
-      return copy;
-    });
-    markDirty();
-  }
 
   const cover = fields.thumbnailMediaId
     ? library.find((entry) => entry.id === fields.thumbnailMediaId)
@@ -562,10 +383,7 @@ export function PostEditor({
     fields.slug !== publishedSlug;
 
   return (
-    <form
-      className="mt-6 space-y-6"
-      onSubmit={(event) => event.preventDefault()}
-    >
+    <form className="mt-6 space-y-6" onSubmit={(event) => event.preventDefault()}>
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-card border border-ink-200 bg-white p-4">
         <div className="flex flex-wrap items-center gap-3">
           <span
@@ -580,6 +398,7 @@ export function PostEditor({
           </span>
           <span
             aria-live="polite"
+            suppressHydrationWarning
             className={cn(
               "text-sm",
               saveFailed ? "text-brand-600" : "text-ink-500",
@@ -663,7 +482,7 @@ export function PostEditor({
           excerpt={fields.excerpt}
           category={fields.category}
           thumbnailMediaId={fields.thumbnailMediaId}
-          blocks={blocks.map((entry) => entry.block)}
+          blocks={blocks}
           media={library}
         />
       ) : (
@@ -681,7 +500,8 @@ export function PostEditor({
                 className="mt-2 w-full rounded-lg border border-ink-200 bg-white px-3 py-3 text-2xl font-semibold text-ink-950 outline-none transition placeholder:text-ink-300 focus:border-brand-600 focus:ring-4 focus:ring-brand-500/15"
               />
               <p className="mt-2 text-xs text-ink-500">
-                The title is the page H1. Use H2–H4 inside the body.
+                The title is the page H1. Use the editor&apos;s heading menu for
+                H1–H6 in the body.
               </p>
               {errors.title && (
                 <p role="alert" className="mt-2 text-sm font-semibold text-brand-600">
@@ -716,8 +536,7 @@ export function PostEditor({
                       Use lowercase letters, numbers and dashes only.
                     </span>
                   )}
-                  {slugCheck === "idle" &&
-                    "Leave blank to generate from the title."}
+                  {slugCheck === "idle" && "Leave blank to generate from the title."}
                 </p>
                 {slugWarning && (
                   <p role="alert" className="mt-1 text-xs font-semibold text-brand-600">
@@ -732,120 +551,31 @@ export function PostEditor({
               </div>
             </section>
 
-            <section
-              className="rounded-card border border-ink-200 bg-white p-4 sm:p-6"
-              onPasteCapture={handlePasteCapture}
-            >
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <h2 className="text-lg font-semibold text-ink-950">Body</h2>
-                <InsertBlockMenu
-                  onInsertBlock={(block) => insertBlocks(blocks.length, [block])}
-                  onInsertComponent={(component: BlockComponent) =>
-                    insertBlocks(blocks.length, component.create())
-                  }
-                  label="Add block"
+            <section className="rounded-card border border-ink-200 bg-white p-4 sm:p-6">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <h2 className="text-lg font-semibold text-ink-950">Body</h2>
+                  <p className="mt-1 max-w-2xl text-xs leading-relaxed text-ink-500">
+                    Paste a complete article from anywhere. Use Enter for a new
+                    paragraph and Shift + Enter for a line break inside the same
+                    paragraph.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <TiptapBodyEditor
+                  initialBlocks={blocks}
+                  media={library}
+                  onMediaUploaded={addMedia}
+                  onChange={updateBody}
                 />
               </div>
 
-              {blocks.length === 0 ? (
-                <p className="mt-5 rounded-lg border border-dashed border-ink-300 bg-ink-50 p-6 text-sm text-ink-600">
-                  The body is empty. Insert a text block or a ready-made component
-                  to start.
+              {errors.body && (
+                <p role="alert" className="mt-2 text-sm font-semibold text-brand-600">
+                  {errors.body}
                 </p>
-              ) : (
-                <ol className="mt-4 space-y-2">
-                  {blocks.map((entry, index) => (
-                    <Fragment key={entry.key}>
-                      <li className="py-1">
-                        <InsertBlockMenu
-                          subtle
-                          label="Insert block here"
-                          onInsertBlock={(block) => insertBlocks(index, [block])}
-                          onInsertComponent={(component: BlockComponent) =>
-                            insertBlocks(index, component.create())
-                          }
-                        />
-                      </li>
-                      <li
-                        ref={(node) => {
-                          if (node) {
-                            blockRefs.current.set(entry.key, node);
-                          } else {
-                            blockRefs.current.delete(entry.key);
-                          }
-                        }}
-                        onClick={() => {
-                          activeBlockRef.current = entry.key;
-                        }}
-                        onFocusCapture={() => {
-                          activeBlockRef.current = entry.key;
-                        }}
-                        className="rounded-lg border border-ink-200 bg-ink-50/60 p-3 sm:p-4"
-                      >
-                        <div className="flex flex-wrap items-center justify-between gap-2">
-                          <span className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-500">
-                            {blockLabel(entry.block)}
-                          </span>
-                          <div className="flex flex-wrap items-center gap-1">
-                            <button
-                              type="button"
-                              onClick={() => duplicateBlock(entry.key)}
-                              className="rounded-md px-2 py-1 text-xs font-semibold text-ink-600 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
-                              aria-label={`Duplicate ${blockLabel(entry.block)} block`}
-                            >
-                              Duplicate
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => moveBlock(entry.key, -1)}
-                              disabled={index === 0}
-                              className="rounded-md px-2 py-1 text-xs font-semibold text-ink-600 hover:bg-white disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
-                              aria-label={`Move ${blockLabel(entry.block)} block up`}
-                            >
-                              ↑
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => moveBlock(entry.key, 1)}
-                              disabled={index === blocks.length - 1}
-                              className="rounded-md px-2 py-1 text-xs font-semibold text-ink-600 hover:bg-white disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
-                              aria-label={`Move ${blockLabel(entry.block)} block down`}
-                            >
-                              ↓
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => removeBlock(entry.key)}
-                              className="rounded-md px-2 py-1 text-xs font-semibold text-brand-600 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
-                              aria-label={`Delete ${blockLabel(entry.block)} block`}
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </div>
-
-                        <div className="mt-3">
-                          <BlockEditor
-                            block={entry.block}
-                            onChange={(block) => updateBlock(entry.key, block)}
-                            media={library}
-                            onMediaUploaded={addMedia}
-                          />
-                        </div>
-                      </li>
-                    </Fragment>
-                  ))}
-                  <li className="py-1">
-                    <InsertBlockMenu
-                      subtle
-                      label="Add block at the end"
-                      onInsertBlock={(block) => insertBlocks(blocks.length, [block])}
-                      onInsertComponent={(component: BlockComponent) =>
-                        insertBlocks(blocks.length, component.create())
-                      }
-                    />
-                  </li>
-                </ol>
               )}
             </section>
           </div>
@@ -986,9 +716,8 @@ export function PostEditor({
                     )}
                   >
                     {fields.seoDescription.length}/{META_DESCRIPTION_RECOMMENDED}
-                    {fields.seoDescription.length >
-                    META_DESCRIPTION_RECOMMENDED
-                      ? " · longer than recommended"
+                    {fields.seoDescription.length > META_DESCRIPTION_RECOMMENDED
+                      ? " — longer than recommended"
                       : ""}
                   </p>
                   {errors.seoDescription && (

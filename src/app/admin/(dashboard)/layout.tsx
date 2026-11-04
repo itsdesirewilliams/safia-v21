@@ -1,6 +1,5 @@
 import "../admin.css";
 import { AdminShell, type AdminNavSection } from "@/components/admin/admin-shell";
-import { AdminThemeScript } from "@/components/admin/admin-theme-script";
 import { buttonStyles } from "@/components/ui/button";
 import {
   canManageMedia,
@@ -113,13 +112,11 @@ export default async function AdminDashboardLayout({
   }
 
   return (
-    <>
-      <AdminThemeScript />
-      <AdminShell
-        sections={sections}
-        email={profile.email}
-        roleLabel={role ? roleLabel(role) : "No role"}
-        signOut={
+    <AdminShell
+      sections={sections}
+      email={profile.email}
+      roleLabel={role ? roleLabel(role) : "No role"}
+      signOut={
         <form action={signOutAction}>
           <button
             type="submit"
@@ -128,10 +125,9 @@ export default async function AdminDashboardLayout({
             Sign out
           </button>
         </form>
-        }
-      >
-        {children}
-      </AdminShell>
-    </>
+      }
+    >
+      {children}
+    </AdminShell>
   );
 }

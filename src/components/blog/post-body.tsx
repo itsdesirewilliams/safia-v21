@@ -1,5 +1,6 @@
 import type { PostBlock } from "@/lib/blog/blocks";
 import { sanitizeRichText } from "@/lib/blog/sanitize";
+import { cn } from "@/lib/cn";
 import type { Media } from "@/lib/media/types";
 
 export type PostBodyProps = {
@@ -11,12 +12,22 @@ export type PostBodyProps = {
 };
 
 const RICH_TEXT_CLASS =
-  "text-lg leading-relaxed text-pretty text-ink-700 [&_p]:mb-4 [&_p:last-child]:mb-0 [&_a]:font-medium [&_a]:text-brand-600 [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-brand-700 [&_strong]:font-semibold [&_b]:font-semibold [&_em]:italic [&_i]:italic [&_u]:underline [&_br]:leading-relaxed";
+  "text-lg leading-relaxed text-pretty text-ink-700 [&_p]:mb-4 [&_p:last-child]:mb-0 [&_a]:font-medium [&_a]:text-brand-600 [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-brand-700 [&_strong]:font-semibold [&_b]:font-semibold [&_em]:italic [&_i]:italic [&_u]:underline [&_s]:line-through [&_del]:line-through [&_br]:leading-relaxed [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-6 [&_ol]:mb-4 [&_ol]:list-decimal [&_ol]:space-y-2 [&_ol]:pl-6 [&_li]:pl-1 [&_blockquote]:my-6 [&_blockquote]:border-l-4 [&_blockquote]:border-brand-200 [&_blockquote]:pl-5 [&_blockquote]:italic [&_blockquote]:text-ink-600 [&_hr]:my-8 [&_hr]:border-ink-200 [&_pre]:mb-4 [&_pre]:overflow-x-auto [&_pre]:rounded-lg [&_pre]:bg-ink-950 [&_pre]:p-4 [&_pre]:text-sm [&_pre]:leading-relaxed [&_pre]:text-white [&_code]:rounded [&_code]:bg-ink-100 [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[0.9em] [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_h1]:text-h1 [&_h1]:pt-2 [&_h1]:text-ink-950 [&_h2]:text-h2 [&_h2]:pt-2 [&_h2]:text-ink-950 [&_h3]:text-h3 [&_h3]:pt-2 [&_h3]:text-ink-950 [&_h4]:text-xl [&_h4]:font-semibold [&_h4]:pt-2 [&_h4]:text-ink-950 [&_h5]:text-lg [&_h5]:font-semibold [&_h5]:pt-2 [&_h5]:text-ink-950 [&_h6]:text-base [&_h6]:font-semibold [&_h6]:pt-2 [&_h6]:text-ink-950";
 
-const HEADING_CLASS: Record<2 | 3 | 4, string> = {
+const HEADING_CLASS: Record<1 | 2 | 3 | 4 | 5 | 6, string> = {
+  1: "text-h1 pt-2 text-ink-950",
   2: "text-h2 pt-2 text-ink-950",
   3: "text-h3 pt-2 text-ink-950",
   4: "text-xl font-semibold pt-2 text-ink-950",
+  5: "text-lg font-semibold pt-2 text-ink-950",
+  6: "text-base font-semibold pt-2 text-ink-950",
+};
+
+const ALIGN_CLASS: Record<string, string> = {
+  left: "text-left",
+  center: "text-center",
+  right: "text-right",
+  justify: "text-justify",
 };
 
 function RichText({ html, className }: { html: string; className?: string }) {
@@ -73,16 +84,31 @@ export function PostBody({ blocks, media, preview = false }: PostBodyProps) {
         }
 
         if (block.type === "text") {
-          return <RichText key={index} html={block.html} />;
+          return (
+            <RichText
+              key={index}
+              html={block.html}
+              className={cn(
+                RICH_TEXT_CLASS,
+                block.align ? ALIGN_CLASS[block.align] : undefined,
+              )}
+            />
+          );
         }
 
         if (block.type === "heading") {
           if (!block.text) {
             return null;
           }
-          const Tag = `h${block.level}` as "h2" | "h3" | "h4";
+          const Tag = `h${block.level}` as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
           return (
-            <Tag key={index} className={HEADING_CLASS[block.level]}>
+            <Tag
+              key={index}
+              className={cn(
+                HEADING_CLASS[block.level],
+                block.align ? ALIGN_CLASS[block.align] : undefined,
+              )}
+            >
               {block.text}
             </Tag>
           );
@@ -108,10 +134,19 @@ export function PostBody({ blocks, media, preview = false }: PostBodyProps) {
             ) : null;
           }
 
+          const width = block.width ? { width: `${block.width}%` } : undefined;
           return (
             <figure
               key={index}
-              className="overflow-hidden rounded-card border border-ink-200"
+              style={width}
+              className={cn(
+                "overflow-hidden rounded-card border border-ink-200",
+                block.align === "right"
+                  ? "ml-auto"
+                  : block.align === "left"
+                    ? "mr-auto"
+                    : "mx-auto",
+              )}
             >
               {/* eslint-disable-next-line @next/next/no-img-element -- media has no intrinsic dimensions to hand next/image */}
               <img

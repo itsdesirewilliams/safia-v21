@@ -46,20 +46,30 @@ export const TABLE_MAX_COLUMNS = 20;
 export const TABLE_CELL_MAX_LENGTH = 2000;
 export const LIST_MAX_ITEMS = 50;
 export const FAQ_MAX_ITEMS = 50;
-export const MAX_BLOCKS = 200;
+export const MAX_BLOCKS = 500;
 
-export type HeadingLevel = 2 | 3 | 4;
+export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+
+export type TextAlign = "left" | "center" | "right" | "justify";
+
+export type ImageAlign = "left" | "center" | "right";
 
 /** Legacy plain-text paragraph. */
 export type ParagraphBlock = { type: "paragraph"; text: string };
 
 /** Rich-text paragraph block (sanitized inline HTML). */
-export type TextBlock = { type: "text"; html: string };
+export type TextBlock = {
+  type: "text";
+  html: string;
+  /** Optional block alignment; omitted means the normal left-aligned layout. */
+  align?: TextAlign;
+};
 
 export type HeadingBlock = {
   type: "heading";
   level: HeadingLevel;
   text: string;
+  align?: TextAlign;
 };
 
 export type ImageBlock = {
@@ -69,6 +79,9 @@ export type ImageBlock = {
   caption: string | null;
   /** Optional URL for imported/legacy content; Media ids are preferred. */
   url?: string | null;
+  align?: ImageAlign;
+  /** Rendered width as a percentage of the article column. */
+  width?: number;
 };
 
 export type ImageTextBlock = {
@@ -130,7 +143,30 @@ function optionalText(value: unknown, maxLength: number): string | null {
 }
 
 function clampHeadingLevel(value: unknown): HeadingLevel {
-  return value === 3 || value === 4 ? value : 2;
+  const level = typeof value === "number" ? value : Number(value);
+  return level === 1 || level === 2 || level === 3 || level === 4 || level === 5 || level === 6
+    ? level
+    : 2;
+}
+
+function parseTextAlign(value: unknown): TextAlign | null {
+  return value === "left" || value === "center" || value === "right" || value === "justify"
+    ? value
+    : null;
+}
+
+function parseImageAlign(value: unknown): ImageAlign | null {
+  return value === "left" || value === "center" || value === "right"
+    ? value
+    : null;
+}
+
+function parseImageWidth(value: unknown): number | null {
+  const width = typeof value === "number" ? value : Number(value);
+  if (!Number.isFinite(width)) {
+    return null;
+  }
+  return Math.min(100, Math.max(10, Math.round(width)));
 }
 
 function parseRows(value: unknown): string[][] {
@@ -162,11 +198,15 @@ function parseImageFields(record: Record<string, unknown>) {
   const mediaId = cleanText(record.mediaId);
   const rawUrl = cleanText(record.url);
   const url = rawUrl ? normalizeImageSrc(rawUrl) : null;
+  const align = parseImageAlign(record.align);
+  const width = parseImageWidth(record.width);
   return {
     mediaId,
     ...(url ? { url } : {}),
     caption: optionalText(record.caption, BLOCK_CAPTION_MAX_LENGTH),
     alt: optionalText(record.alt, BLOCK_ALT_MAX_LENGTH),
+    ...(align ? { align } : {}),
+    ...(width ? { width } : {}),
   };
 }
 
@@ -202,14 +242,24 @@ function parseBlock(
           error: `A text block must be ${BLOCK_HTML_MAX_LENGTH} characters or fewer.`,
         };
       }
-      return { ok: true, block: { type: "text", html } };
+      const align = parseTextAlign(record.align);
+      return {
+        ok: true,
+        block: { type: "text", html, ...(align ? { align } : {}) },
+      };
     }
 
     case "heading": {
       const text = sanitizePlainText(record.text, BLOCK_HEADING_MAX_LENGTH);
+      const align = parseTextAlign(record.align);
       return {
         ok: true,
-        block: { type: "heading", level: clampHeadingLevel(record.level), text },
+        block: {
+          type: "heading",
+          level: clampHeadingLevel(record.level),
+          text,
+          ...(align ? { align } : {}),
+        },
       };
     }
 
@@ -223,6 +273,8 @@ function parseBlock(
           alt: fields.alt,
           caption: fields.caption,
           ...(fields.url ? { url: fields.url } : {}),
+          ...("align" in fields && fields.align ? { align: fields.align } : {}),
+          ...("width" in fields && fields.width ? { width: fields.width } : {}),
         },
       };
     }

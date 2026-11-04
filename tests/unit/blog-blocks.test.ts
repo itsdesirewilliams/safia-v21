@@ -187,3 +187,32 @@ describe("post block model", () => {
     }
   });
 });
+
+describe("Tiptap-era block extensions", () => {
+  it("accepts H1-H6 and safe alignment values", () => {
+    const result = parsePostBlocks([
+      { type: "heading", level: 1, text: "One", align: "center" },
+      { type: "heading", level: 5, text: "Five" },
+      { type: "heading", level: 6, text: "Six", align: "right" },
+      { type: "text", html: "<p>Aligned</p>", align: "justify" },
+    ]);
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.blocks[0]).toMatchObject({ level: 1, align: "center" });
+      expect(result.blocks[1]).toMatchObject({ level: 5 });
+      expect(result.blocks[2]).toMatchObject({ level: 6, align: "right" });
+      expect(result.blocks[3]).toMatchObject({ align: "justify" });
+    }
+  });
+
+  it("accepts image alignment and width metadata", () => {
+    const result = parsePostBlocks([
+      { type: "image", mediaId: "m1", align: "right", width: 75 },
+    ]);
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.blocks[0]).toMatchObject({ align: "right", width: 75 });
+    }
+  });
+});

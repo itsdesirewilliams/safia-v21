@@ -198,3 +198,43 @@ describe("PostBody block editor output", () => {
     expect(publicHtml).not.toContain("Image placeholder");
   });
 });
+describe("Tiptap-era rendered output", () => {
+  it("renders pasted lists, blockquotes, H1/H5/H6 and alignment", () => {
+    const html = renderToStaticMarkup(
+      <PostBody
+        blocks={[
+          { type: "heading", level: 1, text: "Title", align: "center" },
+          { type: "heading", level: 5, text: "Small" },
+          { type: "heading", level: 6, text: "Tiny" },
+          {
+            type: "text",
+            html: "<ul><li>One</li></ul><ol><li>First</li></ol><blockquote><p>Quote</p></blockquote><p>Tail<br>Break</p>",
+            align: "justify",
+          },
+        ]}
+        media={new Map()}
+      />,
+    );
+
+    expect(html).toContain("<h1");
+    expect(html).toContain("<h5");
+    expect(html).toContain("<h6");
+    expect(html).toContain("<ul>");
+    expect(html).toContain("<ol>");
+    expect(html).toContain("<blockquote>");
+    expect(html).toContain("<br>");
+    expect(html).toContain("text-justify");
+  });
+
+  it("applies image alignment and width", () => {
+    const html = renderToStaticMarkup(
+      <PostBody
+        blocks={[{ type: "image", mediaId: "m1", alt: null, caption: null, align: "right", width: 50 }]}
+        media={new Map([["m1", MEDIA]])}
+      />,
+    );
+
+    expect(html).toContain("ml-auto");
+    expect(html).toContain("width:50%");
+  });
+});

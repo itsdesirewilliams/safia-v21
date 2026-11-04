@@ -11,6 +11,11 @@ const eslintConfig = [
       "assets/**",
       "next-env.d.ts",
       "next.config.ts",
+      // Vendored MIT Tiptap UI Components template; fixes belong upstream.
+      "src/components/tiptap-*/**",
+      "src/components/tiptap-templates/**",
+      "src/hooks/**",
+      "src/lib/tiptap-utils.ts",
     ],
   },
 ];

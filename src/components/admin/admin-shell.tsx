@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 import { AdminIcon, type AdminIconName } from "@/components/admin/admin-icon";
-import { AdminThemeSwitcher } from "@/components/admin/admin-theme";
 import { cn } from "@/lib/cn";
 
 export type AdminNavItem = {
@@ -164,7 +163,7 @@ function SidebarNav({
 }
 
 /**
- * Admin application shell: a collapsible, theme-aware SaaS sidebar and header.
+ * Admin application shell: a collapsible Safeway-branded SaaS sidebar and header.
  * Navigation remains role-filtered by the server layout; this component only
  * presents the destinations it receives.
  */
@@ -325,7 +324,6 @@ export function AdminShell({
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
-            <AdminThemeSwitcher />
             <details className="admin-profile relative">
               <summary className="flex cursor-pointer items-center gap-2 rounded-[0.65rem] border border-transparent p-1 pr-2 transition-colors hover:bg-ink-50">
                 <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-ink-100 text-[11px] font-semibold text-ink-700">
