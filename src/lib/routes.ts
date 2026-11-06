@@ -20,6 +20,7 @@ export const ROUTING_MAP = {
   search: "/search",
   categoryListing: "/products/[category]",
   patternDetail: "/products/[category]/[pattern]",
+  tubeValveDetail: "/products/tubes/[valve]",
   // The radial ranges sit beside the existing Nylon Truck & Bus category.
   tbrSafeway: "/products/truck-bus-tire/tbr-safeway",
   tbrPatternDetail: "/products/truck-bus-tire/tbr-safeway/[pattern]",
@@ -42,6 +43,7 @@ export const ROUTES = {
   category: (slug: CategorySlug) => `/products/${slug}`,
   pattern: (category: CategorySlug, pattern: string) =>
     `/products/${category}/${pattern}`,
+  tubeValve: (valve: string) => `/products/tubes/${valve}`,
   tbrSafeway: ROUTING_MAP.tbrSafeway,
   tbrPattern: (pattern: string) =>
     `/products/truck-bus-tire/tbr-safeway/${pattern}`,
@@ -121,5 +123,6 @@ export const SMOKE_ROUTES: readonly string[] = [
   ROUTES.search,
   ...CATEGORIES.map((category) => ROUTES.category(category.slug)),
   ROUTES.pattern("motorcycle", "motorcycle-tyres-sfm-101"),
+  ROUTES.tubeValve("tr-13"),
   ROUTES.blogs,
 ];

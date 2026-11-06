@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation";
 
 import { Breadcrumbs } from "@/components/catalogue/breadcrumbs";
+import { CatalogueDetailHero } from "@/components/catalogue/catalogue-detail-hero";
 import { CatalogueEnquiry } from "@/components/catalogue/catalogue-enquiry";
+import { CatalogueSelectionBar } from "@/components/catalogue/catalogue-selection-bar";
 import { PatternCard } from "@/components/catalogue/pattern-card";
-import { PatternImage } from "@/components/catalogue/pattern-image";
 import { RangeSwitcher } from "@/components/catalogue/range-switcher";
 import { RelatedCategories } from "@/components/catalogue/related-categories";
 import { VariantTable } from "@/components/catalogue/variant-table";
@@ -162,27 +163,26 @@ export default async function PatternPage({
 
       <section className="py-16 lg:py-24">
         <Container>
-          <div className="flex items-center gap-5 sm:gap-6">
-            <PatternImage
-              src={imageUrl}
-              alt={
-                imageUrl
-                  ? `${pattern.displayName} (${pattern.patternCode}) tyre pattern`
-                  : ""
-              }
-              className="h-28 w-28 shrink-0 sm:h-32 sm:w-32"
-            />
-            <div className="min-w-0">
-              <h2 className="pattern-code-font text-2xl font-semibold tracking-tight text-ink-950 sm:text-3xl">
-                {pattern.patternCode}
-              </h2>
-              <p className="mt-1.5 text-sm text-ink-600">{eyebrow}</p>
-            </div>
-          </div>
+          <CatalogueDetailHero
+            imageSrc={imageUrl}
+            imageAlt={
+              imageUrl
+                ? `${pattern.displayName} (${pattern.patternCode}) tyre pattern`
+                : ""
+            }
+            code={pattern.patternCode}
+            description={eyebrow}
+          />
 
           <div className="mt-8">
             <VariantTable
               variants={pattern.variants}
+              selection={{
+                kind: "tyre",
+                categoryKey: category.slug,
+                categoryLabel: categoryName,
+                productCode: pattern.patternCode,
+              }}
               labels={
                 locale === "en"
                   ? undefined
@@ -232,6 +232,8 @@ export default async function PatternPage({
           </Container>
         </section>
       )}
+
+      <CatalogueSelectionBar />
     </div>
   );
 }

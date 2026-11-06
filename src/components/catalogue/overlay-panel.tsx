@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, type ReactNode } from "react";
 
@@ -114,7 +114,7 @@ export function OverlayPanel({
             aria-label="Close"
             className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-ink-200 text-xl leading-none text-ink-600 transition-colors hover:bg-ink-50 hover:text-ink-950"
           >
-            ×
+            <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4"><path strokeLinecap="round" d="m5 5 10 10M15 5 5 15" /></svg>
           </button>
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">

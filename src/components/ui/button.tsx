@@ -95,13 +95,13 @@ export function ArrowIcon({ className }: { className?: string }) {
       viewBox="0 0 20 20"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.75"
+      strokeWidth="2.15"
       className={className}
     >
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5"
+        d="M7 10h7m0 0-3.25-3.25M14 10l-3.25 3.25"
       />
     </svg>
   );

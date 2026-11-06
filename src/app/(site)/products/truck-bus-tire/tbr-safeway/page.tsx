@@ -1,5 +1,6 @@
-import { Breadcrumbs } from "@/components/catalogue/breadcrumbs";
+﻿import { Breadcrumbs } from "@/components/catalogue/breadcrumbs";
 import { CatalogueEnquiry } from "@/components/catalogue/catalogue-enquiry";
+import { CatalogueSelectionBar } from "@/components/catalogue/catalogue-selection-bar";
 import { PatternCard } from "@/components/catalogue/pattern-card";
 import { RangeCatalogueSlider } from "@/components/catalogue/range-catalogue-slider";
 import { RangeSwitcher } from "@/components/catalogue/range-switcher";
@@ -37,9 +38,9 @@ export async function generateMetadata() {
 }
 
 /**
- * TBR Safeway — the Truck & Bus Radial range page.
+ * TBR Safeway â€” the Truck & Bus Radial range page.
  *
- * Hero → landscape catalogue → Pattern Code cards → manufacturing. The Pattern
+ * Hero â†’ landscape catalogue â†’ Pattern Code cards â†’ manufacturing. The Pattern
  * Codes and sizes come from the normalized TBR dataset
  * (`src/lib/catalogue/data/tbr.json`). The existing Nylon Truck & Bus page is
  * untouched.
@@ -185,6 +186,7 @@ export default async function TbrSafewayPage() {
           <CatalogueEnquiry locale={locale} dict={dict} />
         </Container>
       </section>
+      <CatalogueSelectionBar />
     </div>
   );
 }

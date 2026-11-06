@@ -1,5 +1,6 @@
-import { Breadcrumbs } from "@/components/catalogue/breadcrumbs";
+﻿import { Breadcrumbs } from "@/components/catalogue/breadcrumbs";
 import { CatalogueEnquiry } from "@/components/catalogue/catalogue-enquiry";
+import { CatalogueSelectionBar } from "@/components/catalogue/catalogue-selection-bar";
 import { PatternCard } from "@/components/catalogue/pattern-card";
 import { RangeCatalogueSlider } from "@/components/catalogue/range-catalogue-slider";
 import { RangeSwitcher } from "@/components/catalogue/range-switcher";
@@ -35,9 +36,9 @@ export async function generateMetadata() {
 }
 
 /**
- * PCR Safeway — the Passenger Car Radial range page.
+ * PCR Safeway â€” the Passenger Car Radial range page.
  *
- * Hero → landscape catalogue → Pattern Code cards → manufacturing. The Pattern
+ * Hero â†’ landscape catalogue â†’ Pattern Code cards â†’ manufacturing. The Pattern
  * Codes and sizes come from the normalized PCR dataset
  * (`src/lib/catalogue/data/pcr.json`, from the canonical ORDER SHEET).
  */
@@ -180,6 +181,7 @@ export default async function PcrSafewayPage() {
           <CatalogueEnquiry locale={locale} dict={dict} />
         </Container>
       </section>
+      <CatalogueSelectionBar />
     </div>
   );
 }

@@ -5,8 +5,8 @@ import { CatalogueEnquiry } from "@/components/catalogue/catalogue-enquiry";
 import { PatternCard } from "@/components/catalogue/pattern-card";
 import { RangeSwitcher } from "@/components/catalogue/range-switcher";
 import { RelatedCategories } from "@/components/catalogue/related-categories";
+import { CatalogueSelectionBar } from "@/components/catalogue/catalogue-selection-bar";
 import { JsonLd } from "@/components/seo/json-ld";
-import { TubesCatalogue } from "@/components/tubes/tubes-catalogue";
 import { Container } from "@/components/ui/container";
 import { PageHeader } from "@/components/ui/page-header";
 import { Reveal } from "@/components/ui/reveal";
@@ -44,15 +44,6 @@ export async function generateMetadata({
     getActiveLocale(),
   ]);
 
-  if (category.slug === "tubes") {
-    return pageMetadata({
-      title: "Tubes & Flaps",
-      description:
-        "Browse Safeway Tyre butyl tubes by application, valve type and size, plus the separate Flaps range. Search by size and request one quotation.",
-      path: ROUTES.category(category.slug),
-    });
-  }
-
   return pageMetadata({
     title: dict.categories[category.slug],
     description: categoryDescription(locale, category.slug),
@@ -77,42 +68,6 @@ export default async function CategoryPage({
     getDictionary(),
     getActiveLocale(),
   ]);
-
-  if (category.slug === "tubes") {
-    const categoryPath = localizedHref(locale, ROUTES.category(category.slug));
-    return (
-      <div className="bg-white">
-        <JsonLd
-          data={breadcrumbSchema([
-            {
-              name: dict.breadcrumbs.catalogue,
-              path: localizedHref(locale, ROUTES.catalogue),
-            },
-            { name: "Tubes & Flaps", path: categoryPath },
-          ])}
-        />
-        <PageHeader
-          containerSize="listing"
-          breadcrumb={
-            <Breadcrumbs
-              items={[
-                {
-                  label: dict.breadcrumbs.catalogue,
-                  href: localizedHref(locale, ROUTES.catalogue),
-                },
-                { label: "Tubes & Flaps" },
-              ]}
-            />
-          }
-          eyebrow={dict.categories.tubes}
-          title="Tubes & Flaps"
-          description="Browse butyl tubes by application and valve type, search the complete size list, and select multiple sizes for one quotation. Flaps are listed separately by size."
-        />
-        <TubesCatalogue />
-      </div>
-    );
-  }
-
   const patterns = listPatternsByCategory(category.slug);
   const images = await listPatternImageUrls();
 
@@ -198,6 +153,8 @@ export default async function CategoryPage({
           </Container>
         </section>
       )}
+
+      <CatalogueSelectionBar />
     </div>
   );
 }

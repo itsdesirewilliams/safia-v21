@@ -1,19 +1,15 @@
+import {
+  CatalogueSizeTable,
+  type CatalogueSizeColumn,
+  type CatalogueSizeRow,
+} from "@/components/catalogue/catalogue-size-table";
 import type { NormalizedVariant } from "@/lib/catalogue/normalize";
+import type { CatalogueSelectionContext } from "@/lib/catalogue/selection";
 
-type VariantColumn = {
-  key: string;
-  /** Full header on desktop. */
-  label: string;
-  /** Abbreviated header on narrow screens where the full label would not fit. */
-  shortLabel: string;
+type VariantColumn = CatalogueSizeColumn & {
   value: (variant: NormalizedVariant) => string | null;
 };
 
-/**
- * The public specification columns (spec #1). Size is always shown; the
- * Forklift-only columns (rim width, tread, tyre type) appear only when the
- * Pattern actually carries them.
- */
 const COLUMNS: readonly VariantColumn[] = [
   {
     key: "size",
@@ -60,23 +56,20 @@ const COLUMNS: readonly VariantColumn[] = [
 ];
 
 /**
- * The Variant specification table shown on a Pattern page (no Variant routes).
- *
- * A fixed layout keeps every column inside the viewport on narrow screens:
- * desktop keeps the comfortable spacing and full headers, while mobile uses a
- * compact type scale, tighter padding, abbreviated headers and wrapping cells —
- * so the whole table is always visible with no horizontal scrolling.
+ * A Pattern's Variants as the shared catalogue size table. The same search,
+ * selection, copy and mobile treatment is used by every catalogue detail page;
+ * Forklift-only columns appear only when the Pattern carries them.
  */
 export function VariantTable({
   variants,
   labels,
+  selection,
 }: {
   variants: readonly NormalizedVariant[];
-  /**
-   * Localized column labels keyed by column key. When omitted (English), the
-   * compact mobile abbreviations are used.
-   */
+  /** Localized column labels keyed by column key. */
   labels?: Partial<Record<string, string>>;
+  /** Enables multi-size quotation selection on this table. */
+  selection?: CatalogueSelectionContext;
 }) {
   const columns = COLUMNS.filter(
     (column) =>
@@ -84,50 +77,31 @@ export function VariantTable({
       variants.some((variant) => column.value(variant) !== null),
   );
 
+  const rows: CatalogueSizeRow[] = variants.map((variant, index) => {
+    const cells: Record<string, string | null> = {};
+    for (const column of columns) {
+      cells[column.key] = column.value(variant);
+    }
+    return {
+      id: `${variant.public.size}-${index}`,
+      size: variant.public.size,
+      cells,
+      applications: variant.public.application ? [variant.public.application] : [],
+    };
+  });
+
   return (
-    <div className="rounded-card border border-ink-200">
-      <table className="w-full table-fixed border-collapse text-left text-xs sm:text-sm">
-        <caption className="sr-only">
-          Specification table of Variants for this Pattern
-        </caption>
-        <thead className="bg-ink-50">
-          <tr>
-            {columns.map((column) => (
-              <th
-                key={column.key}
-                scope="col"
-                className="px-2 py-2.5 text-[10px] font-semibold uppercase tracking-wide text-ink-500 sm:px-4 sm:py-3 sm:text-xs sm:tracking-[0.14em]"
-              >
-                {labels ? (
-                  labels[column.key] ?? column.label
-                ) : (
-                  <>
-                    <span className="sm:hidden">{column.shortLabel}</span>
-                    <span className="hidden sm:inline">{column.label}</span>
-                  </>
-                )}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {variants.map((variant, index) => (
-            <tr
-              key={`${variant.public.size}-${index}`}
-              className="border-t border-ink-200 even:bg-ink-50/60"
-            >
-              {columns.map((column) => (
-                <td
-                  key={column.key}
-                  className="break-words px-2 py-2.5 align-top text-ink-700 [overflow-wrap:anywhere] sm:px-4 sm:py-3"
-                >
-                  {column.value(variant) ?? "—"}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <CatalogueSizeTable
+      columns={columns.map((column) => ({
+        key: column.key,
+        label: labels?.[column.key] ?? column.label,
+        shortLabel: labels?.[column.key] ?? column.shortLabel,
+      }))}
+      rows={rows}
+      selectionContext={selection}
+      caption="Specification table of Variants for this Pattern"
+      searchPlaceholder="Search sizes"
+      emptyLabel="No size in this pattern matches that search."
+    />
   );
 }

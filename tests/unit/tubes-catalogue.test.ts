@@ -13,10 +13,10 @@ import {
 } from "@/lib/tubes/catalogue";
 import {
   buildQuotationMessage,
-  flapQuotationKey,
-  tubeQuotationKey,
-  type QuotationItem,
-} from "@/lib/tubes/quotation";
+  createSelectionItem,
+  type CatalogueSelectionItem,
+  type CatalogueSelectionContext,
+} from "@/lib/catalogue/selection";
 
 describe("Tubes catalogue data", () => {
   it("defines the seven application groups in catalogue order", () => {
@@ -130,29 +130,26 @@ describe("Tubes catalogue data", () => {
   });
 
   it("builds one quotation message containing mixed tube and flap selections", () => {
-    const items: QuotationItem[] = [
-      {
-        key: tubeQuotationKey("tr-13", "4.00-8"),
-        kind: "tube",
-        size: "4.00-8",
-        valveCode: "TR-13",
-        valveId: "tr-13",
-        applications: ["Agriculture, Industrial & OTR"],
-      },
-      {
-        key: tubeQuotationKey("tr-15", "5.00-12"),
-        kind: "tube",
-        size: "5.00-12",
-        valveCode: "TR-15",
-        valveId: "tr-15",
-        applications: ["Passenger Car"],
-      },
-      {
-        key: flapQuotationKey("7.50-20"),
-        kind: "flap",
-        size: "7.50-20",
-        applications: [],
-      },
+    const tubeContext = (code: string): CatalogueSelectionContext => ({
+      kind: "tube",
+      categoryKey: "tubes",
+      categoryLabel: "Tubes & Flaps",
+      productCode: code,
+    });
+    const items: CatalogueSelectionItem[] = [
+      createSelectionItem(tubeContext("TR-13"), "4.00-8", [
+        "Agriculture, Industrial & OTR",
+      ]),
+      createSelectionItem(tubeContext("TR-15"), "5.00-12", ["Passenger Car"]),
+      createSelectionItem(
+        {
+          kind: "flap",
+          categoryKey: "tubes",
+          categoryLabel: "Flaps",
+          productCode: "Flaps",
+        },
+        "7.50-20",
+      ),
     ];
 
     const message = buildQuotationMessage(items);
@@ -164,14 +161,20 @@ describe("Tubes catalogue data", () => {
   });
 
   it("caps a large quotation message below the contact form limit", () => {
-    const items: QuotationItem[] = Array.from({ length: 120 }, (_, index) => ({
-      key: tubeQuotationKey(`valve-${index}`, `12.00-${index}`),
-      kind: "tube",
-      size: `12.00-${index}`,
-      valveCode: `TR-${index}`,
-      valveId: `valve-${index}`,
-      applications: ["Agriculture, Industrial & OTR"],
-    }));
+    const items: CatalogueSelectionItem[] = Array.from(
+      { length: 120 },
+      (_, index) =>
+        createSelectionItem(
+          {
+            kind: "tube",
+            categoryKey: "tubes",
+            categoryLabel: "Tubes & Flaps",
+            productCode: `TR-${index}`,
+          },
+          `12.00-${index}`,
+          ["Agriculture, Industrial & OTR"],
+        ),
+    );
     const message = buildQuotationMessage(items);
     expect(message.length).toBeLessThanOrEqual(3800);
     expect(message).toContain("...");

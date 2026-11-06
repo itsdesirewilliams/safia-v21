@@ -1,18 +1,20 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 
-import { QueryForm } from "@/components/contact/query-form";
-import { buttonStyles } from "@/components/ui/button";
+import { CatalogueCard } from "@/components/catalogue/catalogue-card";
+import { CatalogueSizeTable } from "@/components/catalogue/catalogue-size-table";
+import { PatternImage } from "@/components/catalogue/pattern-image";
+import { useCatalogueSelection } from "@/hooks/use-catalogue-selection";
 import { cn } from "@/lib/cn";
+import { createSelectionItem } from "@/lib/catalogue/selection";
 import {
   FLAP_IMAGE,
   TUBES_STATS,
   TUBE_APPLICATIONS,
   applicationNames,
-  getValve,
   listFlapSizes,
-  listValveSizes,
   listValvesForApplication,
   searchFlapSizes,
   searchTubeSizes,
@@ -20,38 +22,7 @@ import {
   type TubeSizeMatch,
   type TubeValve,
 } from "@/lib/tubes/catalogue";
-import {
-  buildQuotationMessage,
-  flapQuotationKey,
-  quotationItemLabel,
-  tubeQuotationKey,
-  type QuotationItem,
-} from "@/lib/tubes/quotation";
-
-import { OverlayPanel } from "./overlay-panel";
-import { SizeSelectionTable, type SizeTableRow } from "./size-table";
-
-type TabValue = string | "flaps";
-
-function valveImage(valve: TubeValve) {
-  if (valve.imagePath) {
-    return (
-      /* eslint-disable-next-line @next/next/no-img-element -- local catalogue artwork */
-      <img
-        src={valve.imagePath}
-        alt={`${valve.code} valve`}
-        loading="lazy"
-        className="h-full w-full object-contain p-2"
-      />
-    );
-  }
-  return (
-    <span className="flex h-full w-full flex-col items-center justify-center gap-1 p-2 text-center text-[11px] leading-tight text-ink-400">
-      <span className="text-lg text-ink-300">◌</span>
-      Image pending
-    </span>
-  );
-}
+import { ROUTES } from "@/lib/routes";
 
 function ApplicationBadges({
   slugs,
@@ -85,105 +56,84 @@ function ApplicationBadges({
 function ValveCard({
   valve,
   sizeCount,
-  onOpen,
 }: {
   valve: TubeValve;
   sizeCount: number;
-  onOpen: () => void;
 }) {
   return (
-    <button
-      type="button"
-      onClick={onOpen}
-      className="group flex h-full w-full flex-col rounded-card border border-ink-200 bg-white p-5 text-left transition duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40 motion-reduce:hover:translate-y-0"
-    >
-      <span className="flex items-start gap-4">
-        <span className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-ink-100 bg-ink-50 sm:h-28 sm:w-28">
-          {valveImage(valve)}
-        </span>
-        <span className="min-w-0 flex-1">
-          <span className="pattern-code-font block text-xl font-semibold tracking-tight text-ink-950">
-            {valve.code}
-          </span>
-          <span className="mt-1 block text-sm text-ink-600">
-            {sizeCount} available {sizeCount === 1 ? "size" : "sizes"}
-          </span>
-          <span className="mt-3 block">
-            <ApplicationBadges slugs={valve.applications} />
-          </span>
-          {valve.imageStatus === "missing" && (
-            <span className="mt-2 block text-[10px] font-semibold uppercase tracking-[0.12em] text-ink-400">
-              Image pending
-            </span>
-          )}
-        </span>
-      </span>
-      <span className="mt-5 inline-flex items-center justify-between gap-2 border-t border-ink-100 pt-4 text-sm font-semibold text-brand-700">
-        View sizes
-        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-ink-200 text-ink-600 transition-colors group-hover:border-brand-600 group-hover:bg-brand-600 group-hover:text-white">
-          →
-        </span>
-      </span>
-    </button>
+    <CatalogueCard
+      href={ROUTES.tubeValve(valve.id)}
+      title={valve.code}
+      image={
+        <PatternImage
+          src={valve.imagePath}
+          alt={`${valve.code} valve`}
+          fallbackLabel="Valve image pending"
+          className="h-full w-full"
+        />
+      }
+      meta={`${sizeCount} available ${sizeCount === 1 ? "size" : "sizes"}`}
+      badges={<ApplicationBadges slugs={valve.applications} />}
+    />
   );
 }
 
-function valveMatchesToItems(matches: readonly TubeSizeMatch[]): QuotationItem[] {
-  return matches.map((match) => ({
-    key: tubeQuotationKey(match.valveId, match.originalSize),
-    kind: "tube",
-    size: match.originalSize,
-    valveCode: match.valveCode,
-    valveId: match.valveId,
-    applications: match.applications.map((application) => application.name),
-  }));
+function tubeSearchItem(match: TubeSizeMatch) {
+  return createSelectionItem(
+    {
+      kind: "tube",
+      categoryKey: "tubes",
+      categoryLabel: "Tubes & Flaps",
+      productCode: match.valveCode,
+    },
+    match.originalSize,
+    match.applications.map((application) => application.name),
+  );
 }
 
-function flapToItem(flap: FlapVariant): QuotationItem {
-  return {
-    key: flapQuotationKey(flap.originalSize),
-    kind: "flap",
-    size: flap.originalSize,
-    applications: [],
-  };
+function flapSelectionItem(flap: FlapVariant) {
+  return createSelectionItem(
+    {
+      kind: "flap",
+      categoryKey: "tubes",
+      categoryLabel: "Flaps",
+      productCode: "Flaps",
+    },
+    flap.originalSize,
+  );
 }
 
 function SearchResults({
   query,
   tubeMatches,
   flapMatches,
-  selected,
-  onToggle,
-  onOpenValve,
 }: {
   query: string;
   tubeMatches: readonly TubeSizeMatch[];
   flapMatches: readonly FlapVariant[];
-  selected: ReadonlySet<string>;
-  onToggle: (item: QuotationItem) => void;
-  onOpenValve: (valveId: string) => void;
 }) {
+  const { items, toggle } = useCatalogueSelection();
+  const selectedKeys = useMemo(() => new Set(items.map((item) => item.key)), [items]);
   const total = tubeMatches.length + flapMatches.length;
+
   return (
     <div className="mt-8" aria-live="polite">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h2 className="text-xl font-semibold tracking-tight text-ink-950">
-            Size matches for “{query.trim()}”
-          </h2>
-          <p className="mt-1 text-sm text-ink-600">
-            {total === 0
-              ? "No matching tube or flap sizes were found."
-              : `${total} matching ${total === 1 ? "record" : "records"} across every application.`}
-          </p>
-        </div>
+      <div>
+        <h2 className="text-xl font-semibold tracking-tight text-ink-950">
+          Size matches for “{query.trim()}”
+        </h2>
+        <p className="mt-1 text-sm text-ink-600">
+          {total === 0
+            ? "No matching tube or flap sizes were found."
+            : `${total} matching ${total === 1 ? "record" : "records"} across every application.`}
+        </p>
       </div>
 
       {total > 0 && (
         <div className="mt-5 overflow-hidden rounded-card border border-ink-200 bg-white">
           {tubeMatches.map((match) => {
-            const item = valveMatchesToItems([match])[0];
-            const isSelected = selected.has(item.key);
+            const item = tubeSearchItem(match);
+            const isSelected = selectedKeys.has(item.key);
             return (
               <div
                 key={item.key}
@@ -201,16 +151,15 @@ function SearchResults({
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => onOpenValve(match.valveId)}
+                  <Link
+                    href={ROUTES.tubeValve(match.valveId)}
                     className="rounded-lg border border-ink-200 bg-white px-3 py-2 text-xs font-semibold text-ink-700 transition-colors hover:border-ink-300 hover:bg-ink-50"
                   >
                     Open {match.valveCode}
-                  </button>
+                  </Link>
                   <button
                     type="button"
-                    onClick={() => onToggle(item)}
+                    onClick={() => toggle(item)}
                     className={cn(
                       "rounded-lg px-3 py-2 text-xs font-semibold transition-colors",
                       isSelected
@@ -226,8 +175,8 @@ function SearchResults({
           })}
 
           {flapMatches.map((flap) => {
-            const item = flapToItem(flap);
-            const isSelected = selected.has(item.key);
+            const item = flapSelectionItem(flap);
+            const isSelected = selectedKeys.has(item.key);
             return (
               <div
                 key={item.key}
@@ -241,7 +190,7 @@ function SearchResults({
                 </div>
                 <button
                   type="button"
-                  onClick={() => onToggle(item)}
+                  onClick={() => toggle(item)}
                   className={cn(
                     "self-start rounded-lg px-3 py-2 text-xs font-semibold transition-colors sm:self-auto",
                     isSelected
@@ -260,106 +209,25 @@ function SearchResults({
   );
 }
 
-function ValvePanel({
-  valve,
-  selected,
-  onToggle,
-  onClose,
-  labelId,
-}: {
-  valve: TubeValve;
-  selected: ReadonlySet<string>;
-  onToggle: (row: SizeTableRow) => void;
-  onClose: () => void;
-  labelId: string;
-}) {
-  const rows = useMemo<SizeTableRow[]>(
-    () =>
-      listValveSizes(valve.id).map((size) => ({
-        key: tubeQuotationKey(valve.id, size.originalSize),
-        size: size.originalSize,
-        normalizedSize: size.normalizedSize,
-        looseSize: size.looseSize,
-        applications: applicationNames(size.applicationSlugs),
-        sourceRowCount: size.sourceRowCount,
-      })),
-    [valve.id],
-  );
-
-  return (
-    <OverlayPanel
-      open
-      onClose={onClose}
-      labelledBy={labelId}
-      title={`${valve.code} — Available sizes`}
-    >
-      <div className="space-y-5 px-5 py-5 sm:px-6">
-        <div className="flex items-start gap-4 rounded-card border border-ink-200 bg-ink-50 p-4">
-          <span className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-ink-200 bg-white">
-            {valveImage(valve)}
-          </span>
-          <div className="min-w-0">
-            <p className="pattern-code-font text-xl font-semibold text-ink-950">
-              {valve.code}
-            </p>
-            <p className="mt-1 text-sm text-ink-600">
-              {rows.length} verified {rows.length === 1 ? "size" : "sizes"} in the catalogue.
-            </p>
-            <div className="mt-2">
-              <ApplicationBadges slugs={valve.applications} max={5} />
-            </div>
-            {valve.sourceTexts.length > 0 && (
-              <p className="mt-2 text-[11px] leading-snug text-ink-400">
-                Source valve text: {valve.sourceTexts[0]}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <SizeSelectionTable
-          rows={rows}
-          selected={selected}
-          onToggle={onToggle}
-          onSelectMany={(visibleRows, next) => {
-            for (const row of visibleRows) {
-              if (selected.has(row.key) !== next) {
-                onToggle(row);
-              }
-            }
-          }}
-          searchPlaceholder="Search sizes for this valve"
-          emptyLabel="No size in this valve matches that search."
-        />
-
-        <p className="text-xs leading-relaxed text-ink-500">
-          Sizes are shown exactly as published in the Safeway catalogue. Selecting a size
-          adds it to your quotation list; it does not confirm stock.
-        </p>
-      </div>
-    </OverlayPanel>
-  );
-}
-
-function FlapPanel({
-  flaps,
-  selected,
-  onToggle,
-  onSelectMany,
-}: {
-  flaps: readonly FlapVariant[];
-  selected: ReadonlySet<string>;
-  onToggle: (row: SizeTableRow) => void;
-  onSelectMany: (rows: readonly SizeTableRow[], selected: boolean) => void;
-}) {
-  const rows = useMemo<SizeTableRow[]>(
+function FlapPanel({ flaps }: { flaps: readonly FlapVariant[] }) {
+  const rows = useMemo(
     () =>
       flaps.map((flap) => ({
-        key: flapQuotationKey(flap.originalSize),
+        id: flap.id,
         size: flap.originalSize,
-        normalizedSize: flap.normalizedSize,
-        looseSize: flap.looseSize,
+        cells: { size: flap.originalSize },
+        applications: [],
       })),
     [flaps],
+  );
+  const context = useMemo(
+    () => ({
+      kind: "flap" as const,
+      categoryKey: "tubes",
+      categoryLabel: "Flaps",
+      productCode: "Flaps",
+    }),
+    [],
   );
 
   return (
@@ -390,12 +258,11 @@ function FlapPanel({
       </div>
 
       <div className="mt-6">
-        <SizeSelectionTable
+        <CatalogueSizeTable
+          columns={[{ key: "size", label: "Size", shortLabel: "Size" }]}
           rows={rows}
-          selected={selected}
-          onToggle={onToggle}
-          onSelectMany={onSelectMany}
-          applicationsLabel="Product"
+          selectionContext={context}
+          caption="Available flap sizes"
           searchPlaceholder="Search flap sizes"
           emptyLabel="No flap size matches that search."
         />
@@ -404,102 +271,11 @@ function FlapPanel({
   );
 }
 
-function SelectionSummary({
-  items,
-  onRemove,
-  onClear,
-  onRequestQuote,
-}: {
-  items: readonly QuotationItem[];
-  onRemove: (key: string) => void;
-  onClear: () => void;
-  onRequestQuote: () => void;
-}) {
-  return (
-    <div className="flex min-h-full flex-col">
-      <div className="flex-1 space-y-3 px-5 py-5 sm:px-6">
-        {items.length === 0 ? (
-          <p className="rounded-lg border border-dashed border-ink-200 bg-ink-50 px-4 py-8 text-center text-sm text-ink-500">
-            No products selected yet.
-          </p>
-        ) : (
-          <>
-            <p className="text-sm leading-relaxed text-ink-600">
-              Review the sizes you want Safeway Tyre to quote. You can remove any item
-              before opening the enquiry form.
-            </p>
-            <ul className="divide-y divide-ink-100 rounded-card border border-ink-200">
-              {items.map((item) => (
-                <li
-                  key={item.key}
-                  className="flex items-start justify-between gap-3 px-4 py-3"
-                >
-                  <div className="min-w-0">
-                    <p className="pattern-code-font text-sm font-semibold text-ink-950">
-                      {quotationItemLabel(item)}
-                    </p>
-                    <p className="mt-0.5 text-xs text-ink-500">
-                      {item.kind === "flap"
-                        ? "Flap"
-                        : item.applications.join(", ") || "Tube"}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => onRemove(item.key)}
-                    aria-label={`Remove ${quotationItemLabel(item)}`}
-                    className="shrink-0 text-xs font-semibold text-brand-700 underline-offset-2 hover:underline"
-                  >
-                    Remove
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-      </div>
-      <div className="sticky bottom-0 border-t border-ink-200 bg-white px-5 py-4 sm:px-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <button
-            type="button"
-            onClick={onClear}
-            disabled={items.length === 0}
-            className="text-sm font-semibold text-ink-600 underline-offset-2 hover:underline disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            Clear selection
-          </button>
-          <button
-            type="button"
-            onClick={onRequestQuote}
-            disabled={items.length === 0}
-            className={buttonStyles(
-              "primary",
-              "md",
-              "disabled:cursor-not-allowed disabled:opacity-60",
-            )}
-          >
-            Request quotation
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export function TubesCatalogue() {
-  const [activeTab, setActiveTab] = useState<TabValue>(
+  const [activeTab, setActiveTab] = useState<string>(
     TUBE_APPLICATIONS[0]?.slug ?? "flaps",
   );
   const [query, setQuery] = useState("");
-  const [openValveId, setOpenValveId] = useState<string | null>(null);
-  const [selectedItems, setSelectedItems] = useState<QuotationItem[]>([]);
-  const [summaryOpen, setSummaryOpen] = useState(false);
-  const [quoteOpen, setQuoteOpen] = useState(false);
-
-  const selected = useMemo(
-    () => new Set(selectedItems.map((item) => item.key)),
-    [selectedItems],
-  );
 
   const tubeMatches = useMemo(
     () => (query.trim() ? searchTubeSizes(query) : []),
@@ -509,14 +285,12 @@ export function TubesCatalogue() {
     () => (query.trim() ? searchFlapSizes(query) : []),
     [query],
   );
-
   const activeApplication = useMemo(
     () =>
       TUBE_APPLICATIONS.find((application) => application.slug === activeTab) ??
       null,
     [activeTab],
   );
-
   const applicationValves = useMemo(
     () =>
       activeApplication
@@ -524,75 +298,10 @@ export function TubesCatalogue() {
         : [],
     [activeApplication],
   );
-
   const flaps = useMemo(() => listFlapSizes(), []);
-  const valve = openValveId ? getValve(openValveId) : undefined;
-
-  function toggleItem(item: QuotationItem) {
-    setSelectedItems((current) =>
-      current.some((entry) => entry.key === item.key)
-        ? current.filter((entry) => entry.key !== item.key)
-        : [...current, item],
-    );
-  }
-
-  function toggleRow(row: SizeTableRow, item: QuotationItem) {
-    if (!selected.has(item.key)) {
-      setSelectedItems((current) =>
-        current.some((entry) => entry.key === item.key)
-          ? current
-          : [...current, item],
-      );
-      return;
-    }
-    setSelectedItems((current) => current.filter((entry) => entry.key !== row.key));
-  }
-
-  function toggleFlapRow(row: SizeTableRow) {
-    toggleItem({
-      key: row.key,
-      kind: "flap",
-      size: row.size,
-      applications: [],
-    });
-  }
-
-  function selectMany(rows: readonly SizeTableRow[], next: boolean, kind: "tube" | "flap") {
-    setSelectedItems((current) => {
-      const keys = new Set(rows.map((row) => row.key));
-      const without = current.filter((entry) => !keys.has(entry.key));
-      if (!next) {
-        return without;
-      }
-      const additions: QuotationItem[] = rows.map((row) =>
-        kind === "tube"
-          ? {
-              key: row.key,
-              kind: "tube",
-              size: row.size,
-              valveCode: valve?.code,
-              valveId: valve?.id,
-              applications: row.applications ?? [],
-            }
-          : {
-              key: row.key,
-              kind: "flap",
-              size: row.size,
-              applications: [],
-            },
-      );
-      const existing = new Set(current.map((entry) => entry.key));
-      return [...current, ...additions.filter((entry) => !existing.has(entry.key))];
-    });
-  }
-
-  const quotationMessage = useMemo(
-    () => buildQuotationMessage(selectedItems),
-    [selectedItems],
-  );
 
   return (
-    <div className={cn("bg-white", selectedItems.length > 0 && "pb-24")}>
+    <div className="bg-white">
       <section className="border-b border-ink-200 bg-ink-50/60 py-10 lg:py-14">
         <div className="mx-auto w-full max-w-[90rem] px-4 sm:px-6 lg:px-8">
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-end">
@@ -654,9 +363,6 @@ export function TubesCatalogue() {
               query={query}
               tubeMatches={tubeMatches}
               flapMatches={flapMatches}
-              selected={selected}
-              onToggle={toggleItem}
-              onOpenValve={setOpenValveId}
             />
           )}
         </div>
@@ -708,12 +414,7 @@ export function TubesCatalogue() {
 
             <div className="mt-7">
               {activeTab === "flaps" ? (
-                <FlapPanel
-                  flaps={flaps}
-                  selected={selected}
-                  onToggle={toggleFlapRow}
-                  onSelectMany={(rows, next) => selectMany(rows, next, "flap")}
-                />
+                <FlapPanel flaps={flaps} />
               ) : activeApplication ? (
                 <div>
                   <div className="max-w-3xl">
@@ -734,11 +435,7 @@ export function TubesCatalogue() {
                     <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                       {applicationValves.map(({ valve: item, sizeCount }) => (
                         <li key={item.id} className="h-full">
-                          <ValveCard
-                            valve={item}
-                            sizeCount={sizeCount}
-                            onOpen={() => setOpenValveId(item.id)}
-                          />
+                          <ValveCard valve={item} sizeCount={sizeCount} />
                         </li>
                       ))}
                     </ul>
@@ -748,78 +445,6 @@ export function TubesCatalogue() {
             </div>
           </div>
         </section>
-      )}
-
-      {valve && (
-        <ValvePanel
-          key={valve.id}
-          valve={valve}
-          selected={selected}
-          onToggle={(row) =>
-            toggleRow(row, {
-              key: row.key,
-              kind: "tube",
-              size: row.size,
-              valveCode: valve.code,
-              valveId: valve.id,
-              applications: row.applications ?? [],
-            })
-          }
-          onClose={() => setOpenValveId(null)}
-          labelId="valve-panel-title"
-        />
-      )}
-
-      <OverlayPanel
-        open={summaryOpen}
-        onClose={() => setSummaryOpen(false)}
-        labelledBy="selection-summary-title"
-        title={`Selected Products (${selectedItems.length})`}
-      >
-        <SelectionSummary
-          items={selectedItems}
-          onRemove={(key) =>
-            setSelectedItems((current) => current.filter((item) => item.key !== key))
-          }
-          onClear={() => setSelectedItems([])}
-          onRequestQuote={() => {
-            setSummaryOpen(false);
-            setQuoteOpen(true);
-          }}
-        />
-      </OverlayPanel>
-
-      <OverlayPanel
-        open={quoteOpen}
-        onClose={() => setQuoteOpen(false)}
-        labelledBy="tubes-quote-title"
-        title="Request a quotation"
-        placement="centre"
-      >
-        <div className="px-5 py-5 sm:px-6">
-          <p className="mb-5 rounded-lg border border-brand-100 bg-brand-100/40 px-4 py-3 text-sm leading-relaxed text-ink-700">
-            Your selected products are already included in the message below. You can
-            edit it before sending. Nothing is submitted until you press Send Inquiry.
-          </p>
-          <QueryForm
-            idPrefix="tubes-quote"
-            initialCategories={["tubes"]}
-            initialMessage={quotationMessage}
-          />
-        </div>
-      </OverlayPanel>
-
-      {selectedItems.length > 0 && (
-        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-ink-200 bg-white/95 p-3 shadow-[0_-12px_32px_-20px_rgba(7,16,24,0.4)] backdrop-blur sm:inset-x-auto sm:bottom-6 sm:right-6 sm:rounded-full sm:border sm:p-1.5">
-          <button
-            type="button"
-            onClick={() => setSummaryOpen(true)}
-            className="flex w-full items-center justify-between gap-4 rounded-full bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-700 sm:w-auto"
-          >
-            <span>Selected Products ({selectedItems.length})</span>
-            <span aria-hidden="true">View →</span>
-          </button>
-        </div>
       )}
     </div>
   );

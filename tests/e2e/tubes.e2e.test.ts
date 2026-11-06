@@ -78,11 +78,22 @@ describe("Tubes & Flaps catalogue", () => {
     expect(html).toContain("Flaps");
     expect(html).toContain("TR-13");
     expect(html).toContain("/assets/tubes/valves/tr-13.webp");
+    expect(html).toContain('href="/products/tubes/tr-13"');
+    expect(html).not.toContain('role="dialog"');
   });
 
   it("keeps the canonical URL on the Tubes category path", async () => {
     const html = await get("/products/tubes");
     expect(html).toContain('rel="canonical"');
     expect(html).toContain("/products/tubes");
+  });
+
+  it("serves a dedicated valve page with the shared size table", async () => {
+    const html = await get("/products/tubes/tr-13");
+    expect(html).toContain("TR-13");
+    expect(html).toContain("Tubes &amp; Flaps");
+    expect(html).toContain("Search sizes for this valve");
+    expect(html).toContain("Request a Quotation");
+    expect(html).toContain('href="/products/tubes"');
   });
 });

@@ -5,6 +5,7 @@ export type PatternImageProps = {
   src: string | null;
   alt: string;
   className?: string;
+  fallbackLabel?: string;
 };
 
 /**
@@ -14,7 +15,12 @@ export type PatternImageProps = {
  * invented one. Pattern-level media is deliberately separate from Variant
  * imagery.
  */
-export function PatternImage({ src, alt, className }: PatternImageProps) {
+export function PatternImage({
+  src,
+  alt,
+  className,
+  fallbackLabel = "Pattern image",
+}: PatternImageProps) {
   return (
     <div
       className={cn(
@@ -51,7 +57,7 @@ export function PatternImage({ src, alt, className }: PatternImageProps) {
               d="M12 3.75v3M12 17.25v3M3.75 12h3M17.25 12h3"
             />
           </svg>
-          <span className="sr-only">Pattern image</span>
+          <span className="sr-only">{fallbackLabel}</span>
         </span>
       )}
     </div>

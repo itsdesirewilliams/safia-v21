@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 
 import { Breadcrumbs } from "@/components/catalogue/breadcrumbs";
+import { CatalogueDetailHero } from "@/components/catalogue/catalogue-detail-hero";
 import { CatalogueEnquiry } from "@/components/catalogue/catalogue-enquiry";
-import { PatternImage } from "@/components/catalogue/pattern-image";
+import { CatalogueSelectionBar } from "@/components/catalogue/catalogue-selection-bar";
 import { RangeSpecTable } from "@/components/catalogue/range-spec-table";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Container } from "@/components/ui/container";
@@ -136,28 +137,27 @@ export default async function PcrPatternPage({
 
       <section className="py-16 lg:py-24">
         <Container size="listing">
-          <div className="flex items-center gap-5 sm:gap-6">
-            <PatternImage
-              src={imageUrl}
-              alt={
-                imageUrl
-                  ? `${pattern.patternCode} Passenger Car Radial tyre pattern`
-                  : ""
-              }
-              className="h-28 w-28 shrink-0 sm:h-32 sm:w-32"
-            />
-            <div className="min-w-0">
-              <h2 className="pattern-code-font text-2xl font-semibold tracking-tight text-ink-950 sm:text-3xl">
-                {pattern.patternCode}
-              </h2>
-              <p className="mt-1.5 text-sm leading-relaxed text-ink-600">
-                {rangeApplication("pcr")}
-              </p>
-            </div>
-          </div>
+          <CatalogueDetailHero
+            imageSrc={imageUrl}
+            imageAlt={
+              imageUrl
+                ? `${pattern.patternCode} Passenger Car Radial tyre pattern`
+                : ""
+            }
+            code={pattern.patternCode}
+            description={rangeApplication("pcr")}
+          />
 
           <div className="mt-8">
-            <RangeSpecTable variants={pattern.variants} />
+            <RangeSpecTable
+              variants={pattern.variants}
+              selection={{
+                kind: "tyre",
+                categoryKey: "truck-bus",
+                categoryLabel: `${dict.categories["truck-bus"]} — ${dict.nav.pcr}`,
+                productCode: pattern.patternCode,
+              }}
+            />
           </div>
 
           <div className="mt-12">
@@ -165,6 +165,8 @@ export default async function PcrPatternPage({
           </div>
         </Container>
       </section>
+
+      <CatalogueSelectionBar />
     </div>
   );
 }
