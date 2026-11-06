@@ -47,7 +47,21 @@ _Avoid_: Size, SKU, option
 Non-canonical umbrella language for anything sellable. Never an entity; say Pattern or Variant instead.
 
 **Tubes**:
-A top-level Category whose products do not follow the Pattern → Variant shape. Its data structure is deferred until Tubes data is supplied.
+A top-level Category whose products do not follow the Pattern → Variant shape. It is the interactive Tubes & Flaps catalogue, organised as Application → Valve → Tube Variant, plus a separate Flaps family.
+
+**Tube application**:
+One of the seven catalogue groupings (Agriculture, Industrial & OTR; Bus / Light Truck & Truck; Industrial Forklift & Truck; Passenger Car; Implement & Trailer; Lawn & Garden; Utility Vehicles) used to filter valve products.
+
+**Valve**:
+A reusable tube valve product identified by its catalogue code (e.g. `TR-13`, `TR-218A`, `JS-2`). A Valve belongs to one or more Tube applications and owns its size Variants. Never duplicate a Valve because it appears in several applications or source tables.
+_Avoid_: valve pattern, valve SKU
+
+**Tube Variant**:
+One source size-to-valve compatibility row. It keeps the exact catalogue size notation, its normalized search key, and its source page/table/row. Repeated source rows are retained; they are not silently deduplicated.
+_Avoid_: tube size, SKU
+
+**Flaps**:
+A separate size-only product family on the Tubes & Flaps page. Flaps have no valve types. Do not attach valves to Flaps.
 
 **Tread pattern**:
 The physical tread design of a tyre. Not a database entity; do not use bare "pattern" to mean tread design.

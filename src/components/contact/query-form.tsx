@@ -33,6 +33,12 @@ export type QueryFormProps = {
   defaultCountry?: string;
   /** Override the server action (used by tests). */
   action?: ContactFormAction;
+  /** Pre-fill the message, e.g. with a prepared Tubes & Flaps selection. */
+  initialMessage?: string;
+  /** Pre-select categories, e.g. `tubes` for a catalogue quotation. */
+  initialCategories?: readonly string[];
+  /** Prefix for form field ids so multiple forms can coexist on one page. */
+  idPrefix?: string;
 };
 
 /**
@@ -42,6 +48,9 @@ export type QueryFormProps = {
 export function QueryForm({
   defaultCountry,
   action = submitQueryForm,
+  initialMessage,
+  initialCategories,
+  idPrefix = "query",
 }: QueryFormProps = {}) {
   const [state, formAction, isPending] = useActionState<
     ContactFormState,
@@ -68,7 +77,7 @@ export function QueryForm({
     <form action={formAction} noValidate onSubmit={() => setDirty({})}>
       <div className="grid gap-4 sm:grid-cols-2">
         <TextField
-          id="query-name"
+          id={`${idPrefix}-name`}
           name="name"
           label="Name"
           required
@@ -78,7 +87,7 @@ export function QueryForm({
           onValueChange={() => markDirty("name")}
         />
         <CountryPhoneField
-          idPrefix="query"
+          idPrefix={idPrefix}
           countryDefault={values?.country ?? defaultCountry}
           phoneDefault={values?.phone}
           countryError={errorFor("country")}
@@ -93,8 +102,8 @@ export function QueryForm({
 
       <div className="mt-4">
         <CategoryCheckboxes
-          idPrefix="query"
-          defaultSelected={values?.categories}
+          idPrefix={idPrefix}
+          defaultSelected={values?.categories ?? initialCategories}
           error={errorFor("categories")}
           required
           onValueChange={() => markDirty("categories")}
@@ -103,12 +112,12 @@ export function QueryForm({
 
       <div className="mt-4">
         <TextAreaField
-          id="query-message"
+          id={`${idPrefix}-message`}
           name="message"
           label="Message"
           required
           hint="Tell us what you need, including sizes if applicable."
-          defaultValue={values?.message}
+          defaultValue={values?.message ?? initialMessage}
           error={errorFor("message")}
           onValueChange={() => markDirty("message")}
         />

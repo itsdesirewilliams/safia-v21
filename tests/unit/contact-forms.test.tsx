@@ -7,9 +7,7 @@ import { QueryForm } from "@/components/contact/query-form";
 import { CATEGORIES } from "@/lib/catalogue/categories";
 import { COUNTRIES } from "@/lib/contact/countries";
 
-const PRODUCT_CATEGORIES = CATEGORIES.filter(
-  (category) => category.slug !== "tubes",
-);
+const PRODUCT_CATEGORIES = CATEGORIES;
 
 describe("Inquiry form", () => {
   const html = renderToStaticMarkup(<QueryForm />);
@@ -53,7 +51,7 @@ describe("Inquiry form", () => {
     expect(html).toMatch(/name="phone"[^>]*value=""/);
   });
 
-  it("offers the six product categories as checkboxes", () => {
+  it("offers every product category as a checkbox", () => {
     expect(html.match(/name="category"/g)).toHaveLength(
       PRODUCT_CATEGORIES.length,
     );
@@ -64,7 +62,7 @@ describe("Inquiry form", () => {
       expect(html).toContain(escapedLabel);
     }
 
-    expect(html).not.toContain('value="tubes"');
+    expect(html).toContain('value="tubes"');
   });
 
   it("carries a hidden honeypot field", () => {

@@ -2,8 +2,8 @@ import { CATEGORIES } from "@/lib/catalogue/categories";
 
 import { FieldError, RequiredMark } from "./fields";
 
-/** The six product categories offered on the inquiry form (Tubes deferred). */
-const OPTIONS = CATEGORIES.filter((category) => category.slug !== "tubes");
+/** The product categories offered on the inquiry form. */
+const OPTIONS = CATEGORIES;
 
 export type CategoryCheckboxesProps = {
   idPrefix: string;

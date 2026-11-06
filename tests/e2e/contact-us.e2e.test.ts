@@ -80,7 +80,7 @@ describe("Contact Us page", () => {
     expect(html).toContain("Feedback");
   });
 
-  it("renders the inquiry form fields and the six product categories", async () => {
+  it("renders the inquiry form fields and every product category", async () => {
     const html = await getContactHtml();
 
     for (const id of [
@@ -94,12 +94,9 @@ describe("Contact Us page", () => {
     }
 
     for (const category of CATEGORIES) {
-      if (category.slug === "tubes") {
-        continue;
-      }
       expect(html).toContain(`value="${category.slug}"`);
     }
-    expect(html).not.toContain('value="tubes"');
+    expect(html).toContain('value="tubes"');
   });
 
   it("renders the simpler feedback form without a category", async () => {
